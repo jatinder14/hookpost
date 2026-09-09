@@ -49,7 +49,7 @@ export default function EnterpriseTeamsPage() {
         name: "Is Hookpost really free to get started?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "Yes. Hookpost includes a generous $0 starter tier with no credit card required. Upgrade to Pro for 18 channels, 5,000 posts a month and the AI copilot.",
+          text: "Yes. Hookpost includes a generous $0 starter tier with no credit card required. Upgrade to Pro for 30 channels, 5,000 posts a month and the AI copilot.",
         },
       },
     ],

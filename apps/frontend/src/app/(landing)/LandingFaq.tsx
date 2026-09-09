@@ -1,5 +1,6 @@
 import React from 'react';
-import { PUBLISHABLE_CHANNEL_COUNT } from './channels/channel-count';
+import { PUBLISHABLE_CHANNEL_COUNT, CHANNEL_COUNT } from './channels/channel-count';
+import { pricing } from '@hookpost/nestjs-libraries/database/prisma/subscriptions/pricing';
 
 export const FAQ_DATA = [
   {
@@ -48,15 +49,15 @@ export const FAQ_DATA = [
   },
   {
     q: "How much does Hookpost cost, and what's included in each plan?",
-    a: 'Hookpost has four transparent plans with monthly or annual billing (saving ~20%): Standard is ₹699/mo ($9 USD) for 5 channels, 500 posts/month, 500 AI text generations, 20 AI images, 3 AI videos, API, and 2 webhooks. Team is ₹1,499/mo ($19 USD) for 10 channels, 1,500 posts/month, team members, 1,500 AI text generations, 100 AI images, 10 AI videos, RSS auto-posting, and 10 webhooks. Pro is ₹2,299/mo ($29 USD) for 18 channels, 5,000 posts/month, 2,500 AI text generations, 300 AI images, 30 AI videos, and 30 webhooks. Ultimate is ₹4,499/mo ($59 USD) for 100 channels, 15,000 posts/month, members, 6,000 AI text generations, 500 AI images, 60 AI videos, and custom SLA.',
+    a: `Hookpost has four transparent plans with monthly or annual billing (saving ~20%): Standard is ₹699/mo ($9 USD) for ${pricing.STANDARD.channel} channels, 500 posts/month, 500 AI text generations, 20 AI images, 3 AI videos, API, and 2 webhooks. Team is ₹1,499/mo ($19 USD) for ${pricing.TEAM.channel} channels, 1,500 posts/month, team members, 1,500 AI text generations, 100 AI images, 10 AI videos, RSS auto-posting, and 10 webhooks. Pro is ₹2,299/mo ($29 USD) for ${pricing.PRO.channel} channels, 5,000 posts/month, 2,500 AI text generations, 300 AI images, 30 AI videos, and 30 webhooks. Ultimate is ₹4,499/mo ($59 USD) for ${pricing.ULTIMATE.channel} channels, 15,000 posts/month, members, 6,000 AI text generations, 500 AI images, 60 AI videos, and custom SLA.`,
   },
   {
     q: 'Can I swap or change my connected channels after choosing a plan?',
-    a: "Yes. You are never locked into any specific set of channels. Connect, disconnect, and swap any of the 18 supported networks at any time, as long as your total active channels stay within your plan's limit. If you downgrade and exceed the new limit, Hookpost automatically disables the most recent connections without deleting data.",
+    a: `Yes. You are never locked into any specific set of channels. Connect, disconnect, and swap any of the ${CHANNEL_COUNT} supported networks at any time, as long as your total active channels stay within your plan's limit. If you downgrade and exceed the new limit, Hookpost automatically disables the most recent connections without deleting data.`,
   },
   {
     q: 'If I connect 3 Facebook pages, does that count as 1 channel or 3?',
-    a: 'Each connected social account, profile, or page counts as one channel slot. So three Facebook pages count as three channels. Channel allowances are: Standard (5 channels), Team (10 channels), Pro (30 channels), and Ultimate (100 channels).',
+    a: `Each connected social account, profile, or page counts as one channel slot. So three Facebook pages count as three channels. Channel allowances are: Standard (${pricing.STANDARD.channel} channels), Team (${pricing.TEAM.channel} channels), Pro (${pricing.PRO.channel} channels), and Ultimate (${pricing.ULTIMATE.channel} channels).`,
   },
 ];
 

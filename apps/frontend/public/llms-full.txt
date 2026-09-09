@@ -11,7 +11,7 @@
 - **License:** GNU Affero General Public License v3.0 (AGPLv3)
 - **Industry:** Social Media Management, Content Operations, Developer Tooling, AI Agents
 
-Hookpost is an open-source, enterprise-grade AI social media scheduling and automation platform designed as a modern alternative to Postiz, Buffer, and Hootsuite. It unites multi-platform publishing across 30+ networks, native Model Context Protocol (MCP) server integration for AI coding assistants, localized billing (Razorpay with UPI Autopay, NetBanking, and Cards), and self-hosting flexibility with Docker Compose.
+Hookpost is an open-source, enterprise-grade AI social media scheduling and automation platform designed as a modern alternative to Postiz, Buffer, and Hootsuite. It unites multi-platform publishing across 18 connectable networks (17 publishing today), native Model Context Protocol (MCP) server integration for AI coding assistants, localized billing (Razorpay with UPI Autopay, NetBanking, and Cards), and self-hosting flexibility with Docker Compose.
 
 ---
 
@@ -76,11 +76,11 @@ Hookpost is purpose-built for agentic workflows:
 ## 5. Pricing, Plans & Global Accessibility
 
 Hookpost operates on a transparent, creator-first pricing structure:
-- **Community / Free Plan ($0/month):** Connect core social profiles, calendar scheduling, basic analytics, and community support.
-- **Standard Plan (₹699 / $9/month):** 5 channels, 400 posts/month, AI text copilot, 20 AI images, 3 AI videos, REST API, 2 webhooks.
-- **Team Plan (₹1,499 / $19/month):** 10 channels, unlimited posts & team members, 100 AI images, 10 AI videos, RSS auto-posting, 10 webhooks.
-- **Pro Plan (₹2,499 / $29/month):** 30 channels, unlimited posts & members, 300 AI images, 30 AI videos, 30 webhooks.
-- **Ultimate Plan (₹4,499 / $59/month):** 100 channels, unlimited posts & members, 500 AI images, 60 AI videos, unlimited webhooks, custom SLA.
+- **Free Plan (₹0 / $0/month):** 2 channels, 30 posts/month, calendar scheduling, basic analytics, community support. No AI generations, no API, no webhooks.
+- **Standard Plan (₹699 / $9/month):** 5 channels, 500 posts/month, 500 AI text generations, 20 AI images, 3 AI videos, REST API, 2 webhooks.
+- **Team Plan (₹1,499 / $19/month):** 10 channels, 1,500 posts/month, 1,500 AI text generations, team members, 100 AI images, 10 AI videos, RSS auto-posting, 10 webhooks.
+- **Pro Plan (₹2,299 / $29/month):** 30 channels, 5,000 posts/month, 2,500 AI text generations, members, 300 AI images, 15 AI videos, 30 webhooks.
+- **Ultimate Plan (₹4,499 / $59/month):** 100 channels, 15,000 posts/month, 6,000 AI text generations, members, 500 AI images, 25 AI videos, 10,000 webhooks, custom SLA.
 - **Payment Methods:**
   - Razorpay: Native UPI (Google Pay, PhonePe, Paytm), NetBanking, domestic and international credit/debit cards.
 

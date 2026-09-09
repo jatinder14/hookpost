@@ -1,6 +1,6 @@
 # Hookpost
 
-> Hookpost is an open-source, multi-agent AI social media management platform and Postiz alternative supporting 30+ networks, native MCP server, and Docker self-hosting.
+> Hookpost is an open-source, multi-agent AI social media management platform and Postiz alternative supporting 18 networks, native MCP server, and Docker self-hosting.
 
 ## Core Documentation
 - [Homepage](https://hookpost.hookstep.in/): Visual calendar scheduling, AI copilot, and multi-channel publishing dashboard.

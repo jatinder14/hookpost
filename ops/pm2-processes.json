@@ -1,0 +1,85 @@
+[
+  {
+    "name": "hookpost-backend",
+    "script": "/home/flexiple_jr/hookpost/apps/backend/dist/apps/backend/src/main.js",
+    "cwd": "/home/flexiple_jr/hookpost",
+    "args": null,
+    "interpreter": "node",
+    "exec_mode": "fork_mode",
+    "instances": null,
+    "autorestart": true,
+    "max_restarts": null,
+    "min_uptime": null,
+    "max_memory_restart": null,
+    "node_args": []
+  },
+  {
+    "name": "hookpost-frontend",
+    "script": "/home/flexiple_jr/hookpost/node_modules/.bin/next",
+    "cwd": "/home/flexiple_jr/hookpost/apps/frontend",
+    "args": [
+      "start",
+      "-p",
+      "4200"
+    ],
+    "interpreter": "/usr/bin/node",
+    "exec_mode": "fork_mode",
+    "instances": null,
+    "autorestart": true,
+    "max_restarts": null,
+    "min_uptime": null,
+    "max_memory_restart": null,
+    "node_args": []
+  },
+  {
+    "name": "hookpost-orchestrator",
+    "script": "/usr/bin/bash",
+    "cwd": "/home/flexiple_jr/hookpost",
+    "args": [
+      "-c",
+      "pnpm --filter ./apps/orchestrator run start"
+    ],
+    "interpreter": "none",
+    "exec_mode": "fork_mode",
+    "instances": null,
+    "autorestart": true,
+    "max_restarts": null,
+    "min_uptime": null,
+    "max_memory_restart": null,
+    "node_args": []
+  },
+  {
+    "name": "hookpost-temporal",
+    "script": "/home/flexiple_jr/temporal-server-dist/temporal-server",
+    "cwd": "/home/flexiple_jr/temporal-server-dist",
+    "args": [
+      "--env",
+      "production",
+      "--root",
+      ".",
+      "start"
+    ],
+    "interpreter": "none",
+    "exec_mode": "fork_mode",
+    "instances": 1,
+    "autorestart": true,
+    "max_restarts": null,
+    "min_uptime": null,
+    "max_memory_restart": null,
+    "node_args": []
+  },
+  {
+    "name": "pm2-logrotate",
+    "script": "/home/flexiple_jr/.pm2/modules/pm2-logrotate/node_modules/pm2-logrotate/app.js",
+    "cwd": "/home/flexiple_jr/.pm2/modules/pm2-logrotate/node_modules/pm2-logrotate",
+    "args": null,
+    "interpreter": "node",
+    "exec_mode": "fork_mode",
+    "instances": 1,
+    "autorestart": true,
+    "max_restarts": null,
+    "min_uptime": null,
+    "max_memory_restart": 524288000,
+    "node_args": []
+  }
+]

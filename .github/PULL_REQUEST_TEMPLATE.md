@@ -1,5 +1,3 @@
-<!-- Remember to first apply via [the contribution form](https://contribute.hookpost.com/p/hookpost) and sign the [CLA](https://contribute.hookpost.com/p/hookpost/cla) before submitting a PR. -->
-
 # What kind of change does this PR introduce?
 
 eg: Bug fix, feature, docs update, ...
@@ -16,8 +14,5 @@ eg: Did you discuss this change with anybody before working on it (not required,
 
 Put a "X" in the boxes below to indicate you have followed the checklist;
 
-- [ ] I have read the [CONTRIBUTING](https://github.com/gitroomhq/hookpost-app/blob/main/CONTRIBUTING.md) guide.
-- [ ] I have signed the [Contributor License Agreement (CLA)](https://contribute.hookpost.com/p/hookpost/cla) ([ICLA](https://github.com/gitroomhq/hookpost-app/blob/main/ICLA.md) for individuals, [CCLA](https://github.com/gitroomhq/hookpost-app/blob/main/CCLA.md) for entities).
-- [ ] I confirm I have not used AI to submit this PR or generate code for it.
 - [ ] I checked that there were no similar issues or PRs already open for this.
 - [ ] This PR fixes just ONE issue

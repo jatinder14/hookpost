@@ -63,7 +63,17 @@ body * {
    next family in the stack, i.e. exactly today's behaviour. No regression path.
    Trade-off: the sign itself is drawn in the system UI font rather than Jakarta.
    At the size it renders next to a numeral this is not noticeable, and it is the
-   same thing that would happen if Google shipped a latin-only file. */
+   same thing that would happen if Google shipped a latin-only file.
+
+   Put 'RupeeSign' on the font-family rules below and NOT into --font-dm /
+   --font-jakarta. Doing it in :root looks tidier and silently does nothing:
+   next/font emits its own `.dm_sans_..._variable { --font-dm: 'DM Sans',
+   'DM Sans Fallback' }`, layout.tsx puts that class on <body>, and it lands
+   later in the cascade at equal specificity - so it wins for <body> and every
+   descendant, which is the entire page. :root then only ever applies to the
+   bare <html> element, where no text lives. Verified against production: the
+   latin-ext files were still downloaded with the :root version in place.
+   Listing the family ahead of var(--font-*) works whichever value wins. */
 @font-face {
   font-family: 'RupeeSign';
   src: local('Segoe UI'), local('Roboto'), local('Helvetica Neue'),
@@ -73,22 +83,22 @@ body * {
 }
 
 :root {
-  --font-dm: 'RupeeSign', 'DM Sans', sans-serif;
-  --font-jakarta: 'RupeeSign', 'Plus Jakarta Sans', sans-serif;
+  --font-dm: 'DM Sans', sans-serif;
+  --font-jakarta: 'Plus Jakarta Sans', sans-serif;
   --pink: #FF4CE2;
 }
 
 body {
   background-color: #000000 !important;
   color: #ffffff;
-  font-family: var(--font-dm) !important;
+  font-family: 'RupeeSign', var(--font-dm) !important;
   margin: 0;
   padding: 0;
   -webkit-font-smoothing: antialiased;
 }
 
 h1, h2, h3, h4, .font-jakarta {
-  font-family: var(--font-jakarta) !important;
+  font-family: 'RupeeSign', var(--font-jakarta) !important;
   font-weight: 700;
   letter-spacing: -0.02em;
 }
@@ -102,7 +112,7 @@ h1 {
 }
 
 .font-dm {
-  font-family: var(--font-dm) !important;
+  font-family: 'RupeeSign', var(--font-dm) !important;
 }
 
 /* 15-column and 10-column Grid utilities for Social Icons */

@@ -1,12 +1,23 @@
 import Link from 'next/link';
+import {
+  pricing,
+  CURRENCY_SYMBOL,
+} from '@hookpost/nestjs-libraries/database/prisma/subscriptions/pricing';
 
 /**
  * The pricing tables, shared by the homepage section and the /pricing page.
  *
- * Every number here comes from pricing.ts. Do not edit them in isolation - the
- * posts_per_month and ai_generation_count values are real gates enforced in
- * permissions.service.ts, and advertising a number the code does not honour is
- * how the free tier once ended up unable to publish at all.
+ * Every number here is READ from pricing.ts rather than typed, because the
+ * comment saying it came from pricing.ts was not enough on its own: Pro's card
+ * advertised "30 AI videos" against a generate_videos limit of 15, and the
+ * channel allowance had already drifted once before that. posts_per_month and
+ * ai_generation_count are real gates enforced in permissions.service.ts, and
+ * advertising a number the code does not honour is how the free tier once
+ * ended up unable to publish at all.
+ *
+ * Prices come from month_price, so the card and the invoice cannot disagree.
+ * The USD figures stay hardcoded on purpose - they are indicative only, there
+ * is no USD collection path, and nothing in pricing.ts denominates them.
  *
  * This used to be inline in the homepage, which is why /pricing did not exist
  * and the nav's "Pricing" link was the fragment "#pricing" - dead on all ~70
@@ -15,38 +26,43 @@ import Link from 'next/link';
 const PLANS = [
   {
     name: "Free",
-    inr: "₹0",
+    inr: `${CURRENCY_SYMBOL}${pricing.FREE.month_price.toLocaleString("en-IN")}`,
     usd: "$0",
     blurb: "Enough to see whether it fits.",
-    features: ["2 channels", "30 posts / month", "Visual calendar", "Public API"],
+    features: [
+      `${pricing.FREE.channel} channels`,
+      `${pricing.FREE.posts_per_month} posts / month`,
+      "Visual calendar",
+      "Public API",
+    ],
     cta: "Start free",
     featured: false,
   },
   {
     name: "Standard",
-    inr: "₹699",
+    inr: `${CURRENCY_SYMBOL}${pricing.STANDARD.month_price.toLocaleString("en-IN")}`,
     usd: "$9",
     blurb: "For a solo creator or a small brand.",
     features: [
-      "5 channels",
-      "500 posts / month",
-      "500 AI text generations",
-      "20 AI images · 3 AI videos",
-      "2 webhooks",
+      `${pricing.STANDARD.channel} channels`,
+      `${pricing.STANDARD.posts_per_month.toLocaleString("en-IN")} posts / month`,
+      `${pricing.STANDARD.ai_generation_count.toLocaleString("en-IN")} AI text generations`,
+      `${pricing.STANDARD.image_generation_count} AI images · ${pricing.STANDARD.generate_videos} AI videos`,
+      `${pricing.STANDARD.webhooks} webhooks`,
     ],
     cta: "Start 7-day trial",
     featured: true,
   },
   {
     name: "Team",
-    inr: "₹1,499",
+    inr: `${CURRENCY_SYMBOL}${pricing.TEAM.month_price.toLocaleString("en-IN")}`,
     usd: "$19",
     blurb: "When more than one person posts.",
     features: [
-      "10 channels",
-      "1,500 posts / month",
-      "1,500 AI text generations",
-      "100 AI images · 10 AI videos",
+      `${pricing.TEAM.channel} channels`,
+      `${pricing.TEAM.posts_per_month.toLocaleString("en-IN")} posts / month`,
+      `${pricing.TEAM.ai_generation_count.toLocaleString("en-IN")} AI text generations`,
+      `${pricing.TEAM.image_generation_count} AI images · ${pricing.TEAM.generate_videos} AI videos`,
       "Unlimited team members",
     ],
     cta: "Choose Team",
@@ -54,7 +70,7 @@ const PLANS = [
   },
   {
     name: "Pro",
-    inr: "₹2,299",
+    inr: `${CURRENCY_SYMBOL}${pricing.PRO.month_price.toLocaleString("en-IN")}`,
     usd: "$29",
     blurb: "For agencies running many brands.",
     features: [
@@ -64,11 +80,11 @@ const PLANS = [
       // been 30 too before the count was corrected to 18. Substituting
       // CHANNEL_COUNT here understated the plan by 12 channels and contradicted
       // the table further down /pricing, which reads 30 from pricing.ts.
-      "30 channels",
-      "5,000 posts / month",
-      "2,500 AI text generations",
-      "300 AI images · 30 AI videos",
-      "30 webhooks",
+      `${pricing.PRO.channel} channels`,
+      `${pricing.PRO.posts_per_month.toLocaleString("en-IN")} posts / month`,
+      `${pricing.PRO.ai_generation_count.toLocaleString("en-IN")} AI text generations`,
+      `${pricing.PRO.image_generation_count} AI images · ${pricing.PRO.generate_videos} AI videos`,
+      `${pricing.PRO.webhooks} webhooks`,
     ],
     cta: "Choose Pro",
     featured: false,

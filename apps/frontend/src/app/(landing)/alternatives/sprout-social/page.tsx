@@ -86,7 +86,7 @@ export default function SproutSocialAlternativePage() {
 
       <header className="flex justify-between items-center w-full max-w-[1440px] mx-auto h-[70px] px-6 sm:px-12">
         <Link href="/" className="flex items-center gap-2">
-          <img alt="Hookpost" src="/brand-logo-96.png" width="96" height="96" className="h-8 md:h-10 w-auto max-h-[38px] object-contain" />
+          <img alt="Hookpost" src="/brand-logo-96.webp" width="96" height="96" className="h-8 md:h-10 w-auto max-h-[38px] object-contain" />
           <span className="text-2xl font-black tracking-tight text-white">
             Hook<span className="text-[#FF4CE2]">post</span>
           </span>

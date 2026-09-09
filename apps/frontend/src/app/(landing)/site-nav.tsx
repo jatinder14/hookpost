@@ -35,7 +35,7 @@ export const SiteNav = () => {
             /* brand-logo.png is 512x512 / 89KB and renders at 36px here - the
                header was paying 89KB for a 36px mark. The full-size file stays
                for the Organization schema logo, which wants >=112px. */
-            src="/brand-logo-96.png"
+            src="/brand-logo-96.webp"
             /* Decorative: the word "Hookpost" sits next to it in the wordmark,
                and the link already carries aria-label="Hookpost home". A screen
                reader would otherwise announce the name three times. */

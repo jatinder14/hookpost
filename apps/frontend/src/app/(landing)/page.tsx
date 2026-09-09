@@ -331,7 +331,7 @@ export default function HomePage() {
           <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-5">
             <div>
               <div className="flex items-center gap-2.5">
-                <img src="/brand-logo-96.png" width="96" height="96" alt="" className="h-7 w-auto object-contain" />
+                <img src="/brand-logo-96.webp" width="96" height="96" alt="" className="h-7 w-auto object-contain" />
                 <span className="font-extrabold tracking-tight">Hookpost</span>
               </div>
               <p className="mt-4 max-w-[34ch] text-sm leading-relaxed text-white/50">

@@ -44,9 +44,37 @@ body * {
    the 1KB file alone blocking render for 715ms - the round-trip, not the bytes.
    One stylesheet, one request.
    --------------------------------------------------------------------------- */
+/* The rupee sign costs 41KB of webfont.
+   Google Fonts splits each family into subsets guarded by unicode-range. U+20B9
+   (the INR sign) is not in `latin` - it falls inside latin-ext's U+20AD-20C0
+   currency block. The pricing block prints twelve of them, so every first-time
+   visitor downloaded the latin-ext woff2 for BOTH families - 22KB for Plus
+   Jakarta Sans plus 19KB for DM Sans - to draw one glyph, and nothing else on
+   any marketing page needs a latin-ext character.
+   Measured: the only visible codepoint on the homepage inside those ranges is
+   U+20B9, twelve occurrences.
+   `subsets: ['latin']` in layout.tsx does NOT prevent this. That option controls
+   which subsets get PRELOADED; next/font still emits the @font-face rules for
+   every subset Google publishes, so one matching character triggers the fetch.
+   So map that single codepoint to a face the machine already has. Listed first,
+   it wins for U+20B9 only - its unicode-range makes it inapplicable to every
+   other character, which continues to come from the real family. If none of the
+   locals resolve, the face is simply dropped and the glyph falls through to the
+   next family in the stack, i.e. exactly today's behaviour. No regression path.
+   Trade-off: the sign itself is drawn in the system UI font rather than Jakarta.
+   At the size it renders next to a numeral this is not noticeable, and it is the
+   same thing that would happen if Google shipped a latin-only file. */
+@font-face {
+  font-family: 'RupeeSign';
+  src: local('Segoe UI'), local('Roboto'), local('Helvetica Neue'),
+       local('Arial'), local('Noto Sans'), local('DejaVu Sans'),
+       local('Liberation Sans');
+  unicode-range: U+20B9;
+}
+
 :root {
-  --font-dm: 'DM Sans', sans-serif;
-  --font-jakarta: 'Plus Jakarta Sans', sans-serif;
+  --font-dm: 'RupeeSign', 'DM Sans', sans-serif;
+  --font-jakarta: 'RupeeSign', 'Plus Jakarta Sans', sans-serif;
   --pink: #FF4CE2;
 }
 

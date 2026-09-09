@@ -94,6 +94,22 @@ rsync -avz --delete -e "ssh -i $SSH_KEY -o StrictHostKeyChecking=no" \
 echo "==> Step 3: Transferring atomic bundle to production VM..."
 scp -i "$SSH_KEY" /tmp/next-atomic.tar.gz "$VM_HOST:/tmp/next-atomic.tar.gz"
 
+# ------------------------------------------------------------------------------
+# Step 3b: ship the server's own configuration.
+#
+# This deploy shipped only .next and public/, so nothing in the repo describing
+# the *server* ever reached the server. The result: the live NGINX config drifted
+# to 6,845 bytes against 2,198 committed - 142 lines - and the only copy of the
+# HOOKPOST_SSR proxy_cache_path this very script depends on, of two live
+# domain-verification routes, and of the kernel/gzip tuning was the production
+# disk itself. A cron script and the PM2 process definitions were in the same
+# state. Config that is never shipped is not configuration, it is a wish.
+# ------------------------------------------------------------------------------
+echo "==> Step 3b: Transferring server config from the repo..."
+scp -i "$SSH_KEY" "$REPO_ROOT/nginx.hookpost.conf"      "$VM_HOST:/tmp/hookpost-nginx.conf"
+scp -i "$SSH_KEY" "$REPO_ROOT/ops/check-temporal.sh"    "$VM_HOST:/tmp/hookpost-check-temporal.sh"
+scp -i "$SSH_KEY" "$REPO_ROOT/ops/ecosystem.config.js"  "$VM_HOST:/tmp/hookpost-ecosystem.config.js"
+
 echo "==> Step 4: Applying build without deleting existing chunk history & clearing NGINX cache..."
 ssh -i "$SSH_KEY" "$VM_HOST" bash << 'REMOTECOMMANDS'
 set -euo pipefail
@@ -109,6 +125,48 @@ find /home/flexiple_jr/hookpost/apps/frontend/.next/static/chunks -type f -mtime
 
 # Clear Next.js internal SSR cache
 rm -rf /home/flexiple_jr/hookpost/apps/frontend/.next/cache
+
+# ---------------------------------------------------------------- config ----
+# Install the NGINX config from git, but never blindly: a bad config that
+# reaches `systemctl reload` takes the whole site down. Test first, roll back on
+# failure, and fail the deploy rather than leaving a broken file in place.
+if ! sudo cmp -s /tmp/hookpost-nginx.conf /etc/nginx/sites-available/hookpost; then
+  echo "    nginx config differs from git - installing"
+  sudo cp /etc/nginx/sites-available/hookpost /tmp/hookpost-nginx.rollback
+  sudo cp /tmp/hookpost-nginx.conf /etc/nginx/sites-available/hookpost
+  if sudo nginx -t >/dev/null 2>&1; then
+    echo "    nginx -t OK"
+  else
+    echo "    ! nginx -t FAILED on the config from git - rolling back" >&2
+    sudo nginx -t 2>&1 | sed 's/^/      /' >&2 || true
+    sudo cp /tmp/hookpost-nginx.rollback /etc/nginx/sites-available/hookpost
+    sudo nginx -t >/dev/null 2>&1 || echo "    !! rollback ALSO fails nginx -t - server config is broken" >&2
+    exit 1
+  fi
+else
+  echo "    nginx config already matches git"
+fi
+
+# The monitoring script and its cron entry. Idempotent: the grep -vF strips any
+# older variant of the line before re-adding it, so repeated deploys cannot
+# stack up duplicate entries.
+install -m 0755 /tmp/hookpost-check-temporal.sh /home/flexiple_jr/check-temporal.sh
+CRON_LINE='*/5 * * * * /home/flexiple_jr/check-temporal.sh >/dev/null 2>&1'
+if crontab -l 2>/dev/null | grep -Fqx "$CRON_LINE"; then
+  echo "    cron entry already present"
+else
+  { crontab -l 2>/dev/null | grep -vF 'check-temporal.sh'; echo "$CRON_LINE"; } | crontab -
+  echo "    cron entry installed"
+fi
+
+# PM2 definitions are shipped and recorded, but deliberately NOT applied here.
+# `pm2 startOrReload` would restart the backend, orchestrator and temporal on
+# every frontend-only deploy, which is a much bigger blast radius than this
+# script currently has. Use it by hand when rebuilding a box:
+#   pm2 startOrReload /home/flexiple_jr/hookpost/ops/ecosystem.config.js && pm2 save
+mkdir -p /home/flexiple_jr/hookpost/ops
+install -m 0644 /tmp/hookpost-ecosystem.config.js /home/flexiple_jr/hookpost/ops/ecosystem.config.js
+rm -f /tmp/hookpost-nginx.conf /tmp/hookpost-check-temporal.sh /tmp/hookpost-ecosystem.config.js
 
 # Purge NGINX proxy cache so old pre-rendered HTML is never served
 sudo rm -rf /var/cache/nginx/hookpost_cache/*

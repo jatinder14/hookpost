@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="500" viewBox="0 0 800 500" fill="none">
+  <rect width="800" height="500" rx="16" fill="#121316" stroke="#26272B" stroke-width="2"/>
+  <!-- Left Side Composer -->
+  <rect x="30" y="30" width="420" height="440" rx="10" fill="#181A1E" stroke="#2D3039"/>
+  <text x="50" y="65" fill="#FFF" font-family="sans-serif" font-weight="bold" font-size="16">Create New Post</text>
+  <circle cx="390" cy="60" r="14" fill="#FF4CE2" opacity="0.2"/>
+  <text x="385" y="65" fill="#FF4CE2" font-family="sans-serif" font-weight="bold" font-size="12">AI</text>
+  
+  <rect x="50" y="90" width="380" height="180" rx="8" fill="#121316" stroke="#363A45"/>
+  <text x="65" y="120" fill="#E2E8F0" font-family="sans-serif" font-size="14">Launching our brand new AI Social Media Copilot! 🚀</text>
+  <text x="65" y="145" fill="#94A3B8" font-family="sans-serif" font-size="13">Automate scheduling across 30+ channels in one click.</text>
+  <text x="65" y="175" fill="#FF4CE2" font-family="sans-serif" font-size="13">#opensource #socialmedia #growth</text>
+  
+  <rect x="50" y="290" width="380" height="80" rx="8" fill="#1E222A" stroke="#363A45" stroke-dasharray="4 4"/>
+  <text x="180" y="335" fill="#64748B" font-family="sans-serif" font-size="13">Drop images / videos here</text>
+  
+  <rect x="50" y="395" width="180" height="45" rx="8" fill="#FF4CE2"/>
+  <text x="100" y="423" fill="#000" font-family="sans-serif" font-weight="bold" font-size="14">Schedule Post</text>
+  
+  <!-- Right Side Preview -->
+  <rect x="470" y="30" width="300" height="440" rx="10" fill="#181A1E" stroke="#2D3039"/>
+  <rect x="490" y="55" width="40" height="40" rx="20" fill="#FF4CE2"/>
+  <text x="540" y="72" fill="#FFF" font-family="sans-serif" font-weight="bold" font-size="13">Hookpost Brand</text>
+  <text x="540" y="88" fill="#64748B" font-family="sans-serif" font-size="11">Just now · 🌐</text>
+  <rect x="490" y="110" width="260" height="200" rx="8" fill="#242832"/>
+  <circle cx="620" cy="210" r="30" fill="#FF4CE2" opacity="0.3"/>
+</svg>

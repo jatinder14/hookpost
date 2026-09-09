@@ -1,0 +1,75 @@
+# Hookpost image for Cloud Run.
+#
+# Derivative work of Postiz (AGPL-3.0) -- see NOTICE.
+#
+# One image, one tier per container. The root Dockerfile bundles frontend,
+# backend, orchestrator and nginx together under pm2, which suits self-hosters
+# but cannot autoscale. Here the entrypoint runs a single tier chosen by
+# SERVICE_ROLE, listening directly on $PORT, with no nginx and no pm2.
+#
+# Temporal's server and worker are deliberately absent: the server is stateful
+# and the worker must poll continuously, so neither belongs in a scale-to-zero
+# runtime. Both stay on the VM.
+FROM node:22.20-bookworm-slim
+
+ARG NEXT_PUBLIC_VERSION=1.0.0
+ENV NEXT_PUBLIC_VERSION=$NEXT_PUBLIC_VERSION
+ENV NODE_ENV=production
+
+# Next.js inlines NEXT_PUBLIC_* into the client bundle at BUILD time, so these
+# have to be present now -- setting them at runtime does nothing to an
+# already-compiled frontend. NEXT_PUBLIC_RAZORPAY_KEY_ID is a publishable key
+# meant to be visible in the browser; the secret never appears here.
+ARG NEXT_PUBLIC_BACKEND_URL=""
+ARG NEXT_PUBLIC_RAZORPAY_KEY_ID=""
+ARG NEXT_PUBLIC_BILLING_CURRENCY="INR"
+ARG NEXT_PUBLIC_BILLING_CURRENCY_SYMBOL=""
+ARG NEXT_PUBLIC_UPLOAD_DIRECTORY="/uploads"
+ENV NEXT_PUBLIC_BACKEND_URL=$NEXT_PUBLIC_BACKEND_URL \
+    NEXT_PUBLIC_RAZORPAY_KEY_ID=$NEXT_PUBLIC_RAZORPAY_KEY_ID \
+    NEXT_PUBLIC_BILLING_CURRENCY=$NEXT_PUBLIC_BILLING_CURRENCY \
+    NEXT_PUBLIC_BILLING_CURRENCY_SYMBOL=$NEXT_PUBLIC_BILLING_CURRENCY_SYMBOL \
+    NEXT_PUBLIC_UPLOAD_DIRECTORY=$NEXT_PUBLIC_UPLOAD_DIRECTORY
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+      g++ make python3-pip bash curl \
+ && rm -rf /var/lib/apt/lists/*
+
+RUN npm --no-update-notifier --no-fund --global install pnpm@10.6.1
+
+WORKDIR /app
+
+# Manifests first so the dependency layer caches independently of source edits.
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml .npmrc ./
+COPY apps/backend/package.json ./apps/backend/
+COPY apps/frontend/package.json ./apps/frontend/
+COPY apps/orchestrator/package.json ./apps/orchestrator/
+COPY apps/extension/package.json ./apps/extension/
+COPY apps/commands/package.json ./apps/commands/
+COPY apps/sdk/package.json ./apps/sdk/
+COPY libraries ./libraries
+# The frontend's postinstall runs scripts/fetch-gtm.mjs, so that script must be
+# in the context before install, not just its package.json.
+COPY apps/frontend/scripts ./apps/frontend/scripts
+
+# The root postinstall runs prisma generate, which needs the schema in libraries/.
+RUN pnpm install --frozen-lockfile
+
+COPY . /app
+
+# Copy the entrypoint explicitly and assert it landed. The first build of this
+# image started with `failed to load /app/var/docker/cloudrun-entrypoint.sh:
+# no such file or directory` — Cloud Run only surfaces that after a full deploy
+# and a rollout timeout, which is a slow way to learn the file is missing.
+# Failing here instead makes it obvious at build time.
+COPY var/docker/cloudrun-entrypoint.sh /app/var/docker/cloudrun-entrypoint.sh
+RUN chmod +x /app/var/docker/cloudrun-entrypoint.sh \
+ && test -x /app/var/docker/cloudrun-entrypoint.sh \
+ && head -1 /app/var/docker/cloudrun-entrypoint.sh | grep -q '^#!/bin/bash'
+
+RUN NODE_OPTIONS="--max-old-space-size=4096" pnpm run build
+
+ENV PORT=8080
+EXPOSE 8080
+
+ENTRYPOINT ["/app/var/docker/cloudrun-entrypoint.sh"]

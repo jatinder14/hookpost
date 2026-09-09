@@ -1,0 +1,138 @@
+:root {
+  --font-dm: 'DM Sans', sans-serif;
+  --font-jakarta: 'Plus Jakarta Sans', sans-serif;
+  --pink: #FF4CE2;
+}
+
+body {
+  background-color: #000000 !important;
+  color: #ffffff;
+  font-family: var(--font-dm) !important;
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4, .font-jakarta {
+  font-family: var(--font-jakarta) !important;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+h1 {
+  font-size: clamp(34px, 5vw, 68px) !important;
+  line-height: 1.06 !important;
+  font-weight: 800 !important;
+  text-align: center !important;
+  margin: 0 auto !important;
+}
+
+.font-dm {
+  font-family: var(--font-dm) !important;
+}
+
+/* 15-column and 10-column Grid utilities for Social Icons */
+.grid-cols-15, 
+.sm\:grid-cols-15,
+div[class*="grid-cols-15"] {
+  display: grid !important;
+  grid-template-columns: repeat(15, minmax(0, 1fr)) !important;
+  width: 100% !important;
+  max-width: 720px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+@media (max-width: 640px) {
+  .max-sm\:grid-cols-10,
+  div[class*="max-sm:grid-cols-10"] {
+    display: grid !important;
+    grid-template-columns: repeat(10, minmax(0, 1fr)) !important;
+  }
+}
+
+.bg-pink {
+  background-color: #FF4CE2 !important;
+}
+
+.hover\:bg-pink:hover {
+  background-color: #FF4CE2 !important;
+}
+
+.text-pink {
+  color: #FF4CE2 !important;
+}
+
+.hover\:text-pink:hover {
+  color: #FF4CE2 !important;
+}
+
+.stroke-pink {
+  stroke: #FF4CE2 !important;
+}
+
+.hover\:stroke-pink:hover {
+  stroke: #FF4CE2 !important;
+}
+
+.border-pink {
+  border-color: #FF4CE2 !important;
+}
+
+.hover\:border-pink:hover {
+  border-color: #FF4CE2 !important;
+}
+
+.bg-boxOne {
+  background: linear-gradient(180deg, #1A1325 0%, #0D0B12 100%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.bg-boxTwo {
+  background: linear-gradient(180deg, #221226 0%, #0F0B13 100%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.bg-boxThree {
+  background: linear-gradient(180deg, #251711 0%, #120C09 100%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.bg-boxFour {
+  background: linear-gradient(180deg, #111B28 0%, #090E15 100%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.bg-gradientBlue {
+  background: linear-gradient(135deg, #002584 0%, #24005E 100%);
+}
+
+/* Smooth clean page scroll */
+html {
+  scroll-behavior: smooth;
+  overflow-x: hidden;
+}
+
+body {
+  overflow-x: hidden;
+  width: 100%;
+}
+
+/* Premium minimalist dark scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #000000;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #2a2832;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #FF4CE2;
+}

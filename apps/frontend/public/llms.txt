@@ -1,0 +1,25 @@
+# Hookpost
+
+> Hookpost is an open-source, multi-agent AI social media management platform and Postiz alternative supporting 30+ networks, native MCP server, and Docker self-hosting.
+
+## Core Documentation
+- [Homepage](https://hookpost.hookstep.in/): Visual calendar scheduling, AI copilot, and multi-channel publishing dashboard.
+- [AI Agents & MCP Server](https://hookpost.hookstep.in/mcp): Model Context Protocol (MCP) server setup for Claude Desktop, Claude Code, Cursor, and Windsurf (npx hookpost).
+- [Postiz Alternative Guide](https://hookpost.hookstep.in/alternatives/postiz): Feature matrix, pricing comparison, and 3-step migration guide from Postiz to Hookpost.
+- [Buffer Alternative Guide](https://hookpost.hookstep.in/alternatives/buffer): In-depth comparison of pricing, scheduling capabilities, and API access vs Buffer.
+- [Docker Self-Hosting Guide](https://hookpost.hookstep.in/guides/docker-self-hosting): Production Docker Compose setup for Next.js, NestJS, Temporal.io, PostgreSQL, and Redis.
+- [Why We Rewrote Postiz](https://hookpost.hookstep.in/guides/why-we-rewrote-postiz): Engineering retrospective on microservices architecture, Temporal workflows, and performance optimization.
+- [Claude MCP Social Media Guide](https://hookpost.hookstep.in/guides/claude-mcp-social-media): Step-by-step tutorial for controlling Hookpost social media publishing directly from Claude Code.
+- [Supported Channels](https://hookpost.hookstep.in/channels): API specifications for Instagram, TikTok, YouTube Shorts, X, LinkedIn, Facebook, Threads, Bluesky, Pinterest, and Mastodon.
+- [Pricing & Plans](https://hookpost.hookstep.in/pricing): Free starter tier ($0) and flat plans starting at ₹699 / $9/month with Razorpay (UPI, NetBanking, Cards).
+- [Company & Team](https://hookpost.hookstep.in/about): About JR Consulting Co., founder Mohan Bhanushali, mission, and product roadmap.
+
+- [Public API Reference](https://hookpost.hookstep.in/docs/public-api): REST endpoints for posts, channels, media, and slot lookup, with auth and rate limits.
+- [OAuth for Third-Party Apps](https://hookpost.hookstep.in/docs/oauth): Authorisation-code flow for apps acting on another organisation's behalf.
+
+## Optional
+- [All Alternatives](https://hookpost.hookstep.in/alternatives): Comparison pages against Hootsuite, Later, Metricool, Publer, SocialPilot, and Sprout Social.
+- [Solutions Hub](https://hookpost.hookstep.in/for): Persona-specific workflows for creators, agencies, developers, e-commerce, and solopreneurs.
+- [Terms of Service](https://hookpost.hookstep.in/terms): User agreement and service terms.
+- [Privacy Policy](https://hookpost.hookstep.in/privacy): Privacy policy and data retention practices.
+- [Comprehensive LLM Specification](https://hookpost.hookstep.in/llms-full.txt): Full technical architecture, environment variables, and API specs.

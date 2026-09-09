@@ -1,0 +1,45 @@
+{
+  "name": "n8n-nodes-hookpost",
+  "version": "0.1.0",
+  "description": "n8n community node for Hookpost - schedule and publish social media posts across 30+ networks",
+  "keywords": [
+    "n8n-community-node-package",
+    "n8n",
+    "hookpost",
+    "social media",
+    "scheduling"
+  ],
+  "license": "AGPL-3.0",
+  "author": "JR Consulting Co.",
+  "homepage": "https://hookpost.hookstep.in/docs/public-api",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jatinder14/hookpost.git",
+    "directory": "apps/n8n-node"
+  },
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc && node copy-assets.js",
+    "prepublishOnly": "npm run build"
+  },
+  "files": [
+    "dist"
+  ],
+  "n8n": {
+    "n8nNodesApiVersion": 1,
+    "credentials": [
+      "dist/credentials/HookpostApi.credentials.js"
+    ],
+    "nodes": [
+      "dist/nodes/Hookpost/Hookpost.node.js"
+    ]
+  },
+  "peerDependencies": {
+    "n8n-workflow": "*"
+  },
+  "devDependencies": {
+    "n8n-workflow": "^1.82.0",
+    "typescript": "^5.6.0",
+    "@types/node": "^22.0.0"
+  }
+}

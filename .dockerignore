@@ -1,0 +1,44 @@
+# We want the docker builds to be clean, and as fast as possible. Don't send
+# any half-built stuff in the build context as a pre-caution (also saves copying
+# 180k files in node_modules that isn't used!).
+**/node_modules
+node_modules/*
+node_modules
+docker-data/*
+dist
+.nx
+/apps/frontend/.next
+/apps/backend/dist
+/apps/workers/dist
+/apps/cron/dist
+/apps/commands/dist
+.devcontainer
+**/.git
+**/*.md
+**/LICENSE
+**/npm-debug.log
+**/*.vscode
+.git
+.github
+reports
+# Never bake local secrets into the image.
+.env
+.env.*
+!.env.example
+
+# Keep the license and attribution in the image (AGPL section 5a).
+!LICENSE
+!NOTICE
+
+# Both Dockerfiles do `COPY . /app`, and .gitignore has no effect on a docker
+# build context or a `gcloud builds submit` upload - so without these the Play
+# Store signing keystore, its password file, the Play service-account JSON and
+# the generated .deploy-secrets (Postgres + Temporal passwords) were baked into
+# every image pushed to Artifact Registry, readable by anyone who can pull it.
+.deploy-secrets
+.secrets/
+android-playstore-keys/
+google-play-service-account.json
+*.keystore
+*.jks
+*.p12

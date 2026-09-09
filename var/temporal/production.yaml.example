@@ -1,0 +1,125 @@
+# Reference copy of the Temporal server config on hookpost-prod at
+# ~/temporal-server-dist/config/production.yaml. Credentials are placeholders;
+# the live file holds the real values and is chmod 600.
+#
+# Persistence is Cloud SQL (instance `hookpost-temporal`, PostgreSQL 16,
+# db-f1-micro, asia-southeast1) reached over a PRIVATE IP inside the VPC. The
+# instance has no public IP at all.
+#
+# It was briefly on Neon. That was a mistake: Temporal holds connections open
+# permanently, so Neon's compute could never scale to zero, and the free plan
+# only includes 100 compute-hours per project against the ~182 a month of
+# always-on needs. It also shared a compute with the production app database.
+#
+# maxConns is PER INTERNAL SERVICE, not global. One temporal-server binary runs
+# frontend, matching, history and worker, each with its own pool, so a value of
+# 15 here would allow up to 60 connections against one database.
+#
+# If the password is ever lost, reset it rather than hunting for it:
+#   gcloud sql users set-password temporal --instance=hookpost-temporal
+# Hookpost production Temporal, backed by Neon Postgres.
+#
+# Replaces `temporal server start-dev --db-filename temporal.db`, which was the
+# development server on a single SQLite file: one writer, no HA, and the only
+# copy of every scheduled post.
+#
+# Services bind on all interfaces so the VPC can reach :7233. That is not a
+# public exposure - the only firewall rule covering 7233 is
+# default-allow-internal (10.128.0.0/9). Ports 80, 443 and 22 are the only ones
+# open to the internet.
+log:
+  stdout: true
+  level: info
+
+persistence:
+  defaultStore: postgres-default
+  visibilityStore: postgres-visibility
+  # Fixed at cluster creation and cannot be changed without wiping state.
+  numHistoryShards: 4
+  datastores:
+    postgres-default:
+      sql:
+        pluginName: "postgres12"
+        databaseName: "temporal"
+        connectAddr: "${CLOUDSQL_PRIVATE_IP}:5432"
+        connectProtocol: "tcp"
+        user: "temporal"
+        password: "${CLOUDSQL_PASSWORD}"
+        maxConns: 5
+        maxIdleConns: 2
+        maxConnLifetime: "1h"
+    postgres-visibility:
+      sql:
+        pluginName: "postgres12"
+        databaseName: "temporal_visibility"
+        connectAddr: "${CLOUDSQL_PRIVATE_IP}:5432"
+        connectProtocol: "tcp"
+        user: "temporal"
+        password: "${CLOUDSQL_PASSWORD}"
+        maxConns: 3
+        maxIdleConns: 1
+        maxConnLifetime: "1h"
+
+global:
+  membership:
+    maxJoinDuration: 30s
+    broadcastAddress: "10.148.0.2"
+  pprof:
+    port: 7936
+
+services:
+  frontend:
+    rpc:
+      grpcPort: 7233
+      membershipPort: 6933
+      bindOnLocalHost: false
+      httpPort: 7243
+  matching:
+    rpc:
+      grpcPort: 7235
+      membershipPort: 6935
+      bindOnLocalHost: false
+  history:
+    rpc:
+      grpcPort: 7234
+      membershipPort: 6934
+      bindOnLocalHost: false
+  worker:
+    rpc:
+      grpcPort: 7239
+      membershipPort: 6939
+      bindOnLocalHost: false
+
+clusterMetadata:
+  enableGlobalNamespace: false
+  failoverVersionIncrement: 10
+  masterClusterName: "active"
+  currentClusterName: "active"
+  clusterInformation:
+    active:
+      enabled: true
+      initialFailoverVersion: 1
+      rpcName: "frontend"
+      rpcAddress: "10.148.0.2:7233"
+
+dcRedirectionPolicy:
+  policy: "noop"
+
+# Archival wrote to /tmp in the sample config, which is pointless on a box that
+# gets recreated. Off until there is somewhere durable to send it.
+archival:
+  history:
+    state: "disabled"
+  visibility:
+    state: "disabled"
+
+namespaceDefaults:
+  archival:
+    history:
+      state: "disabled"
+    visibility:
+      state: "disabled"
+
+dynamicConfigClient:
+  filepath: "config/dynamicconfig/development-sql.yaml"
+  pollInterval: "10s"

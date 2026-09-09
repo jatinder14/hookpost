@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="500" viewBox="0 0 800 500" fill="none">
+  <rect width="800" height="500" rx="16" fill="#121316" stroke="#26272B" stroke-width="2"/>
+  <!-- Stat Cards -->
+  <rect x="30" y="30" width="220" height="100" rx="10" fill="#181A1E" stroke="#2D3039"/>
+  <text x="50" y="60" fill="#94A3B8" font-family="sans-serif" font-size="13">Total Impressions</text>
+  <text x="50" y="95" fill="#FFF" font-family="sans-serif" font-weight="bold" font-size="24">1,428,950</text>
+  <text x="180" y="95" fill="#00E599" font-family="sans-serif" font-weight="bold" font-size="13">+34.8%</text>
+
+  <rect x="280" y="30" width="220" height="100" rx="10" fill="#181A1E" stroke="#2D3039"/>
+  <text x="300" y="60" fill="#94A3B8" font-family="sans-serif" font-size="13">Total Engagements</text>
+  <text x="300" y="95" fill="#FFF" font-family="sans-serif" font-weight="bold" font-size="24">284,120</text>
+  <text x="430" y="95" fill="#00E599" font-family="sans-serif" font-weight="bold" font-size="13">+28.2%</text>
+
+  <rect x="530" y="30" width="240" height="100" rx="10" fill="#181A1E" stroke="#2D3039"/>
+  <text x="550" y="60" fill="#94A3B8" font-family="sans-serif" font-size="13">Audience Growth</text>
+  <text x="550" y="95" fill="#FFF" font-family="sans-serif" font-weight="bold" font-size="24">+42,800</text>
+  <text x="690" y="95" fill="#FF4CE2" font-family="sans-serif" font-weight="bold" font-size="13">🔥 Top</text>
+
+  <!-- Big Chart -->
+  <rect x="30" y="150" width="740" height="320" rx="10" fill="#181A1E" stroke="#2D3039"/>
+  <path d="M60 400 Q 180 340, 280 360 T 480 240 T 680 200 L 740 180" stroke="#FF4CE2" stroke-width="4" fill="none"/>
+  <path d="M60 400 Q 180 340, 280 360 T 480 240 T 680 200 L 740 180 L 740 440 L 60 440 Z" fill="url(#pinkGrad)" opacity="0.2"/>
+  
+  <defs>
+    <linearGradient id="pinkGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#FF4CE2"/>
+      <stop offset="100%" stop-color="#181A1E" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+</svg>

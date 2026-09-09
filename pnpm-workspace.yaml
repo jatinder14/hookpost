@@ -1,0 +1,25 @@
+packages:
+  - apps/*
+  - libraries/*
+
+# These lived in the "pnpm" field of package.json, which pnpm 10 no longer
+# reads - it warns "The following keys were ignored: pnpm.overrides,
+# pnpm.onlyBuiltDependencies" on every install. The React/Next pins had been
+# silently inert; the lockfile happened to already resolve to them, so nothing
+# had broken yet. Single source of truth here.
+overrides:
+  multer: ^2.2.0
+  next: 16.3.1
+  react: 19.2.4
+  react-dom: 19.2.4
+  '@types/react': 19.1.8
+  '@types/react-dom': 19.1.6
+  # CVE-2025-7783: form-data used Math.random() for multipart boundaries,
+  # fixed in 2.5.4, 3.0.4 and 4.0.4. Three transitive copies sat below those
+  # lines. Bumped within each major so nothing gets a breaking upgrade.
+  'form-data@<2.5.4': ^2.5.5
+  'form-data@>=3.0.0 <3.0.4': ^3.0.4
+  'form-data@>=4.0.0 <4.0.4': ^4.0.6
+
+onlyBuiltDependencies:
+  - bcrypt

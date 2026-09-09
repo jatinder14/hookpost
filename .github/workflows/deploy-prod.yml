@@ -1,0 +1,90 @@
+name: Deploy to Production VM
+
+# Deliberate trigger only. This used to fire on every push to main touching
+# apps/**, libraries/**, package.json, pnpm-lock.yaml or scripts/deploy.sh -
+# which meant a push WAS a production deploy, and nobody working in the repo
+# knew it. On 2026-09-08 six runs fired from three different people's pushes;
+# four failed. Everyone involved believed pushing to a private repo was inert.
+#
+# A deploy should be something someone chooses to do, so this is now
+# workflow_dispatch only: run it from the Actions tab, or `gh workflow run
+# deploy-prod.yml`. Restoring the push trigger re-arms automatic production
+# deploys - if you do it, tell everyone working in the repo first.
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    name: Deploy to Hookpost Singapore Origin VM
+    runs-on: ubuntu-latest
+    env:
+      NODE_OPTIONS: "--max-old-space-size=6144"
+      TARGET_HOST: ${{ secrets.PROD_HOST }}
+      SSH_USER: ${{ secrets.PROD_USER }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 10.6.1
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Generate Prisma Client
+        run: pnpm run prisma-generate
+
+      - name: Configure SSH Key
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.GCP_SSH_PRIVATE_KEY }}
+        run: |
+          mkdir -p ~/.ssh
+          echo "$SSH_PRIVATE_KEY" > ~/.ssh/google_compute_engine
+          chmod 600 ~/.ssh/google_compute_engine
+          ssh-keyscan -H "$TARGET_HOST" >> ~/.ssh/known_hosts 2>/dev/null || true
+
+      # The frontend is built HERE, on the 16GB runner, and shipped as a tarball.
+      # It is deliberately NOT built on the production VM: that box is an
+      # e2-medium (3913MB) also serving production traffic and Cloud SQL-backed
+      # Temporal, and it cannot compile Next.js. Measured over a full solo
+      # build: PSI memory full avg300 12.41% (peak 34.58%), peak swap 4857MB,
+      # peak swap-in 4821 pages/s - a third of the time the machine does no
+      # useful work at all, and builds die intermittently with exit 137
+      # (SIGKILL, kernel OOM killer). Four of the six runs of this workflow on
+      # 2026-09-08 failed for exactly that reason, because it used to run
+      # deploy.sh, which rebuilds on the VM. Raising --max-old-space-size does
+      # not help: it bounds V8's heap while the OOM killer scores total RSS.
+      #
+      # deploy-production.sh fetches the real NEXT_PUBLIC_* off the VM before
+      # building, which is mandatory - Next inlines them at build time, the
+      # repo's .env is the development one, and an unset NEXT_PUBLIC_* inlines
+      # as an empty string with nothing failing loudly. It then verifies the
+      # pixel and GTM ids are actually present in the emitted chunks before it
+      # ships anything.
+      - name: Deploy frontend (built on this runner, shipped as a tarball)
+        env:
+          SSH_KEY: /home/runner/.ssh/google_compute_engine
+        run: |
+          chmod +x ./scripts/deploy-production.sh
+          ./scripts/deploy-production.sh
+
+      # Backend and orchestrator dists are compiled on the runner by deploy.sh
+      # and rsynced, which is fine - it is only the frontend build that the VM
+      # cannot survive. SKIP_FRONTEND_BUILD stops the remote block rebuilding
+      # the .next we just shipped above.
+      - name: Deploy backend and orchestrator
+        env:
+          SSH_KEY: /home/runner/.ssh/google_compute_engine
+          SKIP_FRONTEND_BUILD: '1'
+        run: |
+          chmod +x ./scripts/deploy.sh
+          ./scripts/deploy.sh

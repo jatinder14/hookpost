@@ -1,0 +1,35 @@
+# Keeps the Cloud Build upload to the ~23 MB of actual source. Without this the
+# context is about 16 GB: node_modules, a 3.3 GB .git, and local build output.
+.git
+.gitignore
+**/node_modules
+node_modules
+dist
+.nx
+.turbo
+apps/frontend/.next
+apps/backend/dist
+apps/orchestrator/dist
+apps/commands/dist
+apps/sdk/dist
+apps/cli/dist
+apps/n8n-node/dist
+docker-data
+*.log
+*.tar.gz
+.DS_Store
+.env
+.env.*
+
+# Both Dockerfiles do `COPY . /app`, and .gitignore has no effect on a docker
+# build context or a `gcloud builds submit` upload - so without these the Play
+# Store signing keystore, its password file, the Play service-account JSON and
+# the generated .deploy-secrets (Postgres + Temporal passwords) were baked into
+# every image pushed to Artifact Registry, readable by anyone who can pull it.
+.deploy-secrets
+.secrets/
+android-playstore-keys/
+google-play-service-account.json
+*.keystore
+*.jks
+*.p12

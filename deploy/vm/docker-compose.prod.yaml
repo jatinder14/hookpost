@@ -1,0 +1,135 @@
+# Interpolated variables (HOOKPOST_IMAGE, POSTGRES_PASSWORD,
+# TEMPORAL_DB_PASSWORD) come from /opt/hookpost/.env, which docker compose
+# reads automatically. The application's own environment lives in app.env.
+# Hookpost production stack for a single Compute Engine VM.
+# Caddy terminates TLS on 80/443 and proxies to the app on 5000.
+services:
+  hookpost:
+    image: ${HOOKPOST_IMAGE}
+    container_name: hookpost
+    restart: always
+    env_file: [/opt/hookpost/app.env]
+    environment:
+      # Deliberately NOT setting PORT: the backend reads it too and would try to
+      # bind nginx's port. The entrypoint defaults nginx to 5000 on its own.
+      TEMPORAL_ADDRESS: 'temporal:7233'
+      DATABASE_URL: 'postgresql://hookpost:${POSTGRES_PASSWORD}@hookpost-postgres:5432/hookpost'
+      REDIS_URL: 'redis://hookpost-redis:6379'
+    # Bound to 127.0.0.1 so it is reachable over an SSH tunnel for admin and
+    # debugging, but never from the internet -- the firewall only opens 80/443,
+    # and this binding is loopback-only regardless.
+    ports:
+      - '127.0.0.1:5000:5000'
+    volumes:
+      - hookpost-config:/config/
+      - hookpost-uploads:/uploads/
+    networks: [hookpost-network, temporal-network]
+    depends_on:
+      hookpost-postgres: {condition: service_healthy}
+      hookpost-redis: {condition: service_healthy}
+      temporal: {condition: service_started}
+
+  caddy:
+    image: caddy:2-alpine
+    container_name: caddy
+    restart: always
+    ports: ['80:80', '443:443', '443:443/udp']
+    volumes:
+      - /opt/hookpost/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy-data:/data
+      - caddy-config:/config
+    networks: [hookpost-network]
+    depends_on: [hookpost]
+
+  hookpost-postgres:
+    image: postgres:17-alpine
+    container_name: hookpost-postgres
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_USER: hookpost
+      POSTGRES_DB: hookpost
+    volumes: [postgres-volume:/var/lib/postgresql/data]
+    networks: [hookpost-network]
+    healthcheck:
+      test: pg_isready -U hookpost -d hookpost
+      interval: 10s
+      timeout: 3s
+      retries: 5
+
+  hookpost-redis:
+    image: redis:7.2
+    container_name: hookpost-redis
+    restart: always
+    healthcheck:
+      test: redis-cli ping
+      interval: 10s
+      timeout: 3s
+      retries: 5
+    volumes: [hookpost-redis-data:/data]
+    networks: [hookpost-network]
+
+  # --- Temporal ---------------------------------------------------------------
+  temporal-postgresql:
+    image: postgres:16
+    container_name: temporal-postgresql
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: ${TEMPORAL_DB_PASSWORD}
+      POSTGRES_USER: temporal
+    volumes: [temporal-postgres-volume:/var/lib/postgresql/data]
+    networks: [temporal-network]
+
+  temporal-elasticsearch:
+    image: elasticsearch:7.17.27
+    container_name: temporal-elasticsearch
+    restart: always
+    environment:
+      - cluster.routing.allocation.disk.threshold_enabled=true
+      - cluster.routing.allocation.disk.watermark.low=512mb
+      - cluster.routing.allocation.disk.watermark.high=256mb
+      - cluster.routing.allocation.disk.watermark.flood_stage=128mb
+      - discovery.type=single-node
+      # A 256MB heap is plenty for Temporal visibility indices.
+      - ES_JAVA_OPTS=-Xms256m -Xmx256m
+      - xpack.security.enabled=false
+    volumes: [temporal-es-data:/usr/share/elasticsearch/data]
+    networks: [temporal-network]
+    expose: ['9200']
+
+  temporal:
+    image: temporalio/auto-setup:1.28.1
+    container_name: temporal
+    restart: always
+    depends_on: [temporal-postgresql, temporal-elasticsearch]
+    environment:
+      - DB=postgres12
+      - DB_PORT=5432
+      - POSTGRES_USER=temporal
+      - POSTGRES_PWD=${TEMPORAL_DB_PASSWORD}
+      - POSTGRES_SEEDS=temporal-postgresql
+      - TEMPORAL_NAMESPACE=default
+      # Elasticsearch is REQUIRED, not an optimisation. Without it Temporal
+      # falls back to SQL (standard) visibility, which permits at most 3 Text
+      # search attributes -- and the backend registers more than that at boot,
+      # failing with "cannot have more than 3 search attribute of type Text"
+      # before it ever listens on :3000.
+      - ENABLE_ES=true
+      - ES_SEEDS=temporal-elasticsearch
+      - ES_VERSION=v7
+    networks: [temporal-network]
+    expose: ['7233']
+
+volumes:
+  postgres-volume:
+  temporal-es-data:
+  temporal-postgres-volume:
+  hookpost-redis-data:
+  hookpost-config:
+  hookpost-uploads:
+  caddy-data:
+  caddy-config:
+
+networks:
+  hookpost-network:
+  temporal-network:

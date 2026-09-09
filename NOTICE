@@ -1,0 +1,41 @@
+Hookpost
+========
+
+Hookpost is a modified derivative work of Postiz, an open-source social
+media scheduling tool.
+
+  Upstream project: Postiz
+  Upstream source:  https://github.com/gitroomhq/postiz-app
+  Upstream author:  Gitroom Inc. and the Postiz contributors
+  Forked from:      main @ 0b6dc6c5b62dedd808a37fe275585ec0ee5aef4c
+                    (2026-08-19; upstream's latest release tag at that
+                    point was v2.23.0. Note version.txt in the upstream
+                    tree still reads v1.47.0 and is stale -- the commit
+                    hash above is the authoritative reference.)
+  Upstream license: GNU Affero General Public License v3.0
+
+Hookpost is NOT affiliated with, endorsed by, or sponsored by Postiz or
+Gitroom Inc. "Postiz" and "Gitroom" are trademarks of their respective
+owners and are used here only to identify the upstream project, as
+required for attribution.
+
+This program is free software: you can redistribute it and/or modify it
+under the terms of the GNU Affero General Public License as published by
+the Free Software Foundation, either version 3 of the License, or (at
+your option) any later version. See the LICENSE file for the full text.
+
+AGPL SECTION 13 - REMOTE NETWORK INTERACTION
+--------------------------------------------
+If you run a modified version of this program on a server and let other
+users interact with it over a network, you MUST offer those users access
+to the Corresponding Source of your modified version, at no charge.
+
+The complete corresponding source of this instance is published at:
+
+  <<< SET THIS: your public source repository URL >>>
+
+Substantive modifications made in Hookpost relative to upstream Postiz:
+  - Rebranded from "Postiz" to "Hookpost" throughout.
+  - Replaced the Stripe payment integration with Razorpay.
+  - Revised subscription pricing tiers.
+  - Replaced deployment tooling for Google Cloud Platform.

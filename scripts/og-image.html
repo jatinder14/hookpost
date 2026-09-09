@@ -1,0 +1,91 @@
+<!--
+  Source for apps/frontend/public/og-image.png (1200x630).
+
+  Regenerate:
+    "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" \
+      --headless --disable-gpu --hide-scrollbars --force-device-scale-factor=1 \
+      --screenshot=apps/frontend/public/og-image.png --window-size=1200,630 \
+      file://$PWD/scripts/og-image.html
+
+  Deliberately uses system fonts only. The previous og-image was generated with
+  emoji in the chips and three of them rendered as tofu boxes in the shipped PNG,
+  because whatever produced it had no emoji font. No emoji here, no web fonts, no
+  network fetch at render time.
+
+  Copy rules learned the hard way - keep them:
+  - No competitor names. The old image read "the modern, open-source Postiz &
+    Buffer alternative", which tells Buffer's own audience we are the knock-off.
+    Commit 4c4a826d scrubbed the same framing off the compare pages.
+  - No unsupportable superlatives. The old badge said "#1 OPEN SOURCE
+    ALTERNATIVE".
+  - NO NETWORK COUNT. This asset carried "30 networks" and was wrong within
+    hours, because the connectable count is 32 registered providers MINUS
+    whatever HIDDEN_PROVIDERS hides - and that is a server env var, not
+    something readable from the repo. channel-specs.ts, whose stated invariant
+    is "only channels a signed-up user can actually connect appear here",
+    lists 18. The site said 30 and was being corrected to 20 at the same time.
+    A static share image must not carry a number that lives in an env var and
+    drifts. Say what is true at any count.
+-->
+<!doctype html>
+<meta charset="utf-8">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html,body { width:1200px; height:630px; }
+  body {
+    background:#05070c;
+    font-family:"Helvetica Neue", Helvetica, Arial, sans-serif;
+    color:#fff; overflow:hidden; position:relative;
+  }
+  /* ambient glows, matching the brand pink/blue */
+  .glow { position:absolute; border-radius:50%; filter:blur(90px); }
+  .g1 { width:620px; height:620px; left:-190px; top:-230px; background:rgba(23,178,255,.22); }
+  .g2 { width:560px; height:560px; right:-170px; bottom:-250px; background:rgba(255,76,226,.20); }
+  .g3 { width:420px; height:420px; left:44%; top:38%; background:rgba(23,178,255,.10); }
+
+  .card {
+    position:absolute; inset:38px;
+    border:1px solid rgba(255,255,255,.10);
+    border-radius:26px;
+    padding:56px 60px;
+    display:flex; flex-direction:column;
+  }
+  .badge {
+    align-self:flex-start; display:flex; align-items:center; gap:11px;
+    border:1px solid rgba(23,178,255,.42);
+    background:rgba(23,178,255,.09);
+    border-radius:999px; padding:11px 22px;
+    font-size:16px; font-weight:700; letter-spacing:.13em; text-transform:uppercase;
+    color:#cfeaff;
+  }
+  .dot { width:9px; height:9px; border-radius:50%; background:#17b2ff; }
+
+  .word { margin-top:34px; font-size:92px; font-weight:800; letter-spacing:-.035em; line-height:.98; }
+  .word i { font-style:normal; color:#17b2ff; }
+
+  h2 { margin-top:16px; font-size:41px; font-weight:700; letter-spacing:-.022em; color:#f2f5f9; }
+  p  { margin-top:18px; font-size:22px; line-height:1.5; color:#aab4c4; max-width:52ch; font-weight:400; }
+
+  .chips { margin-top:40px; display:flex; gap:12px; flex-wrap:nowrap; }
+  .chip {
+    border:1px solid rgba(255,255,255,.15);
+    background:rgba(255,255,255,.045);
+    border-radius:999px; padding:13px 21px;
+    font-size:18px; font-weight:600; color:#e6ebf2; white-space:nowrap;
+  }
+  .url { margin-top:auto; padding-top:30px; font-size:21px; font-weight:600; color:#17b2ff; letter-spacing:-.01em; }
+</style>
+<div class="glow g1"></div><div class="glow g2"></div><div class="glow g3"></div>
+<div class="card">
+  <div class="badge"><span class="dot"></span>Self-hostable &middot; MCP-native</div>
+  <div class="word">Hook<i>post</i></div>
+  <h2>Social scheduling with an AI agent</h2>
+  <p>Every network you post to, from one visual calendar, with AI drafting &mdash; plus an MCP server, so Claude can publish for you.</p>
+  <div class="chips">
+    <div class="chip">One calendar</div>
+    <div class="chip">AI content agent</div>
+    <div class="chip">Free forever tier</div>
+    <div class="chip">Docker self-host</div>
+  </div>
+  <div class="url">hookpost.hookstep.in</div>
+</div>

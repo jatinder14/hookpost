@@ -1,0 +1,11 @@
+# Caddy obtains and renews a Let's Encrypt certificate automatically.
+# The DNS A record for this name must already point at this VM's public IP,
+# or the ACME HTTP-01 challenge will fail.
+hookpost.hookstep.in {
+	encode zstd gzip
+	reverse_proxy hookpost:5000 {
+		header_up Host {host}
+		header_up X-Real-IP {remote_host}
+		header_up X-Forwarded-Proto {scheme}
+	}
+}

@@ -1,0 +1,38 @@
+{
+  "name": "hookpost",
+  "version": "0.1.0",
+  "description": "Hookpost CLI - schedule and publish social media posts from your terminal",
+  "keywords": [
+    "hookpost",
+    "cli",
+    "social media",
+    "scheduling",
+    "social media scheduler"
+  ],
+  "license": "AGPL-3.0",
+  "author": "JR Consulting Co.",
+  "homepage": "https://hookpost.hookstep.in/docs/public-api",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jatinder14/hookpost.git",
+    "directory": "apps/cli"
+  },
+  "bin": {
+    "hookpost": "dist/index.js"
+  },
+  "main": "dist/index.js",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "prepublishOnly": "npm run build"
+  },
+  "devDependencies": {
+    "typescript": "^5.6.0",
+    "@types/node": "^22.0.0"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

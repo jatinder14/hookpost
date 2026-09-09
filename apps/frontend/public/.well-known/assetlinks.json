@@ -1,0 +1,8 @@
+[{
+      "relation": ["delegate_permission/common.handle_all_urls"],
+      "target": {
+        "namespace": "android_app",
+        "package_name": "in.hookstep.hookpost.twa",
+        "sha256_cert_fingerprints": ["BD:F8:8F:AF:95:89:A9:BB:E9:95:CD:F1:F7:6B:F6:8D:D9:C7:0C:D8:78:05:AD:24:5C:A5:2A:93:FF:5B:4E:01"]
+      }
+    }]

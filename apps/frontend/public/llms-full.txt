@@ -1,0 +1,115 @@
+# Hookpost — Comprehensive System & Architecture Specification for LLMs
+
+## 1. Executive Summary & Brand Identity
+- **Product Name:** Hookpost
+- **Parent Entity:** JR Consulting Co.
+- **Founder & Leadership:** Mohan Bhanushali (Founder & Lead Operations)
+- **Primary Website:** https://hookpost.hookstep.in
+- **Company Website:** https://hookstep.in
+- **Founders Portal:** https://hookstep.in/founders
+- **Licence:** AGPL-3.0. The public source release is not published yet; the repository is shared on request.
+- **License:** GNU Affero General Public License v3.0 (AGPLv3)
+- **Industry:** Social Media Management, Content Operations, Developer Tooling, AI Agents
+
+Hookpost is an open-source, enterprise-grade AI social media scheduling and automation platform designed as a modern alternative to Postiz, Buffer, and Hootsuite. It unites multi-platform publishing across 30+ networks, native Model Context Protocol (MCP) server integration for AI coding assistants, localized billing (Razorpay with UPI Autopay, NetBanking, and Cards), and self-hosting flexibility with Docker Compose.
+
+---
+
+## 2. Core Architectural Pillars
+
+### Microservices Stack
+1. **Frontend:** Next.js 16 with React 19, TypeScript, Turbopack, and Tailwind CSS.
+2. **Backend API:** NestJS modular application with JWT/OAuth2 authentication and Prisma ORM.
+3. **Database:** PostgreSQL (Neon Serverless PostgreSQL or local PostgreSQL instance).
+4. **Cache & Queues:** Redis (Upstash Redis or self-hosted Redis) with BullMQ job queues.
+5. **Workflow Orchestrator:** Temporal.io distributed stateful workflow orchestrator ensuring guaranteed post delivery, retry exponential backoff, and state recovery.
+6. **AI Agent Protocols:** Native Model Context Protocol (MCP) server running on SSE and stdio modes (`npx hookpost`).
+
+---
+
+## 3. Supported Social Channels & Media Formats
+
+Hookpost connects directly to official platform APIs:
+- **Instagram:** Feed Posts, Reels, Carousels, Stories with audio and caption management.
+- **TikTok:** Direct video publishing with privacy controls and thumbnail selection.
+- **YouTube:** Full videos and YouTube Shorts with custom titles, tags, and category assignment.
+- **X (formerly Twitter):** Single tweets, multi-post threads, polls, and media attachments.
+- **LinkedIn:** Personal profiles and Company Organization Pages with rich PDF carousels and images.
+- **Facebook:** Pages and Groups with scheduled auto-sharing.
+- **Threads:** Text posts, single images, and video sharing.
+- **Pinterest:** Boards and Pin creation with custom destination links.
+- **Bluesky:** AT Protocol integration with custom feeds and image attachments.
+- **Mastodon:** ActivityPub federated posts with CW (content warnings) and image alt tags.
+- **Reddit:** Subreddit post scheduling with flair tags and markdown support.
+- **Discord:** Webhook and bot-driven multi-server announcements.
+- **Telegram:** Channel broadcasts and discussion group message dispatch.
+
+---
+
+## 4. AI & Model Context Protocol (MCP) Integration
+
+Hookpost is purpose-built for agentic workflows:
+- **Endpoint:** `https://hookpost.hookstep.in/mcp`
+- **CLI Package:** `npx hookpost`
+- **Claude Desktop Config:**
+```json
+{
+  "mcpServers": {
+    "hookpost": {
+      "command": "npx",
+      "args": ["-y", "hookpost-mcp"],
+      "env": {
+        "HOOKPOST_API_KEY": "your_api_key_here"
+      }
+    }
+  }
+}
+```
+- **Agent Capabilities:**
+  - `list_channels`: Retrieve connected social media profiles.
+  - `draft_post`: Generate and stage multi-network content with platform-specific character limits.
+  - `schedule_post`: Queue posts with precise ISO timestamps and media attachments.
+  - `get_analytics`: Fetch engagement metrics across published posts.
+
+---
+
+## 5. Pricing, Plans & Global Accessibility
+
+Hookpost operates on a transparent, creator-first pricing structure:
+- **Community / Free Plan ($0/month):** Connect core social profiles, calendar scheduling, basic analytics, and community support.
+- **Standard Plan (₹699 / $9/month):** 5 channels, 400 posts/month, AI text copilot, 20 AI images, 3 AI videos, REST API, 2 webhooks.
+- **Team Plan (₹1,499 / $19/month):** 10 channels, unlimited posts & team members, 100 AI images, 10 AI videos, RSS auto-posting, 10 webhooks.
+- **Pro Plan (₹2,499 / $29/month):** 30 channels, unlimited posts & members, 300 AI images, 30 AI videos, 30 webhooks.
+- **Ultimate Plan (₹4,499 / $59/month):** 100 channels, unlimited posts & members, 500 AI images, 60 AI videos, unlimited webhooks, custom SLA.
+- **Payment Methods:**
+  - Razorpay: Native UPI (Google Pay, PhonePe, Paytm), NetBanking, domestic and international credit/debit cards.
+
+---
+
+## 6. Self-Hosting with Docker
+
+Users can achieve complete data sovereignty by self-hosting Hookpost:
+```bash
+# Clone official repository
+git clone <access-url-provided-on-request> hookpost
+cd hookpost
+
+# Configure environment
+cp .env.example .env
+
+# Boot microservices stack
+docker compose up -d
+```
+All scheduling data, tokens, and media remain strictly within the user's infrastructure.
+
+---
+
+## 7. Official Knowledge Graph & Entity URLs
+- Canonical URL: https://hookpost.hookstep.in
+- Parent Entity: https://hookstep.in
+- Founder Profile: Mohan Bhanushali (https://hookstep.in/founders)
+- Source Code: AGPL-3.0, shared on request (public release pending)
+- LinkedIn: https://in.linkedin.com/company/hookstep
+- X (Twitter): https://x.com/hookstep
+- Documentation & Guides: https://hookpost.hookstep.in/guides
+- LLM Machine Info: https://hookpost.hookstep.in/llms.txt

@@ -1,0 +1,110 @@
+#!/usr/bin/env bash
+#
+# Blocks a commit that would put a credential into git history.
+#
+# This exists because it already happened. Between 2026-08-24 and 2026-09-08 the
+# repository carried, in history: the Play Store signing keystore plus its
+# passwords in plaintext (android-playstore-keys/, added e3c85e8f, removed
+# 50422248), a live Resend API key as a `process.env.X || '<real key>'` fallback
+# (added 7702d907, removed 61d1abd0), and live Neon/Upstash database URLs in the
+# same fallback shape. Removing a secret from HEAD does nothing - history keeps
+# it forever, and the only real remedy is rotating the credential and rewriting
+# history, which is expensive and, for a Play Store signing key, impossible.
+#
+# So the cheapest place to stop this is here, before the commit exists.
+#
+# Enabled automatically by `pnpm install` (see the postinstall script). To enable
+# by hand:  git config core.hooksPath .githooks
+# To bypass for one commit, if you are certain:  git commit --no-verify
+#
+set -uo pipefail
+
+fail=0
+note() { printf '\n\033[31mpre-commit: %s\033[0m\n' "$1" >&2; fail=1; }
+
+# ---------------------------------------------------------------- paths ------
+# Files that must never be tracked, regardless of content. Checked by path so a
+# binary keystore is caught even though no pattern would match its bytes.
+blocked_paths='(^|/)\.env$|(^|/)\.env\.(production|build|local)$|(^|/)\.deploy-secrets$|(^|/)android-playstore-keys/|\.(keystore|jks|p12|pfx)$|(^|/)id_(rsa|ed25519)$|\.pem$'
+
+staged=$(git diff --cached --name-only --diff-filter=ACMR)
+[ -z "$staged" ] && exit 0
+
+offending_paths=$(printf '%s\n' "$staged" | grep -E "$blocked_paths" || true)
+if [ -n "$offending_paths" ]; then
+  note "these paths must never be committed:"
+  printf '%s\n' "$offending_paths" | sed 's/^/    /' >&2
+  printf '  They are in .gitignore; if one is staged it was force-added.\n  Unstage with: git rm --cached <path>\n' >&2
+fi
+
+# -------------------------------------------------------------- content ------
+# Patterns are deliberately shaped to the real credential formats rather than
+# anything loose. A previous audit sweep matched `re_[A-Za-z0-9_-]{20,}` and
+# flagged the i18n key `re_you_sure_you_want_to_delete_post` - requiring 8+
+# alphanumerics before the underscore is what keeps this hook quiet enough to
+# leave switched on. A hook people disable protects nothing.
+scan_added() { git diff --cached -U0 --diff-filter=ACMR -- "$@" | grep '^+' | grep -v '^+++'; }
+
+check() {
+  local label="$1" pattern="$2"
+  local hits
+  # -e is required, not optional: the PRIVATE KEY pattern begins with a dash and
+  # grep read it as a flag, so that check errored out instead of matching. It
+  # was silently dead until a real commit surfaced the usage message.
+  hits=$(scan_added . | grep -nE -e "$pattern" || true)
+  if [ -n "$hits" ]; then
+    note "possible $label in staged changes:"
+    # Print only the matched shape and never the surrounding line, so the hook's
+    # own output does not become a second copy of the secret.
+    printf '%s\n' "$hits" | grep -oE -e "$pattern" | sort -u \
+      | sed -E 's/^(.{6}).*$/    \1... (redacted)/' >&2
+  fi
+}
+
+check "Resend API key"        're_[A-Za-z0-9]{8,}_[A-Za-z0-9]{16,}'
+check "npm token"             'npm_[A-Za-z0-9]{36}'
+check "OpenAI/Anthropic key"  '(sk|sk-ant)-[A-Za-z0-9_-]{32,}'
+check "Google API key"        'AIza[0-9A-Za-z_-]{35}'
+check "Razorpay live key"     'rzp_live_[A-Za-z0-9]{10,}'
+check "Meta access token"     'EAA[A-Za-z0-9]{60,}'
+check "AWS access key id"     'AKIA[0-9A-Z]{16}'
+check "Slack token"           'xox[baprs]-[A-Za-z0-9-]{10,}'
+check "private key block"     '-----BEGIN [A-Z ]*PRIVATE KEY-----'
+# The DB-URL rule needs a placeholder filter or it fires on every template.
+# Confirmed false positives on the first full-tree run: USER:PASS@HOST,
+# ${POSTGRES_PASSWORD}, hookpost-user:hookpost-password@localhost and
+# PASSWORD@localhost, across .env.example, docker-compose and deploy docs. This
+# checks the password segment rather than the file path, so a real credential
+# pasted into .env.example is still caught.
+db_urls=$(scan_added . \
+  | grep -oE '(postgres(ql)?|mysql|mongodb(\+srv)?|rediss?)://[^[:space:]:@/]+:[^[:space:]@/]+@' \
+  | grep -vE ':(\$\{[^}]*\}|PASS|PASSWORD|password|<[^>]*>|changeme|CHANGEME|[a-z-]*-password|postgres|root|example)@' || true)
+if [ -n "$db_urls" ]; then
+  note "database URL with an inline password:"
+  printf '%s\n' "$db_urls" | sort -u | sed -E 's|://.*|://...(redacted)|' | sed 's/^/    /' >&2
+fi
+
+# The specific shape that leaked twice here: a real value used as the fallback
+# for a missing environment variable. Long string literals after `||` on an
+# env read are almost always a credential someone pasted "just to make it work".
+# URLs, model names and domains are the common legitimate case, so those are
+# allowed through by the negative lookahead-free filter below.
+env_fallbacks=$(scan_added . \
+  | grep -oE "process\.env\.[A-Z0-9_]+ *\|\| *['\"][^'\"]{16,}['\"]" \
+  | grep -vE "https?://|@[a-z0-9.-]+\.[a-z]{2,}|gpt-|claude-|[a-z]+://" \
+  | grep -vE "['\"][a-z0-9-]+(\.[a-z0-9-]+)+['\"]" \
+  | grep -vE "['\"][a-z_]+( [a-z_:]+)+['\"]" \
+  | grep -vE "['\"]0{4,}[0-9a-fA-F-]*['\"]" || true)
+if [ -n "$env_fallbacks" ]; then
+  note "environment variable with a long hardcoded fallback:"
+  printf '%s\n' "$env_fallbacks" | sed -E "s/(\|\| *['\"]).{4}[^'\"]*/\1...(redacted)/" | sed 's/^/    /' >&2
+  printf '  This is exactly how the Resend key and the Neon URL reached history.\n  Let it fail loudly on a missing variable instead.\n' >&2
+fi
+
+if [ "$fail" -ne 0 ]; then
+  printf '\nCommit aborted. Nothing has been committed.\n' >&2
+  printf 'If this is a false positive: git commit --no-verify\n\n' >&2
+  exit 1
+fi
+
+exit 0

@@ -1,0 +1,41 @@
+{
+  "name": "@hookpost/node",
+  "version": "1.0.1",
+  "description": "Official Node.js SDK for Hookpost - schedule and publish social media posts across 30+ networks.",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsup",
+    "prepublishOnly": "npm run build"
+  },
+  "files": [
+    "dist"
+  ],
+  "keywords": [
+    "social media",
+    "scheduling",
+    "social media scheduler",
+    "hookpost",
+    "post scheduler",
+    "api client"
+  ],
+  "author": "JR Consulting Co.",
+  "license": "AGPL-3.0",
+  "dependencies": {
+    "node-fetch": "^3.3.2"
+  },
+  "homepage": "https://hookpost.hookstep.in/docs/public-api",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jatinder14/hookpost.git",
+    "directory": "apps/sdk"
+  },
+  "module": "dist/index.mjs",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    }
+  }
+}

@@ -88,7 +88,7 @@ export default function HomePage() {
 
             <p className="mt-5 text-sm text-white/60">
               Free tier is 2 channels and 30 posts a month, and does not expire.
-              Paid plans start at ₹699 / $9.
+              Paid plans start at ₹699.
             </p>
           </div>
 

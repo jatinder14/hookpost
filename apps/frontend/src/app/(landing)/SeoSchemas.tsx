@@ -1,4 +1,5 @@
 import React from 'react';
+import { pricing } from '@hookpost/nestjs-libraries/database/prisma/subscriptions/pricing';
 import { FAQ_DATA } from './LandingFaq';
 import { CHANNEL_COUNT, PUBLISHABLE_CHANNEL_COUNT } from './channels/channel-count';
 
@@ -23,23 +24,23 @@ export default function SeoSchemas() {
         },
         offers: {
           '@type': 'AggregateOffer',
-          priceCurrency: 'USD',
-          lowPrice: '0',
-          highPrice: '9',
-          offerCount: '2',
+          priceCurrency: 'INR',
+          lowPrice: String(pricing.FREE.month_price),
+          highPrice: String(pricing.ULTIMATE.month_price),
+          offerCount: '5',
           offers: [
             {
               '@type': 'Offer',
-              name: 'Community / Free Plan',
-              price: '0',
-              priceCurrency: 'USD',
+              name: 'Free Plan',
+              price: String(pricing.FREE.month_price),
+              priceCurrency: 'INR',
               description: `Free social media scheduling and multi-platform publishing across ${PUBLISHABLE_CHANNEL_COUNT} channels.`,
             },
             {
               '@type': 'Offer',
-              name: 'Pro Tier',
-              price: '9',
-              priceCurrency: 'USD',
+              name: 'Standard',
+              price: String(pricing.STANDARD.month_price),
+              priceCurrency: 'INR',
               description: 'Multi-Channel Publishing, Multi-Agent AI Copilot, Visual Calendar, MCP Server & Analytics.',
             },
           ],

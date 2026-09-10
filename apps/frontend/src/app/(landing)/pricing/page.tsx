@@ -34,7 +34,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Hookpost Pricing — flat plans, no per-channel fee',
     description:
-      'Free tier plus four paid plans from ₹699 / $9 a month. Every limit listed, including posts per month and AI generation caps.',
+      'Free tier plus four paid plans from ₹699 a month. Every limit listed, including posts per month and AI generation caps.',
     url: CANONICAL,
     type: 'website',
   },
@@ -170,8 +170,8 @@ export default function PricingPage() {
           fact go in the first sentence rather than after a value proposition.
         */}
         <p className="mt-4 max-w-[70ch] text-lg text-white/70">
-          Hookpost costs ₹0 a month on the Free plan and ₹699 / $9, ₹1,499 /
-          $19, ₹2,299 / $29 or ₹4,499 / $59 a month on the four paid plans.
+          Hookpost costs ₹0 a month on the Free plan and ₹699, ₹1,499,
+          ₹2,299 or ₹4,499 a month on the four paid plans.
           There is no per-channel fee and no setup fee, and the open-source
           version can be self-hosted at no licence cost.
         </p>

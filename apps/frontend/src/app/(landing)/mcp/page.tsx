@@ -88,7 +88,7 @@ export default function McpPage() {
     offers: {
       "@type": "Offer",
       price: "0",
-      priceCurrency: "USD",
+      priceCurrency: "INR",
     },
     description:
       `Official open-source Model Context Protocol (MCP) server enabling Claude, Cursor, Cline, and LLM agents to schedule and publish across ${PUBLISHABLE_CHANNEL_COUNT} social platforms.`,

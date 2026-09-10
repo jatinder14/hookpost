@@ -161,7 +161,7 @@ export const PricingPlans = ({ id }: { id?: string }) => (
           </div>
 
           <p className="mt-8 text-sm text-white/60">
-            Ultimate is ₹4,499 / $59 for 100 channels and 15,000 posts a month.
+            Ultimate is ₹4,499 for 100 channels and 15,000 posts a month.
             Each connected profile or page counts as one channel.
           </p>
         </div>

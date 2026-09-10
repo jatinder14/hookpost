@@ -76,7 +76,7 @@ export default function AeoAnswerCapsule() {
                 Pricing & Payments
               </div>
               <div className="text-white font-bold text-sm mb-1 font-jakarta">
-                Free Tier ($0) & ₹699 / $9
+                Free Tier (₹0) & ₹699
               </div>
               <p className="text-xs text-gray-400 leading-normal">
                 Transparent flat pricing. Razorpay (UPI Autopay, NetBanking, Domestic & International Cards).

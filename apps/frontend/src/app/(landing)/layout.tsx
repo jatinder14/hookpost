@@ -1,4 +1,5 @@
 import '../landing-global.scss';
+import { pricing } from '@hookpost/nestjs-libraries/database/prisma/subscriptions/pricing';
 import { Metadata, Viewport } from 'next';
 import { DM_Sans, Plus_Jakarta_Sans } from 'next/font/google';
 import { FAQ_DATA } from './LandingFaq';
@@ -184,7 +185,9 @@ export const metadata: Metadata = {
     'rating': 'General',
     'revisit-after': '1 days',
     'target': 'all',
-    'priceCurrency': 'USD, EUR, GBP, INR, CAD, AUD, BRL, JPY',
+    // INR only. This previously listed eight currencies, of which just
+    // this one can actually be charged - see the offers block below.
+    'priceCurrency': 'INR',
   },
 };
 
@@ -289,21 +292,21 @@ const globalJsonLd = {
       offers: [
         {
           '@type': 'Offer',
-          price: '0',
-          priceCurrency: 'USD',
+          price: String(pricing.FREE.month_price),
+          priceCurrency: 'INR',
           name: 'Free Forever',
         },
         {
           '@type': 'Offer',
-          price: '9',
-          priceCurrency: 'USD',
-          name: 'Pro',
+          price: String(pricing.STANDARD.month_price),
+          priceCurrency: 'INR',
+          name: 'Standard (UPI / NetBanking / card via Razorpay)',
         },
         {
           '@type': 'Offer',
-          price: '699',
+          price: String(pricing.PRO.month_price),
           priceCurrency: 'INR',
-          name: 'Pro (India, UPI/Razorpay)',
+          name: 'Pro',
         },
       ],
     },

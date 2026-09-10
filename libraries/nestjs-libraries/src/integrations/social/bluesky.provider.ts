@@ -24,6 +24,7 @@ import {
 import dayjs from 'dayjs';
 import { Integration } from '@prisma/client';
 import { AuthService } from '@hookpost/helpers/auth/auth.service';
+import { serializeError } from '@hookpost/helpers/utils/serialize.error';
 import { isSafePublicHttpsUrl } from '@hookpost/nestjs-libraries/dtos/webhooks/webhook.url.validator';
 import {
   getSsrfSafeAxios,
@@ -391,7 +392,9 @@ export class BlueskyProvider extends SocialAbstract implements SocialProvider {
         status < 500 &&
         status !== 429
       ) {
-        throw new RefreshToken('bluesky', JSON.stringify(err), {} as BodyInit);
+        // serializeError: JSON.stringify(err) is '{}' for a real Error, so the
+        // reason this token was considered dead was being thrown away.
+        throw new RefreshToken('bluesky', serializeError(err), {} as BodyInit);
       }
 
       throw err;

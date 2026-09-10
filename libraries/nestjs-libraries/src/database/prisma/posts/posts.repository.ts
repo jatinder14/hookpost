@@ -1,4 +1,5 @@
 import { PrismaRepository } from '@hookpost/nestjs-libraries/database/prisma/prisma.service';
+import { serializeError } from '@hookpost/helpers/utils/serialize.error';
 import { Injectable } from '@nestjs/common';
 import { Post as PostBody } from '@hookpost/nestjs-libraries/dtos/posts/create.post.dto';
 import {
@@ -425,9 +426,13 @@ export class PostsRepository {
       },
       data: {
         state,
-        ...(err
-          ? { error: typeof err === 'string' ? err : JSON.stringify(err) }
-          : {}),
+        // serializeError, not JSON.stringify: stringify returns '{}' for a real
+        // Error (message/stack are non-enumerable) and THROWS on a circular
+        // one. The throw happened here, inside the data literal, before the
+        // update ran - so a provider error carrying a fetch/Axios response made
+        // changeState itself fail and left the post stuck in its old state
+        // instead of ERROR.
+        ...(err ? { error: serializeError(err) } : {}),
       },
       include: {
         integration: {
@@ -442,11 +447,11 @@ export class PostsRepository {
       try {
         await this._errors.model.errors.create({
           data: {
-            message: typeof err === 'string' ? err : JSON.stringify(err),
+            message: serializeError(err),
             organizationId: update.organizationId,
             platform: update.integration.providerIdentifier,
             postId: update.id,
-            body: typeof body === 'string' ? body : JSON.stringify(body),
+            body: serializeError(body),
           },
         });
       } catch (err) {}

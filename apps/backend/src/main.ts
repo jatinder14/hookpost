@@ -1,3 +1,25 @@
+// MUST be the first import. Loads .env into process.env before any other
+// module body runs - import declarations execute in order, so anything below
+// this line already sees the file's values.
+//
+// PM2 runs the compiled main.js directly (`interpreter: node`), which bypasses
+// the package.json "start" script and its `dotenv -e ../../.env`. So in
+// production the backend's entire configuration existed only as the environment
+// PM2 happened to capture whenever someone last started it by hand. That is a
+// live hazard: `pm2 restart --update-env` from a shell without those variables
+// replaces the process environment wholesale, and doing exactly that on
+// 2026-09-10 dropped the backend from 92 env keys to 22 - DATABASE_URL,
+// REDIS_URL and JWT_SECRET among them - and took port 3000 down. The deploy
+// script survives only because `pm2 reload --update-env` preserves the saved
+// env where `restart` does not, and nothing in deploy.sh sources .env at all.
+//
+// Reading the file here removes the distinction and the whole class of failure.
+// dotenv does not override variables already present, so anything PM2 or CI
+// supplies still wins and no existing behaviour changes.
+//
+// Path is process.cwd()/.env; ops/ecosystem.config.js pins cwd to the repo root.
+import 'dotenv/config';
+
 import { initializeSentry } from '@hookpost/nestjs-libraries/sentry/initialize.sentry';
 initializeSentry('backend', true);
 import compression from 'compression';

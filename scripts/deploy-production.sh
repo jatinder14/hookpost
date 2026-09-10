@@ -106,8 +106,10 @@ scp -i "$SSH_KEY" /tmp/next-atomic.tar.gz "$VM_HOST:/tmp/next-atomic.tar.gz"
 # state. Config that is never shipped is not configuration, it is a wish.
 # ------------------------------------------------------------------------------
 echo "==> Step 3b: Transferring server config from the repo..."
+# check-temporal.sh is deliberately absent here: scripts/check-temporal.sh is
+# its source of truth and scripts/deploy.sh already rsyncs it to the path cron
+# runs. Shipping it from two places is how the nginx drift started.
 scp -i "$SSH_KEY" "$REPO_ROOT/nginx.hookpost.conf"      "$VM_HOST:/tmp/hookpost-nginx.conf"
-scp -i "$SSH_KEY" "$REPO_ROOT/ops/check-temporal.sh"    "$VM_HOST:/tmp/hookpost-check-temporal.sh"
 scp -i "$SSH_KEY" "$REPO_ROOT/ops/ecosystem.config.js"  "$VM_HOST:/tmp/hookpost-ecosystem.config.js"
 
 echo "==> Step 4: Applying build without deleting existing chunk history & clearing NGINX cache..."
@@ -147,10 +149,10 @@ else
   echo "    nginx config already matches git"
 fi
 
-# The monitoring script and its cron entry. Idempotent: the grep -vF strips any
-# older variant of the line before re-adding it, so repeated deploys cannot
-# stack up duplicate entries.
-install -m 0755 /tmp/hookpost-check-temporal.sh /home/flexiple_jr/check-temporal.sh
+# The cron entry for the Temporal health check. deploy.sh ships the script
+# itself; only the crontab line is missing from either script, and it was the
+# one thing that existed nowhere but the box. Idempotent: grep -vF strips any
+# older variant before re-adding, so repeated deploys cannot stack duplicates.
 CRON_LINE='*/5 * * * * /home/flexiple_jr/check-temporal.sh >/dev/null 2>&1'
 if crontab -l 2>/dev/null | grep -Fqx "$CRON_LINE"; then
   echo "    cron entry already present"
@@ -166,7 +168,7 @@ fi
 #   pm2 startOrReload /home/flexiple_jr/hookpost/ops/ecosystem.config.js && pm2 save
 mkdir -p /home/flexiple_jr/hookpost/ops
 install -m 0644 /tmp/hookpost-ecosystem.config.js /home/flexiple_jr/hookpost/ops/ecosystem.config.js
-rm -f /tmp/hookpost-nginx.conf /tmp/hookpost-check-temporal.sh /tmp/hookpost-ecosystem.config.js
+rm -f /tmp/hookpost-nginx.conf /tmp/hookpost-ecosystem.config.js
 
 # Purge NGINX proxy cache so old pre-rendered HTML is never served
 sudo rm -rf /var/cache/nginx/hookpost_cache/*

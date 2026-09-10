@@ -16,8 +16,15 @@ import {
  * ended up unable to publish at all.
  *
  * Prices come from month_price, so the card and the invoice cannot disagree.
- * The USD figures stay hardcoded on purpose - they are indicative only, there
- * is no USD collection path, and nothing in pricing.ts denominates them.
+ *
+ * The USD figures were REMOVED on 2026-09-10. There is no USD collection
+ * path: CURRENCY_CODE is pinned to INR, Razorpay settles this account in INR,
+ * and while international cards were approved on 8 Sep the recurring/mandate
+ * rails are still India-only - so a foreign visitor shown '$9/month' reached a
+ * rupee checkout for a subscription we cannot charge them for. Quoting a price
+ * you cannot collect is a promise, not a placeholder. Rupee pricing is also
+ * the positioning: taking UPI is the thing competitors cannot copy.
+ * Put them back only alongside a real USD path, driven from pricing.ts.
  *
  * This used to be inline in the homepage, which is why /pricing did not exist
  * and the nav's "Pricing" link was the fragment "#pricing" - dead on all ~70
@@ -27,7 +34,6 @@ const PLANS = [
   {
     name: "Free",
     inr: `${CURRENCY_SYMBOL}${pricing.FREE.month_price.toLocaleString("en-IN")}`,
-    usd: "$0",
     blurb: "Enough to see whether it fits.",
     features: [
       `${pricing.FREE.channel} channels`,
@@ -41,7 +47,6 @@ const PLANS = [
   {
     name: "Standard",
     inr: `${CURRENCY_SYMBOL}${pricing.STANDARD.month_price.toLocaleString("en-IN")}`,
-    usd: "$9",
     blurb: "For a solo creator or a small brand.",
     features: [
       `${pricing.STANDARD.channel} channels`,
@@ -56,7 +61,6 @@ const PLANS = [
   {
     name: "Team",
     inr: `${CURRENCY_SYMBOL}${pricing.TEAM.month_price.toLocaleString("en-IN")}`,
-    usd: "$19",
     blurb: "When more than one person posts.",
     features: [
       `${pricing.TEAM.channel} channels`,
@@ -71,7 +75,6 @@ const PLANS = [
   {
     name: "Pro",
     inr: `${CURRENCY_SYMBOL}${pricing.PRO.month_price.toLocaleString("en-IN")}`,
-    usd: "$29",
     blurb: "For agencies running many brands.",
     features: [
       // NOT CHANNEL_COUNT. This is the Pro plan's channel ALLOWANCE, which
@@ -132,7 +135,6 @@ export const PricingPlans = ({ id }: { id?: string }) => (
                   </span>
                   <span className="text-sm text-white/60">/ month</span>
                 </div>
-                <p className="mt-1 text-sm text-white/60 tabular-nums">{p.usd} USD</p>
 
                 <ul className="mt-6 flex flex-1 flex-col gap-2.5 text-[15px] text-white/70">
                   {p.features.map((f) => (

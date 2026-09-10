@@ -27,14 +27,7 @@ const GUIDES = [
       'Connect the Model Context Protocol server to Claude Desktop, Claude Code, Cursor or Windsurf, and have your assistant draft and queue posts directly.',
     tag: 'AI agents',
   },
-  {
-    href: '/guides/why-we-rewrote-postiz',
-    title: 'Five architectural problems we hit in production',
-    blurb:
-      'Turbopack builds triggering the OOM killer on 2 GB hosts, Meta tokens expiring two hours after connect, a serverless connection pool running dry — and what each fix was.',
-    tag: 'Engineering',
-  },
-];
+  ];
 
 export default function GuidesIndex() {
   return (

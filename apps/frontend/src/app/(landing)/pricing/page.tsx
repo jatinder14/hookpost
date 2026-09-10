@@ -1,4 +1,8 @@
 import { Metadata } from 'next';
+import {
+  pricing,
+  CURRENCY_SYMBOL,
+} from '@hookpost/nestjs-libraries/database/prisma/subscriptions/pricing';
 import Link from 'next/link';
 import { SiteNav } from '../site-nav';
 import { PricingPlans } from '../PricingPlans';
@@ -25,7 +29,7 @@ const CANONICAL = 'https://hookpost.hookstep.in/pricing';
 export const metadata: Metadata = {
   title: 'Hookpost Pricing: Free, ₹699, ₹1,499, ₹2,299 & ₹4,499 / month',
   description:
-    'Flat per-plan pricing for Hookpost, billed in INR or USD. Free tier with 2 channels, paid plans from ₹699 / $9 a month. No per-channel fee, no setup fee. Pay by UPI, NetBanking or card.',
+    'Flat per-plan pricing for Hookpost, billed in Indian rupees. Free tier with 2 channels, paid plans from ₹699 a month. No per-channel fee, no setup fee. Pay by UPI, NetBanking or card.',
   alternates: { canonical: CANONICAL },
   openGraph: {
     title: 'Hookpost Pricing — flat plans, no per-channel fee',
@@ -36,15 +40,38 @@ export const metadata: Metadata = {
   },
 };
 
-// Full tier table including Ultimate, which the homepage only mentions in a
-// footnote. Values mirror pricing.ts.
-const TIERS = [
-  { name: 'Free', inr: '₹0', usd: '$0', channels: '2', posts: '30', aiText: '0', aiImages: '0', aiVideos: '0', webhooks: '0', team: 'No' },
-  { name: 'Standard', inr: '₹699', usd: '$9', channels: '5', posts: '500', aiText: '500', aiImages: '20', aiVideos: '3', webhooks: '2', team: 'No' },
-  { name: 'Team', inr: '₹1,499', usd: '$19', channels: '10', posts: '1,500', aiText: '1,500', aiImages: '100', aiVideos: '10', webhooks: '10', team: 'Unlimited' },
-  { name: 'Pro', inr: '₹2,299', usd: '$29', channels: '30', posts: '5,000', aiText: '2,500', aiImages: '300', aiVideos: '30', webhooks: '30', team: 'Unlimited' },
-  { name: 'Ultimate', inr: '₹4,499', usd: '$59', channels: '100', posts: '15,000', aiText: '10,000', aiImages: '1,000', aiVideos: '100', webhooks: '100', team: 'Unlimited' },
-];
+// Full tier table including Ultimate, which the homepage only cards four plans
+// and mentions in a footnote.
+//
+// READ from pricing.ts rather than typed. The previous version carried the
+// comment "Values mirror pricing.ts" and five of its numbers did not: Pro
+// claimed 30 AI videos against a real limit of 15, and Ultimate claimed 10,000
+// AI text, 1,000 images, 100 videos and 100 webhooks against 6,000 / 500 / 25 /
+// 10,000. This is the page people compare on before paying, so it is the worst
+// place to keep hand-typed copies of enforced limits.
+//
+// The USD column was removed on 2026-09-10. There is no USD collection path -
+// CURRENCY_CODE is pinned to INR and Razorpay's recurring rails on this account
+// are India-only - so quoting a dollar subscription price was a promise we
+// cannot keep, and the homepage cards had no disclosure at all.
+const n = (v: number) => v.toLocaleString('en-IN');
+
+const TIERS = (['FREE', 'STANDARD', 'TEAM', 'PRO', 'ULTIMATE'] as const).map(
+  (tier) => {
+    const t = pricing[tier];
+    return {
+      name: `${tier.charAt(0)}${tier.slice(1).toLowerCase()}`,
+      inr: `${CURRENCY_SYMBOL}${n(t.month_price)}`,
+      channels: n(t.channel ?? 0),
+      posts: n(t.posts_per_month),
+      aiText: n(t.ai_generation_count),
+      aiImages: n(t.image_generation_count),
+      aiVideos: n(t.generate_videos),
+      webhooks: n(t.webhooks),
+      team: t.team_members ? 'Unlimited' : 'No',
+    };
+  }
+);
 
 const FAQ = [
   {
@@ -53,7 +80,7 @@ const FAQ = [
   },
   {
     q: 'What currencies can I pay in?',
-    a: 'Billing runs through Razorpay. Indian customers pay in INR by UPI, NetBanking, card or wallet. USD prices are shown for reference; recurring card billing outside India is not yet enabled.',
+    a: 'Hookpost is priced and billed in Indian rupees through Razorpay - UPI, NetBanking, card or wallet. Recurring card billing outside India is not enabled yet, so we do not quote a dollar subscription price we could not charge.',
   },
   {
     q: 'Is there a free plan?',
@@ -168,13 +195,12 @@ export default function PricingPage() {
           <div className="mt-10 -mx-5 overflow-x-auto px-5 sm:mx-0 sm:px-0">
             <table className="w-full min-w-[760px] border-collapse text-left text-sm">
               <caption className="sr-only">
-                Hookpost plan limits by tier, monthly prices in INR and USD
+                Hookpost plan limits by tier, with monthly prices in INR
               </caption>
               <thead>
                 <tr className="border-b border-white/15 text-white/60">
                   <th scope="col" className="py-3 pr-4 font-semibold">Plan</th>
                   <th scope="col" className="py-3 pr-4 font-semibold">INR / month</th>
-                  <th scope="col" className="py-3 pr-4 font-semibold">USD / month</th>
                   <th scope="col" className="py-3 pr-4 font-semibold">Channels</th>
                   <th scope="col" className="py-3 pr-4 font-semibold">Posts / month</th>
                   <th scope="col" className="py-3 pr-4 font-semibold">AI text</th>
@@ -189,7 +215,6 @@ export default function PricingPage() {
                   <tr key={t.name} className="border-b border-white/[0.08]">
                     <th scope="row" className="py-3 pr-4 font-semibold text-white">{t.name}</th>
                     <td className="py-3 pr-4 text-white/70">{t.inr}</td>
-                    <td className="py-3 pr-4 text-white/70">{t.usd}</td>
                     <td className="py-3 pr-4 text-white/70">{t.channels}</td>
                     <td className="py-3 pr-4 text-white/70">{t.posts}</td>
                     <td className="py-3 pr-4 text-white/70">{t.aiText}</td>

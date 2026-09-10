@@ -63,7 +63,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const guides: Entry[] = [
     'claude-mcp-social-media',
     'docker-self-hosting',
-    'why-we-rewrote-postiz',
   ].map((slug) => page(`/guides/${slug}`, UPDATED.guides, 0.85, 'monthly'));
 
   const alternatives: Entry[] = [

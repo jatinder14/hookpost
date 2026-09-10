@@ -154,6 +154,17 @@ const nextConfig = {
   },
   async redirects() {
     return [
+      // /guides/why-we-rewrote-postiz is gone. It was titled "Why We Rewrote
+      // Postiz" and described as a "post-mortem of rebuilding Postiz into
+      // Hookpost", which positions this product as the Postiz project rather
+      // than an alternative to it. 301 rather than 404: the URL was indexed and
+      // linked from llms.txt, and /alternatives/postiz covers the same search
+      // intent with the framing we actually want.
+      {
+        source: '/guides/why-we-rewrote-postiz',
+        destination: '/alternatives/postiz',
+        permanent: true,
+      },
       // Channels we no longer offer. These pages were indexed and linked, so a
       // 404 would waste the accumulated authority and strand anyone arriving
       // from search. 301 to the channel index instead, which lists what is

@@ -172,6 +172,68 @@ Hookpost is proud to support true regional purchasing power:
 Transparent, fair, and accessible to creators everywhere.
 
 Check out our plans: https://hookpost.hookstep.in/pricing`
+  },
+  {
+    id: 'growth_09_hookpost_vs_postiz',
+    title: 'Why Teams Are Choosing Hookpost Over Postiz',
+    content: `Looking for a modern, reliable open-source social media scheduler?
+
+Here is why creators and growth teams are moving to Hookpost:
+1. True Multi-Currency: Seamless Indian UPI & RuPay support alongside global Visa, Mastercard and Amex.
+2. Built-in Claude & Cursor MCP: Connect your IDE directly to your social engine without third-party directory redirects.
+3. Durable Infrastructure: Distributed Temporal workflow clusters with automatic queue recovery so posts never fail silently.
+4. Privacy-First: Clean Next.js 14 architecture with zero third-party ad telemetry.
+
+Experience social scheduling done right: https://hookpost.hookstep.in`
+  },
+  {
+    id: 'growth_10_hookpost_vs_buffer',
+    title: 'Buffer Charges $60 for 10 Channels. Hookpost Charges $39 Flat.',
+    content: `The per-channel pricing model is outdated.
+
+Buffer charges $6 per channel every single month:
+• 5 channels = $30 every month
+• 10 channels = $60 every month
+• 20 channels = $120 every month
+
+With Hookpost, you get flat transparent pricing:
+• Standard: $19/mo for 5 channels
+• Team: $39/mo for 10 channels with unlimited team members
+• Pro: $79/mo for 30 channels with 5,000 posts and webhooks
+
+Plus native Claude and Cursor MCP integration that Buffer does not have.
+
+Switch to flat pricing: https://hookpost.hookstep.in/pricing`
+  },
+  {
+    id: 'growth_11_hookpost_vs_hootsuite',
+    title: 'Stop Paying the $100 Per-Seat Enterprise Tax',
+    content: `Legacy social tools charge you for every single team member who logs in.
+
+Hootsuite starts at $99/mo and Sprout Social charges an astronomical $199 per user every month. A small team of 5 spends $1,000/mo just for software seats.
+
+Hookpost eliminates per-seat taxes:
+• Unlimited team members on Team and Pro plans
+• Unified collaborative calendar with approval workflows
+• Sub-100ms dashboard transitions without legacy bloat
+• 1 click simultaneous publishing to 17+ networks
+
+Enterprise capabilities without enterprise price gouging.
+
+Try Hookpost with your team: https://hookpost.hookstep.in`
+  },
+  {
+    id: 'growth_12_open_source_sovereignty',
+    title: 'Why Open-Source Social Media Scheduling Wins',
+    content: `Closed-source social media platforms hold your scheduled posts and audience workflows hostage.
+
+Hookpost gives you complete peace of mind and data sovereignty:
+• Managed Cloud: Hosted in Singapore and Iowa with 14ms low-latency Neon DB
+• Open Source Core: AGPL codebase you can audit, contribute to, or self-host
+• Full REST API & Webhooks: Automate your publishing pipelines directly from GitHub Actions or custom scripts
+• Zero Vendor Lock-in: Your content, your analytics, your rules.
+
+Join the open-source social movement: https://hookpost.hookstep.in`
   }
 ];
 

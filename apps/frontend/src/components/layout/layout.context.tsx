@@ -1,6 +1,6 @@
 'use client';
 
-import { ReactNode, useCallback } from 'react';
+import { ReactNode, useCallback, useEffect } from 'react';
 import { FetchWrapperComponent } from '@hookpost/helpers/utils/custom.fetch';
 import { deleteDialog } from '@hookpost/react/helpers/delete.dialog';
 import { useReturnUrl } from '@hookpost/frontend/app/(app)/auth/return.url.component';
@@ -32,6 +32,10 @@ export function setCookie(cname: string, cvalue: string, exdays: number) {
 function LayoutContextInner(params: { children: ReactNode }) {
   const returnUrl = useReturnUrl();
   const { backendUrl, isGeneral, isSecured } = useVariables();
+
+  useEffect(() => {
+    setCookie('hp_logged_in', '1', 365);
+  }, []);
   const afterRequest = useCallback(
     async (url: string, options: RequestInit, response: Response) => {
       if (

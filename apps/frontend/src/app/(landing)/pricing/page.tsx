@@ -36,7 +36,23 @@ export const metadata: Metadata = {
     description:
       'Free tier plus four paid plans from ₹699 a month. Every limit listed, including posts per month and AI generation caps.',
     url: CANONICAL,
+    siteName: 'Hookpost',
     type: 'website',
+    images: [
+      {
+        url: 'https://hookpost.hookstep.in/og-image.png',
+        width: 1200,
+        height: 630,
+        alt: 'Hookpost Pricing Plans',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Hookpost Pricing — flat plans, no per-channel fee',
+    description:
+      'Free tier plus four paid plans from ₹699 a month. Pay by UPI, NetBanking or card.',
+    images: ['https://hookpost.hookstep.in/og-image.png'],
   },
 };
 

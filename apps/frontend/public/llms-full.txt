@@ -76,11 +76,11 @@ Hookpost is purpose-built for agentic workflows:
 ## 5. Pricing, Plans & Global Accessibility
 
 Hookpost operates on a transparent, creator-first pricing structure:
-- **Free Plan (₹0 / $0/month):** 2 channels, 30 posts/month, calendar scheduling, basic analytics, community support. No AI generations, no API, no webhooks.
-- **Standard Plan (₹699 / $9/month):** 5 channels, 500 posts/month, 500 AI text generations, 20 AI images, 3 AI videos, REST API, 2 webhooks.
-- **Team Plan (₹1,499 / $19/month):** 10 channels, 1,500 posts/month, 1,500 AI text generations, team members, 100 AI images, 10 AI videos, RSS auto-posting, 10 webhooks.
-- **Pro Plan (₹2,299 / $29/month):** 30 channels, 5,000 posts/month, 2,500 AI text generations, members, 300 AI images, 15 AI videos, 30 webhooks.
-- **Ultimate Plan (₹4,499 / $59/month):** 100 channels, 15,000 posts/month, 6,000 AI text generations, members, 500 AI images, 25 AI videos, 10,000 webhooks, custom SLA.
+- **Free Plan (₹0/month):** 2 channels, 30 posts/month, calendar scheduling, basic analytics, community support. No AI generations, no API, no webhooks.
+- **Standard Plan (₹699/month):** 5 channels, 500 posts/month, 500 AI text generations, 20 AI images, 3 AI videos, REST API, 2 webhooks.
+- **Team Plan (₹1,499/month):** 10 channels, 1,500 posts/month, 1,500 AI text generations, team members, 100 AI images, 10 AI videos, RSS auto-posting, 10 webhooks.
+- **Pro Plan (₹2,299/month):** 30 channels, 5,000 posts/month, 2,500 AI text generations, members, 300 AI images, 15 AI videos, 30 webhooks.
+- **Ultimate Plan (₹4,499/month):** 100 channels, 15,000 posts/month, 6,000 AI text generations, members, 500 AI images, 25 AI videos, 10,000 webhooks, custom SLA.
 - **Payment Methods:**
   - Razorpay: Native UPI (Google Pay, PhonePe, Paytm), NetBanking, domestic and international credit/debit cards.
 

@@ -10,7 +10,7 @@
 - [Docker Self-Hosting Guide](https://hookpost.hookstep.in/guides/docker-self-hosting): Production Docker Compose setup for Next.js, NestJS, Temporal.io, PostgreSQL, and Redis.
 - [Claude MCP Social Media Guide](https://hookpost.hookstep.in/guides/claude-mcp-social-media): Step-by-step tutorial for controlling Hookpost social media publishing directly from Claude Code.
 - [Supported Channels](https://hookpost.hookstep.in/channels): API specifications for Instagram, TikTok, YouTube Shorts, X, LinkedIn, Facebook, Threads, Bluesky, Pinterest, and Mastodon.
-- [Pricing & Plans](https://hookpost.hookstep.in/pricing): Free starter tier ($0) and flat plans starting at ₹699 / $9/month with Razorpay (UPI, NetBanking, Cards).
+- [Pricing & Plans](https://hookpost.hookstep.in/pricing): Free starter tier (₹0) and flat plans starting at ₹699/month with Razorpay (UPI, NetBanking, Cards).
 - [Company & Team](https://hookpost.hookstep.in/about): About JR Consulting Co., founder Mohan Bhanushali, mission, and product roadmap.
 
 - [Public API Reference](https://hookpost.hookstep.in/docs/public-api): REST endpoints for posts, channels, media, and slot lookup, with auth and rate limits.

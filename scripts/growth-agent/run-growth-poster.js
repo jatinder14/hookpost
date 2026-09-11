@@ -234,6 +234,24 @@ Hookpost gives you complete peace of mind and data sovereignty:
 • Zero Vendor Lock-in: Your content, your analytics, your rules.
 
 Join the open-source social movement: https://hookpost.hookstep.in`
+  },
+  {
+    id: 'growth_13_free_forever_plan',
+    title: 'Start Free Forever: 0 Rupees, 0 Dollars, 0 Card Required',
+    content: `Most social media schedulers force you into a paid trial before you can even touch the dashboard.
+
+Hookpost believes creators and developers should test tools freely without surprise credit card charges.
+
+Our Free Forever Plan gives you:
+• 2 Connected Social Channels
+• 30 Scheduled Posts Per Month
+• Clean visual calendar and queue management
+• Direct Cursor & Claude IDE MCP integration
+• Zero credit card or UPI required to get started
+
+When you grow and need AI copilots or more channels, upgrade with 1 click. Until then, schedule your week at zero cost.
+
+Try the Free Plan right now: https://hookpost.hookstep.in`
   }
 ];
 
@@ -287,7 +305,14 @@ async function runGrowthPoster(options = {}) {
 
   // 1. Pick next topic
   const history = loadHistory();
-  const nextIndex = (history.lastIndex + 1) % GROWTH_TOPICS.length;
+  let nextIndex;
+  const targetTopicId = options.topicId || process.argv.find(a => a.startsWith('--topic='))?.split('=')[1];
+  if (targetTopicId) {
+    nextIndex = GROWTH_TOPICS.findIndex(t => t.id === targetTopicId);
+    if (nextIndex === -1) nextIndex = 0;
+  } else {
+    nextIndex = (history.lastIndex + 1) % GROWTH_TOPICS.length;
+  }
   const topic = GROWTH_TOPICS[nextIndex];
 
   console.log(`Selected Topic [${nextIndex + 1}/${GROWTH_TOPICS.length}]: "${topic.title}" (ID: ${topic.id})`);

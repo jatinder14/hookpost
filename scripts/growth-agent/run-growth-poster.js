@@ -266,7 +266,7 @@ async function runGrowthPoster(options = {}) {
     type: 'now',
     shortLink: false,
     date: new Date().toISOString(),
-    tags: ['growth-agent', topic.id],
+    tags: [],
     posts: postsConfig
   };
 
@@ -298,21 +298,27 @@ async function runGrowthPoster(options = {}) {
     throw new Error(`Failed to create post. Status: ${response.status}. Details: ${JSON.stringify(resJson)}`);
   }
 
-  console.log(`[SUCCESS] Post group created with ID: ${resJson.id}`);
+  const createdPostIds = Array.isArray(resJson)
+    ? resJson.map((p) => p.postId).filter(Boolean)
+    : resJson.id
+    ? [resJson.id]
+    : [];
+
+  console.log(`[SUCCESS] Posts created successfully! IDs: ${createdPostIds.join(', ')}`);
 
   // 5. Track execution
-  let publishedPosts = [];
-  if (resJson && resJson.id) {
+  if (createdPostIds.length > 0) {
     console.log('Polling execution status...');
     for (let i = 0; i < 8; i++) {
-      await new Promise(r => setTimeout(r, 2500));
-      const checkRes = await fetch(`${BACKEND_URL}/posts/${resJson.id}`, {
-        headers: { 'auth': token, 'showorg': ORG_ID }
+      await new Promise((r) => setTimeout(r, 2500));
+      // All posts created in one dispatch share the same group
+      const firstId = createdPostIds[0];
+      const checkRes = await fetch(`${BACKEND_URL}/posts/${firstId}`, {
+        headers: { auth: token, showorg: ORG_ID },
       });
       const checkData = await checkRes.json();
       if (Array.isArray(checkData)) {
-        publishedPosts = checkData;
-        const allDone = checkData.every(p => p.status === 'PUBLISHED' || p.status === 'ERROR');
+        const allDone = checkData.every((p) => p.status === 'PUBLISHED' || p.status === 'ERROR');
         for (const p of checkData) {
           console.log(`  -> [${p.integration?.providerIdentifier?.toUpperCase() || 'CHANNEL'}] Status: ${p.status} | Release ID: ${p.releaseId || 'processing'}`);
         }

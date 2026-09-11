@@ -387,6 +387,19 @@ export class UsersController {
       expires: new Date(0),
     });
 
+    response.cookie('hp_logged_in', '', {
+      domain: getCookieUrlFromDomain(process.env.FRONTEND_URL!),
+      ...(!process.env.NOT_SECURED
+        ? {
+            secure: true,
+            httpOnly: false,
+            sameSite: 'lax',
+          }
+        : {}),
+      maxAge: -1,
+      expires: new Date(0),
+    });
+
     response.cookie('showorg', '', {
       domain: getCookieUrlFromDomain(process.env.FRONTEND_URL!),
       ...(!process.env.NOT_SECURED

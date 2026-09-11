@@ -63,6 +63,7 @@ function LayoutContextInner(params: { children: ReactNode }) {
         setCookie('auth', '', -10);
         setCookie('showorg', '', -10);
         setCookie('impersonate', '', -10);
+        setCookie('hp_logged_in', '', -10);
         window.location.href = '/';
         return true;
       }
@@ -96,6 +97,7 @@ function LayoutContextInner(params: { children: ReactNode }) {
         setCookie('auth', '', -10);
         setCookie('showorg', '', -10);
         setCookie('impersonate', '', -10);
+        setCookie('hp_logged_in', '', -10);
         if (typeof window !== 'undefined' && !window.location.pathname.startsWith('/auth')) {
           window.location.href = '/auth/login';
           return true;

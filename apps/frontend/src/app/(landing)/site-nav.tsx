@@ -27,19 +27,65 @@ export const SiteNav = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
+    let active = true;
+
+    // 1. Fast synchronous check via document.cookie for zero-delay paint
     try {
       const cookies = document.cookie.split(';');
       for (let i = 0; i < cookies.length; i++) {
         const c = cookies[i].trim();
-        if (c.indexOf('auth=') === 0 && c.length > 5) {
-          const val = c.substring(5).trim();
-          if (val !== '""' && val !== "''") {
+        if (
+          (c.indexOf('hp_logged_in=1') === 0 || c.indexOf('auth=') === 0) &&
+          c.length > 5
+        ) {
+          const val = c.split('=')[1]?.trim();
+          if (val && val !== '""' && val !== "''") {
             setIsLoggedIn(true);
             break;
           }
         }
       }
     } catch (e) {}
+
+    // 2. Reliable session verification with server credentials (works even with HttpOnly cookies)
+    fetch('/api/user/self', { credentials: 'include' })
+      .then((res) => {
+        if (!active) return;
+        if (res.ok) {
+          setIsLoggedIn(true);
+          try {
+            const host = window.location.hostname;
+            const parts = host.split('.');
+            const domainAttr =
+              parts.length > 2
+                ? '; domain=.' + parts.slice(-2).join('.')
+                : '';
+            const secureAttr =
+              window.location.protocol === 'https:' ? '; Secure' : '';
+            document.cookie = `hp_logged_in=1; path=/; max-age=31536000; SameSite=Lax${domainAttr}${secureAttr}`;
+          } catch (e) {}
+
+          if (window.location.pathname === '/') {
+            window.location.replace('/launches');
+          }
+        } else if (res.status === 401 || res.status === 403) {
+          setIsLoggedIn(false);
+          try {
+            const host = window.location.hostname;
+            const parts = host.split('.');
+            const domainAttr =
+              parts.length > 2
+                ? '; domain=.' + parts.slice(-2).join('.')
+                : '';
+            document.cookie = `hp_logged_in=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT${domainAttr}`;
+          } catch (e) {}
+        }
+      })
+      .catch(() => {});
+
+    return () => {
+      active = false;
+    };
   }, []);
 
   return (

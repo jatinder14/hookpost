@@ -16,6 +16,7 @@ export async function proxy(request: NextRequest) {
   const authCookie =
     request.cookies.get('auth') ||
     request.headers.get('auth') ||
+    request.cookies.get('hp_logged_in') ||
     nextUrl.searchParams.get('loggedAuth');
   const lng = request.cookies.has(cookieName)
     ? acceptLanguage.get(request.cookies.get(cookieName).value)
@@ -107,6 +108,11 @@ export async function proxy(request: NextRequest) {
             sameSite: false,
           }
         : {}),
+      maxAge: -1,
+      domain: getCookieUrlFromDomain(process.env.FRONTEND_URL!),
+    });
+    response.cookies.set('hp_logged_in', '', {
+      path: '/',
       maxAge: -1,
       domain: getCookieUrlFromDomain(process.env.FRONTEND_URL!),
     });

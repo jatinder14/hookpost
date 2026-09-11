@@ -340,9 +340,10 @@ export default function LandingLayout({
                   var cookies = document.cookie.split(';');
                   for (var i = 0; i < cookies.length; i++) {
                     var c = cookies[i].trim();
-                    if (c.indexOf('auth=') === 0 && c.length > 5) {
-                      var val = c.substring(5).trim();
-                      if (val !== '""' && val !== "''") {
+                    var isAuth = (c.indexOf('hp_logged_in=1') === 0) || (c.indexOf('auth=') === 0 && c.length > 5);
+                    if (isAuth) {
+                      var val = c.substring(c.indexOf('=') + 1).trim();
+                      if (val && val !== '""' && val !== "''") {
                         if (window.location.pathname === '/') {
                           window.location.replace('/launches');
                           break;

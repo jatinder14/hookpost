@@ -82,6 +82,18 @@ export class AuthController {
         expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 365),
       });
 
+      response.cookie('hp_logged_in', '1', {
+        domain: getCookieUrlFromDomain(process.env.FRONTEND_URL!),
+        ...(!process.env.NOT_SECURED
+          ? {
+              secure: true,
+              httpOnly: false,
+              sameSite: 'lax',
+            }
+          : {}),
+        expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 365),
+      });
+
       if (process.env.NOT_SECURED) {
         response.header('auth', jwt);
       }
@@ -142,6 +154,18 @@ export class AuthController {
               secure: true,
               httpOnly: true,
               sameSite: 'none',
+            }
+          : {}),
+        expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 365),
+      });
+
+      response.cookie('hp_logged_in', '1', {
+        domain: getCookieUrlFromDomain(process.env.FRONTEND_URL!),
+        ...(!process.env.NOT_SECURED
+          ? {
+              secure: true,
+              httpOnly: false,
+              sameSite: 'lax',
             }
           : {}),
         expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 365),
@@ -261,6 +285,18 @@ export class AuthController {
       expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 365),
     });
 
+    response.cookie('hp_logged_in', '1', {
+      domain: getCookieUrlFromDomain(process.env.FRONTEND_URL!),
+      ...(!process.env.NOT_SECURED
+        ? {
+            secure: true,
+            httpOnly: false,
+            sameSite: 'lax',
+          }
+        : {}),
+      expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 365),
+    });
+
     if (process.env.NOT_SECURED) {
       response.header('auth', activate);
     }
@@ -350,6 +386,18 @@ export class AuthController {
             secure: true,
             httpOnly: true,
             sameSite: 'none',
+          }
+        : {}),
+      expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 365),
+    });
+
+    response.cookie('hp_logged_in', '1', {
+      domain: getCookieUrlFromDomain(process.env.FRONTEND_URL!),
+      ...(!process.env.NOT_SECURED
+        ? {
+            secure: true,
+            httpOnly: false,
+            sameSite: 'lax',
           }
         : {}),
       expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 365),

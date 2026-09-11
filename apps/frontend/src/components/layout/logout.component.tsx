@@ -28,6 +28,7 @@ export const LogoutComponent: FC<{ isIcon?: boolean }> = ({ isIcon }) => {
           method: 'POST',
         });
       }
+      setCookie('hp_logged_in', '', -10);
       window.location.href = '/';
     }
   }, []);

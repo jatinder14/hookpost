@@ -30,9 +30,9 @@ async function main() {
         post_type: 'post'
       }
     },
-    // LinkedIn (Jatinder S)
+    // LinkedIn (Mohan Bhanushali)
     {
-      integration: { id: 'cmtwofh0d00093e7ep4jpqyhy' },
+      integration: { id: 'cmtwoj33t000h3e7ezpm3iuey' },
       value: [{
         content: textContent,
         image: [promoImage]
@@ -72,7 +72,7 @@ async function main() {
         post_type: 'post'
       }
     },
-    // Slack (Hookpost - channel: social)
+    // Slack (Hookpost - channel: #social)
     {
       integration: { id: 'cmtwozimw000l3e7eixbef4le' },
       value: [{
@@ -80,10 +80,10 @@ async function main() {
         image: [promoImage]
       }],
       settings: {
-        channel: 'C0BV3GLM89H'
+        channel: 'C0BV3GLM89H' // #social
       }
     },
-    // Discord (HookStep - channel: general)
+    // Discord (HookStep - channel: #general)
     {
       integration: { id: 'cmtwu5dwr00013e9dr356bpma' },
       value: [{
@@ -91,7 +91,7 @@ async function main() {
         image: [promoImage]
       }],
       settings: {
-        channel: '1546109264911663168'
+        channel: '1547921913001672809' // #general
       }
     },
     // Pinterest (jatinder1901243)

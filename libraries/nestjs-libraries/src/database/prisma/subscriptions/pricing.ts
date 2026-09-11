@@ -27,16 +27,39 @@ export interface PricingInterface {
 /**
  * Billing currency.
  *
- * Razorpay settles in INR for standard Indian merchant accounts, so every
- * amount in `pricing` below is denominated in CURRENCY_CODE.
+ * Hookpost supports both INR (₹) and USD ($) via Razorpay.
+ * Default is INR.
  */
+export type SupportedCurrency = 'INR' | 'USD';
+
+export interface CurrencyConfig {
+  code: SupportedCurrency;
+  symbol: string;
+  minorMultiplier: number;
+  label: string;
+}
+
+export const CURRENCY_CONFIG: Record<SupportedCurrency, CurrencyConfig> = {
+  INR: { code: 'INR', symbol: '₹', minorMultiplier: 100, label: 'INR (₹)' },
+  USD: { code: 'USD', symbol: '$', minorMultiplier: 100, label: 'USD ($)' },
+};
+
 export const CURRENCY_CODE =
-  process.env.NEXT_PUBLIC_BILLING_CURRENCY || process.env.BILLING_CURRENCY || 'INR';
+  (process.env.NEXT_PUBLIC_BILLING_CURRENCY as SupportedCurrency) ||
+  (process.env.BILLING_CURRENCY as SupportedCurrency) ||
+  'INR';
+
 export const CURRENCY_SYMBOL =
   process.env.NEXT_PUBLIC_BILLING_CURRENCY_SYMBOL ||
   process.env.BILLING_CURRENCY_SYMBOL ||
   '₹';
+
 export const CURRENCY_MINOR_MULTIPLIER = 100;
+
+export function getCurrencyConfig(currency?: string): CurrencyConfig {
+  const code = (currency || CURRENCY_CODE).toUpperCase() as SupportedCurrency;
+  return CURRENCY_CONFIG[code] || CURRENCY_CONFIG.INR;
+}
 
 /**
  * Highly competitive pricing with 85%+ gross profit margin via Razorpay.
@@ -51,11 +74,11 @@ export const CURRENCY_MINOR_MULTIPLIER = 100;
 // generated with gpt-4.1-mini. Each tier works out to 3-5 posts per channel
 // per day, and the worst case - an AI caption on every single post - stays
 // under 22% of the plan price on every tier.
-export const pricing: PricingInterface = {
+/**
+ * Shared tier limits between INR and USD tiers.
+ */
+const TIER_LIMITS = {
   FREE: {
-    current: 'FREE',
-    month_price: 0,
-    year_price: 0,
     channel: 2,
     image_generation_count: 0,
     posts_per_month: 30,
@@ -72,9 +95,6 @@ export const pricing: PricingInterface = {
     generate_videos: 0,
   },
   STANDARD: {
-    current: 'STANDARD',
-    month_price: 699,
-    year_price: 5990,
     channel: 5,
     posts_per_month: 500,
     ai_generation_count: 500,
@@ -91,9 +111,6 @@ export const pricing: PricingInterface = {
     generate_videos: 3,
   },
   TEAM: {
-    current: 'TEAM',
-    month_price: 1499,
-    year_price: 13990,
     channel: 10,
     posts_per_month: 1500,
     ai_generation_count: 1500,
@@ -110,9 +127,6 @@ export const pricing: PricingInterface = {
     generate_videos: 10,
   },
   PRO: {
-    current: 'PRO',
-    month_price: 2299,
-    year_price: 21990,
     channel: 30,
     posts_per_month: 5000,
     ai_generation_count: 2500,
@@ -133,9 +147,6 @@ export const pricing: PricingInterface = {
     generate_videos: 15,
   },
   ULTIMATE: {
-    current: 'ULTIMATE',
-    month_price: 4499,
-    year_price: 43990,
     channel: 100,
     posts_per_month: 15000,
     ai_generation_count: 6000,
@@ -152,3 +163,42 @@ export const pricing: PricingInterface = {
     generate_videos: 25,
   },
 };
+
+/**
+ * INR Pricing (₹).
+ */
+export const pricingINR: PricingInterface = {
+  FREE: { current: 'FREE', month_price: 0, year_price: 0, ...TIER_LIMITS.FREE },
+  STANDARD: { current: 'STANDARD', month_price: 699, year_price: 5990, ...TIER_LIMITS.STANDARD },
+  TEAM: { current: 'TEAM', month_price: 1499, year_price: 13990, ...TIER_LIMITS.TEAM },
+  PRO: { current: 'PRO', month_price: 2299, year_price: 21990, ...TIER_LIMITS.PRO },
+  ULTIMATE: { current: 'ULTIMATE', month_price: 4499, year_price: 43990, ...TIER_LIMITS.ULTIMATE },
+};
+
+/**
+ * USD Pricing ($).
+ */
+export const pricingUSD: PricingInterface = {
+  FREE: { current: 'FREE', month_price: 0, year_price: 0, ...TIER_LIMITS.FREE },
+  STANDARD: { current: 'STANDARD', month_price: 9, year_price: 79, ...TIER_LIMITS.STANDARD },
+  TEAM: { current: 'TEAM', month_price: 19, year_price: 179, ...TIER_LIMITS.TEAM },
+  PRO: { current: 'PRO', month_price: 29, year_price: 279, ...TIER_LIMITS.PRO },
+  ULTIMATE: { current: 'ULTIMATE', month_price: 59, year_price: 549, ...TIER_LIMITS.ULTIMATE },
+};
+
+export const PRICING_BY_CURRENCY: Record<string, PricingInterface> = {
+  INR: pricingINR,
+  USD: pricingUSD,
+};
+
+export function getPricing(currency?: string): PricingInterface {
+  if (currency && PRICING_BY_CURRENCY[currency.toUpperCase()]) {
+    return PRICING_BY_CURRENCY[currency.toUpperCase()];
+  }
+  return pricingINR;
+}
+
+/**
+ * Backward compatibility: export default `pricing` aliased to INR.
+ */
+export const pricing: PricingInterface = pricingINR;

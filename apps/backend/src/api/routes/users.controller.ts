@@ -270,8 +270,8 @@ export class UsersController {
 
   @Get('/subscription/tiers')
   @CheckPolicies([AuthorizationActions.Create, Sections.ADMIN])
-  async tiers() {
-    return this._razorpayService.getPackages();
+  async tiers(@Query('currency') currency?: string) {
+    return this._razorpayService.getPackages(currency);
   }
 
   @Post('/join-org')

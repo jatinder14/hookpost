@@ -10,8 +10,14 @@ import { AttachToFeedbackIcon } from '@hookpost/frontend/components/new-layout/s
 import NotificationComponent from '@hookpost/frontend/components/notifications/notification.component';
 import dynamic from 'next/dynamic';
 import { LogoTextComponent } from '@hookpost/frontend/components/ui/logo-text.component';
-import { pricing, CURRENCY_SYMBOL } from '@hookpost/nestjs-libraries/database/prisma/subscriptions/pricing';
 import { capitalize } from 'lodash';
+import {
+  pricing,
+  getPricing,
+  getCurrencyConfig,
+  SupportedCurrency,
+  CURRENCY_SYMBOL,
+} from '@hookpost/nestjs-libraries/database/prisma/subscriptions/pricing';
 import clsx from 'clsx';
 import { LoadingComponent } from '@hookpost/frontend/components/layout/loading';
 import { CheckIconComponent } from '@hookpost/frontend/components/ui/check.icon.component';
@@ -57,6 +63,33 @@ export const FirstBillingComponent = () => {
   const [datafast_visitor_id] = useCookie('datafast_visitor_id', '');
   const [datafast_session_id] = useCookie('datafast_session_id', '');
 
+  const [currency, setCurrency] = useState<SupportedCurrency>('INR');
+
+  useEffect(() => {
+    const saved =
+      typeof window !== 'undefined'
+        ? (localStorage.getItem('hookpost_currency') ||
+            document.cookie
+              .split('; ')
+              .find((row) => row.startsWith('hookpost_currency='))
+              ?.split('=')[1])
+        : null;
+    if (saved === 'USD' || saved === 'INR') {
+      setCurrency(saved as SupportedCurrency);
+    }
+  }, []);
+
+  const changeCurrency = (c: SupportedCurrency) => {
+    setCurrency(c);
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('hookpost_currency', c);
+      document.cookie = `hookpost_currency=${c}; path=/; max-age=2592000; SameSite=Lax`;
+    }
+  };
+
+  const activePricing = useMemo(() => getPricing(currency), [currency]);
+  const currencySymbol = useMemo(() => getCurrencyConfig(currency).symbol, [currency]);
+
   const loadCheckout = useCallback(async () => {
     return (
       await fetch('/billing/embedded', {
@@ -64,6 +97,7 @@ export const FirstBillingComponent = () => {
         body: JSON.stringify({
           billing: tier,
           period: period,
+          currency: currency,
           ...(datafast_visitor_id && datafast_session_id
             ? { datafast_visitor_id, datafast_session_id }
             : {}),
@@ -71,7 +105,7 @@ export const FirstBillingComponent = () => {
         }),
       })
     ).json();
-  }, [tier, period]);
+  }, [tier, period, currency]);
 
   const showYouTube = () => {
     modals.openModal({
@@ -89,7 +123,7 @@ export const FirstBillingComponent = () => {
   };
 
   const { data, isLoading } = useSWR(
-    `/billing-${tier}-${period}`,
+    `/billing-${tier}-${period}-${currency}`,
     loadCheckout,
     {
       revalidateOnFocus: false,
@@ -101,8 +135,8 @@ export const FirstBillingComponent = () => {
   );
 
   const price = useMemo(
-    () => Object.entries(pricing).filter(([key, value]) => key !== 'FREE'),
-    []
+    () => Object.entries(activePricing).filter(([key, value]) => key !== 'FREE'),
+    [activePricing]
   );
 
   const JoinOver = () => {
@@ -219,11 +253,11 @@ export const FirstBillingComponent = () => {
               subscriptionId={data.subscriptionId}
               url={data.url}
               keyId={data.keyId || razorpayKeyId}
-              currency={data.currency}
-              amountLabel={`${CURRENCY_SYMBOL}${
+              currency={data.currency || currency}
+              amountLabel={`${getCurrencyConfig(data.currency || currency).symbol}${
                 period === 'MONTHLY'
-                  ? pricing[tier]?.month_price
-                  : pricing[tier]?.year_price
+                  ? activePricing[tier]?.month_price
+                  : activePricing[tier]?.year_price
               }`}
               allowTrial={!!user?.allowTrial}
             />
@@ -236,34 +270,64 @@ export const FirstBillingComponent = () => {
             <div className="hidden tablet:block">
               <JoinOver />
             </div>
-            <div className="flex mb-[24px] mobile:flex-col">
-              <div className="flex-1 text-[24px] font-[700]">
+            <div className="flex mb-[24px] mobile:flex-col justify-between items-start mobile:items-stretch gap-4">
+              <div className="text-[24px] font-[700]">
                 {t('billing_choose_plan', 'Choose a Plan')}
               </div>
-              <div className="h-[44px] px-[6px] mobile:px-0 flex items-center justify-center mobile:justify-start gap-[12px] border border-newColColor rounded-[12px] select-none">
-                <div
-                  className={clsx(
-                    'h-[32px] mobile:flex-1 rounded-[6px] text-[16px] px-[12px] flex justify-center items-center',
-                    period === 'MONTHLY'
-                      ? 'bg-boxFocused text-textItemFocused'
-                      : 'cursor-pointer'
-                  )}
-                  onClick={() => setPeriod('MONTHLY')}
-                >
-                  {t('billing_monthly', 'Monthly')}
+              <div className="flex items-center gap-3 flex-wrap">
+                {/* Currency Switcher */}
+                <div className="inline-flex items-center rounded-lg border border-newColColor bg-boxFocused/40 p-1 text-[13px] font-semibold">
+                  <button
+                    type="button"
+                    onClick={() => changeCurrency('INR')}
+                    className={clsx(
+                      'px-2.5 py-1 rounded-[4px] transition-colors',
+                      currency === 'INR'
+                        ? 'bg-[#FF4CE2] text-black font-bold shadow-sm'
+                        : 'text-white/60 hover:text-white'
+                    )}
+                  >
+                    ₹ INR
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => changeCurrency('USD')}
+                    className={clsx(
+                      'px-2.5 py-1 rounded-[4px] transition-colors',
+                      currency === 'USD'
+                        ? 'bg-[#FF4CE2] text-black font-bold shadow-sm'
+                        : 'text-white/60 hover:text-white'
+                    )}
+                  >
+                    $ USD
+                  </button>
                 </div>
-                <div
-                  className={clsx(
-                    'gap-[10px] h-[32px] mobile:flex-1 rounded-[6px] text-[16px] px-[12px] flex justify-center items-center',
-                    period === 'YEARLY'
-                      ? 'bg-boxFocused text-textItemFocused'
-                      : 'cursor-pointer'
-                  )}
-                  onClick={() => setPeriod('YEARLY')}
-                >
-                  <div>{t('billing_yearly', 'Yearly')}</div>
-                  <div className="bg-[#AA0FA4] text-[white] px-[8px] rounded-[4px] mobile:hidden">
-                    {t('billing_20_percent_off', '2 months free')}
+
+                <div className="h-[44px] px-[6px] mobile:px-0 flex items-center justify-center mobile:justify-start gap-[12px] border border-newColColor rounded-[12px] select-none">
+                  <div
+                    className={clsx(
+                      'h-[32px] mobile:flex-1 rounded-[6px] text-[16px] px-[12px] flex justify-center items-center',
+                      period === 'MONTHLY'
+                        ? 'bg-boxFocused text-textItemFocused'
+                        : 'cursor-pointer'
+                    )}
+                    onClick={() => setPeriod('MONTHLY')}
+                  >
+                    {t('billing_monthly', 'Monthly')}
+                  </div>
+                  <div
+                    className={clsx(
+                      'gap-[10px] h-[32px] mobile:flex-1 rounded-[6px] text-[16px] px-[12px] flex justify-center items-center',
+                      period === 'YEARLY'
+                        ? 'bg-boxFocused text-textItemFocused'
+                        : 'cursor-pointer'
+                    )}
+                    onClick={() => setPeriod('YEARLY')}
+                  >
+                    <div>{t('billing_yearly', 'Yearly')}</div>
+                    <div className="bg-[#AA0FA4] text-[white] px-[8px] rounded-[4px] mobile:hidden">
+                      {t('billing_20_percent_off', '2 months free')}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -286,7 +350,7 @@ export const FirstBillingComponent = () => {
                     </div>
                     <div className="flex items-baseline gap-[4px] flex-wrap mt-[6px]">
                       <span className="text-[32px] mobile:text-[22px] font-[700] leading-none text-white tracking-tight">
-                        {CURRENCY_SYMBOL}
+                        {currencySymbol}
                         {
                           value[
                             period === 'MONTHLY' ? 'month_price' : 'year_price'

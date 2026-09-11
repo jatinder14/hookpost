@@ -6,6 +6,8 @@ import { makeId } from '@hookpost/nestjs-libraries/services/make.is';
 import { BillingSubscribeDto } from '@hookpost/nestjs-libraries/dtos/billing/billing.subscribe.dto';
 import {
   pricing,
+  getPricing,
+  getCurrencyConfig,
   CURRENCY_CODE,
   CURRENCY_MINOR_MULTIPLIER,
 } from '@hookpost/nestjs-libraries/database/prisma/subscriptions/pricing';
@@ -412,19 +414,41 @@ export class RazorpayService {
             process.env.BILLING_EMAIL_DOMAIN || 'hookpost.local'
           }`;
 
-    const created = await this.client.request('POST', '/customers', {
-      name: organization.name || 'Hookpost customer',
-      email,
-      // Do not error if a customer with this email already exists -- return it.
-      fail_existing: 0,
-      notes: { orgId: organization.id },
-    });
+    try {
+      const created = await this.client.request('POST', '/customers', {
+        name: organization.name || 'Hookpost customer',
+        email,
+        // Do not error if a customer with this email already exists -- return it.
+        fail_existing: 0,
+        notes: { orgId: organization.id },
+      });
 
-    await this._subscriptionService.updateCustomerId(
-      organization.id,
-      created.id
-    );
-    return created.id;
+      await this._subscriptionService.updateCustomerId(
+        organization.id,
+        created.id
+      );
+      return created.id;
+    } catch (err: any) {
+      if (
+        err?.message?.includes('Customer already exists') ||
+        err?.message?.includes('already exists')
+      ) {
+        const list = await this.client.request<{
+          items: Array<{ id: string; email: string }>;
+        }>('GET', `/customers?count=100`);
+        const existing = list?.items?.find(
+          (c) => c.email && c.email.toLowerCase() === email.toLowerCase()
+        );
+        if (existing?.id) {
+          await this._subscriptionService.updateCustomerId(
+            organization.id,
+            existing.id
+          );
+          return existing.id;
+        }
+      }
+      throw err;
+    }
   }
 
   async getCustomerByOrganizationId(organizationId: string) {
@@ -432,10 +456,13 @@ export class RazorpayService {
     return org?.paymentId || '';
   }
 
-  private amountFor(billing: Billing, period: Period) {
-    const p = pricing[billing];
+  private amountFor(billing: Billing, period: Period, currency: string = CURRENCY_CODE) {
+    const curr = (currency || CURRENCY_CODE).toUpperCase();
+    const planPricing = getPricing(curr);
+    const p = planPricing[billing] || pricing[billing];
     const major = period === 'MONTHLY' ? p.month_price : p.year_price;
-    return major * CURRENCY_MINOR_MULTIPLIER;
+    const mult = getCurrencyConfig(curr).minorMultiplier || CURRENCY_MINOR_MULTIPLIER;
+    return major * mult;
   }
 
   /**
@@ -443,9 +470,14 @@ export class RazorpayService {
    * Changing a price in pricing.ts therefore provisions a new plan rather than
    * silently repricing existing subscribers.
    */
-  private async findOrCreatePlan(billing: Billing, period: Period) {
-    const amount = this.amountFor(billing, period);
-    const key = buildPlanKey(billing, period, amount, CURRENCY_CODE);
+  private async findOrCreatePlan(
+    billing: Billing,
+    period: Period,
+    currency: string = CURRENCY_CODE
+  ) {
+    const curr = (currency || CURRENCY_CODE).toUpperCase();
+    const amount = this.amountFor(billing, period, curr);
+    const key = buildPlanKey(billing, period, amount, curr);
     const cached = this.planCache.get(key);
     if (cached) return cached;
 
@@ -463,9 +495,9 @@ export class RazorpayService {
       period: period === 'MONTHLY' ? 'monthly' : 'yearly',
       interval: 1,
       item: {
-        name: `Hookpost ${billing} ${period}`,
+        name: `Hookpost ${billing} ${period} (${curr})`,
         amount,
-        currency: CURRENCY_CODE,
+        currency: curr,
       },
       notes: { hookpost_key: key, billing, period },
     });
@@ -575,10 +607,11 @@ export class RazorpayService {
     const id = makeId(10);
     const billing = body.billing.toUpperCase() as Billing;
     const period = (body.period || 'MONTHLY').toUpperCase() as Period;
+    const currency = (body.currency || CURRENCY_CODE).toUpperCase();
 
     const org = (await this._organizationService.getOrgById(organizationId))!;
     const customerId = await this.createOrGetCustomer(org);
-    const planId = await this.findOrCreatePlan(billing, period);
+    const planId = await this.findOrCreatePlan(billing, period, currency);
 
     const current = await this._subscriptionService.getSubscription(
       organizationId
@@ -604,6 +637,7 @@ export class RazorpayService {
               service: 'hookpost',
               billing,
               period,
+              currency,
               orgId: organizationId,
               userId,
               id,
@@ -650,6 +684,7 @@ export class RazorpayService {
         service: 'hookpost',
         billing,
         period,
+        currency,
         orgId: organizationId,
         userId,
         id,
@@ -826,7 +861,9 @@ export class RazorpayService {
   async prorate(organizationId: string, body: BillingSubscribeDto) {
     const billing = body.billing.toUpperCase() as Billing;
     const period = (body.period || 'MONTHLY').toUpperCase() as Period;
-    const target = this.amountFor(billing, period) / CURRENCY_MINOR_MULTIPLIER;
+    const currency = (body.currency || CURRENCY_CODE).toUpperCase();
+    const mult = getCurrencyConfig(currency).minorMultiplier || CURRENCY_MINOR_MULTIPLIER;
+    const target = this.amountFor(billing, period, currency) / mult;
 
     const sub = await this.liveSubscriptionFor(organizationId);
     if (!sub) return { price: target };
@@ -842,10 +879,11 @@ export class RazorpayService {
     );
     const currentTier = (local?.subscriptionTier || 'FREE') as Billing;
     const currentPeriod = (local?.period || 'MONTHLY') as Period;
+    const planPricing = getPricing(currency);
     const currentAmount =
-      (pricing[currentTier]
-        ? this.amountFor(currentTier, currentPeriod)
-        : 0) / CURRENCY_MINOR_MULTIPLIER;
+      (planPricing[currentTier]
+        ? this.amountFor(currentTier, currentPeriod, currency)
+        : 0) / mult;
 
     const credit = currentAmount * (remaining / cycle);
     const price = Math.max(target - credit, 0);
@@ -862,20 +900,22 @@ export class RazorpayService {
    * provider, so the marketing page renders correctly even before any Razorpay
    * plan has been provisioned.
    */
-  async getPackages() {
-    const tiers = Object.values(pricing).filter((p) => p.month_price > 0);
+  async getPackages(currency?: string) {
+    const curr = (currency || CURRENCY_CODE).toUpperCase();
+    const activePricing = getPricing(curr);
+    const tiers = Object.values(activePricing).filter((p) => p.month_price > 0);
     return {
       month: tiers.map((p) => ({
         name: p.current,
         recurring: 'month',
         price: p.month_price,
-        currency: CURRENCY_CODE,
+        currency: curr,
       })),
       year: tiers.map((p) => ({
         name: p.current,
         recurring: 'year',
         price: p.year_price,
-        currency: CURRENCY_CODE,
+        currency: curr,
       })),
     };
   }
@@ -970,10 +1010,11 @@ export class RazorpayService {
       body,
       allowTrial
     );
+    const currency = (body.currency || CURRENCY_CODE).toUpperCase();
     return {
       ...result,
       keyId: process.env.RAZORPAY_KEY_ID || '',
-      currency: CURRENCY_CODE,
+      currency,
       providerName: 'razorpay',
     };
   }

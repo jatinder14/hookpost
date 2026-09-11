@@ -40,6 +40,25 @@ export async function proxy(request: NextRequest) {
     topResponse.headers.set(cookieName, lng);
   }
 
+  // Multi-currency Geo-IP detection via Cloudflare cf-ipcountry
+  const currencyCookie = request.cookies.get('hookpost_currency')?.value;
+  if (!currencyCookie) {
+    const country = (
+      request.headers.get('cf-ipcountry') ||
+      request.headers.get('x-country') ||
+      ''
+    ).toUpperCase();
+    const detectedCurrency = country === 'IN' || country === '' ? 'INR' : 'USD';
+    topResponse.cookies.set('hookpost_currency', detectedCurrency, {
+      path: '/',
+      maxAge: 60 * 60 * 24 * 30,
+      sameSite: 'lax',
+    });
+    requestHeaders.set('x-hookpost-currency', detectedCurrency);
+  } else {
+    requestHeaders.set('x-hookpost-currency', currencyCookie);
+  }
+
   if (nextUrl.pathname.startsWith('/modal/') && !authCookie) {
     return NextResponse.redirect(new URL(`/auth/login-required`, nextUrl.href));
   }

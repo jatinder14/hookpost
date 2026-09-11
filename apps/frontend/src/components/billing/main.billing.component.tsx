@@ -11,7 +11,13 @@ import { deleteDialog } from '@hookpost/react/helpers/delete.dialog';
 import { useToaster } from '@hookpost/react/toaster/toaster';
 import dayjs from 'dayjs';
 import clsx from 'clsx';
-import { pricing, CURRENCY_SYMBOL } from '@hookpost/nestjs-libraries/database/prisma/subscriptions/pricing';
+import {
+  pricing,
+  getPricing,
+  getCurrencyConfig,
+  SupportedCurrency,
+  CURRENCY_SYMBOL,
+} from '@hookpost/nestjs-libraries/database/prisma/subscriptions/pricing';
 import { FAQComponent } from '@hookpost/frontend/components/billing/faq.component';
 import { useSWRConfig } from 'swr';
 import { useUser } from '@hookpost/frontend/components/layout/user.context';
@@ -33,8 +39,9 @@ import { openRazorpayCheckout } from '@hookpost/frontend/components/billing/razo
 export const Prorate: FC<{
   period: 'MONTHLY' | 'YEARLY';
   pack: 'STANDARD' | 'PRO';
+  currency?: SupportedCurrency;
 }> = (props) => {
-  const { period, pack } = props;
+  const { period, pack, currency = 'INR' } = props;
   const t = useT();
   const fetch = useFetch();
   const [price, setPrice] = useState<number | false>(0);
@@ -49,6 +56,7 @@ export const Prorate: FC<{
             body: JSON.stringify({
               period,
               billing: pack,
+              currency,
             }),
           })
         ).json()
@@ -59,7 +67,7 @@ export const Prorate: FC<{
   useEffect(() => {
     setPrice(false);
     calculatePrice();
-  }, [period, pack]);
+  }, [period, pack, currency]);
   if (loading) {
     return (
       <div className="pt-[12px]">
@@ -70,9 +78,10 @@ export const Prorate: FC<{
   if (price === false) {
     return null;
   }
+  const symbol = getCurrencyConfig(currency).symbol;
   return (
     <div className="text-[12px] flex pt-[12px]">
-      ({t('pay_today', 'Pay Today')} {CURRENCY_SYMBOL}
+      ({t('pay_today', 'Pay Today')} {symbol}
       {(price < 0 ? 0 : price)?.toFixed(1)})
     </div>
   );
@@ -246,6 +255,33 @@ export const MainBillingComponent: FC<{
   const [initialChannels, setInitialChannels] = useState(
     sub?.totalChannels || 1
   );
+  const [currency, setCurrency] = useState<SupportedCurrency>('INR');
+
+  useEffect(() => {
+    const saved =
+      typeof window !== 'undefined'
+        ? (localStorage.getItem('hookpost_currency') ||
+            document.cookie
+              .split('; ')
+              .find((row) => row.startsWith('hookpost_currency='))
+              ?.split('=')[1])
+        : null;
+    if (saved === 'USD' || saved === 'INR') {
+      setCurrency(saved as SupportedCurrency);
+    }
+  }, []);
+
+  const changeCurrency = (c: SupportedCurrency) => {
+    setCurrency(c);
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('hookpost_currency', c);
+      document.cookie = `hookpost_currency=${c}; path=/; max-age=2592000; SameSite=Lax`;
+    }
+  };
+
+  const activePricing = useMemo(() => getPricing(currency), [currency]);
+  const currencySymbol = useMemo(() => getCurrencyConfig(currency).symbol, [currency]);
+
   useEffect(() => {
     if (initialChannels !== sub?.totalChannels) {
       setInitialChannels(sub?.totalChannels || 1);
@@ -385,13 +421,14 @@ export const MainBillingComponent: FC<{
         }
         setLoading(true);
         setLoadingPack(billing);
-        const { url, portal, blocked, subscriptionId, keyId, currency } = await (
+        const { url, portal, blocked, subscriptionId, keyId, currency: returnedCurrency } = await (
           await fetch('/billing/embedded', {
             method: 'POST',
             body: JSON.stringify({
               period: monthlyOrYearly === 'on' ? 'YEARLY' : 'MONTHLY',
               utm,
               billing,
+              currency,
               ...(dub ? { dub } : {}),
             }),
           })
@@ -410,11 +447,12 @@ export const MainBillingComponent: FC<{
           return;
         }
         if (url || subscriptionId) {
+          const planPrice =
+            activePricing[billing][
+              monthlyOrYearly === 'on' ? 'year_price' : 'month_price'
+            ];
           await track(TrackEnum.InitiateCheckout, {
-            value:
-              pricing[billing][
-                monthlyOrYearly === 'on' ? 'year_price' : 'month_price'
-              ],
+            value: planPrice,
           });
 
           // Open Razorpay's in-page modal. This used to be
@@ -424,15 +462,13 @@ export const MainBillingComponent: FC<{
           // every plan on this account on 2026-09-08, so the plans grid had no
           // working path to payment at all. checkout.js does not use it.
           if (subscriptionId) {
+            const checkoutCurrency = returnedCurrency || currency;
+            const checkoutConfig = getCurrencyConfig(checkoutCurrency);
             const opened = await openRazorpayCheckout({
               subscriptionId,
               keyId,
-              currency,
-              amountLabel: `${CURRENCY_SYMBOL}${
-                pricing[billing][
-                  monthlyOrYearly === 'on' ? 'year_price' : 'month_price'
-                ]
-              }`,
+              currency: checkoutCurrency,
+              amountLabel: `${checkoutConfig.symbol}${planPrice}`,
               verify: async (payload) => {
                 await fetch('/razorpay/verify', {
                   method: 'POST',
@@ -509,7 +545,7 @@ export const MainBillingComponent: FC<{
         setLoading(false);
         setLoadingPack('');
       },
-    [monthlyOrYearly, subscription, user, utm, fetch, toast, t]
+    [monthlyOrYearly, subscription, user, utm, fetch, toast, t, currency, activePricing]
   );
   if (user?.isLifetime) {
     router.replace('/');
@@ -517,20 +553,50 @@ export const MainBillingComponent: FC<{
   }
   return (
     <div className="flex flex-col gap-[16px]">
-      <div className="flex flex-col md:flex-row min-w-0 gap-[8px] md:gap-0">
-        <div className="flex-1 text-[20px]">{t('plans', 'Plans')}</div>
-        <div className="flex items-center gap-[16px]">
-          <div>{t('monthly', 'MONTHLY')}</div>
-          <div>
-            <Slider value={monthlyOrYearly} onChange={setMonthlyOrYearly} />
+      <div className="flex flex-col md:flex-row min-w-0 gap-[12px] md:gap-0 items-start md:items-center justify-between">
+        <div className="flex-1 text-[20px] font-bold">{t('plans', 'Plans')}</div>
+        <div className="flex items-center gap-[16px] flex-wrap">
+          {/* Aesthetic Currency Switcher */}
+          <div className="inline-flex items-center rounded-lg border border-customColor6 bg-sixth p-1 text-[13px] font-semibold">
+            <button
+              type="button"
+              onClick={() => changeCurrency('INR')}
+              className={clsx(
+                'px-2.5 py-1 rounded-[4px] transition-colors',
+                currency === 'INR'
+                  ? 'bg-[#FF4CE2] text-black font-bold shadow-sm'
+                  : 'text-white/60 hover:text-white'
+              )}
+            >
+              ₹ INR
+            </button>
+            <button
+              type="button"
+              onClick={() => changeCurrency('USD')}
+              className={clsx(
+                'px-2.5 py-1 rounded-[4px] transition-colors',
+                currency === 'USD'
+                  ? 'bg-[#FF4CE2] text-black font-bold shadow-sm'
+                  : 'text-white/60 hover:text-white'
+              )}
+            >
+              $ USD
+            </button>
           </div>
-          <div>{t('yearly', 'YEARLY')}</div>
+
+          <div className="flex items-center gap-[12px]">
+            <div>{t('monthly', 'MONTHLY')}</div>
+            <div>
+              <Slider value={monthlyOrYearly} onChange={setMonthlyOrYearly} />
+            </div>
+            <div>{t('yearly', 'YEARLY')}</div>
+          </div>
         </div>
       </div>
 
       {finishTrial && <FinishTrial close={() => setFinishTrial(false)} />}
       <div className="flex gap-[16px] [@media(max-width:1024px)]:flex-col [@media(max-width:1024px)]:text-center">
-        {Object.entries(pricing)
+        {Object.entries(activePricing)
           .filter((f) => !isGeneral || f[0] !== 'FREE')
           .map(([name, values]) => (
             <div
@@ -540,7 +606,7 @@ export const MainBillingComponent: FC<{
               <div className="text-[18px]">{name}</div>
               <div className="text-[38px] flex gap-[2px] items-center">
                 <div>
-                  {CURRENCY_SYMBOL}
+                  {currencySymbol}
                   {monthlyOrYearly === 'on'
                     ? values.year_price
                     : values.month_price}
@@ -606,6 +672,7 @@ export const MainBillingComponent: FC<{
                     <Prorate
                       period={monthlyOrYearly === 'on' ? 'YEARLY' : 'MONTHLY'}
                       pack={name.toUpperCase() as 'STANDARD' | 'PRO'}
+                      currency={currency}
                     />
                   )}
               </div>

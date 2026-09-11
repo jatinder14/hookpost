@@ -433,7 +433,7 @@ async function runGrowthPoster(options = {}) {
   console.log(`Next topic scheduled for next hour: "${GROWTH_TOPICS[(nextIndex + 1) % GROWTH_TOPICS.length].title}"`);
   console.log('======================================================\n');
 
-  return { success: true, postGroupId: resJson.id, publishedPosts };
+  return { success: true, postGroupId: resJson.id, createdPostIds };
 }
 
 // Allow CLI execution or module require

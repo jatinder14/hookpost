@@ -17,6 +17,7 @@ import {
   getCurrencyConfig,
   SupportedCurrency,
   CURRENCY_SYMBOL,
+  isIndianRegion,
 } from '@hookpost/nestjs-libraries/database/prisma/subscriptions/pricing';
 import { FAQComponent } from '@hookpost/frontend/components/billing/faq.component';
 import { useSWRConfig } from 'swr';
@@ -255,9 +256,14 @@ export const MainBillingComponent: FC<{
   const [initialChannels, setInitialChannels] = useState(
     sub?.totalChannels || 1
   );
+  const [isIndian, setIsIndian] = useState(true);
   const [currency, setCurrency] = useState<SupportedCurrency>('INR');
 
   useEffect(() => {
+    const tz = Intl.DateTimeFormat().resolvedOptions().timeZone.toLowerCase();
+    const detectedIndian = tz.includes('kolkata') || tz.includes('calcutta');
+    setIsIndian(detectedIndian);
+
     const saved =
       typeof window !== 'undefined'
         ? (localStorage.getItem('hookpost_currency') ||
@@ -266,8 +272,15 @@ export const MainBillingComponent: FC<{
               .find((row) => row.startsWith('hookpost_currency='))
               ?.split('=')[1])
         : null;
-    if (saved === 'USD' || saved === 'INR') {
+
+    if (!detectedIndian && (saved === 'INR' || !saved)) {
+      setCurrency('USD');
+    } else if (saved === 'USD' || saved === 'INR') {
       setCurrency(saved as SupportedCurrency);
+    } else if (detectedIndian) {
+      setCurrency('INR');
+    } else {
+      setCurrency('USD');
     }
   }, []);
 
@@ -558,30 +571,42 @@ export const MainBillingComponent: FC<{
         <div className="flex items-center gap-[16px] flex-wrap">
           {/* Aesthetic Currency Switcher */}
           <div className="inline-flex items-center rounded-lg border border-customColor6 bg-sixth p-1 text-[13px] font-semibold">
-            <button
-              type="button"
-              onClick={() => changeCurrency('INR')}
-              className={clsx(
-                'px-2.5 py-1 rounded-[4px] transition-colors',
-                currency === 'INR'
-                  ? 'bg-[#FF4CE2] text-black font-bold shadow-sm'
-                  : 'text-white/60 hover:text-white'
-              )}
-            >
-              ₹ INR
-            </button>
-            <button
-              type="button"
-              onClick={() => changeCurrency('USD')}
-              className={clsx(
-                'px-2.5 py-1 rounded-[4px] transition-colors',
-                currency === 'USD'
-                  ? 'bg-[#FF4CE2] text-black font-bold shadow-sm'
-                  : 'text-white/60 hover:text-white'
-              )}
-            >
-              $ USD
-            </button>
+            {isIndian ? (
+              <>
+                <button
+                  type="button"
+                  onClick={() => changeCurrency('INR')}
+                  className={clsx(
+                    'px-2.5 py-1 rounded-[4px] transition-colors',
+                    currency === 'INR'
+                      ? 'bg-[#FF4CE2] text-black font-bold shadow-sm'
+                      : 'text-white/60 hover:text-white'
+                  )}
+                >
+                  ₹ INR
+                </button>
+                <button
+                  type="button"
+                  onClick={() => changeCurrency('USD')}
+                  className={clsx(
+                    'px-2.5 py-1 rounded-[4px] transition-colors',
+                    currency === 'USD'
+                      ? 'bg-[#FF4CE2] text-black font-bold shadow-sm'
+                      : 'text-white/60 hover:text-white'
+                  )}
+                >
+                  $ USD
+                </button>
+              </>
+            ) : (
+              <button
+                type="button"
+                onClick={() => changeCurrency('USD')}
+                className="px-2.5 py-1 rounded-[4px] bg-[#FF4CE2] text-black font-bold shadow-sm"
+              >
+                $ USD
+              </button>
+            )}
           </div>
 
           <div className="flex items-center gap-[12px]">

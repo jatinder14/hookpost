@@ -193,11 +193,23 @@ export const RazorpayBilling: FC<{
     return <LoadingComponent />;
   }
 
+  const sym =
+    currency === 'USD'
+      ? '$'
+      : currency === 'EUR'
+      ? '€'
+      : currency === 'GBP'
+      ? '£'
+      : currency === 'INR'
+      ? '₹'
+      : CURRENCY_SYMBOL;
+  const isINR = currency === 'INR' || (!currency && CURRENCY_SYMBOL === '₹');
+
   return (
     <div className="flex flex-col gap-[16px] mt-[24px]">
       <Button onClick={pay} loading={busy} disabled={busy}>
         {allowTrial
-          ? `Start 7-Day Free Trial (₹0 Today, then ${amountLabel || '₹699'})`
+          ? `Start 7-Day Free Trial (${sym}0 Today, then ${amountLabel || (isINR ? '₹699' : '$19')})`
           : amountLabel
           ? `${t('billing_subscribe_for', 'Subscribe for')} ${amountLabel}`
           : t('billing_subscribe', 'Subscribe')}
@@ -207,7 +219,7 @@ export const RazorpayBilling: FC<{
           href="/launches"
           className="text-[14px] text-[#A0A0B0] hover:text-white underline cursor-pointer transition-colors"
         >
-          Or continue with Free Plan ($0/month) →
+          Or continue with Free Plan ({sym}0/month) →
         </a>
       </div>
       {error ? (
@@ -215,12 +227,14 @@ export const RazorpayBilling: FC<{
           {error}
         </div>
       ) : null}
-      <div className="text-[11px] text-customColor18/90 bg-white/5 border border-white/10 rounded-lg p-2.5 leading-relaxed text-center">
-        💡 <strong>Note:</strong> Per RBI guidelines, a temporary ₹5.00 refundable auth check is done to set up UPI Autopay and is refunded to your account immediately.
-      </div>
+      {isINR && (
+        <div className="text-[11px] text-customColor18/90 bg-white/5 border border-white/10 rounded-lg p-2.5 leading-relaxed text-center">
+          💡 <strong>Note:</strong> Per RBI guidelines, a temporary ₹5.00 refundable auth check is done to set up UPI Autopay and is refunded to your account immediately.
+        </div>
+      )}
       <div className="text-[12px] text-customColor18 text-center">
         {t('billing_powered_by_razorpay', 'Secure payments processed by')}{' '}
-        Razorpay (UPI, NetBanking, Cards)
+        {isINR ? 'Razorpay (UPI, NetBanking, Cards)' : 'International Cards (Visa, Mastercard, Amex)'}
       </div>
     </div>
   );

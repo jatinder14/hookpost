@@ -48,8 +48,8 @@ const TEAM = [
 ];
 
 
-export default function HomePage() {
-  const headerList = headers();
+export default async function HomePage() {
+  const headerList = await headers();
   const country = (headerList.get('x-hookpost-country') || '').toUpperCase();
   const rawCurrency = headerList.get('x-hookpost-currency') as SupportedCurrency | null;
   const isIndian = headerList.get('x-hookpost-is-indian') === '1' || country === 'IN';

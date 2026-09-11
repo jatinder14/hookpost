@@ -74,6 +74,16 @@ export const LayoutComponent = ({ children }: { children: ReactNode }) => {
     );
   }, [user]);
 
+  const [continueFree, setContinueFree] = useState<boolean>(() => {
+    if (typeof window !== 'undefined') {
+      return (
+        localStorage.getItem('hookpost_continue_free') === 'true' ||
+        document.cookie.includes('hookpost_continue_free=true')
+      );
+    }
+    return false;
+  });
+
   if (!user) return null;
 
   return (
@@ -102,7 +112,7 @@ export const LayoutComponent = ({ children }: { children: ReactNode }) => {
               )}
             >
               <div>{user?.admin ? <Impersonate /> : <div />}</div>
-              {user.tier === 'FREE' && isGeneral && billingEnabled && !user?.admin ? (
+              {user.tier === 'FREE' && isGeneral && billingEnabled && !user?.admin && !continueFree ? (
                 <FirstBillingComponent />
               ) : (
                 <>

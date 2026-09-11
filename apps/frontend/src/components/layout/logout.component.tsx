@@ -29,6 +29,11 @@ export const LogoutComponent: FC<{ isIcon?: boolean }> = ({ isIcon }) => {
         });
       }
       setCookie('hp_logged_in', '', -10);
+      if (typeof window !== 'undefined') {
+        localStorage.removeItem('hookpost_continue_free');
+        document.cookie =
+          'hookpost_continue_free=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT; SameSite=Lax';
+      }
       window.location.href = '/';
     }
   }, []);

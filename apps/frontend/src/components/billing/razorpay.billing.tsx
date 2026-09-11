@@ -215,12 +215,20 @@ export const RazorpayBilling: FC<{
           : t('billing_subscribe', 'Subscribe')}
       </Button>
       <div className="flex justify-center items-center gap-2 mt-1">
-        <a
-          href="/launches"
-          className="text-[14px] text-[#A0A0B0] hover:text-white underline cursor-pointer transition-colors"
+        <button
+          type="button"
+          onClick={() => {
+            if (typeof window !== 'undefined') {
+              localStorage.setItem('hookpost_continue_free', 'true');
+              document.cookie =
+                'hookpost_continue_free=true; path=/; max-age=31536000; SameSite=Lax';
+              window.location.href = '/launches';
+            }
+          }}
+          className="text-[14px] text-[#A0A0B0] hover:text-white underline cursor-pointer transition-colors bg-transparent border-none p-0"
         >
           Or continue with Free Plan ({sym}0/month) →
-        </a>
+        </button>
       </div>
       {error ? (
         <div className="text-[14px] text-red-400" role="alert">

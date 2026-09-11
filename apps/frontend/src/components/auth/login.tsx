@@ -5,7 +5,7 @@ import { useFetch } from '@hookpost/helpers/utils/custom.fetch';
 import Link from 'next/link';
 import { Button } from '@hookpost/react/form/button';
 import { Input } from '@hookpost/react/form/input';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { classValidatorResolver } from '@hookform/resolvers/class-validator';
 import { LoginUserDto } from '@hookpost/nestjs-libraries/dtos/auth/login.user.dto';
 import { GithubProvider } from '@hookpost/frontend/components/auth/providers/github.provider';
@@ -33,6 +33,16 @@ export function Login() {
     billingEnabled,
     genericOauth,
   } = useVariables();
+
+  useEffect(() => {
+    fetch('/api/user/self', { credentials: 'include' })
+      .then((res) => {
+        if (res.ok) {
+          window.location.replace('/launches');
+        }
+      })
+      .catch(() => {});
+  }, []);
   const resolver = useMemo(() => {
     return classValidatorResolver(LoginUserDto);
   }, []);

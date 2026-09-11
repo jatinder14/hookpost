@@ -156,9 +156,13 @@ export async function proxy(request: NextRequest) {
     );
   }
 
-  // Only redirect bare /auth to app dashboard if already authenticated.
-  // Allow /auth/login, /auth/register, /auth/forgot so users can freely access the login page without getting bounced.
-  if ((nextUrl.pathname === '/auth' || nextUrl.pathname === '/auth/') && authCookie) {
+  // Redirect authenticated users away from login/register/auth forms to the dashboard
+  if (
+    nextUrl.pathname.startsWith('/auth') &&
+    !nextUrl.pathname.startsWith('/auth/logout') &&
+    !nextUrl.pathname.startsWith('/auth/activate') &&
+    authCookie
+  ) {
     return NextResponse.redirect(new URL(`/launches${url}`, nextUrl.href));
   }
   if (nextUrl.pathname.startsWith('/auth') && !authCookie) {

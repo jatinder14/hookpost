@@ -88,32 +88,34 @@ async function updateStoreListing(editId, language = 'en-US') {
     editId,
     language,
     requestBody: {
-      title: 'Hookpost: AI Social Scheduler',
-      shortDescription: 'AI social media scheduler. Auto-post Reels, TikTok, Shorts. Buffer alternative.',
-      fullDescription: `Hookpost is the modern, open-source AI social media scheduler, content planner, and top Buffer / Postiz alternative built for creators, agencies, solopreneurs, and marketing teams. Plan, auto-post, and schedule content across 20+ social media networks from a single drag-and-drop visual calendar.
+      title: 'Hookpost: Social Scheduler',
+      shortDescription: 'Plan, create, and schedule posts across all your social networks effortlessly.',
+      fullDescription: `Hookpost is a modern social media management tool and content planner built for creators, marketing agencies, and teams. Plan, draft, and schedule your posts across multiple social networks from a unified visual calendar.
 
-Whether you need an Instagram reels scheduler, TikTok auto-poster, YouTube shorts planner, LinkedIn carousels publisher, or X (Twitter) thread scheduler, Hookpost delivers automated publishing with zero manual push notifications.
+Key Features:
 
-🚀 WHY CREATORS & TEAMS CHOOSE HOOKPOST:
+• Multi-Platform Publishing:
+Schedule content seamlessly to Instagram, YouTube, X, Facebook, LinkedIn, Threads, Bluesky, Mastodon, Telegram, and Discord.
 
-• The Top Buffer & Postiz Alternative: Open-source, transparent, privacy-first social media management without exorbitant pricing or arbitrary limits.
-• Auto-Post to 20+ Platforms in One App: Instagram (Reels, Carousels, Stories, Feed), TikTok, YouTube (Videos & Shorts), LinkedIn (Profiles & Company Pages), X (Twitter), Facebook (Pages & Groups), Threads, Pinterest, Bluesky, Mastodon, Reddit, Telegram, and Discord.
-• Automated Reels, Video & Shorts Publishing: Direct API auto-publishing for short-form video. Set it, forget it, and let Hookpost publish while you sleep.
-• Visual Drag-and-Drop Content Calendar: Seamlessly plan weeks of content in advance. Reschedule with a single drag, manage color-coded queues, and preview feeds before publishing.
-• AI Social Media Copilot & Viral Hooks: Overcome writer's block with built-in AI. Generate viral captions, high-engagement hook headlines, trending hashtags, and platform-tailored copy in seconds.
-• Agent-Ready (Model Context Protocol): The world's first social media scheduler with native MCP server integration for Claude, Cursor, and autonomous AI agents (schedule via terminal with 'npx hookpost').
-• Team & Client Collaboration: Unlimited workspaces, isolated client brands, approval workflows, and granular permission controls.
+• Visual Content Calendar:
+Organize weeks of social content in advance. View scheduled posts at a glance, adjust publishing times with intuitive rescheduling, and manage cross-channel campaigns.
 
-🎯 PERFECT FOR:
-- Content Creators & Influencers: Automate cross-posting to TikTok, Reels, and Shorts effortlessly.
-- Marketing Agencies & Freelancers: Manage 50+ client accounts from one unified command center.
-- Small Businesses & Startups: Enterprise-grade social media scheduling at a fraction of Buffer or Hootsuite pricing.
-- Developers & Indie Hackers: 100% open-source, API-driven, with self-hostable Docker support.
+• Media & Video Publishing:
+Upload images and short-form video directly from your device. Preview posts before they go live to ensure consistent formatting across channels.
 
-Download Hookpost today — the smartest open-source AI social media scheduler!`,
+• AI Writing Assistant:
+Draft engaging captions, generate relevant hashtags, and refine your social copy directly inside the post editor.
+
+• Workspace & Team Collaboration:
+Collaborate with team members across separate workspaces with role-based permissions and structured publishing workflows.
+
+• Developer & API Tools:
+Connect with the Hookpost API, CLI, and Model Context Protocol (MCP) integrations for automated workflows.
+
+Manage your social media presence with Hookpost.`,
     },
   });
-  console.log('✅ Store listing metadata updated with top ASO keywords!');
+  console.log('✅ Store listing metadata updated with policy-compliant ASO copy!');
 }
 
 async function uploadImages(editId, language = 'en-US') {

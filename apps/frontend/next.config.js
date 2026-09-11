@@ -165,6 +165,21 @@ const nextConfig = {
         destination: '/alternatives/postiz',
         permanent: true,
       },
+      {
+        source: '/privacy-policy',
+        destination: '/privacy',
+        permanent: true,
+      },
+      {
+        source: '/alternatives/mixpost',
+        destination: '/alternatives',
+        permanent: true,
+      },
+      {
+        source: '/alternatives/postiz/public-api',
+        destination: '/docs/public-api',
+        permanent: true,
+      },
       // Channels we no longer offer. These pages were indexed and linked, so a
       // 404 would waste the accumulated authority and strand anyone arriving
       // from search. 301 to the channel index instead, which lists what is

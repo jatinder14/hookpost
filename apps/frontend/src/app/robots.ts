@@ -39,6 +39,7 @@ export default function robots(): MetadataRoute.Robots {
           '/analytics/',
           '/media/',
           '/launches/',
+          '/cdn-cgi/',
         ],
       },
       {

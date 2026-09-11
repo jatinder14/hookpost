@@ -115,24 +115,34 @@ export default function MixpostAlternativePage() {
 
   const faqItems = [
     {
-      q: "What is the main difference between Hookpost and Mixpost?",
-      a: "While both Hookpost and Mixpost offer open-source social media management, Hookpost is built on modern TypeScript (Next.js 16, NestJS, and Temporal.io for bulletproof job scheduling) and features a native Model Context Protocol (MCP) server that lets you schedule posts directly from Claude Code, Cursor, and AI agents. Hookpost also offers both a zero-maintenance cloud SaaS and Docker self-hosting, whereas Mixpost is a self-hosted PHP/Laravel application.",
+      name: "What is the main difference between Hookpost and Mixpost?",
+      acceptedAnswer: {
+        text: "While both Hookpost and Mixpost offer open-source social media management, Hookpost is built on modern TypeScript (Next.js 16, NestJS, and Temporal.io for bulletproof job scheduling) and features a native Model Context Protocol (MCP) server that lets you schedule posts directly from Claude Code, Cursor, and AI agents. Hookpost also offers both a zero-maintenance cloud SaaS and Docker self-hosting, whereas Mixpost is a self-hosted PHP/Laravel application.",
+      },
     },
     {
-      q: "Can I self-host Hookpost like Mixpost?",
-      a: "Yes. Hookpost provides production-ready Docker Compose configurations that allow developers, agencies, and enterprises to self-host the entire stack (PostgreSQL, Redis, Temporal, NestJS backend, and Next.js frontend) on their own VPS or cloud infrastructure with complete data sovereignty.",
+      name: "Can I self-host Hookpost like Mixpost?",
+      acceptedAnswer: {
+        text: "Yes. Hookpost provides production-ready Docker Compose configurations that allow developers, agencies, and enterprises to self-host the entire stack (PostgreSQL, Redis, Temporal, NestJS backend, and Next.js frontend) on their own VPS or cloud infrastructure with complete data sovereignty.",
+      },
     },
     {
-      q: "Does Hookpost support more networks than Mixpost?",
-      a: "Yes. Hookpost supports 18+ platforms including Instagram (Feed, Reels, Stories), YouTube (Videos & Shorts), TikTok, LinkedIn (Profiles & Pages), X (Twitter), Facebook, Threads, Pinterest, Bluesky, Mastodon, Reddit, Telegram, Discord, and decentralized channels like Nostr and Lemmy.",
+      name: "Does Hookpost support more networks than Mixpost?",
+      acceptedAnswer: {
+        text: "Yes. Hookpost supports 18+ platforms including Instagram (Feed, Reels, Stories), YouTube (Videos & Shorts), TikTok, LinkedIn (Profiles & Pages), X (Twitter), Facebook, Threads, Pinterest, Bluesky, Mastodon, Reddit, Telegram, Discord, and decentralized channels like Nostr and Lemmy.",
+      },
     },
     {
-      q: "How does pricing compare between Hookpost and Mixpost?",
-      a: "Hookpost offers a free cloud tier (2 channels, 30 posts/mo) and transparent flat plans starting at ₹699/month with Razorpay (UPI, NetBanking, Cards) and zero per-channel fees. Mixpost operates on a split model: an open-source Lite version with limited features, and a commercial Pro license ($149-$299/year) that requires your own server hosting costs.",
+      name: "How does pricing compare between Hookpost and Mixpost?",
+      acceptedAnswer: {
+        text: "Hookpost offers a free cloud tier (2 channels, 30 posts/mo) and transparent flat plans starting at ₹699/month with Razorpay (UPI, NetBanking, Cards) and zero per-channel fees. Mixpost operates on a split model: an open-source Lite version with limited features, and a commercial Pro license ($149-$299/year) that requires your own server hosting costs.",
+      },
     },
     {
-      q: "Does Hookpost have an AI scheduler or MCP server?",
-      a: "Yes. Hookpost is the world's first social media management platform with a native Model Context Protocol (MCP) server. You can install it with 'npx hookpost' or integrate it directly into Claude Desktop, Claude Code, Cursor, and Windsurf to draft, review, and schedule social media campaigns through natural language.",
+      name: "Does Hookpost have an AI scheduler or MCP server?",
+      acceptedAnswer: {
+        text: "Yes. Hookpost is the world's first social media management platform with a native Model Context Protocol (MCP) server. You can install it with 'npx hookpost' or integrate it directly into Claude Desktop, Claude Code, Cursor, and Windsurf to draft, review, and schedule social media campaigns through natural language.",
+      },
     },
   ];
 

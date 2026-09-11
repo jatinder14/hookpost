@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 // The only interactive thing on the homepage was this menu toggle, and one
 // useState was forcing the whole 588-line page to ship as a client component.
@@ -24,6 +24,23 @@ const LINKS: [string, string][] = [
 
 export const SiteNav = () => {
   const [open, setOpen] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    try {
+      const cookies = document.cookie.split(';');
+      for (let i = 0; i < cookies.length; i++) {
+        const c = cookies[i].trim();
+        if (c.indexOf('auth=') === 0 && c.length > 5) {
+          const val = c.substring(5).trim();
+          if (val !== '""' && val !== "''") {
+            setIsLoggedIn(true);
+            break;
+          }
+        }
+      }
+    } catch (e) {}
+  }, []);
 
   return (
     <header className="sticky top-0 z-[9999] w-full bg-black/90 backdrop-blur border-b border-white/10">
@@ -82,7 +99,7 @@ export const SiteNav = () => {
                   </svg>
                 </a>
               ) : (
-                <Link href={href} className="hover:text-[#FF4CE2] transition-colors">
+                <Link href={href} prefetch={false} className="hover:text-[#FF4CE2] transition-colors">
                   {label}
                 </Link>
               )}
@@ -91,15 +108,41 @@ export const SiteNav = () => {
         </ul>
 
         <div className="hidden items-center gap-4 lg:flex">
-          <Link href="/auth/login" className="text-[15px] hover:text-[#FF4CE2] transition-colors">
-            Log in
-          </Link>
-          <Link
-            href="/auth"
-            className="rounded-full bg-[#FF4CE2] px-5 py-2.5 text-[15px] font-semibold text-black transition-opacity hover:opacity-90"
-          >
-            Start free
-          </Link>
+          {isLoggedIn ? (
+            <Link
+              href="/launches"
+              prefetch={false}
+              className="rounded-full bg-[#FF4CE2] px-5 py-2.5 text-[15px] font-semibold text-black transition-opacity hover:opacity-90 inline-flex items-center gap-1.5"
+            >
+              <span>Go to App</span>
+              <svg
+                aria-hidden="true"
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="M5 12h14M12 5l7 7-7 7" />
+              </svg>
+            </Link>
+          ) : (
+            <>
+              <Link href="/auth/login" prefetch={false} className="text-[15px] hover:text-[#FF4CE2] transition-colors">
+                Log in
+              </Link>
+              <Link
+                href="/auth"
+                prefetch={false}
+                className="rounded-full bg-[#FF4CE2] px-5 py-2.5 text-[15px] font-semibold text-black transition-opacity hover:opacity-90"
+              >
+                Start free
+              </Link>
+            </>
+          )}
         </div>
 
         <button
@@ -118,7 +161,19 @@ export const SiteNav = () => {
       {open && (
         <div className="lg:hidden border-t border-white/10 bg-black px-5 pb-5 pt-3">
           <ul className="flex flex-col gap-1 text-[15px]">
-            {[...LINKS, ['Log in', '/auth/login'] as [string, string]].map(([label, href]) => (
+            {isLoggedIn && (
+              <li>
+                <Link
+                  href="/launches"
+                  prefetch={false}
+                  onClick={() => setOpen(false)}
+                  className="block rounded-lg px-3 py-2.5 font-bold text-[#FF4CE2] hover:bg-white/5"
+                >
+                  Go to App &rarr;
+                </Link>
+              </li>
+            )}
+            {[...LINKS, ...(!isLoggedIn ? [['Log in', '/auth/login'] as [string, string]] : [])].map(([label, href]) => (
               <li key={href}>
                 {/*
                   Same LINKS array as the desktop nav, so it has to handle an
@@ -138,6 +193,7 @@ export const SiteNav = () => {
                 ) : (
                   <Link
                     href={href}
+                    prefetch={false}
                     onClick={() => setOpen(false)}
                     className="block rounded-lg px-3 py-2.5 hover:bg-white/5"
                   >
@@ -147,13 +203,25 @@ export const SiteNav = () => {
               </li>
             ))}
           </ul>
-          <Link
-            href="/auth"
-            onClick={() => setOpen(false)}
-            className="mt-3 block rounded-full bg-[#FF4CE2] px-5 py-3 text-center font-semibold text-black"
-          >
-            Start free
-          </Link>
+          {isLoggedIn ? (
+            <Link
+              href="/launches"
+              prefetch={false}
+              onClick={() => setOpen(false)}
+              className="mt-3 block rounded-full bg-[#FF4CE2] px-5 py-3 text-center font-semibold text-black"
+            >
+              Go to App &rarr;
+            </Link>
+          ) : (
+            <Link
+              href="/auth"
+              prefetch={false}
+              onClick={() => setOpen(false)}
+              className="mt-3 block rounded-full bg-[#FF4CE2] px-5 py-3 text-center font-semibold text-black"
+            >
+              Start free
+            </Link>
+          )}
         </div>
       )}
     </header>

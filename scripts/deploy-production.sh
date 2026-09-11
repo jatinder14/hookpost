@@ -70,7 +70,7 @@ NODE_ENV=production pnpm --filter hookpost-frontend run build
 echo "==> Step 1b: Verifying the ids were inlined into the bundle..."
 for ID in "$NEXT_PUBLIC_FACEBOOK_PIXEL" "$NEXT_PUBLIC_GTM_ID"; do
   CLEAN=$(printf '%s' "$ID" | tr -d '"'"'"'')
-  if ! grep -rqF "$CLEAN" "$LOCAL_APP_DIR/.next"; then
+  if ! grep -rqF --exclude-dir=cache "$CLEAN" "$LOCAL_APP_DIR/.next"; then
     echo "ERROR: $CLEAN is not present anywhere in .next - it was compiled out. Not shipping." >&2
     exit 1
   fi

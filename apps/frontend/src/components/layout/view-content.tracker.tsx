@@ -44,7 +44,7 @@ export const ViewContentTracker: FC = () => {
 
     const additional = { content_name: pathname };
 
-    (async () => {
+    const sendEvent = async () => {
       try {
         // credentials: 'include' so the backend can set and then reuse its
         // `track` cookie. That cookie is the event id shared with the browser
@@ -65,7 +65,13 @@ export const ViewContentTracker: FC = () => {
       } catch (e) {
         // Never let a blocked or failed tracking call break a landing page.
       }
-    })();
+    };
+
+    if (typeof window !== 'undefined' && 'requestIdleCallback' in window) {
+      (window as any).requestIdleCallback(sendEvent, { timeout: 2000 });
+    } else {
+      setTimeout(sendEvent, 1000);
+    }
   }, [pathname]);
 
   return null;

@@ -331,13 +331,30 @@ export default function LandingLayout({
         <meta name="p:domain_verify" content="173f3dbe31873eabc4da7e0962f5a07f" />
         <meta name="apple-mobile-web-app-title" content="Hookpost" />
         <meta name="application-name" content="Hookpost" />
-        <link rel="dns-prefetch" href="https://hookpost.hookstep.in" />
-        {/* The pixel posts to facebook.com the moment it initialises, and
-            Lighthouse measured 340ms lost setting that connection up late.
-            The handshake now happens in parallel with the page instead. */}
-        <link rel="preconnect" href="https://connect.facebook.net" crossOrigin="" />
-        <link rel="preconnect" href="https://www.facebook.com" crossOrigin="" />
         <meta name="format-detection" content="telephone=no" />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                try {
+                  var cookies = document.cookie.split(';');
+                  for (var i = 0; i < cookies.length; i++) {
+                    var c = cookies[i].trim();
+                    if (c.indexOf('auth=') === 0 && c.length > 5) {
+                      var val = c.substring(5).trim();
+                      if (val !== '""' && val !== "''") {
+                        if (window.location.pathname === '/') {
+                          window.location.replace('/launches');
+                          break;
+                        }
+                      }
+                    }
+                  }
+                } catch (e) {}
+              })();
+            `,
+          }}
+        />
         <style
           dangerouslySetInnerHTML={{
             __html: `

@@ -74,12 +74,14 @@ export default function HomePage() {
             <div className="mt-9 flex flex-wrap items-center gap-4">
               <Link
                 href="/auth"
+                prefetch={false}
                 className="rounded-full bg-[#FF4CE2] px-7 py-3.5 font-semibold text-black transition-opacity hover:opacity-90"
               >
                 Start free — no card
               </Link>
               <Link
                 href="/mcp"
+                prefetch={false}
                 className="rounded-full border border-white/15 px-7 py-3.5 font-semibold transition-colors hover:border-[#FF4CE2]/50 hover:text-[#FF4CE2]"
               >
                 Set up the MCP server
@@ -176,6 +178,7 @@ export default function HomePage() {
               </p>
               <Link
                 href={c.href}
+                prefetch={false}
                 className="mt-5 text-sm font-semibold text-[#FF4CE2] underline underline-offset-2 decoration-[#FF4CE2]/40 hover:decoration-[#FF4CE2]"
               >
                 {c.link} →
@@ -226,6 +229,7 @@ export default function HomePage() {
             <Link
               key={c}
               href={`/channels/${c}`}
+              prefetch={false}
               className="rounded-full border border-white/10 bg-white/[0.03] px-4 py-2 text-sm capitalize text-white/75 transition-colors hover:border-[#FF4CE2]/50 hover:text-white"
             >
               {c === "devto" ? "DEV.to" : c === "x" ? "X" : c}
@@ -233,6 +237,7 @@ export default function HomePage() {
           ))}
           <Link
             href="/channels"
+            prefetch={false}
             className="rounded-full border border-[#FF4CE2]/40 px-4 py-2 text-sm font-semibold text-[#FF4CE2] hover:bg-[#FF4CE2]/10"
           >
             See all channels →
@@ -354,7 +359,7 @@ export default function HomePage() {
                 <ul className="mt-4 flex flex-col gap-2.5 text-sm">
                   {(links as string[][]).map(([label, href]) => (
                     <li key={href}>
-                      <Link href={href} className="text-white/65 transition-colors hover:text-[#FF4CE2]">
+                      <Link href={href} prefetch={false} className="text-white/65 transition-colors hover:text-[#FF4CE2]">
                         {label}
                       </Link>
                     </li>

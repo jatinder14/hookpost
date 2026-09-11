@@ -147,6 +147,7 @@ export const PricingPlans = ({ id }: { id?: string }) => (
 
                 <Link
                   href="/auth"
+                  prefetch={false}
                   className={
                     "mt-7 rounded-full px-5 py-3 text-center font-semibold transition-opacity hover:opacity-90 " +
                     (p.featured

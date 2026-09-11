@@ -11,6 +11,7 @@
 //
 // Every number here comes from pricing.ts. Do not edit them in isolation.
 
+import { headers } from "next/headers";
 import { SiteNav } from "./site-nav";
 import Link from "next/link";
 import SeoSchemas from "./SeoSchemas";
@@ -19,6 +20,7 @@ import LandingFaq from "./LandingFaq";
 import { PricingPlans } from './PricingPlans';
 import { PricingContrast } from './PricingContrast';
 import { PUBLISHABLE_CHANNEL_COUNT } from './channels/channel-count';
+import { SupportedCurrency } from '@hookpost/nestjs-libraries/database/prisma/subscriptions/pricing';
 
 const CHANNELS = [
   "instagram", "youtube", "linkedin", "x", "facebook",
@@ -47,6 +49,12 @@ const TEAM = [
 
 
 export default function HomePage() {
+  const headerList = headers();
+  const country = (headerList.get('x-hookpost-country') || '').toUpperCase();
+  const rawCurrency = headerList.get('x-hookpost-currency') as SupportedCurrency | null;
+  const isIndian = headerList.get('x-hookpost-is-indian') === '1' || country === 'IN';
+  const currency: SupportedCurrency = rawCurrency || (isIndian ? 'INR' : 'USD');
+
   return (
     <div className="min-h-screen bg-black text-white font-dm selection:bg-[#FF4CE2] selection:text-white">
       <SeoSchemas />
@@ -251,7 +259,12 @@ export default function HomePage() {
 
       {/* Shared with /pricing so both render one source of truth. id keeps
           the existing #pricing anchor working for in-page links. */}
-      <PricingPlans id="pricing" />
+      <PricingPlans
+        id="pricing"
+        initialCurrency={currency}
+        initialCountry={country}
+        isIndianRegion={isIndian}
+      />
 
       {/* --------------------------------------------------------------- faq */}
       {/* LandingFaq renders its own "Frequently asked questions" heading, so

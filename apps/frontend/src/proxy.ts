@@ -8,6 +8,11 @@ import {
   headerName,
   languages,
 } from '@hookpost/react/translation/i18n.config';
+import {
+  resolveCountryToCurrency,
+  isIndianRegion,
+  SupportedCurrency,
+} from '@hookpost/nestjs-libraries/database/prisma/subscriptions/pricing';
 acceptLanguage.languages(languages);
 
 // This function can be marked `async` if using `await` inside
@@ -40,24 +45,34 @@ export async function proxy(request: NextRequest) {
     topResponse.headers.set(cookieName, lng);
   }
 
-  // Multi-currency Geo-IP detection via Cloudflare cf-ipcountry
-  const currencyCookie = request.cookies.get('hookpost_currency')?.value;
+  // Multi-currency Geo-IP detection with Anti-INR Leak Protection
+  const country = (
+    request.headers.get('cf-ipcountry') ||
+    request.headers.get('x-country') ||
+    ''
+  ).toUpperCase();
+  const detectedCurrency = resolveCountryToCurrency(country);
+  const currencyCookie = request.cookies.get('hookpost_currency')?.value as SupportedCurrency | undefined;
+
+  // Anti-leak enforcement:
+  // If the visitor is NOT in India, but has an 'INR' cookie (stale or bypassed), force reset to detected global currency.
+  let finalCurrency: SupportedCurrency;
   if (!currencyCookie) {
-    const country = (
-      request.headers.get('cf-ipcountry') ||
-      request.headers.get('x-country') ||
-      ''
-    ).toUpperCase();
-    const detectedCurrency = country === 'IN' || country === '' ? 'INR' : 'USD';
-    topResponse.cookies.set('hookpost_currency', detectedCurrency, {
-      path: '/',
-      maxAge: 60 * 60 * 24 * 30,
-      sameSite: 'lax',
-    });
-    requestHeaders.set('x-hookpost-currency', detectedCurrency);
+    finalCurrency = detectedCurrency;
+  } else if (!isIndianRegion(country) && currencyCookie === 'INR') {
+    finalCurrency = detectedCurrency;
   } else {
-    requestHeaders.set('x-hookpost-currency', currencyCookie);
+    finalCurrency = currencyCookie;
   }
+
+  topResponse.cookies.set('hookpost_currency', finalCurrency, {
+    path: '/',
+    maxAge: 60 * 60 * 24 * 30,
+    sameSite: 'lax',
+  });
+  requestHeaders.set('x-hookpost-currency', finalCurrency);
+  requestHeaders.set('x-hookpost-country', country);
+  requestHeaders.set('x-hookpost-is-indian', isIndianRegion(country) ? '1' : '0');
 
   if (nextUrl.pathname.startsWith('/modal/') && !authCookie) {
     return NextResponse.redirect(new URL(`/auth/login-required`, nextUrl.href));

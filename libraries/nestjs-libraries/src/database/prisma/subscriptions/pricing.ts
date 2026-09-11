@@ -27,10 +27,14 @@ export interface PricingInterface {
 /**
  * Billing currency.
  *
- * Hookpost supports both INR (₹) and USD ($) via Razorpay.
- * Default is INR.
+ * Hookpost supports multi-currency regional pricing:
+ * - INR (₹) for India (Razorpay UPI, NetBanking, Cards)
+ * - USD ($) for US & Global (Stripe / Razorpay International)
+ * - EUR (€) for European Union
+ * - GBP (£) for United Kingdom
+ * Default for international traffic is USD ($).
  */
-export type SupportedCurrency = 'INR' | 'USD';
+export type SupportedCurrency = 'INR' | 'USD' | 'EUR' | 'GBP';
 
 export interface CurrencyConfig {
   code: SupportedCurrency;
@@ -42,7 +46,53 @@ export interface CurrencyConfig {
 export const CURRENCY_CONFIG: Record<SupportedCurrency, CurrencyConfig> = {
   INR: { code: 'INR', symbol: '₹', minorMultiplier: 100, label: 'INR (₹)' },
   USD: { code: 'USD', symbol: '$', minorMultiplier: 100, label: 'USD ($)' },
+  EUR: { code: 'EUR', symbol: '€', minorMultiplier: 100, label: 'EUR (€)' },
+  GBP: { code: 'GBP', symbol: '£', minorMultiplier: 100, label: 'GBP (£)' },
 };
+
+export const EU_COUNTRIES = new Set([
+  'AT', 'BE', 'BG', 'HR', 'CY', 'CZ', 'DK', 'EE', 'FI', 'FR', 'DE', 'GR',
+  'HU', 'IE', 'IT', 'LV', 'LT', 'LU', 'MT', 'NL', 'PL', 'PT', 'RO', 'SK',
+  'SI', 'ES', 'SE'
+]);
+
+/**
+ * Resolves a visitor's country and timezone to their regional currency.
+ * Guarantees zero leakage: non-Indian visitors NEVER default to INR.
+ */
+export function resolveCountryToCurrency(
+  countryCode?: string,
+  timezone?: string
+): SupportedCurrency {
+  const code = (countryCode || '').trim().toUpperCase();
+  const tz = (timezone || '').trim().toLowerCase();
+
+  // 1. Explicit India detection
+  if (code === 'IN' || tz.includes('kolkata') || tz.includes('calcutta')) {
+    return 'INR';
+  }
+
+  // 2. United Kingdom
+  if (code === 'GB' || code === 'UK' || tz.includes('london')) {
+    return 'GBP';
+  }
+
+  // 3. European Union
+  if (EU_COUNTRIES.has(code) || tz.includes('berlin') || tz.includes('paris') || tz.includes('rome') || tz.includes('madrid')) {
+    return 'EUR';
+  }
+
+  // 4. Default global standard is USD
+  return 'USD';
+}
+
+/**
+ * Determines if a visitor is in the Indian region.
+ * Used to completely hide Indian pricing from foreign visitors.
+ */
+export function isIndianRegion(countryCode?: string, timezone?: string): boolean {
+  return resolveCountryToCurrency(countryCode, timezone) === 'INR';
+}
 
 export const CURRENCY_CODE =
   (process.env.NEXT_PUBLIC_BILLING_CURRENCY as SupportedCurrency) ||
@@ -58,7 +108,7 @@ export const CURRENCY_MINOR_MULTIPLIER = 100;
 
 export function getCurrencyConfig(currency?: string): CurrencyConfig {
   const code = (currency || CURRENCY_CODE).toUpperCase() as SupportedCurrency;
-  return CURRENCY_CONFIG[code] || CURRENCY_CONFIG.INR;
+  return CURRENCY_CONFIG[code] || CURRENCY_CONFIG.USD;
 }
 
 /**
@@ -176,26 +226,51 @@ export const pricingINR: PricingInterface = {
 };
 
 /**
- * USD Pricing ($).
+ * USD Pricing ($) - Competitive SaaS Standard.
+ * Benchmarked ~35% below Buffer ($30/mo for 5 channels) with far richer capabilities.
  */
 export const pricingUSD: PricingInterface = {
   FREE: { current: 'FREE', month_price: 0, year_price: 0, ...TIER_LIMITS.FREE },
-  STANDARD: { current: 'STANDARD', month_price: 9, year_price: 79, ...TIER_LIMITS.STANDARD },
-  TEAM: { current: 'TEAM', month_price: 19, year_price: 179, ...TIER_LIMITS.TEAM },
-  PRO: { current: 'PRO', month_price: 29, year_price: 279, ...TIER_LIMITS.PRO },
-  ULTIMATE: { current: 'ULTIMATE', month_price: 59, year_price: 549, ...TIER_LIMITS.ULTIMATE },
+  STANDARD: { current: 'STANDARD', month_price: 19, year_price: 180, ...TIER_LIMITS.STANDARD },
+  TEAM: { current: 'TEAM', month_price: 39, year_price: 380, ...TIER_LIMITS.TEAM },
+  PRO: { current: 'PRO', month_price: 79, year_price: 780, ...TIER_LIMITS.PRO },
+  ULTIMATE: { current: 'ULTIMATE', month_price: 159, year_price: 1550, ...TIER_LIMITS.ULTIMATE },
 };
 
-export const PRICING_BY_CURRENCY: Record<string, PricingInterface> = {
+/**
+ * EUR Pricing (€) - European Union.
+ */
+export const pricingEUR: PricingInterface = {
+  FREE: { current: 'FREE', month_price: 0, year_price: 0, ...TIER_LIMITS.FREE },
+  STANDARD: { current: 'STANDARD', month_price: 19, year_price: 180, ...TIER_LIMITS.STANDARD },
+  TEAM: { current: 'TEAM', month_price: 39, year_price: 380, ...TIER_LIMITS.TEAM },
+  PRO: { current: 'PRO', month_price: 79, year_price: 780, ...TIER_LIMITS.PRO },
+  ULTIMATE: { current: 'ULTIMATE', month_price: 159, year_price: 1550, ...TIER_LIMITS.ULTIMATE },
+};
+
+/**
+ * GBP Pricing (£) - United Kingdom.
+ */
+export const pricingGBP: PricingInterface = {
+  FREE: { current: 'FREE', month_price: 0, year_price: 0, ...TIER_LIMITS.FREE },
+  STANDARD: { current: 'STANDARD', month_price: 16, year_price: 150, ...TIER_LIMITS.STANDARD },
+  TEAM: { current: 'TEAM', month_price: 34, year_price: 330, ...TIER_LIMITS.TEAM },
+  PRO: { current: 'PRO', month_price: 69, year_price: 670, ...TIER_LIMITS.PRO },
+  ULTIMATE: { current: 'ULTIMATE', month_price: 139, year_price: 1350, ...TIER_LIMITS.ULTIMATE },
+};
+
+export const PRICING_BY_CURRENCY: Record<SupportedCurrency, PricingInterface> = {
   INR: pricingINR,
   USD: pricingUSD,
+  EUR: pricingEUR,
+  GBP: pricingGBP,
 };
 
 export function getPricing(currency?: string): PricingInterface {
-  if (currency && PRICING_BY_CURRENCY[currency.toUpperCase()]) {
-    return PRICING_BY_CURRENCY[currency.toUpperCase()];
+  if (currency && PRICING_BY_CURRENCY[currency.toUpperCase() as SupportedCurrency]) {
+    return PRICING_BY_CURRENCY[currency.toUpperCase() as SupportedCurrency];
   }
-  return pricingINR;
+  return pricingUSD;
 }
 
 /**

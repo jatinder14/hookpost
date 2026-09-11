@@ -5,18 +5,44 @@ import Link from 'next/link';
 import {
   pricingINR,
   pricingUSD,
+  pricingEUR,
+  pricingGBP,
+  getPricing,
   CURRENCY_CONFIG,
   SupportedCurrency,
+  isIndianRegion,
 } from '@hookpost/nestjs-libraries/database/prisma/subscriptions/pricing';
+
+export interface PricingPlansProps {
+  id?: string;
+  initialCurrency?: SupportedCurrency;
+  initialCountry?: string;
+  isIndianRegion?: boolean;
+}
 
 /**
  * Shared pricing tables for homepage and /pricing page.
- * Supports dynamic currency switching between INR (₹) and USD ($).
+ * Features strict geo-isolation:
+ * - International visitors (US/EU/UK/Global) only see global currencies ($19/$39/$79/$159).
+ * - INR rates (₹699) are strictly isolated to Indian visitors to prevent price leakage.
  */
-export const PricingPlans = ({ id }: { id?: string }) => {
-  const [currency, setCurrency] = useState<SupportedCurrency>('INR');
+export const PricingPlans = ({
+  id,
+  initialCurrency,
+  initialCountry,
+  isIndianRegion: initialIsIndian,
+}: PricingPlansProps) => {
+  // Determine initial state from SSR props (defaults to USD for zero leak)
+  const [currency, setCurrency] = useState<SupportedCurrency>(initialCurrency || 'USD');
+  const [isIndian, setIsIndian] = useState<boolean>(
+    initialIsIndian ?? (initialCountry === 'IN' || initialCurrency === 'INR')
+  );
 
   useEffect(() => {
+    // Secondary client-side timezone check (for visitors behind VPN or proxies)
+    const tz = Intl.DateTimeFormat().resolvedOptions().timeZone.toLowerCase();
+    const detectedIndian = tz.includes('kolkata') || tz.includes('calcutta');
+
     // Read persisted currency from cookie or localStorage
     const saved =
       typeof window !== 'undefined'
@@ -26,12 +52,31 @@ export const PricingPlans = ({ id }: { id?: string }) => {
               .find((row) => row.startsWith('hookpost_currency='))
               ?.split('=')[1])
         : null;
-    if (saved === 'USD' || saved === 'INR') {
+
+    // Strict Anti-INR Leak Protection:
+    // If not detected in India, NEVER allow INR. Always force USD or regional currency.
+    if (!detectedIndian && !initialIsIndian && (saved === 'INR' || !saved)) {
+      setCurrency('USD');
+      setIsIndian(false);
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('hookpost_currency', 'USD');
+        document.cookie = 'hookpost_currency=USD; path=/; max-age=2592000; SameSite=Lax';
+      }
+    } else if (detectedIndian || initialIsIndian) {
+      setIsIndian(true);
+      if (saved === 'USD' || saved === 'INR') {
+        setCurrency(saved as SupportedCurrency);
+      } else {
+        setCurrency('INR');
+      }
+    } else if (saved === 'USD' || saved === 'EUR' || saved === 'GBP') {
       setCurrency(saved as SupportedCurrency);
     }
-  }, []);
+  }, [initialIsIndian]);
 
   const changeCurrency = (c: SupportedCurrency) => {
+    // Prevent foreign visitors from switching to INR
+    if (!isIndian && c === 'INR') return;
     setCurrency(c);
     if (typeof window !== 'undefined') {
       localStorage.setItem('hookpost_currency', c);
@@ -39,11 +84,27 @@ export const PricingPlans = ({ id }: { id?: string }) => {
     }
   };
 
-  const activePricing = currency === 'USD' ? pricingUSD : pricingINR;
-  const config = CURRENCY_CONFIG[currency];
+  const activePricing = getPricing(currency);
+  const config = CURRENCY_CONFIG[currency] || CURRENCY_CONFIG.USD;
   const sym = config.symbol;
   const isINR = currency === 'INR';
-  const locale = isINR ? 'en-IN' : 'en-US';
+  const locale =
+    currency === 'INR'
+      ? 'en-IN'
+      : currency === 'GBP'
+      ? 'en-GB'
+      : currency === 'EUR'
+      ? 'de-DE'
+      : 'en-US';
+
+  const paymentMethodText =
+    currency === 'INR'
+      ? 'UPI, NetBanking or cards'
+      : currency === 'EUR'
+      ? 'SEPA, European credit cards or PayPal'
+      : currency === 'GBP'
+      ? 'UK credit cards, Apple Pay or PayPal'
+      : 'International credit/debit cards (Visa, Mastercard, Amex)';
 
   const plans = [
     {
@@ -112,36 +173,81 @@ export const PricingPlans = ({ id }: { id?: string }) => {
               Flat pricing, per plan — not per channel
             </h2>
             <p className="mt-3 max-w-[60ch] text-white/60">
-              No setup fee and no per-channel charge. Pay by {isINR ? 'UPI, NetBanking or card' : 'International cards (Visa, Mastercard, Amex)'}.
+              No setup fee and no per-channel charge. Pay by {paymentMethodText}.
             </p>
           </div>
 
-          {/* Aesthetic Currency Switcher */}
+          {/* Dynamic Currency Switcher with Strict Geo-Isolation */}
           <div className="inline-flex items-center self-start md:self-auto rounded-xl border border-white/15 bg-black/40 p-1.5 backdrop-blur-md">
-            <button
-              type="button"
-              onClick={() => changeCurrency('INR')}
-              className={`flex items-center gap-1.5 rounded-lg px-3.5 py-1.5 text-xs font-semibold tracking-wide transition-all ${
-                currency === 'INR'
-                  ? 'bg-[#FF4CE2] text-black shadow-md'
-                  : 'text-white/60 hover:text-white'
-              }`}
-            >
-              <span>₹</span>
-              <span>INR</span>
-            </button>
-            <button
-              type="button"
-              onClick={() => changeCurrency('USD')}
-              className={`flex items-center gap-1.5 rounded-lg px-3.5 py-1.5 text-xs font-semibold tracking-wide transition-all ${
-                currency === 'USD'
-                  ? 'bg-[#FF4CE2] text-black shadow-md'
-                  : 'text-white/60 hover:text-white'
-              }`}
-            >
-              <span>$</span>
-              <span>USD</span>
-            </button>
+            {isIndian ? (
+              // Indian visitors see INR with USD option
+              <>
+                <button
+                  type="button"
+                  onClick={() => changeCurrency('INR')}
+                  className={`flex items-center gap-1.5 rounded-lg px-3.5 py-1.5 text-xs font-semibold tracking-wide transition-all ${
+                    currency === 'INR'
+                      ? 'bg-[#FF4CE2] text-black shadow-md'
+                      : 'text-white/60 hover:text-white'
+                  }`}
+                >
+                  <span>₹</span>
+                  <span>INR</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => changeCurrency('USD')}
+                  className={`flex items-center gap-1.5 rounded-lg px-3.5 py-1.5 text-xs font-semibold tracking-wide transition-all ${
+                    currency === 'USD'
+                      ? 'bg-[#FF4CE2] text-black shadow-md'
+                      : 'text-white/60 hover:text-white'
+                  }`}
+                >
+                  <span>$</span>
+                  <span>USD</span>
+                </button>
+              </>
+            ) : (
+              // International visitors ONLY see global currencies (USD, EUR, GBP) - Zero INR Leakage
+              <>
+                <button
+                  type="button"
+                  onClick={() => changeCurrency('USD')}
+                  className={`flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold tracking-wide transition-all ${
+                    currency === 'USD'
+                      ? 'bg-[#FF4CE2] text-black shadow-md'
+                      : 'text-white/60 hover:text-white'
+                  }`}
+                >
+                  <span>$</span>
+                  <span>USD</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => changeCurrency('EUR')}
+                  className={`flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold tracking-wide transition-all ${
+                    currency === 'EUR'
+                      ? 'bg-[#FF4CE2] text-black shadow-md'
+                      : 'text-white/60 hover:text-white'
+                  }`}
+                >
+                  <span>€</span>
+                  <span>EUR</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => changeCurrency('GBP')}
+                  className={`flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold tracking-wide transition-all ${
+                    currency === 'GBP'
+                      ? 'bg-[#FF4CE2] text-black shadow-md'
+                      : 'text-white/60 hover:text-white'
+                  }`}
+                >
+                  <span>£</span>
+                  <span>GBP</span>
+                </button>
+              </>
+            )}
           </div>
         </div>
 

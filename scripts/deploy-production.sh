@@ -92,7 +92,7 @@ rsync -avz --delete -e "ssh -i $SSH_KEY -o StrictHostKeyChecking=no" \
   "$VM_HOST:/home/flexiple_jr/hookpost/apps/frontend/public/" | tail -3
 
 echo "==> Step 3: Transferring atomic bundle to production VM..."
-scp -i "$SSH_KEY" /tmp/next-atomic.tar.gz "$VM_HOST:/tmp/next-atomic.tar.gz"
+rsync -avz -e "ssh -i $SSH_KEY -o ServerAliveInterval=15 -o ServerAliveCountMax=6 -o StrictHostKeyChecking=no" /tmp/next-atomic.tar.gz "$VM_HOST:/tmp/next-atomic.tar.gz"
 
 # ------------------------------------------------------------------------------
 # Step 3b: ship the server's own configuration.
@@ -109,8 +109,8 @@ echo "==> Step 3b: Transferring server config from the repo..."
 # check-temporal.sh is deliberately absent here: scripts/check-temporal.sh is
 # its source of truth and scripts/deploy.sh already rsyncs it to the path cron
 # runs. Shipping it from two places is how the nginx drift started.
-scp -i "$SSH_KEY" "$REPO_ROOT/nginx.hookpost.conf"      "$VM_HOST:/tmp/hookpost-nginx.conf"
-scp -i "$SSH_KEY" "$REPO_ROOT/ops/ecosystem.config.js"  "$VM_HOST:/tmp/hookpost-ecosystem.config.js"
+rsync -avz -e "ssh -i $SSH_KEY -o ServerAliveInterval=15 -o ServerAliveCountMax=6 -o StrictHostKeyChecking=no" "$REPO_ROOT/nginx.hookpost.conf"      "$VM_HOST:/tmp/hookpost-nginx.conf"
+rsync -avz -e "ssh -i $SSH_KEY -o ServerAliveInterval=15 -o ServerAliveCountMax=6 -o StrictHostKeyChecking=no" "$REPO_ROOT/ops/ecosystem.config.js"  "$VM_HOST:/tmp/hookpost-ecosystem.config.js"
 
 echo "==> Step 4: Applying build without deleting existing chunk history & clearing NGINX cache..."
 ssh -i "$SSH_KEY" "$VM_HOST" bash << 'REMOTECOMMANDS'

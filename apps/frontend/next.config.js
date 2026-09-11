@@ -171,11 +171,6 @@ const nextConfig = {
         permanent: true,
       },
       {
-        source: '/alternatives/mixpost',
-        destination: '/alternatives',
-        permanent: true,
-      },
-      {
         source: '/alternatives/postiz/public-api',
         destination: '/docs/public-api',
         permanent: true,

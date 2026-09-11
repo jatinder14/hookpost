@@ -76,6 +76,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     'socialpilot',
     'agorapulse',
     'planoly',
+    'mixpost',
   ].map((slug) =>
     page(
       `/alternatives/${slug}`,

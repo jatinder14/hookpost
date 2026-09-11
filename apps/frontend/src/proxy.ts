@@ -156,18 +156,25 @@ export async function proxy(request: NextRequest) {
     );
   }
 
+  // Never intercept OAuth callbacks (e.g. Google, GitHub, etc.) - they must reach /auth to exchange the code
+  const isOAuthCallback =
+    nextUrl.searchParams.has('code') ||
+    nextUrl.searchParams.has('provider') ||
+    nextUrl.searchParams.has('state');
+
   // Redirect authenticated users away from login/register/auth forms to the dashboard
   if (
     nextUrl.pathname.startsWith('/auth') &&
     !nextUrl.pathname.startsWith('/auth/logout') &&
     !nextUrl.pathname.startsWith('/auth/activate') &&
+    !isOAuthCallback &&
     authCookie
   ) {
     return NextResponse.redirect(new URL(`/launches${url}`, nextUrl.href));
   }
   if (nextUrl.pathname.startsWith('/auth') && !authCookie) {
     if (org) {
-      const redirect = NextResponse.redirect(new URL(`/`, nextUrl.href));
+      const redirect = NextResponse.redirect(new URL('/auth/login', nextUrl.href));
       redirect.cookies.set('org', org, {
         ...(!process.env.NOT_SECURED
           ? {

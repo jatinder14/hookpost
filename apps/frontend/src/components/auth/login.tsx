@@ -35,13 +35,19 @@ export function Login() {
   } = useVariables();
 
   useEffect(() => {
-    fetch('/api/user/self', { credentials: 'include' })
-      .then((res) => {
-        if (res.ok) {
-          window.location.replace('/launches');
-        }
-      })
-      .catch(() => {});
+    if (
+      typeof document !== 'undefined' &&
+      (document.cookie.includes('hp_logged_in=1') ||
+        document.cookie.includes('auth='))
+    ) {
+      fetch('/api/user/self', { credentials: 'include' })
+        .then((res) => {
+          if (res.ok) {
+            window.location.replace('/launches');
+          }
+        })
+        .catch(() => {});
+    }
   }, []);
   const resolver = useMemo(() => {
     return classValidatorResolver(LoginUserDto);

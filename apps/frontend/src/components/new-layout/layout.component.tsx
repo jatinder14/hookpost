@@ -1,6 +1,6 @@
 'use client';
 
-import React, { ReactNode, useCallback, useEffect } from 'react';
+import React, { ReactNode, useCallback, useEffect, useState } from 'react';
 import { Logo } from '@hookpost/frontend/components/new-layout/logo';
 import { Plus_Jakarta_Sans } from 'next/font/google';
 const ModeComponent = dynamic(
@@ -74,15 +74,18 @@ export const LayoutComponent = ({ children }: { children: ReactNode }) => {
     );
   }, [user]);
 
-  const [continueFree, setContinueFree] = useState<boolean>(() => {
+  const [continueFree, setContinueFree] = useState(false);
+
+  useEffect(() => {
     if (typeof window !== 'undefined') {
-      return (
+      const isFree =
         localStorage.getItem('hookpost_continue_free') === 'true' ||
-        document.cookie.includes('hookpost_continue_free=true')
-      );
+        document.cookie.includes('hookpost_continue_free=true');
+      if (isFree) {
+        setContinueFree(true);
+      }
     }
-    return false;
-  });
+  }, []);
 
   if (!user) return null;
 

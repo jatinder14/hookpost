@@ -37,8 +37,8 @@ const USER_ID = '1c340590-52fe-4605-be3e-543d16948bbf';
 const ORG_ID = '15764a35-de5b-4a23-877b-849aebc96527';
 
 const PROMO_IMAGE = {
-  id: 'cf2face6-682e-4cb1-a2cc-459a9c804a79',
-  path: 'https://media.hookstep.in/tommy_pricing_breakdown_1789480538913.png'
+  id: '000ceb9d-2e6d-4219-ad89-a291497ab996',
+  path: 'https://media.hookstep.in/hookpost_before_after_1789481103452.png'
 };
 
 /**
@@ -46,6 +46,21 @@ const PROMO_IMAGE = {
  * Strictly audited: NO DOUBLE DASHES ('--' or '—').
  */
 const GROWTH_TOPICS = [
+  {
+    id: 'growth_00_create_once_post_everywhere',
+    title: 'Before vs After: The Reality of Multi-Platform Publishing',
+    content: `Content creator workflow before Hookpost:
+Upload here... and here... also here... still more? Same file again, 6 different browser tabs, completely repetitive.
+
+Content creator workflow with Hookpost:
+1. Connect your social channels
+2. Create your post once
+3. Publish to Instagram, TikTok, YouTube, Facebook, LinkedIn & Pinterest simultaneously
+
+One post. Everywhere. More time for what you actually love doing.
+
+Give Hookpost a try for free: https://hookpost.hookstep.in`
+  },
   {
     id: 'growth_00_pricing_breakdown',
     title: 'Why Hookpost is 62% Cheaper Than Buffer at 10 Channels',
@@ -339,9 +354,23 @@ async function runGrowthPoster(options = {}) {
   const content = sanitizeAndAssertContent(topic.content);
   console.log('Format Check: Zero double dashes verified! (PASSED)\n');
 
-  // 3. Define target channels
+  // Format X content to be concise under 280 chars
+  function formatForX(text) {
+    if (text.length <= 270) return text;
+    const lines = text.split('\n').filter(l => l.trim().length > 0);
+    let result = '';
+    for (const line of lines) {
+      if ((result + '\n' + line).length > 210) break;
+      result = result ? (result + '\n' + line) : line;
+    }
+    return (result || text.slice(0, 210)) + '\n\nTry free: https://hookpost.hookstep.in';
+  }
+  const xContent = formatForX(content);
+
+  // 3. Define target channels:
   // - LinkedIn: Mohan Bhanushali (cmtwoj33t000h3e7ezpm3iuey)
   // - Discord: HookStep #general (cmtwu5dwr00013e9dr356bpma, channel 1547921913001672809)
+  // - X / Twitter: Jatinder (cmtqy6le200013eym84zjej1e)
   const postsConfig = [
     {
       integration: { id: 'cmtwoj33t000h3e7ezpm3iuey' },
@@ -364,6 +393,17 @@ async function runGrowthPoster(options = {}) {
         __type: 'discord',
         channel: '1547921913001672809' // #general
       }
+    },
+    {
+      integration: { id: 'cmtqy6le200013eym84zjej1e' },
+      value: [{
+        content: xContent,
+        image: [PROMO_IMAGE]
+      }],
+      settings: {
+        who_can_reply_post: 'everyone',
+        post_type: 'post'
+      }
     }
   ];
 
@@ -377,7 +417,7 @@ async function runGrowthPoster(options = {}) {
 
   if (isDryRun) {
     console.log('[DRY-RUN] Payload constructed successfully:');
-    console.log(`- Channels targeted: LinkedIn (Mohan Bhanushali), Discord (#general)`);
+    console.log(`- Channels targeted: LinkedIn (Mohan), Discord (#general), X/Twitter (Jatinder)`);
     console.log(`- Post length: ${content.length} characters`);
     console.log(`- First 120 chars: "${content.slice(0, 120).replace(/\n/g, ' ')}..."`);
     console.log('\n[SUCCESS] Dry-run completed with zero errors.');

@@ -8,8 +8,8 @@ async function main() {
   const token = jwt.sign({ id: userId }, process.env.JWT_SECRET);
   
   const promoImage = {
-    id: '616c3cd8-2402-42bb-a3cd-67ab01a13275',
-    path: 'https://media.hookstep.in/vPudzJ7ynp.png'
+    id: 'cf2face6-682e-4cb1-a2cc-459a9c804a79',
+    path: 'https://media.hookstep.in/tommy_pricing_breakdown_1789480538913.png'
   };
 
   const textContent = "Supercharge your social presence with Hookpost! 🚀\n\nSchedule, manage, and automate your posts across LinkedIn, X, Facebook, Threads, Instagram, Slack, and Discord from one unified visual calendar.\n\n✨ Built for creators, agencies & modern growth teams:\n• Visual content calendar & automated scheduling\n• Native Claude/Cursor MCP integration & CLI\n• Multi-currency pricing now live (₹ INR & $ USD)\n\nTry it free today: https://hookpost.hookstep.in";

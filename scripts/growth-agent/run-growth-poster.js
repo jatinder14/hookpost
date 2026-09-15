@@ -37,8 +37,8 @@ const USER_ID = '1c340590-52fe-4605-be3e-543d16948bbf';
 const ORG_ID = '15764a35-de5b-4a23-877b-849aebc96527';
 
 const PROMO_IMAGE = {
-  id: '616c3cd8-2402-42bb-a3cd-67ab01a13275',
-  path: 'https://media.hookstep.in/vPudzJ7ynp.png'
+  id: 'cf2face6-682e-4cb1-a2cc-459a9c804a79',
+  path: 'https://media.hookstep.in/tommy_pricing_breakdown_1789480538913.png'
 };
 
 /**
@@ -46,6 +46,24 @@ const PROMO_IMAGE = {
  * Strictly audited: NO DOUBLE DASHES ('--' or '—').
  */
 const GROWTH_TOPICS = [
+  {
+    id: 'growth_00_pricing_breakdown',
+    title: 'Why Hookpost is 62% Cheaper Than Buffer at 10 Channels',
+    content: `A growth analyst recently did a teardown of Hookpost vs Buffer and Publer.
+
+Here is the exact math at 10 connected social channels:
+• Buffer: ~$50/mo (charges per channel)
+• Publer: ~$29/mo (scales per account)
+• Hookpost: $19/mo (Team plan with 10 channels included)
+
+That makes Hookpost roughly 34% cheaper than Publer and 62% cheaper than Buffer.
+
+Why? Because we price access, not just usage. You get the freedom to expand across channels without watching your bill spike every time you connect another account.
+
+Full multi-currency pricing is live in USD and INR.
+
+Try Hookpost free today: https://hookpost.hookstep.in`
+  },
   {
     id: 'growth_01_flat_pricing',
     title: 'The Per-Channel Tax is Killing Creators',

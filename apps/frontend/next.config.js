@@ -171,6 +171,66 @@ const nextConfig = {
         permanent: true,
       },
       {
+        source: '/terms-and-conditions',
+        destination: '/terms',
+        permanent: true,
+      },
+      {
+        source: '/terms-of-service',
+        destination: '/terms',
+        permanent: true,
+      },
+      {
+        source: '/terms-of-use',
+        destination: '/terms',
+        permanent: true,
+      },
+      {
+        source: '/contact-us',
+        destination: '/contact',
+        permanent: true,
+      },
+      {
+        source: '/about-us',
+        destination: '/about',
+        permanent: true,
+      },
+      {
+        source: '/shipping-and-delivery',
+        destination: '/shipping-policy',
+        permanent: true,
+      },
+      {
+        source: '/shipping',
+        destination: '/shipping-policy',
+        permanent: true,
+      },
+      {
+        source: '/cancellation-and-refund',
+        destination: '/refund-policy',
+        permanent: true,
+      },
+      {
+        source: '/cancellation-and-refund-policy',
+        destination: '/refund-policy',
+        permanent: true,
+      },
+      {
+        source: '/cancellation',
+        destination: '/cancellation-policy',
+        permanent: true,
+      },
+      {
+        source: '/refund',
+        destination: '/refund-policy',
+        permanent: true,
+      },
+      {
+        source: '/refunds',
+        destination: '/refund-policy',
+        permanent: true,
+      },
+      {
         source: '/alternatives/postiz/public-api',
         destination: '/docs/public-api',
         permanent: true,

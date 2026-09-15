@@ -88,9 +88,9 @@ export async function proxy(request: NextRequest) {
     nextUrl.pathname.startsWith('/privacy') ||
     nextUrl.pathname.startsWith('/terms') ||
     nextUrl.pathname.startsWith('/data-deletion') ||
-    nextUrl.pathname.startsWith('/refund-policy') ||
-    nextUrl.pathname.startsWith('/cancellation-policy') ||
-    nextUrl.pathname.startsWith('/shipping-policy') ||
+    nextUrl.pathname.startsWith('/refund') ||
+    nextUrl.pathname.startsWith('/cancellation') ||
+    nextUrl.pathname.startsWith('/shipping') ||
     // /pricing is the page a payment reviewer clicks to find checkout, and the
     // homepage footer links straight to it. Without this entry it 307s to
     // /auth, so an anonymous visitor asking "what does it cost" hits a login

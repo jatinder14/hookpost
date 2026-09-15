@@ -27,7 +27,7 @@ export class RazorpayController {
    * req.rawBody (enabled via `rawBody: true` in main.ts) rather than the parsed
    * body -- JSON.stringify of the parsed object would not round-trip byte-exact.
    */
-  @Post('/')
+  @Post(['/', '/webhook'])
   async webhook(@Req() req: RawBodyRequest<Request>) {
     let event: any;
     try {

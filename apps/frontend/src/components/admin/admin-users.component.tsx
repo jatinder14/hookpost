@@ -383,21 +383,21 @@ export const AdminUsersComponent: FC = () => {
     return data.users.filter((u) => {
       const matchesSearch =
         !searchInput ||
-        u.email.toLowerCase().includes(searchInput.toLowerCase()) ||
+        u.email?.toLowerCase().includes(searchInput.toLowerCase()) ||
         (u.name && u.name.toLowerCase().includes(searchInput.toLowerCase())) ||
-        u.organizations.some((o) =>
-          o.organization.name.toLowerCase().includes(searchInput.toLowerCase())
+        u.organizations?.some((o) =>
+          o.organization?.name?.toLowerCase().includes(searchInput.toLowerCase())
         );
 
       if (!matchesSearch) return false;
 
       if (tierFilter === 'ADMIN') return u.isSuperAdmin;
       if (tierFilter === 'PAID') {
-        return u.organizations.some((o) => !!o.organization.subscription);
+        return u.organizations?.some((o) => !!o.organization?.subscription);
       }
       if (tierFilter === 'TRIAL') {
-        return u.organizations.some(
-          (o) => o.organization.isTrailing && !o.organization.subscription
+        return u.organizations?.some(
+          (o) => o.organization?.isTrailing && !o.organization?.subscription
         );
       }
 

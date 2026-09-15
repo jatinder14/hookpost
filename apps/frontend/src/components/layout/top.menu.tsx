@@ -19,6 +19,7 @@ interface MenuItemInterface {
 }
 
 export const useMenuItem = () => {
+  const user = useUser();
   const { isGeneral } = useVariables();
   const t = useT();
   const { openModal } = useModals();

@@ -215,7 +215,12 @@ export class NoAuthIntegrationsController {
       }
     }
 
+    const isSuperAdminOrg = await this._organizationService.hasSuperAdminUser(
+      org.id
+    );
+
     if (
+      !isSuperAdminOrg &&
       process.env.RAZORPAY_KEY_ID &&
       org.isTrailing &&
       (await this._integrationService.checkPreviousConnections(

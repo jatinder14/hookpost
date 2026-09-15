@@ -458,6 +458,17 @@ export class OrganizationRepository {
     });
   }
 
+  setTrialFinished(orgId: string) {
+    return this._organization.model.organization.update({
+      where: {
+        id: orgId,
+      },
+      data: {
+        isTrailing: false,
+      },
+    });
+  }
+
   async deleteTeamMember(orgId: string, userId: string) {
     return this._userOrg.model.userOrganization.delete({
       where: {

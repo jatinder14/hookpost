@@ -11,6 +11,7 @@ import { NotificationService } from '@hookpost/nestjs-libraries/database/prisma/
 import { Request } from 'express';
 import { AuthService } from '@hookpost/helpers/auth/auth.service';
 import { UsersService } from '@hookpost/nestjs-libraries/database/prisma/users/users.service';
+import { OrganizationService } from '@hookpost/nestjs-libraries/database/prisma/organizations/organization.service';
 
 @ApiTags('Billing')
 @Controller('/billing')
@@ -19,7 +20,8 @@ export class BillingController {
     private _subscriptionService: SubscriptionService,
     private _razorpayService: RazorpayService,
     private _notificationService: NotificationService,
-    private _usersService: UsersService
+    private _usersService: UsersService,
+    private _organizationService: OrganizationService
   ) {}
 
   private async assertNoOtherSubscribedAccount(user: User) {
@@ -57,8 +59,11 @@ export class BillingController {
   @Post('/finish-trial')
   async finishTrial(@GetOrgFromRequest() org: Organization) {
     try {
-      await this._razorpayService.finishTrial(org.paymentId);
+      if (org.paymentId) {
+        await this._razorpayService.finishTrial(org.paymentId);
+      }
     } catch (err) {}
+    await this._organizationService.setTrialFinished(org.id);
     return {
       finish: true,
     };
@@ -66,8 +71,9 @@ export class BillingController {
 
   @Get('/is-trial-finished')
   async isTrialFinished(@GetOrgFromRequest() org: Organization) {
+    const currentOrg = await this._organizationService.getOrgById(org.id);
     return {
-      finished: !org.isTrailing,
+      finished: !currentOrg?.isTrailing,
     };
   }
 

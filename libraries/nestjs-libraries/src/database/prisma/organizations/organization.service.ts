@@ -195,4 +195,8 @@ export class OrganizationService {
       shortlink
     );
   }
+
+  setTrialFinished(orgId: string) {
+    return this._organizationRepository.setTrialFinished(orgId);
+  }
 }

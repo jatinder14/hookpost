@@ -251,4 +251,254 @@ export class AdminController {
 
     return { ok: true };
   }
+
+  // ---------------------------------------------------------------------------
+  // Super Admin Management & User Journey
+  // ---------------------------------------------------------------------------
+
+  @Post('/users/:id/super-admin')
+  async toggleSuperAdmin(
+    @GetUserFromRequest() user: User,
+    @Param('id') targetUserId: string,
+    @Body('isSuperAdmin') isSuperAdmin: boolean
+  ) {
+    this.assertSuperAdmin(user);
+
+    if (user.id === targetUserId && !isSuperAdmin) {
+      throw new HttpException('Cannot revoke your own super admin access', 400);
+    }
+
+    const updated = await this._user.model.user.update({
+      where: { id: targetUserId },
+      data: { isSuperAdmin: Boolean(isSuperAdmin) },
+      select: {
+        id: true,
+        email: true,
+        name: true,
+        isSuperAdmin: true,
+      },
+    });
+
+    return { ok: true, user: updated };
+  }
+
+  @Get('/users/:id/journey')
+  async getUserJourney(
+    @GetUserFromRequest() user: User,
+    @Param('id') targetUserId: string
+  ): Promise<Record<string, any>> {
+    this.assertSuperAdmin(user);
+
+    const targetUser: any = await this._user.model.user.findUnique({
+      where: { id: targetUserId },
+      include: {
+        organizations: {
+          include: {
+            organization: {
+              include: {
+                subscription: true,
+                Integration: {
+                  select: {
+                    id: true,
+                    name: true,
+                    providerIdentifier: true,
+                    picture: true,
+                    disabled: true,
+                    createdAt: true,
+                    updatedAt: true,
+                    inBetweenSteps: true,
+                  },
+                },
+                post: {
+                  orderBy: { createdAt: 'desc' },
+                  take: 50,
+                  select: {
+                    id: true,
+                    content: true,
+                    createdAt: true,
+                    publishDate: true,
+                    state: true,
+                    releaseURL: true,
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    });
+
+    if (!targetUser) {
+      throw new HttpException('User not found', 404);
+    }
+
+    interface JourneyEvent {
+      id: string;
+      type: 'SIGNUP' | 'WORKSPACE' | 'CHANNEL' | 'POST' | 'BILLING';
+      title: string;
+      description: string;
+      timestamp: Date;
+      metadata?: Record<string, any>;
+      status?: 'success' | 'warning' | 'info' | 'error';
+    }
+
+    const events: JourneyEvent[] = [];
+
+    // 1. Signup Event
+    events.push({
+      id: `signup-${targetUser.id}`,
+      type: 'SIGNUP',
+      title: 'Signed Up to Hookpost',
+      description: `Registered via ${targetUser.providerName || 'Email'}${
+        targetUser.activated ? ' (Verified)' : ' (Pending verification)'
+      }`,
+      timestamp: targetUser.createdAt,
+      status: 'success',
+      metadata: {
+        email: targetUser.email,
+        isSuperAdmin: targetUser.isSuperAdmin,
+      },
+    });
+
+    // 2. Workspaces, Channels, Posts & Subscriptions
+    for (const uo of targetUser.organizations) {
+      const org = uo.organization;
+      events.push({
+        id: `org-${org.id}`,
+        type: 'WORKSPACE',
+        title: `Workspace: ${org.name}`,
+        description: `Member role: ${uo.role}. ${
+          org.isTrailing ? 'Status: 7-day trial active.' : 'Status: Active.'
+        }`,
+        timestamp: org.createdAt,
+        status: 'info',
+        metadata: {
+          organizationId: org.id,
+          role: uo.role,
+          paymentId: org.paymentId,
+        },
+      });
+
+      if (org.subscription) {
+        events.push({
+          id: `sub-${org.subscription.id}`,
+          type: 'BILLING',
+          title: `Subscription Plan: ${org.subscription.subscriptionTier}`,
+          description: `Plan: ${org.subscription.subscriptionTier} (${
+            org.subscription.period
+          }). Channels allowed: ${org.subscription.totalChannels}. ${
+            org.subscription.isLifetime ? 'Lifetime access.' : ''
+          }`,
+          timestamp: org.subscription.createdAt,
+          status: 'success',
+          metadata: {
+            tier: org.subscription.subscriptionTier,
+            period: org.subscription.period,
+            channels: org.subscription.totalChannels,
+          },
+        });
+      }
+
+      for (const integ of org.Integration) {
+        events.push({
+          id: `integ-${integ.id}`,
+          type: 'CHANNEL',
+          title: `Connected Channel: ${integ.name || integ.providerIdentifier}`,
+          description: `Platform: ${integ.providerIdentifier}. Status: ${
+            integ.disabled
+              ? 'Disabled'
+              : integ.inBetweenSteps
+              ? 'Needs Reconnect'
+              : 'Active'
+          }`,
+          timestamp: integ.createdAt,
+          status: integ.disabled
+            ? 'error'
+            : integ.inBetweenSteps
+            ? 'warning'
+            : 'success',
+          metadata: {
+            channelId: integ.id,
+            provider: integ.providerIdentifier,
+            name: integ.name,
+            picture: integ.picture,
+          },
+        });
+      }
+
+      for (const p of org.post) {
+        const snippet = (p.content || '').slice(0, 100);
+        events.push({
+          id: `post-${p.id}`,
+          type: 'POST',
+          title:
+            p.state === 'PUBLISHED'
+              ? 'Published Social Post'
+              : p.state === 'QUEUE'
+              ? 'Scheduled Post'
+              : 'Draft Post',
+          description: snippet ? `"${snippet}..."` : 'Social media post',
+          timestamp: p.publishDate || p.createdAt,
+          status:
+            p.state === 'PUBLISHED'
+              ? 'success'
+              : p.state === 'ERROR'
+              ? 'error'
+              : 'info',
+          metadata: {
+            postId: p.id,
+            state: p.state,
+            releaseURL: p.releaseURL,
+          },
+        });
+      }
+    }
+
+    events.sort(
+      (a, b) =>
+        new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
+    );
+
+    const totalWorkspaces = targetUser.organizations.length;
+    const totalIntegrations = targetUser.organizations.reduce(
+      (sum, uo) => sum + uo.organization.Integration.length,
+      0
+    );
+    const totalPosts = targetUser.organizations.reduce(
+      (sum, uo) => sum + uo.organization.post.length,
+      0
+    );
+    const publishedPosts = targetUser.organizations.reduce(
+      (sum, uo) =>
+        sum + uo.organization.post.filter((p) => p.state === 'PUBLISHED').length,
+      0
+    );
+    const hasActiveSubscription = targetUser.organizations.some(
+      (uo) => !!uo.organization.subscription
+    );
+    const isTrailing = targetUser.organizations.some(
+      (uo) => uo.organization.isTrailing
+    );
+
+    return {
+      user: {
+        id: targetUser.id,
+        email: targetUser.email,
+        name: targetUser.name,
+        isSuperAdmin: targetUser.isSuperAdmin,
+        activated: targetUser.activated,
+        providerName: targetUser.providerName,
+        createdAt: targetUser.createdAt,
+      },
+      summary: {
+        totalWorkspaces,
+        totalIntegrations,
+        totalPosts,
+        publishedPosts,
+        hasActiveSubscription,
+        isTrailing,
+      },
+      events,
+    };
+  }
 }

@@ -63,6 +63,225 @@ interface UsersApiResponse {
   users: UserRow[];
 }
 
+interface JourneyEvent {
+  id: string;
+  type: 'SIGNUP' | 'WORKSPACE' | 'CHANNEL' | 'POST' | 'BILLING';
+  title: string;
+  description: string;
+  timestamp: string;
+  metadata?: Record<string, any>;
+  status?: 'success' | 'warning' | 'info' | 'error';
+}
+
+interface UserJourneyResponse {
+  user: {
+    id: string;
+    email: string;
+    name: string | null;
+    isSuperAdmin: boolean;
+    activated: boolean;
+    providerName: string;
+    createdAt: string;
+  };
+  summary: {
+    totalWorkspaces: number;
+    totalIntegrations: number;
+    totalPosts: number;
+    publishedPosts: number;
+    hasActiveSubscription: boolean;
+    isTrailing: boolean;
+  };
+  events: JourneyEvent[];
+}
+
+const UserJourneyModal: FC<{
+  userId: string;
+  onClose: () => void;
+}> = ({ userId, onClose }) => {
+  const fetch = useFetch();
+  const { data, error, isLoading } = useSWR<UserJourneyResponse>(
+    `/admin/users/${userId}/journey`,
+    async (url: string) => {
+      const res = await fetch(url);
+      if (!res.ok) {
+        throw new Error('Failed to load user journey');
+      }
+      return res.json();
+    }
+  );
+
+  return (
+    <div className="fixed inset-0 z-[400] bg-black/70 backdrop-blur-sm flex justify-end animate-fade">
+      <div
+        className="w-full max-w-[620px] bg-[#0b132b] border-s border-newTableBorder h-full flex flex-col shadow-2xl overflow-hidden"
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* Drawer Header */}
+        <div className="p-[20px] border-b border-newTableBorder bg-newBgColorInner flex items-center justify-between">
+          <div className="flex items-center gap-[12px]">
+            <div className="w-[42px] h-[42px] rounded-full bg-gradient-to-tr from-indigo-500 to-purple-600 flex items-center justify-center font-[700] text-white text-[16px]">
+              {data?.user?.email?.slice(0, 2).toUpperCase() || 'U'}
+            </div>
+            <div>
+              <div className="flex items-center gap-[8px]">
+                <h2 className="text-[17px] font-[700] text-white">
+                  {data?.user?.email || 'User Journey'}
+                </h2>
+                {data?.user?.isSuperAdmin && (
+                  <span className="px-[6px] py-[1px] text-[10px] font-[700] bg-amber-500/20 text-amber-300 border border-amber-500/40 rounded-full">
+                    SUPERADMIN
+                  </span>
+                )}
+              </div>
+              <p className="text-[12px] opacity-65">
+                {data?.user?.name ? `${data.user.name} • ` : ''}
+                Joined {data?.user?.createdAt ? dayjs(data.user.createdAt).format('MMM D, YYYY') : '—'}
+              </p>
+            </div>
+          </div>
+          <button
+            onClick={onClose}
+            className="w-[32px] h-[32px] rounded-[8px] bg-white/5 hover:bg-white/10 flex items-center justify-center text-[16px] text-white transition-all cursor-pointer"
+          >
+            ✕
+          </button>
+        </div>
+
+        {/* Drawer Body */}
+        <div className="flex-1 overflow-y-auto p-[20px] flex flex-col gap-[20px]">
+          {isLoading ? (
+            <div className="flex flex-col items-center justify-center py-[60px] gap-[12px]">
+              <LoadingComponent height={50} width={50} />
+              <div className="text-[13px] opacity-70">Loading user lifecycle journey...</div>
+            </div>
+          ) : error ? (
+            <div className="p-[16px] bg-red-950/30 border border-red-800 rounded-[8px] text-red-300 text-[13px]">
+              Failed to load journey: {error.message}
+            </div>
+          ) : data ? (
+            <>
+              {/* Summary Stats Grid */}
+              <div className="grid grid-cols-4 gap-[10px]">
+                <div className="border border-newTableBorder bg-newBgColorInner rounded-[10px] p-[12px] text-center">
+                  <div className="text-[11px] opacity-60">Workspaces</div>
+                  <div className="text-[18px] font-[700] text-white mt-[2px]">
+                    {data.summary.totalWorkspaces}
+                  </div>
+                </div>
+                <div className="border border-newTableBorder bg-newBgColorInner rounded-[10px] p-[12px] text-center">
+                  <div className="text-[11px] opacity-60">Channels</div>
+                  <div className="text-[18px] font-[700] text-sky-400 mt-[2px]">
+                    {data.summary.totalIntegrations}
+                  </div>
+                </div>
+                <div className="border border-newTableBorder bg-newBgColorInner rounded-[10px] p-[12px] text-center">
+                  <div className="text-[11px] opacity-60">Posts</div>
+                  <div className="text-[18px] font-[700] text-emerald-400 mt-[2px]">
+                    {data.summary.totalPosts}
+                  </div>
+                  <div className="text-[9px] opacity-50">{data.summary.publishedPosts} published</div>
+                </div>
+                <div className="border border-newTableBorder bg-newBgColorInner rounded-[10px] p-[12px] text-center">
+                  <div className="text-[11px] opacity-60">Billing</div>
+                  <div className="text-[12px] font-[700] mt-[4px]">
+                    {data.summary.hasActiveSubscription ? (
+                      <span className="text-emerald-300">Paid Plan</span>
+                    ) : data.summary.isTrailing ? (
+                      <span className="text-amber-300">Free Trial</span>
+                    ) : (
+                      <span className="opacity-70">Free Tier</span>
+                    )}
+                  </div>
+                </div>
+              </div>
+
+              {/* Chronological Timeline */}
+              <div>
+                <h3 className="text-[13px] uppercase tracking-wider font-[700] opacity-75 mb-[14px] flex items-center gap-[6px]">
+                  <span>🧭</span> Activity & Lifecycle Timeline ({data.events.length} events)
+                </h3>
+
+                {data.events.length === 0 ? (
+                  <div className="text-center py-[40px] opacity-50 border border-newTableBorder rounded-[10px] bg-newBgColorInner text-[13px]">
+                    No activity recorded yet for this account.
+                  </div>
+                ) : (
+                  <div className="relative border-s-2 border-newTableBorder ms-[16px] flex flex-col gap-[16px] py-[6px]">
+                    {data.events.map((evt) => {
+                      const icon =
+                        evt.type === 'SIGNUP'
+                          ? '🚀'
+                          : evt.type === 'WORKSPACE'
+                          ? '🏢'
+                          : evt.type === 'CHANNEL'
+                          ? '🔗'
+                          : evt.type === 'POST'
+                          ? '📝'
+                          : '💳';
+
+                      const dotBg =
+                        evt.status === 'success'
+                          ? 'bg-emerald-500 ring-emerald-500/20'
+                          : evt.status === 'error'
+                          ? 'bg-rose-500 ring-rose-500/20'
+                          : evt.status === 'warning'
+                          ? 'bg-amber-500 ring-amber-500/20'
+                          : 'bg-indigo-500 ring-indigo-500/20';
+
+                      return (
+                        <div key={evt.id} className="relative ps-[24px]">
+                          {/* Dot on timeline */}
+                          <div
+                            className={`absolute -start-[7px] top-[14px] w-[12px] h-[12px] rounded-full ring-4 ${dotBg}`}
+                          />
+
+                          {/* Event Card */}
+                          <div className="border border-newTableBorder rounded-[10px] p-[14px] bg-newBgColorInner hover:border-primary/50 transition-all">
+                            <div className="flex items-center justify-between gap-[8px]">
+                              <div className="flex items-center gap-[6px] font-[600] text-white text-[13px]">
+                                <span>{icon}</span>
+                                <span>{evt.title}</span>
+                              </div>
+                              <span className="text-[11px] opacity-60 whitespace-nowrap">
+                                {dayjs(evt.timestamp).fromNow()}
+                              </span>
+                            </div>
+
+                            <p className="text-[12px] opacity-80 mt-[6px] leading-[18px]">
+                              {evt.description}
+                            </p>
+
+                            <div className="flex items-center justify-between gap-[8px] mt-[10px] pt-[8px] border-t border-newTableBorder/50 text-[11px] opacity-60">
+                              <span>{dayjs(evt.timestamp).format('MMM D, YYYY • h:mm A')}</span>
+                              {evt.status && (
+                                <span className={`capitalize font-[600] ${
+                                  evt.status === 'success'
+                                    ? 'text-emerald-400'
+                                    : evt.status === 'error'
+                                    ? 'text-rose-400'
+                                    : evt.status === 'warning'
+                                    ? 'text-amber-400'
+                                    : 'text-indigo-400'
+                                }`}>
+                                  {evt.status}
+                                </span>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
+            </>
+          ) : null}
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const MetricCard: FC<{
   title: string;
   value: number;
@@ -90,6 +309,8 @@ export const AdminUsersComponent: FC = () => {
   const toaster = useToaster();
   const [searchInput, setSearchInput] = useState('');
   const [tierFilter, setTierFilter] = useState<'ALL' | 'PAID' | 'TRIAL' | 'ADMIN'>('ALL');
+  const [selectedJourneyUserId, setSelectedJourneyUserId] = useState<string | null>(null);
+  const [togglingAdminId, setTogglingAdminId] = useState<string | null>(null);
 
   const { data, error, isLoading, mutate } = useSWR<UsersApiResponse>(
     '/admin/users',
@@ -118,6 +339,44 @@ export const AdminUsersComponent: FC = () => {
       window.location.reload();
     }, 300);
   }, [toaster]);
+
+  const handleToggleSuperAdmin = useCallback(
+    async (targetUserId: string, nextState: boolean, email: string) => {
+      if (targetUserId === user?.id && !nextState) {
+        toaster.show('You cannot revoke your own Super Admin access', 'error');
+        return;
+      }
+
+      const confirmMsg = nextState
+        ? `Are you sure you want to grant Super Admin access to ${email}? They will have full administrative privileges.`
+        : `Are you sure you want to revoke Super Admin access from ${email}?`;
+
+      if (!window.confirm(confirmMsg)) return;
+
+      setTogglingAdminId(targetUserId);
+      try {
+        const res = await fetch(`/admin/users/${targetUserId}/super-admin`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ isSuperAdmin: nextState }),
+        });
+        if (!res.ok) {
+          const err = await res.json().catch(() => ({}));
+          throw new Error(err.message || 'Failed to update admin permissions');
+        }
+        toaster.show(
+          `Super Admin ${nextState ? 'granted to' : 'revoked from'} ${email}`,
+          'success'
+        );
+        mutate();
+      } catch (e: any) {
+        toaster.show(e.message || 'Operation failed', 'error');
+      } finally {
+        setTogglingAdminId(null);
+      }
+    },
+    [user, fetch, toaster, mutate]
+  );
 
   const filteredUsers = useMemo(() => {
     if (!data?.users) return [];
@@ -424,12 +683,41 @@ export const AdminUsersComponent: FC = () => {
 
                       {/* Actions */}
                       <td className="py-[14px] px-[16px] text-right whitespace-nowrap">
-                        <button
-                          onClick={() => handleImpersonate(u.id, u.email)}
-                          className="px-[10px] py-[5px] bg-primary/20 hover:bg-primary text-primary hover:text-white border border-primary/40 rounded-[6px] text-[12px] font-[600] transition-all cursor-pointer inline-flex items-center gap-[4px]"
-                        >
-                          <span>🎭</span> Impersonate
-                        </button>
+                        <div className="flex items-center justify-end gap-[6px]">
+                          <button
+                            onClick={() => setSelectedJourneyUserId(u.id)}
+                            className="px-[10px] py-[5px] bg-sky-500/20 hover:bg-sky-500 text-sky-300 hover:text-white border border-sky-500/40 rounded-[6px] text-[12px] font-[600] transition-all cursor-pointer inline-flex items-center gap-[4px]"
+                            title="View full lifecycle journey"
+                          >
+                            <span>🧭</span> Journey
+                          </button>
+
+                          <button
+                            onClick={() => handleToggleSuperAdmin(u.id, !u.isSuperAdmin, u.email)}
+                            disabled={togglingAdminId === u.id || (u.id === user?.id && u.isSuperAdmin)}
+                            className={`px-[10px] py-[5px] rounded-[6px] text-[12px] font-[600] transition-all cursor-pointer inline-flex items-center gap-[4px] border ${
+                              u.isSuperAdmin
+                                ? 'bg-amber-500/20 hover:bg-amber-500 text-amber-300 hover:text-black border-amber-500/40 disabled:opacity-40 disabled:cursor-not-allowed'
+                                : 'bg-white/5 hover:bg-white/15 text-white/80 hover:text-white border-white/20'
+                            }`}
+                            title={
+                              u.id === user?.id && u.isSuperAdmin
+                                ? 'Cannot revoke own super admin'
+                                : u.isSuperAdmin
+                                ? 'Revoke Super Admin Access'
+                                : 'Grant Super Admin Access'
+                            }
+                          >
+                            <span>🛡️</span> {u.isSuperAdmin ? 'Revoke Admin' : 'Make Admin'}
+                          </button>
+
+                          <button
+                            onClick={() => handleImpersonate(u.id, u.email)}
+                            className="px-[10px] py-[5px] bg-primary/20 hover:bg-primary text-primary hover:text-white border border-primary/40 rounded-[6px] text-[12px] font-[600] transition-all cursor-pointer inline-flex items-center gap-[4px]"
+                          >
+                            <span>🎭</span> Impersonate
+                          </button>
+                        </div>
                       </td>
                     </tr>
                   );
@@ -438,6 +726,13 @@ export const AdminUsersComponent: FC = () => {
             </table>
           </div>
         </div>
+      )}
+
+      {selectedJourneyUserId && (
+        <UserJourneyModal
+          userId={selectedJourneyUserId}
+          onClose={() => setSelectedJourneyUserId(null)}
+        />
       )}
     </div>
   );

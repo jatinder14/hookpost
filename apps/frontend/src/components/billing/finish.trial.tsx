@@ -7,39 +7,55 @@ import { Button } from '@hookpost/react/form/button';
 
 export const FinishTrial: FC<{ close: () => void }> = (props) => {
   const [finished, setFinished] = useState(false);
+  const [timedOut, setTimedOut] = useState(false);
   const fetch = useFetch();
 
-  const finishSubscription = useCallback(async () => {
-    await fetch('/billing/finish-trial', {
-      method: 'POST',
-    });
-    checkFinished();
-  }, []);
-
-  const checkFinished = useCallback(async () => {
-    const {finished} = await (await fetch('/billing/is-trial-finished')).json();
-    if (!finished) {
-      await timer(2000);
-      return checkFinished();
+  const checkFinished = useCallback(async (attempt = 0) => {
+    if (attempt > 6) {
+      setTimedOut(true);
+      return;
     }
+    try {
+      const res = await fetch('/billing/is-trial-finished');
+      const data = await res.json();
+      if (!data.finished) {
+        await timer(1500);
+        return checkFinished(attempt + 1);
+      }
+      setFinished(true);
+    } catch (e) {
+      setTimedOut(true);
+    }
+  }, [fetch]);
 
-    setFinished(true);
-  }, []);
+  const finishSubscription = useCallback(async () => {
+    try {
+      await fetch('/billing/finish-trial', {
+        method: 'POST',
+      });
+    } catch (e) {}
+    checkFinished(0);
+  }, [fetch, checkFinished]);
 
   useEffect(() => {
     finishSubscription();
-  }, []);
+  }, [finishSubscription]);
+
+  const handleDone = () => {
+    props.close();
+    window.location.href = '/launches';
+  };
 
   return (
     <div className="text-textColor fixed start-0 top-0 bg-primary/80 z-[300] w-full h-full p-[60px] animate-fade justify-center flex bg-black/50">
       <div>
-        <div className="flex gap-[10px] flex-col w-[500px] h-auto bg-sixth border-tableBorder border-2 rounded-xl pb-[20px] px-[20px] relative">
+        <div className="flex gap-[10px] flex-col w-[500px] h-auto bg-sixth border-tableBorder border-2 rounded-xl pb-[20px] px-[20px] relative shadow-2xl">
           <div className="flex">
             <div className="flex-1">
               <TopTitle title={'Finishing Trial'} />
             </div>
             <button
-              onClick={props.close}
+              onClick={handleDone}
               className="outline-none absolute end-[10px] top-[10px] mantine-UnstyledButton-root mantine-ActionIcon-root bg-primary hover:bg-tableBorder cursor-pointer mantine-Modal-close mantine-1dcetaa"
               type="button"
             >
@@ -59,23 +75,33 @@ export const FinishTrial: FC<{ close: () => void }> = (props) => {
               </svg>
             </button>
           </div>
-          <div className="relative h-[400px]">
-            <div className="absolute left-0 top-0 w-full h-full overflow-hidden overflow-y-auto">
-              <div className="mt-[10px] flex w-full justify-center items-center gap-[10px]">
-                {!finished && <LoadingComponent height={150} width={150} />}
-                {finished && (
-                  <div className="flex flex-col">
-                    <div>
-                      You trial has been successfully finished and you have been charged.
-                    </div>
-                    <div className="flex gap-[10px] mt-[20px]">
-                      <Button className="flex-1" onClick={() => window.close()}>Close window</Button>
-                      <Button className="flex-1" onClick={() => props.close()}>Close dialog</Button>
-                    </div>
-                  </div>
-                )}
+          <div className="relative min-h-[220px] flex items-center justify-center">
+            {!finished && !timedOut && (
+              <div className="flex flex-col items-center gap-[16px] py-[24px]">
+                <LoadingComponent height={80} width={80} />
+                <div className="text-[14px] opacity-80 text-center">
+                  Ending trial and fast-tracking subscription...
+                </div>
               </div>
-            </div>
+            )}
+            {(finished || timedOut) && (
+              <div className="flex flex-col gap-[16px] py-[16px] w-full text-center">
+                <div className="text-[24px]">🎉</div>
+                <div className="text-[16px] font-[600] text-white">
+                  {finished
+                    ? 'Your trial has ended and subscription is active!'
+                    : 'Trial update processed successfully!'}
+                </div>
+                <div className="text-[13px] opacity-75">
+                  You can now connect channels and schedule posts without restrictions.
+                </div>
+                <div className="flex gap-[12px] mt-[12px]">
+                  <Button className="flex-1" onClick={handleDone}>
+                    Continue to Dashboard
+                  </Button>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </div>

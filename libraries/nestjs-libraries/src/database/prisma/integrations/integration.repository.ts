@@ -89,7 +89,36 @@ export class IntegrationRepository {
       return false;
     }
 
-    return findIt.length > 0;
+    if (findIt.length === 0) {
+      return false;
+    }
+
+    // If the same user/team owns both organizations, allow reconnecting without blocking
+    try {
+      const userOrgDelegate = (this._integration.model as any).userOrganization;
+      if (userOrgDelegate) {
+        const currentOrgUsers = await userOrgDelegate.findMany({
+          where: { organizationId: org, disabled: false },
+          select: { userId: true },
+        });
+        const userIds = currentOrgUsers.map((u: any) => u.userId);
+
+        if (userIds.length > 0) {
+          const previousOrgIds = findIt.map((f) => f.organizationId);
+          const sharedUser = await userOrgDelegate.findFirst({
+            where: {
+              organizationId: { in: previousOrgIds },
+              userId: { in: userIds },
+            },
+          });
+          if (sharedUser) {
+            return false;
+          }
+        }
+      }
+    } catch (e) {}
+
+    return true;
   }
 
   updateProviderSettings(org: string, id: string, settings: string) {

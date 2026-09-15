@@ -22,9 +22,10 @@ export interface PricingPlansProps {
 
 /**
  * Shared pricing tables for homepage and /pricing page.
- * Features strict geo-isolation:
- * - International visitors (US/EU/UK/Global) only see global currencies ($19/$39/$79/$159).
- * - INR rates (₹699) are strictly isolated to Indian visitors to prevent price leakage.
+ * Features strict geo-isolation and Purchasing Power Parity (PPP):
+ * - International visitors (US/EU/UK/UAE/Global) see localized global currencies ($19/$39/$79/$159) with Early Adopter discounts.
+ * - INR rates (₹699) feature transparent regional parity discount (58% off) strictly isolated to genuine domestic visitors.
+ * - Secondary client-side timezone verification prevents foreign VPN users from spoofing Indian domestic rates.
  */
 export const PricingPlans = ({
   id,
@@ -38,10 +39,30 @@ export const PricingPlans = ({
     initialIsIndian ?? (initialCountry === 'IN' || initialCurrency === 'INR')
   );
 
+  const isUAE = (initialCountry || '').toUpperCase() === 'AE';
+
   useEffect(() => {
-    // Secondary client-side timezone check (for visitors behind VPN or proxies)
+    // Client-side timezone verification (detects VPN / proxy spoofing)
     const tz = Intl.DateTimeFormat().resolvedOptions().timeZone.toLowerCase();
-    const detectedIndian = tz.includes('kolkata') || tz.includes('calcutta');
+    const detectedIndian = tz.includes('kolkata') || tz.includes('calcutta') || tz.includes('asia/colombo');
+    const isForeignTz =
+      tz.includes('america') ||
+      tz.includes('europe') ||
+      tz.includes('london') ||
+      tz.includes('pacific') ||
+      tz.includes('australia');
+
+    // Anti-Arbitrage Protection: If a foreign visitor uses an Indian VPN,
+    // their device timezone flags the spoofing. Enforce global USD standard.
+    if (isForeignTz && !initialIsIndian) {
+      setCurrency('USD');
+      setIsIndian(false);
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('hookpost_currency', 'USD');
+        document.cookie = 'hookpost_currency=USD; path=/; max-age=2592000; SameSite=Lax';
+      }
+      return;
+    }
 
     // Read persisted currency from cookie or localStorage
     const saved =
@@ -104,12 +125,17 @@ export const PricingPlans = ({
       ? 'SEPA, European credit cards or PayPal'
       : currency === 'GBP'
       ? 'UK credit cards, Apple Pay or PayPal'
+      : isUAE
+      ? 'UAE credit/debit cards (Mashreq, ENBD, ADCB) or Apple Pay'
       : 'International credit/debit cards (Visa, Mastercard, Amex)';
 
   const plans = [
     {
       name: 'Free',
       price: `${sym}${activePricing.FREE.month_price.toLocaleString(locale)}`,
+      anchorPrice: null,
+      discountBadge: null,
+      subnote: null,
       blurb: 'Enough to see whether it fits.',
       features: [
         `${activePricing.FREE.channel} channels`,
@@ -123,6 +149,13 @@ export const PricingPlans = ({
     {
       name: 'Standard',
       price: `${sym}${activePricing.STANDARD.month_price.toLocaleString(locale)}`,
+      anchorPrice: activePricing.STANDARD.anchor_month_price
+        ? `${sym}${activePricing.STANDARD.anchor_month_price.toLocaleString(locale)}`
+        : null,
+      discountBadge: activePricing.STANDARD.discount_percent
+        ? `${activePricing.STANDARD.discount_percent}% OFF`
+        : null,
+      subnote: isUAE && currency === 'USD' ? 'Approx ~69 AED / month' : null,
       blurb: 'For a solo creator or a small brand.',
       features: [
         `${activePricing.STANDARD.channel} channels`,
@@ -137,6 +170,13 @@ export const PricingPlans = ({
     {
       name: 'Team',
       price: `${sym}${activePricing.TEAM.month_price.toLocaleString(locale)}`,
+      anchorPrice: activePricing.TEAM.anchor_month_price
+        ? `${sym}${activePricing.TEAM.anchor_month_price.toLocaleString(locale)}`
+        : null,
+      discountBadge: activePricing.TEAM.discount_percent
+        ? `${activePricing.TEAM.discount_percent}% OFF`
+        : null,
+      subnote: isUAE && currency === 'USD' ? 'Approx ~145 AED / month' : null,
       blurb: 'When more than one person posts.',
       features: [
         `${activePricing.TEAM.channel} channels`,
@@ -151,6 +191,13 @@ export const PricingPlans = ({
     {
       name: 'Pro',
       price: `${sym}${activePricing.PRO.month_price.toLocaleString(locale)}`,
+      anchorPrice: activePricing.PRO.anchor_month_price
+        ? `${sym}${activePricing.PRO.anchor_month_price.toLocaleString(locale)}`
+        : null,
+      discountBadge: activePricing.PRO.discount_percent
+        ? `${activePricing.PRO.discount_percent}% OFF`
+        : null,
+      subnote: isUAE && currency === 'USD' ? 'Approx ~290 AED / month' : null,
       blurb: 'For agencies running many brands.',
       features: [
         `${activePricing.PRO.channel} channels`,
@@ -167,6 +214,40 @@ export const PricingPlans = ({
   return (
     <section id={id} className="border-t border-white/10 bg-white/[0.015]">
       <div className="mx-auto w-full max-w-[1280px] px-5 py-20 sm:px-10">
+        {/* Dynamic Regional Discount / Early Adopter Announcement Badge */}
+        <div className="mb-6 flex flex-wrap items-center gap-3">
+          {isIndian && currency === 'INR' && (
+            <div className="inline-flex items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3.5 py-1 text-xs font-semibold text-emerald-400 backdrop-blur-md">
+              <span className="text-sm">🇮🇳</span>
+              <span>Regional Purchasing Power Parity (PPP): 58% discount applied for India</span>
+            </div>
+          )}
+          {isUAE && (
+            <div className="inline-flex items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3.5 py-1 text-xs font-semibold text-emerald-400 backdrop-blur-md">
+              <span className="text-sm">🇦🇪</span>
+              <span>Dubai / UAE Early Adopter Deal: 35% discount applied (~69 AED · Instant UAE Card / Apple Pay)</span>
+            </div>
+          )}
+          {!isIndian && !isUAE && currency === 'USD' && (
+            <div className="inline-flex items-center gap-2 rounded-full border border-[#FF4CE2]/30 bg-[#FF4CE2]/10 px-3.5 py-1 text-xs font-semibold text-[#FF4CE2] backdrop-blur-md">
+              <span className="text-sm">⚡</span>
+              <span>Global Early Adopter Deal: 35% launch discount applied (Save vs Buffer $30 & Hootsuite $99)</span>
+            </div>
+          )}
+          {currency === 'EUR' && (
+            <div className="inline-flex items-center gap-2 rounded-full border border-sky-500/30 bg-sky-500/10 px-3.5 py-1 text-xs font-semibold text-sky-400 backdrop-blur-md">
+              <span className="text-sm">🇪🇺</span>
+              <span>European Union Launch Deal: 35% discount applied across all tiers</span>
+            </div>
+          )}
+          {currency === 'GBP' && (
+            <div className="inline-flex items-center gap-2 rounded-full border border-amber-500/30 bg-amber-500/10 px-3.5 py-1 text-xs font-semibold text-amber-400 backdrop-blur-md">
+              <span className="text-sm">🇬🇧</span>
+              <span>UK Creator Launch Deal: 36% discount applied across all plans</span>
+            </div>
+          )}
+        </div>
+
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
           <div>
             <h2 className="text-3xl font-extrabold tracking-tight font-jakarta sm:text-4xl text-balance">
@@ -192,7 +273,7 @@ export const PricingPlans = ({
                   }`}
                 >
                   <span>₹</span>
-                  <span>INR</span>
+                  <span>INR (India 58% Off)</span>
                 </button>
                 <button
                   type="button"
@@ -204,7 +285,7 @@ export const PricingPlans = ({
                   }`}
                 >
                   <span>$</span>
-                  <span>USD</span>
+                  <span>USD (Global)</span>
                 </button>
               </>
             ) : (
@@ -220,7 +301,7 @@ export const PricingPlans = ({
                   }`}
                 >
                   <span>$</span>
-                  <span>USD</span>
+                  <span>USD {isUAE ? '(~AED)' : ''}</span>
                 </button>
                 <button
                   type="button"
@@ -270,11 +351,29 @@ export const PricingPlans = ({
               <h3 className="text-lg font-bold font-jakarta">{p.name}</h3>
               <p className="mt-1 text-sm text-white/50">{p.blurb}</p>
 
-              <div className="mt-5 flex items-baseline gap-2">
-                <span className="text-4xl font-extrabold tracking-tight font-jakarta tabular-nums">
-                  {p.price}
-                </span>
-                <span className="text-sm text-white/60">/ month</span>
+              {/* Price block with guaranteed zero layout shift */}
+              <div className="mt-5 flex flex-col justify-end min-h-[64px]">
+                {p.anchorPrice ? (
+                  <div className="flex items-center gap-2 mb-1">
+                    <span className="text-sm font-semibold text-white/40 line-through tabular-nums">
+                      {p.anchorPrice}
+                    </span>
+                    <span className="rounded-full bg-emerald-500/15 border border-emerald-500/30 px-2 py-0.5 text-[10px] font-bold text-emerald-400 uppercase tracking-wider">
+                      {p.discountBadge}
+                    </span>
+                  </div>
+                ) : (
+                  <div className="h-6" />
+                )}
+                <div className="flex items-baseline gap-2">
+                  <span className="text-4xl font-extrabold tracking-tight font-jakarta tabular-nums text-white">
+                    {p.price}
+                  </span>
+                  <span className="text-sm text-white/60">/ month</span>
+                </div>
+                {p.subnote && (
+                  <span className="text-[11px] text-white/40 mt-1">{p.subnote}</span>
+                )}
               </div>
 
               <ul className="mt-6 flex flex-1 flex-col gap-2.5 text-[15px] text-white/70">

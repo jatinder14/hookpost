@@ -2,6 +2,9 @@ export interface PricingInnerInterface {
   current: string;
   month_price: number;
   year_price: number;
+  anchor_month_price?: number;
+  anchor_year_price?: number;
+  discount_percent?: number;
   channel?: number;
   posts_per_month: number;
   // Cap on AI *text* generations (copilot chat + agent). Images and videos
@@ -215,48 +218,47 @@ const TIER_LIMITS = {
 };
 
 /**
- * INR Pricing (₹).
+ * INR Pricing (₹) - Regional Purchasing Power Parity (58% off global anchor).
  */
 export const pricingINR: PricingInterface = {
   FREE: { current: 'FREE', month_price: 0, year_price: 0, ...TIER_LIMITS.FREE },
-  STANDARD: { current: 'STANDARD', month_price: 699, year_price: 5990, ...TIER_LIMITS.STANDARD },
-  TEAM: { current: 'TEAM', month_price: 1499, year_price: 13990, ...TIER_LIMITS.TEAM },
-  PRO: { current: 'PRO', month_price: 2299, year_price: 21990, ...TIER_LIMITS.PRO },
-  ULTIMATE: { current: 'ULTIMATE', month_price: 4499, year_price: 43990, ...TIER_LIMITS.ULTIMATE },
+  STANDARD: { current: 'STANDARD', month_price: 699, year_price: 5990, anchor_month_price: 1699, anchor_year_price: 16990, discount_percent: 58, ...TIER_LIMITS.STANDARD },
+  TEAM: { current: 'TEAM', month_price: 1499, year_price: 13990, anchor_month_price: 3499, anchor_year_price: 34990, discount_percent: 57, ...TIER_LIMITS.TEAM },
+  PRO: { current: 'PRO', month_price: 2299, year_price: 21990, anchor_month_price: 5499, anchor_year_price: 54990, discount_percent: 58, ...TIER_LIMITS.PRO },
+  ULTIMATE: { current: 'ULTIMATE', month_price: 4499, year_price: 43990, anchor_month_price: 9999, anchor_year_price: 99990, discount_percent: 55, ...TIER_LIMITS.ULTIMATE },
 };
 
 /**
- * USD Pricing ($) - Competitive SaaS Standard.
- * Benchmarked ~35% below Buffer ($30/mo for 5 channels) with far richer capabilities.
+ * USD Pricing ($) - Global Standard (35% off market anchor / Buffer comparison).
  */
 export const pricingUSD: PricingInterface = {
   FREE: { current: 'FREE', month_price: 0, year_price: 0, ...TIER_LIMITS.FREE },
-  STANDARD: { current: 'STANDARD', month_price: 19, year_price: 180, ...TIER_LIMITS.STANDARD },
-  TEAM: { current: 'TEAM', month_price: 39, year_price: 380, ...TIER_LIMITS.TEAM },
-  PRO: { current: 'PRO', month_price: 79, year_price: 780, ...TIER_LIMITS.PRO },
-  ULTIMATE: { current: 'ULTIMATE', month_price: 159, year_price: 1550, ...TIER_LIMITS.ULTIMATE },
+  STANDARD: { current: 'STANDARD', month_price: 19, year_price: 180, anchor_month_price: 29, anchor_year_price: 290, discount_percent: 35, ...TIER_LIMITS.STANDARD },
+  TEAM: { current: 'TEAM', month_price: 39, year_price: 380, anchor_month_price: 59, anchor_year_price: 590, discount_percent: 34, ...TIER_LIMITS.TEAM },
+  PRO: { current: 'PRO', month_price: 79, year_price: 780, anchor_month_price: 119, anchor_year_price: 1190, discount_percent: 34, ...TIER_LIMITS.PRO },
+  ULTIMATE: { current: 'ULTIMATE', month_price: 159, year_price: 1550, anchor_month_price: 239, anchor_year_price: 2390, discount_percent: 33, ...TIER_LIMITS.ULTIMATE },
 };
 
 /**
- * EUR Pricing (€) - European Union.
+ * EUR Pricing (€) - European Union (35% off launch offer).
  */
 export const pricingEUR: PricingInterface = {
   FREE: { current: 'FREE', month_price: 0, year_price: 0, ...TIER_LIMITS.FREE },
-  STANDARD: { current: 'STANDARD', month_price: 19, year_price: 180, ...TIER_LIMITS.STANDARD },
-  TEAM: { current: 'TEAM', month_price: 39, year_price: 380, ...TIER_LIMITS.TEAM },
-  PRO: { current: 'PRO', month_price: 79, year_price: 780, ...TIER_LIMITS.PRO },
-  ULTIMATE: { current: 'ULTIMATE', month_price: 159, year_price: 1550, ...TIER_LIMITS.ULTIMATE },
+  STANDARD: { current: 'STANDARD', month_price: 19, year_price: 180, anchor_month_price: 29, anchor_year_price: 290, discount_percent: 35, ...TIER_LIMITS.STANDARD },
+  TEAM: { current: 'TEAM', month_price: 39, year_price: 380, anchor_month_price: 59, anchor_year_price: 590, discount_percent: 34, ...TIER_LIMITS.TEAM },
+  PRO: { current: 'PRO', month_price: 79, year_price: 780, anchor_month_price: 119, anchor_year_price: 1190, discount_percent: 34, ...TIER_LIMITS.PRO },
+  ULTIMATE: { current: 'ULTIMATE', month_price: 159, year_price: 1550, anchor_month_price: 239, anchor_year_price: 2390, discount_percent: 33, ...TIER_LIMITS.ULTIMATE },
 };
 
 /**
- * GBP Pricing (£) - United Kingdom.
+ * GBP Pricing (£) - United Kingdom (36% off launch offer).
  */
 export const pricingGBP: PricingInterface = {
   FREE: { current: 'FREE', month_price: 0, year_price: 0, ...TIER_LIMITS.FREE },
-  STANDARD: { current: 'STANDARD', month_price: 16, year_price: 150, ...TIER_LIMITS.STANDARD },
-  TEAM: { current: 'TEAM', month_price: 34, year_price: 330, ...TIER_LIMITS.TEAM },
-  PRO: { current: 'PRO', month_price: 69, year_price: 670, ...TIER_LIMITS.PRO },
-  ULTIMATE: { current: 'ULTIMATE', month_price: 139, year_price: 1350, ...TIER_LIMITS.ULTIMATE },
+  STANDARD: { current: 'STANDARD', month_price: 16, year_price: 150, anchor_month_price: 25, anchor_year_price: 250, discount_percent: 36, ...TIER_LIMITS.STANDARD },
+  TEAM: { current: 'TEAM', month_price: 34, year_price: 330, anchor_month_price: 49, anchor_year_price: 490, discount_percent: 31, ...TIER_LIMITS.TEAM },
+  PRO: { current: 'PRO', month_price: 69, year_price: 670, anchor_month_price: 99, anchor_year_price: 990, discount_percent: 30, ...TIER_LIMITS.PRO },
+  ULTIMATE: { current: 'ULTIMATE', month_price: 139, year_price: 1350, anchor_month_price: 199, anchor_year_price: 1990, discount_percent: 30, ...TIER_LIMITS.ULTIMATE },
 };
 
 export const PRICING_BY_CURRENCY: Record<SupportedCurrency, PricingInterface> = {

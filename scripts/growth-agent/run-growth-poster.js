@@ -353,11 +353,15 @@ async function runGrowthPoster(options = {}) {
   // - X / Twitter: Jatinder (@Jatinde03016755 - X Premium boosted)
   // - LinkedIn: Mohan Bhanushali (Link-free for maximum algorithmic reach)
   // - Threads: sacredsmilesbhakti (Optimized under 500 chars)
+  // - Instagram: JR (@godhand_ai)
+  // - Facebook Page: GodHand Developers (Brand Page, NOT personal profile)
   // - Discord: HookStep #general
   console.log('==> [3/4] Assembling Multi-Platform Dispatch Payload:');
   console.log('    • X / Twitter: @Jatinde03016755 (Native X Hook with Hashtags)');
   console.log('    • LinkedIn: Mohan Bhanushali (Link-free viral reach optimization)');
   console.log('    • Threads: sacredsmilesbhakti (Optimized under 500 chars)');
+  console.log('    • Instagram: JR (@godhand_ai)');
+  console.log('    • Facebook Page: GodHand Developers (NOT personal profile)');
   console.log('    • Discord: HookStep #general');
 
   const postsConfig = [
@@ -390,6 +394,28 @@ async function runGrowthPoster(options = {}) {
         image: [PROMO_IMAGE]
       }],
       settings: {}
+    },
+    {
+      integration: { id: 'cmu43udq900013epoama12hyl' }, // Instagram: JR (@godhand_ai)
+      value: [{
+        content: threadsContent,
+        image: [PROMO_IMAGE]
+      }],
+      settings: {
+        __type: 'instagram',
+        post_type: 'post'
+      }
+    },
+    {
+      integration: { id: 'cmtqwr35i00013ere51x8gnp3' }, // Facebook Page: GodHand Developers
+      value: [{
+        content: content,
+        image: [PROMO_IMAGE]
+      }],
+      settings: {
+        __type: 'facebook',
+        post_type: 'post'
+      }
     },
     {
       integration: { id: 'cmtwu5dwr00013e9dr356bpma' }, // Discord (HookStep #general)

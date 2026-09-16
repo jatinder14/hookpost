@@ -115,7 +115,13 @@ export class IntegrationsController {
               : {}),
             display: p.profile,
             type: p.type,
-            time: JSON.parse(p.postingTimes),
+            time: (() => {
+              try {
+                return JSON.parse(p.postingTimes || '[]');
+              } catch {
+                return [{ time: 230 }, { time: 520 }, { time: 810 }];
+              }
+            })(),
             changeProfilePicture: !!findIntegration?.changeProfilePicture,
             changeNickName: !!findIntegration?.changeNickname,
             customer: p.customer,

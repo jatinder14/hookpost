@@ -39,7 +39,9 @@ for (const envPath of envPaths) {
 }
 
 const JWT_SECRET = process.env.JWT_SECRET || 'secret';
-const BACKEND_URL = process.env.BACKEND_INTERNAL_URL || 'https://hookpost.hookstep.in/api';
+const BACKEND_URL = (process.env.BACKEND_INTERNAL_URL && !process.env.BACKEND_INTERNAL_URL.includes('localhost'))
+  ? process.env.BACKEND_INTERNAL_URL
+  : 'https://hookpost.hookstep.in/api';
 const USER_ID = '1c340590-52fe-4605-be3e-543d16948bbf';
 const ORG_ID = '15764a35-de5b-4a23-877b-849aebc96527';
 
@@ -303,9 +305,12 @@ async function runGrowthPoster(options = {}) {
   console.log(`==> [2/4] Selected Content Playbook: "${topic.title}" (ID: ${topic.id})`);
   const content = sanitizeAndAssertContent(topic.content);
   const xContent = sanitizeAndAssertContent(topic.xHook || topic.content);
+  const threadsContent = sanitizeAndAssertContent(
+    topic.threadsHook || (content.length <= 480 ? content : (topic.xHook || content.slice(0, 480)))
+  );
   console.log('    Zero double dashes assertion: [PASSED]\n');
 
-  // 3. Multi-Channel Configuration:
+  // 3. Multi-Platform Configuration:
   // - X / Twitter: Jatinder (@Jatinde03016755 - X Premium boosted)
   // - LinkedIn: Mohan Bhanushali
   // - Threads: sacredsmilesbhakti
@@ -313,7 +318,7 @@ async function runGrowthPoster(options = {}) {
   console.log('==> [3/4] Assembling Multi-Platform Dispatch Payload:');
   console.log('    • X / Twitter: @Jatinde03016755 (Native X Hook with Hashtags)');
   console.log('    • LinkedIn: Mohan Bhanushali (Long-form founder insight)');
-  console.log('    • Threads: sacredsmilesbhakti (Visual Before/After)');
+  console.log('    • Threads: sacredsmilesbhakti (Optimized under 500 chars)');
   console.log('    • Discord: HookStep #general');
 
   const postsConfig = [
@@ -342,7 +347,7 @@ async function runGrowthPoster(options = {}) {
     {
       integration: { id: 'cmtrblz5n00013ekkd6kosjwp' }, // Threads (sacredsmilesbhakti)
       value: [{
-        content: content,
+        content: threadsContent,
         image: [PROMO_IMAGE]
       }],
       settings: {}

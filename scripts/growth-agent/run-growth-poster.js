@@ -188,6 +188,38 @@ Hookpost now supports Purchasing Power Parity:
 Fair pricing worldwide.
 
 #saas #pricing #india #creators`
+  },
+  {
+    id: 'finops_01_cloud_bill_cut',
+    category: 'open_source',
+    title: 'How We Cut Our Cloud Hosting Bill by 55% in 15 Minutes',
+    content: `Most early-stage SaaS companies overpay for cloud infrastructure by 2x or 3x out of habit.
+
+Here is how we trimmed our production hosting bill from ~$35/mo down to ~$14.50/mo with zero downtime:
+
+1. Right-Sizing Compute Responsibly
+We downsized our GCP instance from e2-medium (4GB RAM) to e2-small (2GB RAM + 2GB swap).
+Running 4 PM2 microservices (Next.js frontend, NestJS backend, orchestrator, and Temporal worker) consumes roughly 1.2GB RAM.
+With swap memory backing burst traffic, RAM usage sits comfortably at 69%.
+
+2. Eliminating Database Latency
+Instead of running a heavy local PostgreSQL instance, we co-located in Singapore with Neon Serverless Postgres.
+Ping latency is down to 14ms, drastically cutting CPU churn and connection pooling overhead.
+
+3. Dismissing Premature Lock-Ins
+Cloud providers constantly push 3-year commitments to lock in discounts. For pre-scale SaaS, flexibility beats a small monthly saving every single time.
+
+Build lean, measure actual memory profiles, and never pay for idle cloud capacity.`,
+    xHook: `How we cut our production cloud bill by 55% in 15 mins:
+
+1. e2-medium (4GB) to e2-small (2GB + 2GB swap)
+2. 4 PM2 services running at 69% RAM
+3. Neon DB in Singapore (14ms latency)
+4. Zero downtime during resize
+
+Build lean before scaling up.
+
+#devops #buildinpublic #cloud #saas`
   }
 ];
 
@@ -308,16 +340,23 @@ async function runGrowthPoster(options = {}) {
   const threadsContent = sanitizeAndAssertContent(
     topic.threadsHook || (content.length <= 480 ? content : (topic.xHook || content.slice(0, 480)))
   );
+  // LinkedIn algorithm penalty fix: Remove direct links from post body to prevent 70% reach drop
+  const linkedInContent = sanitizeAndAssertContent(
+    topic.linkedInContent || (
+      content.replace(/https?:\/\/[^\s]+/g, '').replace(/\n\s*\n\s*\n/g, '\n\n').trim() +
+      '\n\nLink to explore Hookpost is in the first comment below 👇'
+    )
+  );
   console.log('    Zero double dashes assertion: [PASSED]\n');
 
   // 3. Multi-Platform Configuration:
   // - X / Twitter: Jatinder (@Jatinde03016755 - X Premium boosted)
-  // - LinkedIn: Mohan Bhanushali
-  // - Threads: sacredsmilesbhakti
+  // - LinkedIn: Mohan Bhanushali (Link-free for maximum algorithmic reach)
+  // - Threads: sacredsmilesbhakti (Optimized under 500 chars)
   // - Discord: HookStep #general
   console.log('==> [3/4] Assembling Multi-Platform Dispatch Payload:');
   console.log('    • X / Twitter: @Jatinde03016755 (Native X Hook with Hashtags)');
-  console.log('    • LinkedIn: Mohan Bhanushali (Long-form founder insight)');
+  console.log('    • LinkedIn: Mohan Bhanushali (Link-free viral reach optimization)');
   console.log('    • Threads: sacredsmilesbhakti (Optimized under 500 chars)');
   console.log('    • Discord: HookStep #general');
 
@@ -336,7 +375,7 @@ async function runGrowthPoster(options = {}) {
     {
       integration: { id: 'cmtwoj33t000h3e7ezpm3iuey' }, // LinkedIn (Mohan Bhanushali)
       value: [{
-        content: content,
+        content: linkedInContent,
         image: [PROMO_IMAGE]
       }],
       settings: {

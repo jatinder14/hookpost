@@ -73,13 +73,16 @@ export class RazorpayClient {
     if (!signature) {
       throw new Error('Missing x-razorpay-signature header.');
     }
+    const sanitizedSecret = secret.trim().replace(/^["']|["'];?$/g, '').replace(/;$/, '');
+    const sanitizedSignature = signature.trim();
+
     const expected = crypto
-      .createHmac('sha256', secret)
+      .createHmac('sha256', sanitizedSecret)
       .update(rawBody)
       .digest('hex');
 
     const a = Buffer.from(expected, 'utf8');
-    const b = Buffer.from(signature, 'utf8');
+    const b = Buffer.from(sanitizedSignature, 'utf8');
     // timingSafeEqual throws on length mismatch, so gate on it first.
     if (a.length !== b.length || !crypto.timingSafeEqual(a, b)) {
       throw new Error('Invalid Razorpay webhook signature.');

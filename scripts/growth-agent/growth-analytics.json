@@ -1,0 +1,23 @@
+{
+  "evaluatedAt": "2026-09-16T13:09:46.368Z",
+  "totalPostsTracked": 2,
+  "selectedCategory": "creator_workflow",
+  "categoryStats": {
+    "pricing_arbitrage": {
+      "posts": 1,
+      "score": 10
+    },
+    "creator_workflow": {
+      "posts": 0,
+      "score": 10
+    },
+    "ai_mcp_developer": {
+      "posts": 1,
+      "score": 12
+    },
+    "open_source": {
+      "posts": 0,
+      "score": 10
+    }
+  }
+}

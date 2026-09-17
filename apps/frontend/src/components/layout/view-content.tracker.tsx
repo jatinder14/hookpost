@@ -29,14 +29,24 @@ const fired = new Set<string>();
  * Mounted in (landing) only. Every route under (app) is a logged-in screen and
  * a ViewContent on each one would swamp the marketing signal.
  */
+// These MUST be read at module scope. Inside a function body the bundler does
+// not fold `process.env.X` into a literal - it compiles to a property lookup on
+// a `process` shim whose `env` is an empty object in the browser, so both reads
+// came back undefined and the guard below returned on every single page view.
+// The tracker shipped, loaded on the marketing pages, and silently did nothing.
+// facebook.component.tsx reads its pixel at module scope, which is why that one
+// inlined correctly and this one did not - the difference is only the position.
+const PIXEL = process.env.NEXT_PUBLIC_FACEBOOK_PIXEL;
+const BACKEND = process.env.NEXT_PUBLIC_BACKEND_URL;
+
 export const ViewContentTracker: FC = () => {
   const pathname = usePathname();
 
   useEffect(() => {
-    // Inlined at build time. Empty when the pixel is not configured, which
-    // keeps this inert rather than posting events nothing can receive.
-    const pixel = process.env.NEXT_PUBLIC_FACEBOOK_PIXEL;
-    const backend = process.env.NEXT_PUBLIC_BACKEND_URL;
+    // Empty when the pixel is not configured, which keeps this inert rather
+    // than posting events nothing can receive.
+    const pixel = PIXEL;
+    const backend = BACKEND;
     if (!pixel || !backend || !pathname || fired.has(pathname)) {
       return;
     }

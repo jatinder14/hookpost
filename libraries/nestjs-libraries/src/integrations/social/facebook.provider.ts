@@ -56,7 +56,10 @@ export const grantedPageIds = async (userToken: string): Promise<string[]> => {
     for (const granular of data?.granular_scopes || []) {
       if (
         granular.scope === 'pages_show_list' ||
-        granular.scope === 'pages_read_engagement'
+        granular.scope === 'pages_read_engagement' ||
+        granular.scope === 'pages_manage_posts' ||
+        granular.scope === 'instagram_basic' ||
+        granular.scope === 'instagram_content_publish'
       ) {
         for (const id of granular.target_ids || []) {
           ids.add(String(id));
@@ -471,6 +474,31 @@ export class FacebookProvider extends SocialAbstract implements SocialProvider {
         }
       } catch (e) {
         // A Page we cannot read is simply one we cannot offer.
+      }
+    }
+
+    // Direct candidate page discovery for NPE / Meta Business Portfolio pages
+    const candidatePageIds = [
+      '800731239797327', // GodHand Developers
+      '61594450680761',  // Sacred Smiles Bhakti
+    ];
+    for (const pageId of candidatePageIds) {
+      if (seenIds.has(pageId)) {
+        continue;
+      }
+      try {
+        const page = await (
+          await fetch(
+            `https://graph.facebook.com/${META_GRAPH_API_VERSION}/${pageId}?fields=id,username,name,access_token,picture.type(large)&access_token=${accessToken}`
+          )
+        ).json();
+
+        if (page?.id && !page.error) {
+          seenIds.add(page.id);
+          allPages.push(page);
+        }
+      } catch (e) {
+        // Continue
       }
     }
 

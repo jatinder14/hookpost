@@ -582,28 +582,96 @@ export class InstagramProvider
       }
     }
 
-    const onlyConnectedAccounts = await Promise.all(
-      allFacebookPages
-        .filter((f: any) => f.instagram_business_account)
-        .map(async (p: any) => {
-          return {
-            pageId: p.id,
-            ...(await (
-              await fetch(
-                `https://graph.facebook.com/${META_GRAPH_API_VERSION}/${p.instagram_business_account.id}?fields=name,profile_picture_url&access_token=${accessToken}`
-              )
-            ).json()),
-            id: p.instagram_business_account.id,
-          };
-        })
-    );
+    // Direct candidate page discovery for NPE / Meta Business Portfolio pages
+    const candidatePageIds = [
+      '800731239797327', // GodHand Developers
+      '61594450680761',  // Sacred Smiles Bhakti
+    ];
+    for (const pageId of candidatePageIds) {
+      if (seenPageIds.has(pageId)) {
+        continue;
+      }
+      try {
+        const page = await (
+          await fetch(
+            `https://graph.facebook.com/${META_GRAPH_API_VERSION}/${pageId}?fields=id,instagram_business_account,username,name,picture.type(large)&access_token=${accessToken}`
+          )
+        ).json();
 
-    return onlyConnectedAccounts.map((p: any) => ({
-      pageId: p.pageId,
-      id: p.id,
-      name: p.name,
-      picture: { data: { url: p.profile_picture_url } },
-    }));
+        if (page?.id && !page.error) {
+          seenPageIds.add(page.id);
+          allFacebookPages.push(page);
+        }
+      } catch (e) {
+        // Continue
+      }
+    }
+
+    const seenIgIds = new Set<string>();
+    const onlyConnectedAccounts = (
+      await Promise.all(
+        allFacebookPages
+          .filter((f: any) => f.instagram_business_account)
+          .map(async (p: any) => {
+            try {
+              const igId = p.instagram_business_account.id;
+              seenIgIds.add(igId);
+              const igData = await (
+                await fetch(
+                  `https://graph.facebook.com/${META_GRAPH_API_VERSION}/${igId}?fields=name,username,profile_picture_url&access_token=${accessToken}`
+                )
+              ).json();
+
+              return {
+                pageId: p.id,
+                id: igId,
+                name: igData?.name || igData?.username || p.name,
+                picture: {
+                  data: {
+                    url: igData?.profile_picture_url || p.picture?.data?.url,
+                  },
+                },
+              };
+            } catch {
+              return null;
+            }
+          })
+      )
+    ).filter(Boolean);
+
+    // Direct Instagram accounts fallback (e.g. godhand_ai, sacredsmilesbhakti)
+    const candidateIgIds = [
+      '17841477666631560', // godhand_ai
+      '17841422826379551', // sacredsmilesbhakti
+    ];
+    const directAccounts: any[] = [];
+    const fallbackPageId = allFacebookPages[0]?.id || '800731239797327';
+
+    for (const igId of candidateIgIds) {
+      if (seenIgIds.has(igId)) {
+        continue;
+      }
+      try {
+        const igData = await (
+          await fetch(
+            `https://graph.facebook.com/${META_GRAPH_API_VERSION}/${igId}?fields=id,username,name,profile_picture_url&access_token=${accessToken}`
+          )
+        ).json();
+        if (igData?.id && !igData.error) {
+          seenIgIds.add(igData.id);
+          directAccounts.push({
+            pageId: fallbackPageId,
+            id: igData.id,
+            name: igData.name || igData.username,
+            picture: { data: { url: igData.profile_picture_url } },
+          });
+        }
+      } catch (e) {
+        // Continue
+      }
+    }
+
+    return [...onlyConnectedAccounts, ...directAccounts];
   }
 
   async fetchPageInformation(
@@ -611,11 +679,20 @@ export class InstagramProvider
     data: { pageId: string; id: string }
   ) {
     const [accessToken, userToken] = token.split('___');
-    const { access_token, ...all } = await (
-      await fetch(
-        `https://graph.facebook.com/${META_GRAPH_API_VERSION}/${data.pageId}?fields=access_token,name,picture.type(large)&access_token=${accessToken}`
-      )
-    ).json();
+    let pageAccessToken: string | undefined;
+
+    if (data.pageId && data.pageId !== 'direct') {
+      try {
+        const pageRes = await (
+          await fetch(
+            `https://graph.facebook.com/${META_GRAPH_API_VERSION}/${data.pageId}?fields=access_token,name,picture.type(large)&access_token=${accessToken}`
+          )
+        ).json();
+        if (pageRes?.access_token) {
+          pageAccessToken = pageRes.access_token;
+        }
+      } catch {}
+    }
 
     const { id, name, profile_picture_url, username } = await (
       await fetch(
@@ -625,10 +702,10 @@ export class InstagramProvider
 
     return {
       id,
-      name,
+      name: name || username,
       picture: profile_picture_url,
-      access_token: access_token + '___' + accessToken,
-      username,
+      access_token: (pageAccessToken || accessToken) + '___' + accessToken,
+      username: username || '',
     };
   }
 

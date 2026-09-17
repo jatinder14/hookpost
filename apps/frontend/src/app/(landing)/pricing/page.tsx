@@ -10,11 +10,27 @@ import Link from 'next/link';
 import { SiteNav } from '../site-nav';
 import { PricingPlans } from '../PricingPlans';
 import { PUBLISHABLE_CHANNEL_COUNT } from '../channels/channel-count';
+import {
+  pricingINR,
+  pricingUSD,
+} from '@hookpost/nestjs-libraries/database/prisma/subscriptions/pricing';
+
+// Read the prices rather than retyping them. This paragraph used to hardcode
+// "$19, $39, $79 or $159"; when the paid tiers were repriced the cards below
+// updated from pricing.ts and this sentence did not, so the page stated two
+// different prices at once. Derived strings cannot drift.
+const paidUSD = [pricingUSD.STANDARD, pricingUSD.TEAM, pricingUSD.PRO, pricingUSD.ULTIMATE]
+  .map((t) => `$${t.month_price}`);
+const paidINR = [pricingINR.STANDARD, pricingINR.TEAM, pricingINR.PRO, pricingINR.ULTIMATE]
+  .map((t) => `\u20b9${t.month_price.toLocaleString('en-IN')}`);
+const listUSD = `${paidUSD.slice(0, -1).join(', ')} or ${paidUSD[paidUSD.length - 1]}`;
+const listINR = `${paidINR.slice(0, -1).join(', ')} or ${paidINR[paidINR.length - 1]}`;
 
 /**
  * /pricing page with strict geo-isolation:
- * - US & International visitors are presented exclusively with USD ($19 / $39 / $79 / $159).
- * - Indian visitors are presented with INR (₹699 / ₹1,499 / ₹2,299 / ₹4,499).
+ * - US & International visitors are presented exclusively with USD.
+ * - Indian visitors are presented with INR.
+ * Actual figures come from pricing.ts - do not restate them here.
  * - No INR price comparison table is ever leaked to international visitors.
  */
 
@@ -170,15 +186,15 @@ export default async function PricingPage() {
         </h1>
         {isIndian ? (
           <p className="mt-4 max-w-[70ch] text-lg text-white/70">
-            Hookpost costs ₹0 a month on the Free plan and ₹699, ₹1,499,
-            ₹2,299 or ₹4,499 a month on the four paid plans.
+            Hookpost costs ₹0 a month on the Free plan and {listINR} a month
+            on the four paid plans.
             There is no per-channel fee and no setup fee, and the open-source
             version can be self-hosted at no licence cost.
           </p>
         ) : (
           <p className="mt-4 max-w-[70ch] text-lg text-white/70">
-            Hookpost costs $0 a month on the Free plan and $19, $39,
-            $79 or $159 a month on the four paid plans.
+            Hookpost costs $0 a month on the Free plan and {listUSD} a month
+            on the four paid plans.
             There is no per-channel fee and no setup fee, and the open-source
             version can be self-hosted at no licence cost.
           </p>

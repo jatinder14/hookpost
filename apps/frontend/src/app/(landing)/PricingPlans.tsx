@@ -23,7 +23,7 @@ export interface PricingPlansProps {
 /**
  * Shared pricing tables for homepage and /pricing page.
  * Features strict geo-isolation and Purchasing Power Parity (PPP):
- * - International visitors (US/EU/UK/UAE/Global) see localized global currencies ($19/$39/$79/$159) with Early Adopter discounts.
+ * - International visitors (US/EU/UK/UAE/Global) see localized global currencies with Early Adopter discounts. Figures live in pricing.ts; do not restate them in comments.
  * - INR rates (₹699) feature transparent regional parity discount (58% off) strictly isolated to genuine domestic visitors.
  * - Secondary client-side timezone verification prevents foreign VPN users from spoofing Indian domestic rates.
  */

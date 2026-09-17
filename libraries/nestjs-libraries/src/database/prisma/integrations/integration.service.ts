@@ -5,6 +5,8 @@ import {
   Inject,
   Injectable,
 } from '@nestjs/common';
+import { SubscriptionRepository } from '@hookpost/nestjs-libraries/database/prisma/subscriptions/subscription.repository';
+import { pricing } from '@hookpost/nestjs-libraries/database/prisma/subscriptions/pricing';
 import { IntegrationRepository } from '@hookpost/nestjs-libraries/database/prisma/integrations/integration.repository';
 import { IntegrationManager } from '@hookpost/nestjs-libraries/integrations/integration.manager';
 import {
@@ -41,7 +43,10 @@ export class IntegrationService {
     private _notificationService: NotificationService,
     @Inject(forwardRef(() => RefreshIntegrationService))
     private _refreshIntegrationService: RefreshIntegrationService,
-    private _temporalService: TemporalService
+    private _temporalService: TemporalService,
+    // Repository, not SubscriptionService: SubscriptionService imports
+    // IntegrationService, so injecting it here would be a dependency cycle.
+    private _subscriptionRepository: SubscriptionRepository
   ) {}
 
   async changeActiveCron(orgId: string) {
@@ -430,6 +435,32 @@ export class IntegrationService {
       throw new HttpException('No pages selected', HttpStatus.BAD_REQUEST);
     }
 
+    // The @CheckPolicies guard asks "is there room for ONE more channel?" once,
+    // at request time (permissions.service.ts:83-93). That was sound while one
+    // request created one channel. A batch creates N, so a Free org with one
+    // channel and an allowance of two passed the guard and could then create
+    // twenty. The public route below has no policy guard at all, so it never
+    // even got that check. Enforce the real remaining allowance here, where the
+    // creation actually happens and both routes pass through.
+    const subscription =
+      await this._subscriptionRepository.getSubscriptionByOrganizationId(org);
+    const allowance =
+      subscription?.totalChannels ?? pricing.FREE.channel;
+    const used = (await this.getIntegrationsList(org)).filter(
+      (i) => !i.refreshNeeded
+    ).length;
+    const remaining = Math.max(0, allowance - used);
+
+    if (itemsToSave.length > remaining) {
+      // Reject rather than silently connecting the first `remaining` of them.
+      // Quietly saving 2 of the 20 pages someone selected is the same kind of
+      // lie as reporting a count that never happened.
+      throw new HttpException(
+        `Your plan allows ${allowance} channels and ${used} are in use, so you can add ${remaining} more. You selected ${itemsToSave.length}.`,
+        HttpStatus.PAYMENT_REQUIRED
+      );
+    }
+
     const [firstItem, ...restItems] = itemsToSave;
 
     const getIntegrationInformation = await provider.fetchPageInformation(
@@ -450,6 +481,10 @@ export class IntegrationService {
       token: getIntegrationInformation.access_token,
       profile: getIntegrationInformation.username,
     });
+
+    // firstItem above is already saved at this point.
+    let saved = 1;
+    const failed: string[] = [];
 
     for (const item of restItems) {
       try {
@@ -488,12 +523,17 @@ export class IntegrationService {
           undefined,
           undefined
         );
+        saved++;
       } catch (err) {
+        // firstItem is processed outside this loop, so its failure propagates
+        // and the request errors; items 2..N used to fail silently while the
+        // response still claimed every one succeeded. Report them instead.
+        failed.push(String((item as any)?.page ?? (item as any)?.id ?? 'unknown'));
         console.error('Failed saving additional provider item:', item, err);
       }
     }
 
-    return { success: true, count: itemsToSave.length };
+    return { success: failed.length === 0, count: saved, failed };
   }
 
   async checkAnalytics(

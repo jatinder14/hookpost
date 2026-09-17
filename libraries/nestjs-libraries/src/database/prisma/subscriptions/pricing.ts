@@ -154,11 +154,28 @@ export function getCurrencyConfig(currency?: string): CurrencyConfig {
 // tier (no cap in practice) while the pricing page advertised 400 on Standard,
 // and 0 on FREE, which meant the advertised free tier could not publish at all.
 //
-// These numbers come from measured production cost: ~Rs 0.005 per published
-// post (about 30 Redis commands) rising to ~Rs 0.065 if an AI caption is
-// generated with gpt-4.1-mini. Each tier works out to 3-5 posts per channel
-// per day, and the worst case - an AI caption on every single post - stays
-// under 22% of the plan price on every tier.
+// Measured unit costs, checked against the models the code actually calls:
+//   published post          ~Rs 0.005  (about 30 Redis commands)
+//   post with an AI caption ~Rs 0.065  (gpt-4.1-mini)
+//   AI image                ~Rs 0.97   ($0.011, gpt-image-1-mini 1024x1024)
+//   AI video                ~Rs 26     ($0.30, veo3_fast via kie.ai)
+//
+// An earlier version of this comment guessed Rs3.50 an image, 3.6x the real
+// figure, which made every tier look far thinner than it is. Check the model in
+// openai.service.ts / veo3.ts before trusting any number here.
+//
+// The shape that matters: ONE video costs as much as 400 AI captions. Text and
+// images are close to free; video is the only thing that can put a plan under
+// water. If a quota ever needs raising, raise text and images, never video.
+//
+// Worst case is NOT "an AI caption on every post" - AI captions are capped by
+// ai_generation_count, not by posts_per_month. Every quota maxed:
+//   Standard Rs130 of Rs599  -> 78% margin
+//   Pro      Rs427 of Rs1,999 -> 79% margin
+//
+// Quotas are per ORGANIZATION, not per user: creditAllowance() reads the org's
+// subscription and reserveCredit() keys on organizationId. A Pro team of twenty
+// shares one pool, which is why unlimited team members costs us nothing.
 /**
  * Shared tier limits between INR and USD tiers.
  */
@@ -221,8 +238,8 @@ const TIER_LIMITS = {
     // reach is not generosity, it is a number that invites a support ticket.
     // 2,000 over 20 channels is 3.3/day, the same intensity as Standard.
     posts_per_month: 2000,
-    ai_generation_count: 1500,
-    image_generation_count: 150,
+    ai_generation_count: 1000,
+    image_generation_count: 100,
     community_features: true,
     team_members: true,
     featured_by_gitroom: true,

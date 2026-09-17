@@ -56,9 +56,9 @@ export default function BufferAlternativePage() {
     // Verified 8 Sep 2026 against buffer.com/pricing.
     { feature: "Channel Pricing Model", hookpost: "✅ Channels bundled into the plan", buffer: "Per channel: $5/mo billed yearly, $6 month-to-month", winner: "Hookpost" },
     // Was "₹699 ($9/mo)" against Buffer's ten channels. Standard caps at 5
-    // channels (pricing.ts), so ten channels is the Team plan - the old row
-    // overstated our own offer by comparing a 5-channel plan to Buffer's 10.
-    { feature: "Cost for 10 social accounts", hookpost: "₹1,499 ($19/mo) — Team, 10 channels", buffer: "$50/mo billed yearly, $60 month-to-month", winner: "Hookpost" },
+    // Team was retired (PURCHASABLE_TIERS), so ten channels is now the Pro
+    // plan - 20 channels for Rs1,999/$39 against Buffer's $50 for exactly ten.
+    { feature: "Cost for 10 social accounts", hookpost: "₹1,999 ($39/mo) — Pro, 20 channels", buffer: "$50/mo billed yearly, $60 month-to-month", winner: "Hookpost" },
     { feature: "Open-Source & Self-Hostable", hookpost: "✅ 100% AGPLv3 Open-Source", buffer: "❌ Closed Proprietary SaaS", winner: "Hookpost" },
     { feature: "AI Content & Hook Copilot", hookpost: "✅ Native AI Copilot & MCP Server", buffer: "⚠️ Paid AI Add-on Credits", winner: "Hookpost" },
     { feature: "Supported Networks", hookpost: `${CHANNEL_COUNT} (Instagram, Facebook, Threads, YouTube, X, Pinterest, Bluesky...)`, buffer: "8-10 Channels", winner: "Hookpost" },

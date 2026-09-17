@@ -92,6 +92,24 @@ function flag(args: string[], name: string): string | undefined {
   return i !== -1 ? args[i + 1] : undefined;
 }
 
+// Repeatable flag. `--channel a --channel b` and `--channel a,b` both work, and
+// mixing them does too. The API has always accepted an array of posts; the CLI
+// was the only thing limiting a post to a single channel.
+function flags(args: string[], name: string): string[] {
+  const out: string[] = [];
+  args.forEach((arg, i) => {
+    if (arg !== `--${name}`) return;
+    const value = args[i + 1];
+    if (!value || value.startsWith('--')) return;
+    value
+      .split(',')
+      .map((v) => v.trim())
+      .filter(Boolean)
+      .forEach((v) => out.push(v));
+  });
+  return [...new Set(out)];
+}
+
 const HELP = `
 ${c.bold('hookpost')} - schedule and publish social media posts from your terminal
 
@@ -110,7 +128,8 @@ ${c.bold('Commands')}
   slot [channelId]        Show the next free slot
 
 ${c.bold('post options')}
-  --channel <id>          Channel to post to (required)
+  --channel <id>          Channel to post to (required; repeat it, or pass a
+                          comma-separated list, to post to several at once)
   --at <ISO date>         When to publish; omitted uses your next free slot
   --now                   Publish immediately
   --draft                 Save as a draft
@@ -120,6 +139,8 @@ ${c.bold('Examples')}
   hookpost channels
   hookpost post "Shipped something small today." --channel abc123
   hookpost post "Live now" --channel abc123 --now
+  hookpost post "Ship log #12" --channel abc123 --channel def456
+  hookpost post "Ship log #12" --channel abc123,def456,ghi789
   hookpost posts --days 14
 
 ${c.bold('Environment')}
@@ -214,8 +235,9 @@ async function main() {
     if (!text || text.startsWith('--')) {
       throw new Error('Usage: hookpost post "your text" --channel <id>');
     }
-    const channel = flag(argv, 'channel');
-    if (!channel) throw new Error('--channel is required. Run `hookpost channels` to list them.');
+    const channels = flags(argv, 'channel');
+    if (!channels.length)
+      throw new Error('--channel is required. Run `hookpost channels` to list them.');
 
     const type = argv.includes('--now')
       ? 'now'
@@ -225,28 +247,39 @@ async function main() {
 
     let date = flag(argv, 'at');
     if (type === 'schedule' && !date) {
-      const slot = await api('GET', `/find-slot/${channel}`);
+      // One post group carries one date, so the first channel's next free slot
+      // is the one that applies to all of them.
+      const slot = await api('GET', `/find-slot/${channels[0]}`);
       date = slot?.date;
       console.log(c.dim(`No --at given, using next free slot: ${date}`));
     }
 
     const settingsRaw = flag(argv, 'settings');
     const settings = settingsRaw ? JSON.parse(settingsRaw) : undefined;
+    if (settings && channels.length > 1) {
+      // --settings is per-channel (YouTube title, Pinterest board...). Applying
+      // one blob to several channels would silently send nonsense to most of
+      // them, so refuse rather than guess.
+      throw new Error(
+        '--settings applies to a single channel. Post to one channel at a time when using it.'
+      );
+    }
 
     const res = await api('POST', '/posts', {
       type,
       date: date || new Date().toISOString(),
       shortLink: false,
       tags: [],
-      posts: [
-        {
-          integration: { id: channel },
-          value: [{ content: text, image: [] }],
-          ...(settings ? { settings } : {}),
-        },
-      ],
+      posts: channels.map((id) => ({
+        integration: { id },
+        value: [{ content: text, image: [] }],
+        ...(settings ? { settings } : {}),
+      })),
     });
-    console.log(c.green('Created.'), JSON.stringify(res));
+    console.log(
+      c.green(`Created on ${channels.length} channel${channels.length > 1 ? 's' : ''}.`),
+      JSON.stringify(res)
+    );
     return;
   }
 

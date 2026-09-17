@@ -60,10 +60,28 @@ export const EU_COUNTRIES = new Set([
 ]);
 
 /**
- * Resolves a visitor's country and timezone to their regional currency.
- * Guarantees zero leakage: non-Indian visitors NEVER default to INR.
+ * Currencies this Razorpay account can actually collect in.
+ *
+ * Checked against live Razorpay on 2026-09-17: of 8 payments ever taken, ALL
+ * were INR. USD had 8 subscriptions created and 0 ever reached `authenticated`;
+ * EUR and GBP have no plans on the account at all, so their checkouts cannot
+ * even start. International cards and international recurring ARE switched on
+ * in the dashboard - the capability exists - but no non-INR charge has ever
+ * completed, and the dashboard also warns that non-3DS is disabled by
+ * Razorpay's fraud team and that "only limited cards are supported" under the
+ * RBI rules. Quoting a price nobody can pay costs an ad click and the trust.
+ *
+ * To re-enable a currency: take ONE real subscription in it end to end, watch
+ * it reach `authenticated`, then add it here. Nothing else needs changing.
  */
-export function resolveCountryToCurrency(
+export const COLLECTABLE_CURRENCIES: SupportedCurrency[] = ['INR'];
+
+/**
+ * The visitor's true regional currency, before collectability is considered.
+ * Copy decisions (which wording, which parity claim) must use this, otherwise
+ * a US visitor would be told they are getting an Indian regional discount.
+ */
+export function resolveCountryToCurrencyRaw(
   countryCode?: string,
   timezone?: string
 ): SupportedCurrency {
@@ -90,11 +108,25 @@ export function resolveCountryToCurrency(
 }
 
 /**
- * Determines if a visitor is in the Indian region.
- * Used to completely hide Indian pricing from foreign visitors.
+ * The currency to actually BILL a visitor in. Falls back to INR whenever the
+ * regional currency is not collectable, so nobody is ever shown a price that
+ * cannot be charged. See COLLECTABLE_CURRENCIES.
+ */
+export function resolveCountryToCurrency(
+  countryCode?: string,
+  timezone?: string
+): SupportedCurrency {
+  const regional = resolveCountryToCurrencyRaw(countryCode, timezone);
+  return COLLECTABLE_CURRENCIES.includes(regional) ? regional : 'INR';
+}
+
+/**
+ * Determines if a visitor is in the Indian region. Deliberately uses the RAW
+ * currency: this drives copy, not billing, and a foreign visitor billed in INR
+ * is still not in the Indian region.
  */
 export function isIndianRegion(countryCode?: string, timezone?: string): boolean {
-  return resolveCountryToCurrency(countryCode, timezone) === 'INR';
+  return resolveCountryToCurrencyRaw(countryCode, timezone) === 'INR';
 }
 
 export const CURRENCY_CODE =

@@ -326,20 +326,24 @@ export const PricingPlans = ({
           </div>
         </div>
 
-        <div className="mx-auto mt-12 grid max-w-[1100px] gap-6 md:grid-cols-2 lg:grid-cols-3">
+        <div className="group/plans mx-auto mt-12 grid max-w-[1100px] gap-6 md:grid-cols-2 lg:grid-cols-3">
           {plans.map((p) => (
             <div
               key={p.name}
-              // The highlight follows the pointer. Standard keeps it by default
-              // (it is the "most chosen" one), but hovering any card lifts that
-              // card instead - previously only Standard could ever look picked,
-              // so hovering Pro gave no feedback at all.
+              // The highlight has to MOVE, which needs two halves. Adding it on
+              // hover was not enough: Standard kept its own pink border, so
+              // hovering Pro lit two cards at once and read as nothing
+              // happening. The second half gives it up whenever some other card
+              // in the grid is hovered - group-hover/plans fires for any card,
+              // and [&:not(:hover)] excludes the one under the pointer.
               className={
-                'group flex flex-col rounded-2xl border p-7 transition-all duration-200 ' +
+                'flex flex-col rounded-2xl border p-7 transition-all duration-200 ' +
                 'hover:-translate-y-1 hover:border-[#FF4CE2] hover:bg-[#FF4CE2]/[0.06] ' +
                 'hover:shadow-[0_0_0_1px_rgba(255,76,226,0.35),0_18px_40px_-18px_rgba(255,76,226,0.45)] ' +
                 (p.featured
-                  ? 'border-[#FF4CE2] bg-[#FF4CE2]/[0.06] md:[&:not(:hover)]:opacity-100 '
+                  ? 'border-[#FF4CE2] bg-[#FF4CE2]/[0.06] ' +
+                    'group-hover/plans:[&:not(:hover)]:border-white/10 ' +
+                    'group-hover/plans:[&:not(:hover)]:bg-white/[0.02] '
                   : 'border-white/10 bg-white/[0.02] ')
               }
             >

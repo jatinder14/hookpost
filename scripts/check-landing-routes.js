@@ -33,9 +33,16 @@ const allowed = [...proxy.matchAll(/(?:startsWith|===)\(?\s*'([^']+)'/g)]
   // deleting the /pricing line and confirming the check now fails.
   .filter((a) => a !== '/');
 
-// Match on segment boundaries: '/price' must not satisfy '/pricing'.
-const isAllowed = (route) =>
-  allowed.some((a) => route === a || route.startsWith(a.endsWith('/') ? a : a + '/'));
+// Mirror proxy.ts EXACTLY: it uses a plain startsWith, so '/refund' really does
+// allow '/refund-policy' in production.
+//
+// This used to require a segment boundary ('/refund' only covering '/refund/x'),
+// which is stricter than the proxy and reported /cancellation-policy,
+// /refund-policy and /shipping-policy as broken while all three served 200 to
+// anonymous visitors. A guard that cries wolf gets ignored, and then the next
+// real /pricing-style regression goes out unnoticed - so the rule here has to
+// be the proxy's rule, not a tighter one.
+const isAllowed = (route) => allowed.some((a) => route.startsWith(a));
 
 function routes(dir, prefix = '') {
   const out = [];

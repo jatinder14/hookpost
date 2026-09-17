@@ -109,9 +109,6 @@ export async function proxy(request: NextRequest) {
     // serves the (landing) page.
     nextUrl.pathname.startsWith('/docs') ||
     nextUrl.pathname.startsWith('/contact') ||
-    // Archived previous homepage. Same trap as /docs: without an entry here
-    // the proxy bounces it to /auth before Next ever renders the route.
-    nextUrl.pathname.startsWith('/home-v1') ||
     nextUrl.pathname.startsWith('/mcp') ||
     nextUrl.pathname.startsWith('/vs') ||
     nextUrl.pathname === '/sitemap.xml' ||

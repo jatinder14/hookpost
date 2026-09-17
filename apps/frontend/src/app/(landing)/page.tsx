@@ -3,7 +3,7 @@
 
 // Homepage, rebuilt September 2026.
 //
-// The previous version is archived at /home-v1 (noindex). Two things drove the
+// Two things drove the
 // rewrite: it named competitors throughout — this page is about our own
 // product, and /alternatives/<competitor> already serves anyone searching for a
 // comparison — and it carried claims that were not true, listed below where

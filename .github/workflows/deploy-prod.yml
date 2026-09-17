@@ -70,6 +70,13 @@ jobs:
       # as an empty string with nothing failing loudly. It then verifies the
       # pixel and GTM ids are actually present in the emitted chunks before it
       # ships anything.
+      # A landing route missing from proxy.ts 307s anonymous visitors to /auth.
+      # That is what sent a Razorpay banking reviewer to a login wall and moved
+      # 19 netbanking requests to ACTION REQUIRED. The script existed but was
+      # wired into nothing, so it never ran. Fail the deploy instead.
+      - name: Check every landing route is reachable anonymously
+        run: node scripts/check-landing-routes.js
+
       - name: Deploy frontend (built on this runner, shipped as a tarball)
         env:
           SSH_KEY: /home/runner/.ssh/google_compute_engine

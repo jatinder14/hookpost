@@ -1,4 +1,5 @@
 import React from 'react';
+import { pricingINR as pricing } from '@hookpost/nestjs-libraries/database/prisma/subscriptions/pricing';
 import { PUBLISHABLE_CHANNEL_COUNT } from './channels/channel-count';
 
 export default function AeoAnswerCapsule() {
@@ -76,7 +77,7 @@ export default function AeoAnswerCapsule() {
                 Pricing & Payments
               </div>
               <div className="text-white font-bold text-sm mb-1 font-jakarta">
-                Free Tier (₹0) & ₹699
+                Free Tier (₹0) &amp; ₹{pricing.STANDARD.month_price.toLocaleString('en-IN')}
               </div>
               <p className="text-xs text-gray-400 leading-normal">
                 Transparent flat pricing. Razorpay (UPI Autopay, NetBanking, Domestic & International Cards).

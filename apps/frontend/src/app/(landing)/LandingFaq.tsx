@@ -17,7 +17,7 @@ export const FAQ_DATA = [
   },
   {
     q: 'Does Hookpost support Indian payment methods like UPI and Razorpay?',
-    a: 'Yes. Hookpost is priced in rupees, starting at ₹699/month, with native UPI (Google Pay, PhonePe, Paytm), NetBanking, and Indian cards processed securely via Razorpay.',
+    a: `Yes. Hookpost is priced in rupees, starting at \u20b9${pricing.STANDARD.month_price.toLocaleString('en-IN')}/month, with native UPI (Google Pay, PhonePe, Paytm), NetBanking, and Indian cards processed securely via Razorpay.`,
   },
   {
     q: 'Can Hookpost auto-repeat or recycle evergreen posts?',
@@ -49,7 +49,7 @@ export const FAQ_DATA = [
   },
   {
     q: "How much does Hookpost cost, and what's included in each plan?",
-    a: `Hookpost has four transparent plans with monthly or annual billing (saving ~20%): Standard is ₹699/mo for ${pricing.STANDARD.channel} channels, 500 posts/month, 500 AI text generations, 20 AI images, 3 AI videos, API, and 2 webhooks. Team is ₹1,499/mo for ${pricing.TEAM.channel} channels, 1,500 posts/month, team members, 1,500 AI text generations, 100 AI images, 10 AI videos, RSS auto-posting, and 10 webhooks. Pro is ₹2,299/mo for ${pricing.PRO.channel} channels, 5,000 posts/month, 2,500 AI text generations, 300 AI images, 30 AI videos, and 30 webhooks. Ultimate is ₹4,499/mo for ${pricing.ULTIMATE.channel} channels, 15,000 posts/month, members, 6,000 AI text generations, 500 AI images, 60 AI videos, and custom SLA.`,
+    a: `Hookpost has two paid plans plus a free tier, with monthly or annual billing (saving ~20%). Free is ₹0 for ${pricing.FREE.channel} channels and ${pricing.FREE.posts_per_month} posts a month. Standard is ₹${pricing.STANDARD.month_price.toLocaleString('en-IN')}/mo for ${pricing.STANDARD.channel} channels, ${pricing.STANDARD.posts_per_month.toLocaleString('en-IN')} posts/month, ${pricing.STANDARD.ai_generation_count.toLocaleString('en-IN')} AI text generations, ${pricing.STANDARD.image_generation_count} AI images, ${pricing.STANDARD.generate_videos} AI videos, API, and ${pricing.STANDARD.webhooks} webhooks. Pro is ₹${pricing.PRO.month_price.toLocaleString('en-IN')}/mo for ${pricing.PRO.channel} channels, ${pricing.PRO.posts_per_month.toLocaleString('en-IN')} posts/month, team members, ${pricing.PRO.ai_generation_count.toLocaleString('en-IN')} AI text generations, ${pricing.PRO.image_generation_count} AI images, ${pricing.PRO.generate_videos} AI videos, and ${pricing.PRO.webhooks} webhooks.`,
   },
   {
     q: 'Can I swap or change my connected channels after choosing a plan?',
@@ -57,7 +57,7 @@ export const FAQ_DATA = [
   },
   {
     q: 'If I connect 3 Facebook pages, does that count as 1 channel or 3?',
-    a: `Each connected social account, profile, or page counts as one channel slot. So three Facebook pages count as three channels. Channel allowances are: Standard (${pricing.STANDARD.channel} channels), Team (${pricing.TEAM.channel} channels), Pro (${pricing.PRO.channel} channels), and Ultimate (${pricing.ULTIMATE.channel} channels).`,
+    a: `Each connected social account, profile, or page counts as one channel slot. So three Facebook pages count as three channels. Channel allowances are: Free (${pricing.FREE.channel} channels), Standard (${pricing.STANDARD.channel} channels) and Pro (${pricing.PRO.channel} channels).`,
   },
 ];
 

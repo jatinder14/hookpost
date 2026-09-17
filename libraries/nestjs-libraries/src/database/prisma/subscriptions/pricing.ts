@@ -215,7 +215,7 @@ const TIER_LIMITS = {
     channel: 30,
     posts_per_month: 5000,
     ai_generation_count: 2500,
-    image_generation_count: 300,
+    image_generation_count: 150,
     community_features: true,
     team_members: true,
     featured_by_gitroom: true,
@@ -229,7 +229,7 @@ const TIER_LIMITS = {
     // allowance is the single most expensive thing a plan can hand out. Held
     // to roughly 17% of plan price on every tier, matching the worst-case
     // discipline applied to posts above.
-    generate_videos: 15,
+    generate_videos: 10,
   },
   ULTIMATE: {
     channel: 100,
@@ -250,13 +250,28 @@ const TIER_LIMITS = {
 };
 
 /**
+ * The plans we actually SELL. Four paid tiers was over-segmentation for a
+ * product with a single-digit customer count: it multiplied the Razorpay plan
+ * objects (13 exist, of which 3 are leftover test plans and one is an orphan at
+ * a price we never offered), and every extra tier is another thing to keep
+ * correct on the pricing page, in the FAQ and in the JSON-LD.
+ *
+ * TEAM and ULTIMATE keep their TIER_LIMITS entries on purpose. Entitlements are
+ * resolved as `pricing[tier]`, and subscription.service.ts:52 treats a missing
+ * tier as FREE - so deleting them would silently drop existing TEAM and
+ * ULTIMATE subscribers to free-tier limits. There are live rows on both. They
+ * are no longer purchasable; they still work for whoever already has them.
+ */
+export const PURCHASABLE_TIERS = ['FREE', 'STANDARD', 'PRO'] as const;
+
+/**
  * INR Pricing (₹) - Regional Purchasing Power Parity (58% off global anchor).
  */
 export const pricingINR: PricingInterface = {
   FREE: { current: 'FREE', month_price: 0, year_price: 0, ...TIER_LIMITS.FREE },
-  STANDARD: { current: 'STANDARD', month_price: 699, year_price: 5990, anchor_month_price: 1699, anchor_year_price: 16990, discount_percent: 58, ...TIER_LIMITS.STANDARD },
+  STANDARD: { current: 'STANDARD', month_price: 599, year_price: 5990, anchor_month_price: 1699, anchor_year_price: 16990, discount_percent: 65, ...TIER_LIMITS.STANDARD },
   TEAM: { current: 'TEAM', month_price: 1499, year_price: 13990, anchor_month_price: 3499, anchor_year_price: 34990, discount_percent: 57, ...TIER_LIMITS.TEAM },
-  PRO: { current: 'PRO', month_price: 2299, year_price: 21990, anchor_month_price: 5499, anchor_year_price: 54990, discount_percent: 58, ...TIER_LIMITS.PRO },
+  PRO: { current: 'PRO', month_price: 1999, year_price: 19990, anchor_month_price: 5499, anchor_year_price: 54990, discount_percent: 64, ...TIER_LIMITS.PRO },
   ULTIMATE: { current: 'ULTIMATE', month_price: 4499, year_price: 43990, anchor_month_price: 9999, anchor_year_price: 99990, discount_percent: 55, ...TIER_LIMITS.ULTIMATE },
 };
 
@@ -285,9 +300,9 @@ export const pricingINR: PricingInterface = {
  */
 export const pricingUSD: PricingInterface = {
   FREE: { current: 'FREE', month_price: 0, year_price: 0, ...TIER_LIMITS.FREE },
-  STANDARD: { current: 'STANDARD', month_price: 19, year_price: 180, anchor_month_price: 29, anchor_year_price: 290, discount_percent: 35, ...TIER_LIMITS.STANDARD },
+  STANDARD: { current: 'STANDARD', month_price: 15, year_price: 150, anchor_month_price: 29, anchor_year_price: 290, discount_percent: 48, ...TIER_LIMITS.STANDARD },
   TEAM: { current: 'TEAM', month_price: 35, year_price: 350, anchor_month_price: 59, anchor_year_price: 590, discount_percent: 41, ...TIER_LIMITS.TEAM },
-  PRO: { current: 'PRO', month_price: 45, year_price: 450, anchor_month_price: 119, anchor_year_price: 1190, discount_percent: 62, ...TIER_LIMITS.PRO },
+  PRO: { current: 'PRO', month_price: 39, year_price: 390, anchor_month_price: 119, anchor_year_price: 1190, discount_percent: 67, ...TIER_LIMITS.PRO },
   ULTIMATE: { current: 'ULTIMATE', month_price: 89, year_price: 890, anchor_month_price: 239, anchor_year_price: 2390, discount_percent: 63, ...TIER_LIMITS.ULTIMATE },
 };
 
@@ -296,9 +311,9 @@ export const pricingUSD: PricingInterface = {
  */
 export const pricingEUR: PricingInterface = {
   FREE: { current: 'FREE', month_price: 0, year_price: 0, ...TIER_LIMITS.FREE },
-  STANDARD: { current: 'STANDARD', month_price: 19, year_price: 180, anchor_month_price: 29, anchor_year_price: 290, discount_percent: 35, ...TIER_LIMITS.STANDARD },
+  STANDARD: { current: 'STANDARD', month_price: 15, year_price: 150, anchor_month_price: 29, anchor_year_price: 290, discount_percent: 48, ...TIER_LIMITS.STANDARD },
   TEAM: { current: 'TEAM', month_price: 35, year_price: 350, anchor_month_price: 59, anchor_year_price: 590, discount_percent: 41, ...TIER_LIMITS.TEAM },
-  PRO: { current: 'PRO', month_price: 45, year_price: 450, anchor_month_price: 119, anchor_year_price: 1190, discount_percent: 62, ...TIER_LIMITS.PRO },
+  PRO: { current: 'PRO', month_price: 39, year_price: 390, anchor_month_price: 119, anchor_year_price: 1190, discount_percent: 67, ...TIER_LIMITS.PRO },
   ULTIMATE: { current: 'ULTIMATE', month_price: 89, year_price: 890, anchor_month_price: 239, anchor_year_price: 2390, discount_percent: 63, ...TIER_LIMITS.ULTIMATE },
 };
 

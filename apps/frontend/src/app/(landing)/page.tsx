@@ -20,7 +20,7 @@ import LandingFaq from "./LandingFaq";
 import { PricingPlans } from './PricingPlans';
 import { PricingContrast } from './PricingContrast';
 import { PUBLISHABLE_CHANNEL_COUNT } from './channels/channel-count';
-import { SupportedCurrency } from '@hookpost/nestjs-libraries/database/prisma/subscriptions/pricing';
+import { SupportedCurrency, pricingINR as pricing } from '@hookpost/nestjs-libraries/database/prisma/subscriptions/pricing';
 
 const CHANNELS = [
   "instagram", "youtube", "linkedin", "x", "facebook",
@@ -97,8 +97,9 @@ export default async function HomePage() {
             </div>
 
             <p className="mt-5 text-sm text-white/60">
-              Free tier is 2 channels and 30 posts a month, and does not expire.
-              Paid plans start at ₹699.
+              Free tier is {pricing.FREE.channel} channels and{' '}
+              {pricing.FREE.posts_per_month} posts a month, and does not expire.
+              Paid plans start at ₹{pricing.STANDARD.month_price.toLocaleString('en-IN')}.
             </p>
           </div>
 

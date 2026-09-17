@@ -24,7 +24,7 @@ export interface PricingPlansProps {
  * Shared pricing tables for homepage and /pricing page.
  * Features strict geo-isolation and Purchasing Power Parity (PPP):
  * - International visitors (US/EU/UK/UAE/Global) see localized global currencies with Early Adopter discounts. Figures live in pricing.ts; do not restate them in comments.
- * - INR rates (₹699) feature transparent regional parity discount (58% off) strictly isolated to genuine domestic visitors.
+ * - INR rates carry a regional parity discount, strictly isolated to genuine domestic visitors. Figures live in pricing.ts.
  * - Secondary client-side timezone verification prevents foreign VPN users from spoofing Indian domestic rates.
  */
 export const PricingPlans = ({
@@ -129,6 +129,10 @@ export const PricingPlans = ({
       ? 'UAE credit/debit cards (Mashreq, ENBD, ADCB) or Apple Pay'
       : 'International credit/debit cards (Visa, Mastercard, Amex)';
 
+  // Two paid plans only. TEAM was dropped from the lineup (PURCHASABLE_TIERS in
+  // pricing.ts) because four tiers was over-segmentation at this customer count;
+  // its TIER_LIMITS entry still exists so current TEAM subscribers keep their
+  // entitlements, it simply cannot be bought any more.
   const plans = [
     {
       name: 'Free',
@@ -166,27 +170,6 @@ export const PricingPlans = ({
       ],
       cta: 'Start 7-day trial',
       featured: true,
-    },
-    {
-      name: 'Team',
-      price: `${sym}${activePricing.TEAM.month_price.toLocaleString(locale)}`,
-      anchorPrice: activePricing.TEAM.anchor_month_price
-        ? `${sym}${activePricing.TEAM.anchor_month_price.toLocaleString(locale)}`
-        : null,
-      discountBadge: activePricing.TEAM.discount_percent
-        ? `${activePricing.TEAM.discount_percent}% OFF`
-        : null,
-      subnote: isUAE && currency === 'USD' ? 'Approx ~145 AED / month' : null,
-      blurb: 'When more than one person posts.',
-      features: [
-        `${activePricing.TEAM.channel} channels`,
-        `${activePricing.TEAM.posts_per_month.toLocaleString(locale)} posts / month`,
-        `${activePricing.TEAM.ai_generation_count.toLocaleString(locale)} AI text generations`,
-        `${activePricing.TEAM.image_generation_count} AI images · ${activePricing.TEAM.generate_videos} AI videos`,
-        'Unlimited team members',
-      ],
-      cta: 'Choose Team',
-      featured: false,
     },
     {
       name: 'Pro',

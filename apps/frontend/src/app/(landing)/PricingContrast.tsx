@@ -15,10 +15,13 @@
 // The left-hand column is about per-channel billing generally, which
 // /alternatives/buffer substantiates with Buffer's own published prices.
 
-import { pricing } from '@hookpost/nestjs-libraries/database/prisma/subscriptions/pricing';
+import {
+  pricing,
+  PURCHASABLE_TIERS,
+} from '@hookpost/nestjs-libraries/database/prisma/subscriptions/pricing';
 
 // Read straight from pricing.ts so this cannot drift from what we charge.
-const ALLOWANCE = (['STANDARD', 'TEAM', 'PRO', 'ULTIMATE'] as const)
+const ALLOWANCE = PURCHASABLE_TIERS.filter((t) => t !== 'FREE')
   .map((tier) => `${tier.charAt(0)}${tier.slice(1).toLowerCase()} ${pricing[tier].channel}`)
   .join(', ');
 

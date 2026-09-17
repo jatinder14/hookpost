@@ -13,6 +13,7 @@ import { PUBLISHABLE_CHANNEL_COUNT } from '../channels/channel-count';
 import {
   pricingINR,
   pricingUSD,
+  PURCHASABLE_TIERS,
 } from '@hookpost/nestjs-libraries/database/prisma/subscriptions/pricing';
 
 // Read the prices rather than retyping them. This paragraph used to hardcode
@@ -111,7 +112,9 @@ export default async function PricingPage() {
   const sym = config.symbol;
   const locale = currency === 'INR' ? 'en-IN' : 'en-US';
 
-  const TIERS = (['FREE', 'STANDARD', 'TEAM', 'PRO', 'ULTIMATE'] as const).map(
+  // PURCHASABLE_TIERS, not a retyped list - TEAM and ULTIMATE are retired and
+  // this comparison table was still the one place advertising them.
+  const TIERS = PURCHASABLE_TIERS.map(
     (tier) => {
       const plan = activePricing[tier];
       return {

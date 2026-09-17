@@ -34,6 +34,11 @@ export const PricingPlans = ({
   isIndianRegion: initialIsIndian,
 }: PricingPlansProps) => {
   // Determine initial state from SSR props (defaults to USD for zero leak)
+  // Which plan carries the highlight. null = nobody has pointed at a card yet,
+  // so the featured plan keeps it. Deliberately NOT cleared on mouse-leave:
+  // once you have pointed at a plan, that plan stays lit when the cursor moves
+  // away, instead of snapping back to the middle card.
+  const [litPlan, setLitPlan] = useState<string | null>(null);
   const [currency, setCurrency] = useState<SupportedCurrency>(initialCurrency || 'USD');
   const [isIndian, setIsIndian] = useState<boolean>(
     initialIsIndian ?? (initialCountry === 'IN' || initialCurrency === 'INR')
@@ -326,24 +331,24 @@ export const PricingPlans = ({
           </div>
         </div>
 
-        <div className="group/plans mx-auto mt-12 grid max-w-[1100px] gap-6 md:grid-cols-2 lg:grid-cols-3">
+        <div className="mx-auto mt-12 grid max-w-[1100px] gap-6 md:grid-cols-2 lg:grid-cols-3">
           {plans.map((p) => (
             <div
               key={p.name}
-              // The highlight has to MOVE, which needs two halves. Adding it on
-              // hover was not enough: Standard kept its own pink border, so
-              // hovering Pro lit two cards at once and read as nothing
-              // happening. The second half gives it up whenever some other card
-              // in the grid is hovered - group-hover/plans fires for any card,
-              // and [&:not(:hover)] excludes the one under the pointer.
+              // State, not a CSS :hover. CSS cannot remember which card you
+              // pointed at last, and the requirement is that the highlight
+              // stays put when the cursor leaves rather than snapping back to
+              // the middle card. onMouseEnter only - there is no matching
+              // onMouseLeave on purpose. onFocus covers keyboard tabbing, and
+              // onTouchStart covers phones, where :hover does not exist at all.
+              onMouseEnter={() => setLitPlan(p.name)}
+              onFocus={() => setLitPlan(p.name)}
+              onTouchStart={() => setLitPlan(p.name)}
               className={
                 'flex flex-col rounded-2xl border p-7 transition-all duration-200 ' +
-                'hover:-translate-y-1 hover:border-[#FF4CE2] hover:bg-[#FF4CE2]/[0.06] ' +
-                'hover:shadow-[0_0_0_1px_rgba(255,76,226,0.35),0_18px_40px_-18px_rgba(255,76,226,0.45)] ' +
-                (p.featured
-                  ? 'border-[#FF4CE2] bg-[#FF4CE2]/[0.06] ' +
-                    'group-hover/plans:[&:not(:hover)]:border-white/10 ' +
-                    'group-hover/plans:[&:not(:hover)]:bg-white/[0.02] '
+                ((litPlan === null ? p.featured : litPlan === p.name)
+                  ? 'border-[#FF4CE2] bg-[#FF4CE2]/[0.06] -translate-y-1 ' +
+                    'shadow-[0_0_0_1px_rgba(255,76,226,0.35),0_18px_40px_-18px_rgba(255,76,226,0.45)] '
                   : 'border-white/10 bg-white/[0.02] ')
               }
             >

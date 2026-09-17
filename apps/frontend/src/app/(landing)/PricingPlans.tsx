@@ -209,7 +209,10 @@ export const PricingPlans = ({
           {isIndian && currency === 'INR' && (
             <div className="inline-flex items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3.5 py-1 text-xs font-semibold text-emerald-400 backdrop-blur-md">
               <span className="text-sm">🇮🇳</span>
-              <span>Regional Purchasing Power Parity (PPP): 58% discount applied for India</span>
+              <span>
+                Regional Purchasing Power Parity (PPP):{' '}
+                {activePricing.STANDARD.discount_percent}% discount applied for India
+              </span>
             </div>
           )}
           {isUAE && (
@@ -264,7 +267,7 @@ export const PricingPlans = ({
                   }`}
                 >
                   <span>₹</span>
-                  <span>INR (India 58% Off)</span>
+                  <span>INR (India {pricingINR.STANDARD.discount_percent}% Off)</span>
                 </button>
                 <button
                   type="button"
@@ -327,11 +330,17 @@ export const PricingPlans = ({
           {plans.map((p) => (
             <div
               key={p.name}
+              // The highlight follows the pointer. Standard keeps it by default
+              // (it is the "most chosen" one), but hovering any card lifts that
+              // card instead - previously only Standard could ever look picked,
+              // so hovering Pro gave no feedback at all.
               className={
-                'flex flex-col rounded-2xl border p-7 ' +
+                'group flex flex-col rounded-2xl border p-7 transition-all duration-200 ' +
+                'hover:-translate-y-1 hover:border-[#FF4CE2] hover:bg-[#FF4CE2]/[0.06] ' +
+                'hover:shadow-[0_0_0_1px_rgba(255,76,226,0.35),0_18px_40px_-18px_rgba(255,76,226,0.45)] ' +
                 (p.featured
-                  ? 'border-[#FF4CE2] bg-[#FF4CE2]/[0.06]'
-                  : 'border-white/10 bg-white/[0.02]')
+                  ? 'border-[#FF4CE2] bg-[#FF4CE2]/[0.06] md:[&:not(:hover)]:opacity-100 '
+                  : 'border-white/10 bg-white/[0.02] ')
               }
             >
               {p.featured && (

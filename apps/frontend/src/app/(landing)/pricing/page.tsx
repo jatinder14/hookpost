@@ -218,7 +218,7 @@ export default async function PricingPage() {
       <section className="border-t border-white/10">
         <div className="mx-auto w-full max-w-[1280px] px-5 py-20 sm:px-10">
           <h2 className="text-3xl font-extrabold tracking-tight font-jakarta sm:text-4xl text-balance">
-            Every limit, including Ultimate
+            Every limit, in one table
           </h2>
           <p className="mt-3 max-w-[62ch] text-white/60">
             These are enforced limits, not guidance. Publishing stops when the

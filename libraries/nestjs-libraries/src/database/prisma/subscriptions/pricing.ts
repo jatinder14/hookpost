@@ -229,14 +229,34 @@ export const pricingINR: PricingInterface = {
 };
 
 /**
- * USD Pricing ($) - Global Standard (35% off market anchor / Buffer comparison).
+ * USD Pricing ($) - Global Standard.
+ *
+ * Rule: every tier must sit strictly BELOW both competitors at the same channel
+ * count. Buffer charges $5/channel (5ch $25, 10ch $50, 30ch $150, 100ch $500);
+ * Postiz charges $29 / $39 / $49 / $99 for 5 / 10 / 30 / 100 channels. TEAM, PRO
+ * and ULTIMATE used to lose that comparison against Postiz ($39/$79/$159), which
+ * is why they moved to $35/$45/$89.
+ *
+ * The floor is worst-case COGS from the unit costs documented above - every
+ * quota maxed, an AI caption on every post, every video generated:
+ *
+ *   STANDARD  $2.05   TEAM  $8.04   PRO  $20.06   ULTIMATE  $38.35
+ *
+ * leaving 89% / 77% / 55% / 57% gross margin at the prices below. Do not cut
+ * further without recomputing that table - PRO carries the most video allowance
+ * and is the first tier that would go underwater.
+ *
+ * INR is deliberately NOT changed: at ~Rs88/$ it already reads $7.94 / $17.03 /
+ * $26.12 / $51.12, under both competitors everywhere. Its PRO and ULTIMATE
+ * worst-case margins are the thinnest in the file (23% and 25%), so INR has no
+ * room to move down.
  */
 export const pricingUSD: PricingInterface = {
   FREE: { current: 'FREE', month_price: 0, year_price: 0, ...TIER_LIMITS.FREE },
   STANDARD: { current: 'STANDARD', month_price: 19, year_price: 180, anchor_month_price: 29, anchor_year_price: 290, discount_percent: 35, ...TIER_LIMITS.STANDARD },
-  TEAM: { current: 'TEAM', month_price: 39, year_price: 380, anchor_month_price: 59, anchor_year_price: 590, discount_percent: 34, ...TIER_LIMITS.TEAM },
-  PRO: { current: 'PRO', month_price: 79, year_price: 780, anchor_month_price: 119, anchor_year_price: 1190, discount_percent: 34, ...TIER_LIMITS.PRO },
-  ULTIMATE: { current: 'ULTIMATE', month_price: 159, year_price: 1550, anchor_month_price: 239, anchor_year_price: 2390, discount_percent: 33, ...TIER_LIMITS.ULTIMATE },
+  TEAM: { current: 'TEAM', month_price: 35, year_price: 350, anchor_month_price: 59, anchor_year_price: 590, discount_percent: 41, ...TIER_LIMITS.TEAM },
+  PRO: { current: 'PRO', month_price: 45, year_price: 450, anchor_month_price: 119, anchor_year_price: 1190, discount_percent: 62, ...TIER_LIMITS.PRO },
+  ULTIMATE: { current: 'ULTIMATE', month_price: 89, year_price: 890, anchor_month_price: 239, anchor_year_price: 2390, discount_percent: 63, ...TIER_LIMITS.ULTIMATE },
 };
 
 /**
@@ -245,9 +265,9 @@ export const pricingUSD: PricingInterface = {
 export const pricingEUR: PricingInterface = {
   FREE: { current: 'FREE', month_price: 0, year_price: 0, ...TIER_LIMITS.FREE },
   STANDARD: { current: 'STANDARD', month_price: 19, year_price: 180, anchor_month_price: 29, anchor_year_price: 290, discount_percent: 35, ...TIER_LIMITS.STANDARD },
-  TEAM: { current: 'TEAM', month_price: 39, year_price: 380, anchor_month_price: 59, anchor_year_price: 590, discount_percent: 34, ...TIER_LIMITS.TEAM },
-  PRO: { current: 'PRO', month_price: 79, year_price: 780, anchor_month_price: 119, anchor_year_price: 1190, discount_percent: 34, ...TIER_LIMITS.PRO },
-  ULTIMATE: { current: 'ULTIMATE', month_price: 159, year_price: 1550, anchor_month_price: 239, anchor_year_price: 2390, discount_percent: 33, ...TIER_LIMITS.ULTIMATE },
+  TEAM: { current: 'TEAM', month_price: 35, year_price: 350, anchor_month_price: 59, anchor_year_price: 590, discount_percent: 41, ...TIER_LIMITS.TEAM },
+  PRO: { current: 'PRO', month_price: 45, year_price: 450, anchor_month_price: 119, anchor_year_price: 1190, discount_percent: 62, ...TIER_LIMITS.PRO },
+  ULTIMATE: { current: 'ULTIMATE', month_price: 89, year_price: 890, anchor_month_price: 239, anchor_year_price: 2390, discount_percent: 63, ...TIER_LIMITS.ULTIMATE },
 };
 
 /**
@@ -256,9 +276,9 @@ export const pricingEUR: PricingInterface = {
 export const pricingGBP: PricingInterface = {
   FREE: { current: 'FREE', month_price: 0, year_price: 0, ...TIER_LIMITS.FREE },
   STANDARD: { current: 'STANDARD', month_price: 16, year_price: 150, anchor_month_price: 25, anchor_year_price: 250, discount_percent: 36, ...TIER_LIMITS.STANDARD },
-  TEAM: { current: 'TEAM', month_price: 34, year_price: 330, anchor_month_price: 49, anchor_year_price: 490, discount_percent: 31, ...TIER_LIMITS.TEAM },
-  PRO: { current: 'PRO', month_price: 69, year_price: 670, anchor_month_price: 99, anchor_year_price: 990, discount_percent: 30, ...TIER_LIMITS.PRO },
-  ULTIMATE: { current: 'ULTIMATE', month_price: 139, year_price: 1350, anchor_month_price: 199, anchor_year_price: 1990, discount_percent: 30, ...TIER_LIMITS.ULTIMATE },
+  TEAM: { current: 'TEAM', month_price: 29, year_price: 290, anchor_month_price: 49, anchor_year_price: 490, discount_percent: 41, ...TIER_LIMITS.TEAM },
+  PRO: { current: 'PRO', month_price: 37, year_price: 370, anchor_month_price: 99, anchor_year_price: 990, discount_percent: 63, ...TIER_LIMITS.PRO },
+  ULTIMATE: { current: 'ULTIMATE', month_price: 74, year_price: 740, anchor_month_price: 199, anchor_year_price: 1990, discount_percent: 63, ...TIER_LIMITS.ULTIMATE },
 };
 
 export const PRICING_BY_CURRENCY: Record<SupportedCurrency, PricingInterface> = {

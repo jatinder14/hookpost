@@ -357,10 +357,9 @@ export class UsersController {
         try {
           await this._razorpayService.cancelAllSubscriptions(org.id);
         } catch (err) {
-          console.log(err);
-          throw new HttpException(
-            'Could not cancel your subscription, please try again or contact support',
-            400
+          console.error(
+            `Failed to cancel subscriptions during account deletion for org ${org.id}:`,
+            err
           );
         }
       }

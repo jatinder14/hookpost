@@ -920,10 +920,15 @@ export class RazorpayService {
   async getCustomerSubscriptions(organizationId: string) {
     const customerId = await this.getCustomerByOrganizationId(organizationId);
     if (!customerId) return { items: [], count: 0 };
-    return this.client.request(
-      'GET',
-      `/subscriptions?customer_id=${encodeURIComponent(customerId)}&count=100`
-    );
+    try {
+      return await this.client.request(
+        'GET',
+        `/subscriptions?customer_id=${encodeURIComponent(customerId)}&count=100`
+      );
+    } catch (e: any) {
+      // Razorpay API returns 400 "customer_id is/are not required and should not be sent"
+      return { items: [], count: 0 };
+    }
   }
 
   private async liveSubscriptionFor(organizationId: string) {
@@ -992,20 +997,44 @@ export class RazorpayService {
   }
 
   async cancelAllSubscriptions(organizationId: string) {
-    const all = await this.getCustomerSubscriptions(organizationId);
-    for (const sub of all?.items || []) {
-      if (!LIVE_STATES.includes(sub.status)) continue;
-      await this.client
-        .request('POST', `/subscriptions/${sub.id}/cancel`, {
-          cancel_at_cycle_end: 0,
-        })
-        .catch((e: any) =>
-          this.logger.error(`Failed cancelling ${sub.id}: ${e}`)
-        );
-    }
-    const customerId = await this.getCustomerByOrganizationId(organizationId);
-    if (customerId) {
-      await this._subscriptionService.deleteSubscription(customerId);
+    try {
+      const local = await this._subscriptionService.getSubscription(
+        organizationId
+      );
+      if (local?.identifier) {
+        const remote = await this.client
+          .request('GET', `/subscriptions/${local.identifier}`)
+          .catch(() => null);
+        if (remote && LIVE_STATES.includes(remote.status)) {
+          await this.client
+            .request('POST', `/subscriptions/${local.identifier}/cancel`, {
+              cancel_at_cycle_end: 0,
+            })
+            .catch((e: any) =>
+              this.logger.error(`Failed cancelling ${local.identifier}: ${e}`)
+            );
+        }
+      }
+
+      const all = await this.getCustomerSubscriptions(organizationId).catch(
+        () => ({ items: [], count: 0 })
+      );
+      for (const sub of all?.items || []) {
+        if (!LIVE_STATES.includes(sub.status)) continue;
+        await this.client
+          .request('POST', `/subscriptions/${sub.id}/cancel`, {
+            cancel_at_cycle_end: 0,
+          })
+          .catch((e: any) =>
+            this.logger.error(`Failed cancelling ${sub.id}: ${e}`)
+          );
+      }
+      const customerId = await this.getCustomerByOrganizationId(organizationId);
+      if (customerId) {
+        await this._subscriptionService.deleteSubscription(customerId);
+      }
+    } catch (e: any) {
+      this.logger.error(`Failed cancelAllSubscriptions for ${organizationId}: ${e}`);
     }
     return { ok: true };
   }

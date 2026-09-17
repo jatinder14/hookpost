@@ -25,7 +25,7 @@ export const FAQ_DATA = [
   },
   {
     q: 'Does Hookpost have a public API and webhooks?',
-    a: 'Yes. Every paid plan includes a REST API for creating posts, uploading media, and managing integrations — useful if you want to plug Hookpost into your own tools, n8n, Zapier, or a custom dashboard. Webhooks are included from Standard and up, with the monthly allowance scaling by plan: Standard 2, Team 10, Pro 30, Ultimate unlimited. Combined with the public API, they let you trigger posts automatically from CI, a CMS, or any event source.',
+    a: `Yes. Every paid plan includes a REST API for creating posts, uploading media, and managing integrations — useful if you want to plug Hookpost into your own tools, n8n, Zapier, or a custom dashboard. Webhooks are included from Standard and up, with the monthly allowance scaling by plan: Standard ${pricing.STANDARD.webhooks}, Pro ${pricing.PRO.webhooks}. Combined with the public API, they let you trigger posts automatically from CI, a CMS, or any event source.`,
   },
   {
     q: 'What analytics does Hookpost provide?',
@@ -37,7 +37,7 @@ export const FAQ_DATA = [
   },
   {
     q: 'What AI features does Hookpost include?',
-    a: 'Hookpost ships with a built-in AI agent that can draft posts, generate images, and produce short videos — all from one chat window. AI text generates hooks, captions, threads, and hashtags tuned per platform (included on every paid plan). AI images generate visuals directly from a prompt (monthly allowance: Standard 20, Team 100, Pro 300, Ultimate 500). AI videos produce short social clips (Standard 3, Team 10, Pro 30, Ultimate 60). You can also chat with the agent to schedule posts end-to-end.',
+    a: `Hookpost ships with a built-in AI agent that can draft posts and generate images — all from one chat window. AI text generates hooks, captions, threads and hashtags tuned per platform (included on every paid plan; monthly allowance: Standard ${pricing.STANDARD.ai_generation_count.toLocaleString('en-IN')}, Pro ${pricing.PRO.ai_generation_count.toLocaleString('en-IN')}). AI images generate visuals directly from a prompt (Standard ${pricing.STANDARD.image_generation_count}, Pro ${pricing.PRO.image_generation_count}). You can also chat with the agent to schedule posts end-to-end.`,
   },
   {
     q: 'Can I manage multiple brands or clients from a single Hookpost account?',
@@ -49,7 +49,7 @@ export const FAQ_DATA = [
   },
   {
     q: "How much does Hookpost cost, and what's included in each plan?",
-    a: `Hookpost has two paid plans plus a free tier, with monthly or annual billing (saving ~20%). Free is ₹0 for ${pricing.FREE.channel} channels and ${pricing.FREE.posts_per_month} posts a month. Standard is ₹${pricing.STANDARD.month_price.toLocaleString('en-IN')}/mo for ${pricing.STANDARD.channel} channels, ${pricing.STANDARD.posts_per_month.toLocaleString('en-IN')} posts/month, ${pricing.STANDARD.ai_generation_count.toLocaleString('en-IN')} AI text generations, ${pricing.STANDARD.image_generation_count} AI images, ${pricing.STANDARD.generate_videos} AI videos, API, and ${pricing.STANDARD.webhooks} webhooks. Pro is ₹${pricing.PRO.month_price.toLocaleString('en-IN')}/mo for ${pricing.PRO.channel} channels, ${pricing.PRO.posts_per_month.toLocaleString('en-IN')} posts/month, team members, ${pricing.PRO.ai_generation_count.toLocaleString('en-IN')} AI text generations, ${pricing.PRO.image_generation_count} AI images, ${pricing.PRO.generate_videos} AI videos, and ${pricing.PRO.webhooks} webhooks.`,
+    a: `Hookpost has two paid plans plus a free tier, with monthly or annual billing (saving ~20%). Free is ₹0 for ${pricing.FREE.channel} channels and ${pricing.FREE.posts_per_month} posts a month. Standard is ₹${pricing.STANDARD.month_price.toLocaleString('en-IN')}/mo for ${pricing.STANDARD.channel} channels, ${pricing.STANDARD.posts_per_month.toLocaleString('en-IN')} posts/month, ${pricing.STANDARD.ai_generation_count.toLocaleString('en-IN')} AI text generations, ${pricing.STANDARD.image_generation_count} AI images, ${pricing.STANDARD.generate_videos ? pricing.STANDARD.generate_videos + ' AI videos, ' : ''}API, and ${pricing.STANDARD.webhooks} webhooks. Pro is ₹${pricing.PRO.month_price.toLocaleString('en-IN')}/mo for ${pricing.PRO.channel} channels, ${pricing.PRO.posts_per_month.toLocaleString('en-IN')} posts/month, team members, ${pricing.PRO.ai_generation_count.toLocaleString('en-IN')} AI text generations, ${pricing.PRO.image_generation_count} AI images, ${pricing.PRO.generate_videos ? pricing.PRO.generate_videos + ' AI videos, ' : ''}and ${pricing.PRO.webhooks} webhooks.`,
   },
   {
     q: 'Can I swap or change my connected channels after choosing a plan?',

@@ -210,7 +210,7 @@ const TIER_LIMITS = {
     public_api: true,
     webhooks: 2,
     autoPost: false,
-    generate_videos: 3,
+    generate_videos: 0,
   },
   TEAM: {
     channel: 10,
@@ -249,11 +249,19 @@ const TIER_LIMITS = {
     public_api: true,
     webhooks: 30,
     autoPost: true,
+    // ZERO until the kie.ai balance is topped up. The account has 0 generation
+    // credits and veo3_fast costs 60 credits ($0.30) a clip, so advertising a
+    // video allowance would promise something the first customer cannot use.
+    // The pricing card omits the video line entirely while this is 0, so
+    // restoring it is a one-number change once credits exist: put 3 back on
+    // Standard and 10 on PRO. Cost model for that: 10 videos is Rs260, about
+    // half of PRO's entire worst-case COGS.
+    //
     // Veo3 fast costs ~$0.30 (Rs 26) per generation at kie.ai, so the video
     // allowance is the single most expensive thing a plan can hand out. Held
     // to roughly 17% of plan price on every tier, matching the worst-case
     // discipline applied to posts above.
-    generate_videos: 10,
+    generate_videos: 0,
   },
   ULTIMATE: {
     channel: 100,

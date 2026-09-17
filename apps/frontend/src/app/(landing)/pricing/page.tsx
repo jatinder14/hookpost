@@ -24,6 +24,10 @@ const paidUSD = [pricingUSD.STANDARD, pricingUSD.TEAM, pricingUSD.PRO, pricingUS
 const paidINR = [pricingINR.STANDARD, pricingINR.TEAM, pricingINR.PRO, pricingINR.ULTIMATE]
   .map((t) => `\u20b9${t.month_price.toLocaleString('en-IN')}`);
 const listUSD = `${paidUSD.slice(0, -1).join(', ')} or ${paidUSD[paidUSD.length - 1]}`;
+// AI videos are only advertised while a sold tier actually grants them; the
+// kie.ai balance is 0, so generate_videos is 0 and this column disappears.
+const SHOW_VIDEOS =
+  !!pricingINR.STANDARD.generate_videos || !!pricingINR.PRO.generate_videos;
 const listINR = `${paidINR.slice(0, -1).join(', ')} or ${paidINR[paidINR.length - 1]}`;
 
 /**
@@ -231,7 +235,9 @@ export default async function PricingPage() {
                   <th scope="col" className="py-3 pr-4 font-semibold">Posts / month</th>
                   <th scope="col" className="py-3 pr-4 font-semibold">AI text</th>
                   <th scope="col" className="py-3 pr-4 font-semibold">AI images</th>
-                  <th scope="col" className="py-3 pr-4 font-semibold">AI videos</th>
+                  {SHOW_VIDEOS && (
+                    <th scope="col" className="py-3 pr-4 font-semibold">AI videos</th>
+                  )}
                   <th scope="col" className="py-3 pr-4 font-semibold">Webhooks</th>
                   <th scope="col" className="py-3 font-semibold">Team members</th>
                 </tr>
@@ -245,7 +251,9 @@ export default async function PricingPage() {
                     <td className="py-3 pr-4 text-white/70">{t.posts}</td>
                     <td className="py-3 pr-4 text-white/70">{t.aiText}</td>
                     <td className="py-3 pr-4 text-white/70">{t.aiImages}</td>
-                    <td className="py-3 pr-4 text-white/70">{t.aiVideos}</td>
+                    {SHOW_VIDEOS && (
+                      <td className="py-3 pr-4 text-white/70">{t.aiVideos}</td>
+                    )}
                     <td className="py-3 pr-4 text-white/70">{t.webhooks}</td>
                     <td className="py-3 text-white/70">{t.team}</td>
                   </tr>

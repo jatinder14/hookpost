@@ -167,7 +167,9 @@ export const PricingPlans = ({
         `${activePricing.STANDARD.posts_per_month.toLocaleString(locale)} posts / month`,
         activePricing.STANDARD.team_members ? 'Unlimited team members' : 'Just you - 1 user',
         `${activePricing.STANDARD.ai_generation_count.toLocaleString(locale)} AI text generations`,
-        `${activePricing.STANDARD.image_generation_count} AI images · ${activePricing.STANDARD.generate_videos} AI videos`,
+        activePricing.STANDARD.generate_videos
+          ? `${activePricing.STANDARD.image_generation_count} AI images · ${activePricing.STANDARD.generate_videos} AI videos`
+          : `${activePricing.STANDARD.image_generation_count} AI images`,
         `${activePricing.STANDARD.webhooks} webhooks`,
       ],
       cta: 'Start 7-day trial',
@@ -189,7 +191,9 @@ export const PricingPlans = ({
         `${activePricing.PRO.posts_per_month.toLocaleString(locale)} posts / month`,
         activePricing.PRO.team_members ? 'Unlimited team members' : 'Just you - 1 user',
         `${activePricing.PRO.ai_generation_count.toLocaleString(locale)} AI text generations`,
-        `${activePricing.PRO.image_generation_count} AI images · ${activePricing.PRO.generate_videos} AI videos`,
+        activePricing.PRO.generate_videos
+          ? `${activePricing.PRO.image_generation_count} AI images · ${activePricing.PRO.generate_videos} AI videos`
+          : `${activePricing.PRO.image_generation_count} AI images`,
         `${activePricing.PRO.webhooks} webhooks`,
       ],
       cta: 'Choose Pro',

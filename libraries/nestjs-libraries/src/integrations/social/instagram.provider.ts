@@ -435,7 +435,8 @@ export class InstagramProvider
           `${process.env.FRONTEND_URL}/integrations/social/instagram`
         )}` +
         `&state=${state}` +
-        `&scope=${encodeURIComponent(this.scopes.join(','))}`,
+        `&scope=${encodeURIComponent(this.scopes.join(','))}` +
+        `&auth_type=rerequest`,
       codeVerifier: makeId(10),
       state,
     };

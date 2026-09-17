@@ -96,6 +96,10 @@ export class RazorpayService {
         this.logger.warn(
           `Subscription ${subscription?.id} is ${type} - payment retry in progress.`
         );
+        await this.handleFailedSubscriptionPayment(subscription, payment, type);
+        return { ok: true };
+      case 'payment.failed':
+        await this.handlePaymentFailedWebhook(payment);
         return { ok: true };
       default:
         return { ok: true };
@@ -316,6 +320,210 @@ export class RazorpayService {
       );
     } catch (err) {
       this.logger.error(`Error sending subscription welcome email: ${err}`);
+    }
+  }
+
+  async sendPaymentFailedEmail(
+    orgId: string,
+    details: {
+      billing?: Billing;
+      period?: Period;
+      amount?: number;
+      currency?: string;
+      reason?: string;
+      isHalted?: boolean;
+    }
+  ) {
+    try {
+      const apiKey = process.env.RESEND_API_KEY || '';
+      if (!apiKey) return;
+
+      const team = await this._organizationService.getTeam(orgId);
+      const user = team?.users?.[0]?.user;
+      const email = user?.email;
+      const org = await this._organizationService.getOrgById(orgId);
+      const orgName = org?.name || 'Your Team';
+
+      if (!email || !email.includes('@')) return;
+
+      const { Resend } = await import('resend');
+      const resend = new Resend(apiKey);
+
+      const planName = details.billing
+        ? `${details.billing.charAt(0) + details.billing.slice(1).toLowerCase()} Plan`
+        : 'Subscription Renewal';
+      const formattedAmount = details.amount
+        ? `${details.currency === 'USD' ? '$' : '₹'}${details.amount}`
+        : 'your recurring renewal';
+
+      const subject = details.isHalted
+        ? `🚨 Action Required: Hookpost Subscription Paused - Payment Declined`
+        : `⚠️ Action Required: Hookpost Renewal Payment Couldn't Be Processed`;
+
+      const html = `
+        <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 32px 24px; background-color: #0b0d13; color: #ffffff; border-radius: 16px; border: 1px solid #1f2430;">
+          <div style="text-align: center; margin-bottom: 28px;">
+            <img src="https://hookpost.hookstep.in/brand-logo.png" alt="Hookpost" style="height: 48px; width: auto; max-height: 48px; margin-bottom: 16px;" />
+            <h1 style="color: #ffffff; font-size: 24px; font-weight: 800; margin: 0; letter-spacing: -0.5px;">Renewal Payment Action Required</h1>
+            <p style="color: #f59e0b; font-size: 15px; margin-top: 8px; font-weight: 600;">
+              ${details.isHalted ? 'All automatic retries were declined by your bank' : 'We could not complete your automatic renewal debit'}
+            </p>
+          </div>
+
+          <div style="background-color: #131722; border: 1px solid #232a3b; border-radius: 12px; padding: 20px; margin-bottom: 24px;">
+            <h2 style="color: #f59e0b; font-size: 15px; font-weight: 700; margin-top: 0; margin-bottom: 14px; text-transform: uppercase; letter-spacing: 0.5px;">Payment Details</h2>
+            <table style="width: 100%; border-collapse: collapse; font-size: 14px; color: #e2e8f0;">
+              <tr>
+                <td style="padding: 9px 0; color: #94a3b8; border-bottom: 1px solid #1e2536;">Organization</td>
+                <td style="padding: 9px 0; font-weight: 600; text-align: right; border-bottom: 1px solid #1e2536;">${orgName}</td>
+              </tr>
+              <tr>
+                <td style="padding: 9px 0; color: #94a3b8; border-bottom: 1px solid #1e2536;">Plan Tier</td>
+                <td style="padding: 9px 0; font-weight: 600; text-align: right; border-bottom: 1px solid #1e2536;">${planName}</td>
+              </tr>
+              <tr>
+                <td style="padding: 9px 0; color: #94a3b8; border-bottom: 1px solid #1e2536;">Amount Due</td>
+                <td style="padding: 9px 0; font-weight: 600; text-align: right; border-bottom: 1px solid #1e2536;">${formattedAmount}</td>
+              </tr>
+              <tr>
+                <td style="padding: 9px 0; color: #94a3b8; border-bottom: 1px solid #1e2536;">Bank Note</td>
+                <td style="padding: 9px 0; font-weight: 600; text-align: right; color: #f87171; border-bottom: 1px solid #1e2536;">
+                  ${details.reason || 'Authorization declined / UPI mandate pending'}
+                </td>
+              </tr>
+              <tr>
+                <td style="padding: 9px 0; color: #94a3b8;">Grace Period Status</td>
+                <td style="padding: 9px 0; font-weight: 600; text-align: right; color: #10b981;">● Active (Posts protected)</td>
+              </tr>
+            </table>
+          </div>
+
+          <div style="background-color: #171c28; border: 1px solid #2d3748; border-radius: 12px; padding: 18px; margin-bottom: 28px;">
+            <p style="font-size: 14px; color: #cbd5e1; line-height: 1.6; margin: 0 0 14px 0;">
+              <strong>What this means for you:</strong> Your scheduled posts and connected channels are currently protected during our grace period. However, to prevent your scheduled publications from being paused, please update your payment method or approve the mandate in your bank/UPI app.
+            </p>
+            <div style="text-align: center; margin-top: 18px;">
+              <a href="https://hookpost.hookstep.in/settings?tab=billing" style="display: inline-block; background: #FF4CE2; color: #ffffff; text-decoration: none; padding: 14px 32px; border-radius: 10px; font-weight: 700; font-size: 15px; text-align: center;">
+                👉 Update Payment Method &amp; Retry Renewal →
+              </a>
+            </div>
+          </div>
+
+          <div style="background-color: #0f121a; border-left: 4px solid #f59e0b; padding: 16px 20px; border-radius: 8px; margin-bottom: 28px;">
+            <p style="font-size: 13px; color: #e2e8f0; line-height: 1.6; margin: 0 0 8px 0;">
+              <em>Need assistance completing your renewal or updating UPI details? Hit reply directly to this email and our team will help you right away.</em>
+            </p>
+            <p style="font-size: 12px; color: #94a3b8; margin: 0; font-weight: 600;">
+              — Hookpost Billing &amp; Support Team
+            </p>
+          </div>
+
+          <div style="text-align: center; border-top: 1px solid #1e2430; padding-top: 20px; font-size: 12px; color: #64748b;">
+            <p style="margin: 0 0 6px 0;">Hookpost by HookStep &bull; JR Consulting Co.</p>
+            <p style="margin: 0;">
+              <a href="https://hookpost.hookstep.in/settings" style="color: #94a3b8; text-decoration: underline;">Settings</a> &bull;
+              <a href="mailto:support@hookstep.in" style="color: #94a3b8; text-decoration: underline;">support@hookstep.in</a>
+            </p>
+          </div>
+        </div>
+      `;
+
+      await resend.emails.send({
+        from: 'Hookpost Billing <support@hookstep.in>',
+        to: email,
+        reply_to: 'support@hookstep.in',
+        subject,
+        html,
+      });
+
+      this.logger.log(
+        `Payment failed notification email sent to ${email} for org ${orgId}`
+      );
+    } catch (err) {
+      this.logger.error(`Error sending payment failed email: ${err}`);
+    }
+  }
+
+  private async handleFailedSubscriptionPayment(subscription: any, payment?: any, type?: string) {
+    try {
+      if (!subscription?.id) return;
+      const notes = subscription.notes || {};
+      let orgId: string | undefined = notes.orgId;
+
+      if (!orgId) {
+        const subRecord = await this._subscriptionService.getSubscriptionByIdentifier(subscription.id);
+        orgId = subRecord?.organizationId;
+      }
+      if (!orgId && subscription.customer_id) {
+        const org = await this._organizationService.getOrgByCustomerId(subscription.customer_id);
+        orgId = org?.id;
+      }
+
+      if (!orgId) {
+        this.logger.warn(`Cannot resolve orgId for failing subscription ${subscription.id}`);
+        return;
+      }
+
+      const fromPlan = await this.resolveTierFromPlan(subscription.plan_id);
+      const billing = fromPlan?.billing || (notes.billing ? notes.billing.toUpperCase() : undefined);
+      const period = fromPlan?.period || (notes.period ? notes.period.toUpperCase() : undefined);
+
+      const amount = payment?.amount
+        ? payment.amount / 100
+        : (subscription.plan?.item?.amount ? subscription.plan.item.amount / 100 : undefined);
+      const currency = payment?.currency || subscription.plan?.item?.currency || 'INR';
+      const reason = payment?.error_description || (type === 'subscription.halted'
+        ? 'Bank retries exhausted — subscription renewal halted'
+        : 'Bank authorization declined or UPI mandate pending');
+
+      await this.sendPaymentFailedEmail(orgId, {
+        billing,
+        period,
+        amount,
+        currency,
+        reason,
+        isHalted: type === 'subscription.halted'
+      });
+    } catch (err) {
+      this.logger.error(`Error handling failed subscription payment for ${subscription?.id}: ${err}`);
+    }
+  }
+
+  private async handlePaymentFailedWebhook(payment: any) {
+    try {
+      if (!payment?.id) return;
+      const notes = payment.notes || {};
+      let orgId: string | undefined = notes.orgId;
+
+      if (!orgId && payment.invoice_id) {
+        try {
+          const invoice = await this.client.request('GET', `/invoices/${payment.invoice_id}`);
+          if (invoice?.subscription_id) {
+            const subRecord = await this._subscriptionService.getSubscriptionByIdentifier(invoice.subscription_id);
+            orgId = subRecord?.organizationId;
+          }
+        } catch {}
+      }
+
+      if (!orgId && payment.customer_id) {
+        const org = await this._organizationService.getOrgByCustomerId(payment.customer_id);
+        orgId = org?.id;
+      }
+
+      if (!orgId) return;
+
+      const amount = payment.amount ? payment.amount / 100 : undefined;
+      const currency = payment.currency || 'INR';
+      const reason = payment.error_description || 'Payment was declined by your bank or UPI app';
+
+      await this.sendPaymentFailedEmail(orgId, {
+        amount,
+        currency,
+        reason,
+        isHalted: false
+      });
+    } catch (err) {
+      this.logger.error(`Error handling payment.failed webhook for ${payment?.id}: ${err}`);
     }
   }
 

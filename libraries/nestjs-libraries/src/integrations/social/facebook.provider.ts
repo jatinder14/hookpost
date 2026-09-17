@@ -310,7 +310,8 @@ export class FacebookProvider extends SocialAbstract implements SocialProvider {
           `${process.env.FRONTEND_URL}/integrations/social/facebook`
         )}` +
         `&state=${state}` +
-        `&scope=${this.scopes.join(',')}`,
+        `&scope=${this.scopes.join(',')}` +
+        `&auth_type=rerequest`,
       codeVerifier: makeId(10),
       state,
     };

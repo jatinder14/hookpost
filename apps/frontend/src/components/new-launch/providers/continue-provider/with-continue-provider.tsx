@@ -62,7 +62,7 @@ export function withContinueProvider<TItem, TSelection>(
     const { onSave, existingId, initialData, isSaving } = props;
     const call = useCustomProviderFunction();
     const t = useT();
-    const [selection, setSelection] = useState<TSelection | null>(null);
+    const [selections, setSelections] = useState<TSelection[]>([]);
 
     const loadData = useCallback(async () => {
       // Skip fetch if initial data was provided
@@ -84,19 +84,6 @@ export function withContinueProvider<TItem, TSelection>(
 
     const resolvedData = initialData || data;
 
-    const handleSelect = useCallback(
-      (item: TItem) => () => {
-        setSelection(getSelectionValue(item));
-      },
-      []
-    );
-
-    const handleSave = useCallback(async () => {
-      if (selection) {
-        await onSave(transformSaveData(selection));
-      }
-    }, [onSave, selection]);
-
     const filteredData = useMemo(() => {
       return (
         (resolvedData as TItem[])?.filter(
@@ -104,6 +91,46 @@ export function withContinueProvider<TItem, TSelection>(
         ) || []
       );
     }, [resolvedData, existingId]);
+
+    const handleToggle = useCallback(
+      (item: TItem) => () => {
+        setSelections((prev) => {
+          const exists = prev.some((s) => isSelected(item, s));
+          if (exists) {
+            return prev.filter((s) => !isSelected(item, s));
+          } else {
+            return [...prev, getSelectionValue(item)];
+          }
+        });
+      },
+      [isSelected, getSelectionValue]
+    );
+
+    const isAllSelected = useMemo(() => {
+      return (
+        filteredData.length > 0 &&
+        filteredData.every((item) =>
+          selections.some((s) => isSelected(item, s))
+        )
+      );
+    }, [filteredData, selections, isSelected]);
+
+    const handleToggleAll = useCallback(() => {
+      if (isAllSelected) {
+        setSelections([]);
+      } else {
+        setSelections(filteredData.map(getSelectionValue));
+      }
+    }, [isAllSelected, filteredData, getSelectionValue]);
+
+    const handleSave = useCallback(async () => {
+      if (!selections.length) return;
+      if (selections.length === 1) {
+        await onSave(transformSaveData(selections[0]));
+      } else {
+        await onSave({ items: selections.map(transformSaveData) });
+      }
+    }, [onSave, selections, transformSaveData]);
 
     if (!isLoading && !resolvedData?.length) {
       return (
@@ -125,24 +152,65 @@ export function withContinueProvider<TItem, TSelection>(
 
     return (
       <div className="flex flex-col gap-[20px]">
-        <div>{t(titleKey, titleDefault)}</div>
-        <div className="grid grid-cols-3 justify-items-center select-none cursor-pointer gap-[10px]">
-          {filteredData.map((item) => (
-            <div
-              key={getItemId(item)}
-              className={clsx(
-                'flex flex-col w-full text-center gap-[10px] border border-input p-[10px] hover:bg-seventh rounded-[8px]',
-                isSelected(item, selection) && 'bg-seventh border-primary'
-              )}
-              onClick={handleSelect(item)}
+        <div className="flex items-center justify-between">
+          <div className="font-medium text-[15px]">
+            {t(titleKey, titleDefault)}
+          </div>
+          {filteredData.length > 1 && (
+            <button
+              type="button"
+              className="text-xs text-primary hover:underline font-semibold cursor-pointer focus:outline-none"
+              onClick={handleToggleAll}
             >
-              {renderItem(item, isSelected(item, selection))}
-            </div>
-          ))}
+              {isAllSelected
+                ? t('deselect_all', 'Deselect All')
+                : t('select_all', 'Select All')}
+            </button>
+          )}
+        </div>
+        <div className="grid grid-cols-3 justify-items-center select-none cursor-pointer gap-[10px]">
+          {filteredData.map((item) => {
+            const selected = selections.some((s) => isSelected(item, s));
+            return (
+              <div
+                key={getItemId(item)}
+                className={clsx(
+                  'relative flex flex-col w-full text-center gap-[10px] border border-input p-[10px] hover:bg-seventh rounded-[8px] transition-all cursor-pointer select-none',
+                  selected && 'bg-seventh border-primary ring-1 ring-primary'
+                )}
+                onClick={handleToggle(item)}
+              >
+                <div
+                  className={clsx(
+                    'absolute top-2 right-2 w-5 h-5 rounded-full flex items-center justify-center transition-all',
+                    selected
+                      ? 'bg-primary text-white shadow-sm'
+                      : 'border border-border/80 bg-background/50 opacity-60'
+                  )}
+                >
+                  {selected && (
+                    <svg
+                      className="w-3 h-3 stroke-current stroke-[3] fill-none"
+                      viewBox="0 0 24 24"
+                    >
+                      <polyline points="20 6 9 17 4 12" />
+                    </svg>
+                  )}
+                </div>
+                {renderItem(item, selected)}
+              </div>
+            );
+          })}
         </div>
         <div>
-          <Button disabled={!selection || isSaving} loading={isSaving} onClick={handleSave}>
-            {t('save', 'Save')}
+          <Button
+            disabled={!selections.length || isSaving}
+            loading={isSaving}
+            onClick={handleSave}
+          >
+            {selections.length > 1
+              ? `${t('connect_selected', 'Connect Selected')} (${selections.length})`
+              : t('save', 'Save')}
           </Button>
         </div>
       </div>

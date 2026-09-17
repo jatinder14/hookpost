@@ -417,9 +417,24 @@ export class IntegrationService {
       );
     }
 
+    // Support both single selection and multi-selection (batch)
+    const itemsToSave: any[] = Array.isArray(data)
+      ? data
+      : Array.isArray(data?.items)
+      ? data.items
+      : Array.isArray(data?.pages)
+      ? data.pages
+      : [data];
+
+    if (!itemsToSave.length) {
+      throw new HttpException('No pages selected', HttpStatus.BAD_REQUEST);
+    }
+
+    const [firstItem, ...restItems] = itemsToSave;
+
     const getIntegrationInformation = await provider.fetchPageInformation(
       getIntegration.token,
-      data
+      firstItem
     );
 
     await this.checkForDeletedOnceAndUpdate(
@@ -436,7 +451,49 @@ export class IntegrationService {
       profile: getIntegrationInformation.username,
     });
 
-    return { success: true };
+    for (const item of restItems) {
+      try {
+        const itemInfo = await provider.fetchPageInformation(
+          getIntegration.token,
+          item
+        );
+
+        await this.checkForDeletedOnceAndUpdate(
+          org,
+          String(itemInfo.id)
+        );
+
+        await this.createOrUpdateIntegration(
+          getIntegration.additionalSettings
+            ? JSON.parse(getIntegration.additionalSettings)
+            : undefined,
+          false,
+          org,
+          itemInfo.name,
+          itemInfo.picture,
+          getIntegration.type as 'article' | 'social',
+          String(itemInfo.id),
+          getIntegration.providerIdentifier,
+          itemInfo.access_token,
+          getIntegration.refreshToken,
+          getIntegration.tokenExpiration
+            ? Math.floor(
+                (new Date(getIntegration.tokenExpiration).getTime() -
+                  Date.now()) /
+                  1000
+              )
+            : undefined,
+          itemInfo.username,
+          false,
+          undefined,
+          undefined
+        );
+      } catch (err) {
+        console.error('Failed saving additional provider item:', item, err);
+      }
+    }
+
+    return { success: true, count: itemsToSave.length };
   }
 
   async checkAnalytics(

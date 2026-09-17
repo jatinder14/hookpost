@@ -343,7 +343,7 @@ export const AdminUsersComponent: FC = () => {
   const handleToggleSuperAdmin = useCallback(
     async (targetUserId: string, nextState: boolean, email: string) => {
       if (targetUserId === user?.id && !nextState) {
-        toaster.show('You cannot revoke your own Super Admin access', 'error');
+        toaster.show('You cannot revoke your own Super Admin access', 'warning');
         return;
       }
 
@@ -370,7 +370,7 @@ export const AdminUsersComponent: FC = () => {
         );
         mutate();
       } catch (e: any) {
-        toaster.show(e.message || 'Operation failed', 'error');
+        toaster.show(e.message || 'Operation failed', 'warning');
       } finally {
         setTogglingAdminId(null);
       }

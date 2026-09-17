@@ -234,7 +234,7 @@ export default async function CompetitorComparisonPage({ params }: { params: Pro
     // is removed rather than reworded: an empty comparison row is worse than a
     // missing one. Re-add it once each competitor's real channel list has been
     // checked and date-stamped.
-    { feature: 'Starting Price', hookpost: '✅ $0 Forever Free Tier (Standard: $9 / ₹699)', competitor: `❌ ${comp.startingPrice}` },
+    { feature: 'Starting Price', hookpost: '✅ $0 Forever Free Tier (Standard: $15 / ₹599)', competitor: `❌ ${comp.startingPrice}` },
     { feature: 'Global & Indian Payment Gateways', hookpost: '✅ Razorpay (UPI, Netbanking, Cards)', competitor: '❌ Foreign Credit Card Only' },
     { feature: 'Open-Source & Self-Hostable', hookpost: '✅ 100% Open-Source & 1-Click Docker', competitor: comp.name === 'Postiz' ? '✅ Open-Source' : '❌ Proprietary SaaS Only' },
     { feature: 'Built-in AI Reels & Hooks Generator', hookpost: '✅ Multi-Model Viral Hook & Caption AI', competitor: '⚠️ Basic or Expensive Add-on' },
@@ -321,7 +321,7 @@ export default async function CompetitorComparisonPage({ params }: { params: Pro
             Consulting Co. that publishes to {PUBLISHABLE_CHANNEL_COUNT} social networks — including
             Instagram, YouTube, X, LinkedIn, Facebook, Threads and Pinterest — from
             one calendar. It starts at <strong>$0</strong> with a Pro plan at{' '}
-            <strong>$9/mo (₹699)</strong> billed through Razorpay (UPI, NetBanking
+            <strong>$15/mo (₹599)</strong> billed through Razorpay (UPI, NetBanking
             and cards), and can be self-hosted with Docker. {comp.name} is a{' '}
             {comp.category.toLowerCase()} starting at {comp.startingPrice}, so
             Hookpost is the lower-cost, open-source alternative for creators,

@@ -235,7 +235,7 @@ export default function AlternativesHubPage() {
         name: "Can international and Indian creators pay in local currencies like INR?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "Yes. Hookpost supports native Razorpay integration for instant UPI (Google Pay, PhonePe, Paytm), RuPay, NetBanking, and Indian cards at regional pricing (₹699/mo).",
+          text: "Yes. Hookpost supports native Razorpay integration for instant UPI (Google Pay, PhonePe, Paytm), RuPay, NetBanking, and Indian cards at regional pricing (₹599/mo).",
         },
       },
     ],
@@ -402,12 +402,12 @@ export default function AlternativesHubPage() {
                 </tr>
                 <tr className="hover:bg-white/[0.02]">
                   <td className="p-4 font-semibold text-white">Pro / Team Tier</td>
-                  <td className="p-4 text-white bg-[#FF4CE2]/5 font-bold">$15 / mo (₹699)</td>
+                  <td className="p-4 text-white bg-[#FF4CE2]/5 font-bold">$15 / mo (₹599)</td>
                   <td className="p-4">$6 / channel / mo</td>
                   <td className="p-4 text-red-400">$99 / mo minimum</td>
                   <td className="p-4 text-red-400">$199 / user / mo</td>
                   <td className="p-4">$12 / mo</td>
-                  <td className="p-4">$19 / mo</td>
+                  <td className="p-4">$15 / mo</td>
                 </tr>
                 <tr className="hover:bg-white/[0.02]">
                   <td className="p-4 font-semibold text-white">Per-Channel Penalty</td>

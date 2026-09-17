@@ -18,6 +18,7 @@ import {
   SupportedCurrency,
   CURRENCY_SYMBOL,
   isIndianRegion,
+  PURCHASABLE_TIERS,
 } from '@hookpost/nestjs-libraries/database/prisma/subscriptions/pricing';
 import { FAQComponent } from '@hookpost/frontend/components/billing/faq.component';
 import { useSWRConfig } from 'swr';
@@ -622,6 +623,8 @@ export const MainBillingComponent: FC<{
       {finishTrial && <FinishTrial close={() => setFinishTrial(false)} />}
       <div className="flex gap-[16px] [@media(max-width:1024px)]:flex-col [@media(max-width:1024px)]:text-center">
         {Object.entries(activePricing)
+          // Only tiers we still sell - see PURCHASABLE_TIERS.
+          .filter((f) => (PURCHASABLE_TIERS as readonly string[]).includes(f[0]))
           .filter((f) => !isGeneral || f[0] !== 'FREE')
           .map(([name, values]) => (
             <div

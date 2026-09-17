@@ -5,7 +5,11 @@ import { useFetch } from '@hookpost/helpers/utils/custom.fetch';
 import { useT } from '@hookpost/react/translation/get.transation.service.client';
 import { Button } from '@hookpost/react/form/button';
 import { LoadingComponent } from '@hookpost/frontend/components/layout/loading';
-import { CURRENCY_SYMBOL } from '@hookpost/nestjs-libraries/database/prisma/subscriptions/pricing';
+import {
+  CURRENCY_SYMBOL,
+  pricingINR,
+  pricingUSD,
+} from '@hookpost/nestjs-libraries/database/prisma/subscriptions/pricing';
 
 const CHECKOUT_SCRIPT = 'https://checkout.razorpay.com/v1/checkout.js';
 
@@ -209,7 +213,16 @@ export const RazorpayBilling: FC<{
     <div className="flex flex-col gap-[16px] mt-[24px]">
       <Button onClick={pay} loading={busy} disabled={busy}>
         {allowTrial
-          ? `Start 7-Day Free Trial (${sym}0 Today, then ${amountLabel || (isINR ? '₹699' : '$19')})`
+          ? // The fallback used to be a hardcoded '₹699'/'$19'. When amountLabel
+            // was empty the button promised the old price while the charge came
+            // from pricing.ts - a button that names the wrong amount on the way
+            // into a payment. Derived now, so it cannot disagree.
+            `Start 7-Day Free Trial (${sym}0 Today, then ${
+              amountLabel ||
+              (isINR
+                ? `₹${pricingINR.STANDARD.month_price.toLocaleString('en-IN')}`
+                : `$${pricingUSD.STANDARD.month_price}`)
+            })`
           : amountLabel
           ? `${t('billing_subscribe_for', 'Subscribe for')} ${amountLabel}`
           : t('billing_subscribe', 'Subscribe')}

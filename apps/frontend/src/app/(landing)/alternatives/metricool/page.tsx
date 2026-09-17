@@ -221,7 +221,7 @@ export default function MetricoolAlternativePage() {
                   </tr>
                   <tr className="hover:bg-white/[0.02] transition-colors">
                     <td className="p-4 sm:p-5 font-medium text-white">Pricing</td>
-                    <td className="p-4 sm:p-5 text-white bg-[#FF4CE2]/5 font-semibold">✅ $0 Free Tier / ₹699 ($9/mo)</td>
+                    <td className="p-4 sm:p-5 text-white bg-[#FF4CE2]/5 font-semibold">✅ $0 Free Tier / ₹599 ($15/mo)</td>
                     <td className="p-4 sm:p-5 text-[#888]">❌ $22/month starter tier</td>
                     <td className="p-4 sm:p-5">
                       <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-green-500/10 text-green-400 border border-green-500/20">

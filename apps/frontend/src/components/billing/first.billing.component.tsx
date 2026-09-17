@@ -13,6 +13,7 @@ import { LogoTextComponent } from '@hookpost/frontend/components/ui/logo-text.co
 import { capitalize } from 'lodash';
 import {
   pricing,
+  PURCHASABLE_TIERS,
   getPricing,
   getCurrencyConfig,
   SupportedCurrency,
@@ -147,7 +148,15 @@ export const FirstBillingComponent = () => {
   );
 
   const price = useMemo(
-    () => Object.entries(activePricing).filter(([key, value]) => key !== 'FREE'),
+    () =>
+      // PURCHASABLE_TIERS, not every key in the pricing object. TEAM and
+      // ULTIMATE still have TIER_LIMITS entries so existing subscribers keep
+      // their entitlements, and walking the object put both back on the
+      // onboarding screen at Rs1,499 and Rs4,499 - buyable, after we had
+      // retired them everywhere on the marketing site.
+      Object.entries(activePricing).filter(
+        ([key]) => key !== 'FREE' && (PURCHASABLE_TIERS as readonly string[]).includes(key)
+      ),
     [activePricing]
   );
 

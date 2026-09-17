@@ -55,7 +55,7 @@ export default function BufferAlternativePage() {
     // unlabelled reads as wrong to anyone who opens buffer.com/pricing.
     // Verified 8 Sep 2026 against buffer.com/pricing.
     { feature: "Channel Pricing Model", hookpost: "✅ Channels bundled into the plan", buffer: "Per channel: $5/mo billed yearly, $6 month-to-month", winner: "Hookpost" },
-    // Was "₹699 ($9/mo)" against Buffer's ten channels. Standard caps at 5
+    // Was "₹599 ($15/mo)" against Buffer's ten channels. Standard caps at 5
     // Team was retired (PURCHASABLE_TIERS), so ten channels is now the Pro
     // plan - 20 channels for Rs1,999/$39 against Buffer's $50 for exactly ten.
     { feature: "Cost for 10 social accounts", hookpost: "₹1,999 ($39/mo) — Pro, 20 channels", buffer: "$50/mo billed yearly, $60 month-to-month", winner: "Hookpost" },
@@ -150,7 +150,7 @@ export default function BufferAlternativePage() {
         name: "Why is Hookpost the top competitor to Buffer in 2026?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "Buffer prices per channel: $5 per channel per month billed yearly, or $6 month-to-month, so ten channels costs $50-$60 a month. Hookpost bundles channels into flat plans - 5 channels on Standard at ₹699 ($9) a month and 10 channels on Team at ₹1,499 ($19) a month - across 18 networks, with a free tier at ₹0 and AGPL self-hosting. Buffer pricing verified 8 September 2026 at buffer.com/pricing.",
+          text: "Buffer prices per channel: $5 per channel per month billed yearly, or $6 month-to-month, so ten channels costs $50-$60 a month. Hookpost bundles channels into flat plans - 5 channels on Standard at ₹599 ($9) a month and 10 channels on Team at ₹1,499 ($19) a month - across 18 networks, with a free tier at ₹0 and AGPL self-hosting. Buffer pricing verified 8 September 2026 at buffer.com/pricing.",
         },
       },
       {
@@ -190,7 +190,7 @@ export default function BufferAlternativePage() {
         name: "Does Hookpost support Indian payment methods like UPI and RuPay?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "Yes. Hookpost bills through Razorpay and supports UPI, RuPay, NetBanking and Indian cards at rupee pricing (₹699/mo). Buffer bills in USD by international card. If you are paying from outside India, Buffer's USD billing is the simpler option today.",
+          text: "Yes. Hookpost bills through Razorpay and supports UPI, RuPay, NetBanking and Indian cards at rupee pricing (₹599/mo). Buffer bills in USD by international card. If you are paying from outside India, Buffer's USD billing is the simpler option today.",
         },
       },
     ],

@@ -155,7 +155,7 @@ export default function PostizAlternativePage() {
         name: "How does Hookpost pricing compare to Postiz ($29-$99/mo) and Buffer?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "Both Hookpost and Postiz offer generous $0 free tiers. However, on cloud plans, Postiz charges $29/mo (Starter), $39/mo (Growth), $49/mo (Pro), and $99/mo (Enterprise) in USD only. Hookpost Pro provides unlimited channels, AI copilot, and MCP tools for just $9/mo (₹699/mo with native UPI), saving users up to 80% with zero per-channel markup fees.",
+          text: "Both Hookpost and Postiz offer generous $0 free tiers. However, on cloud plans, Postiz charges $29/mo (Starter), $39/mo (Growth), $49/mo (Pro), and $99/mo (Enterprise) in USD only. Hookpost Pro provides unlimited channels, AI copilot, and MCP tools for just $15/mo (₹599/mo with native UPI), saving users up to 80% with zero per-channel markup fees.",
         },
       },
       {
@@ -187,7 +187,7 @@ export default function PostizAlternativePage() {
         name: "Why do international and Indian creators prefer Hookpost over Postiz for billing?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "Postiz exclusively uses USD credit card billing, which requires international cards and incurs 3.5% foreign transaction fees. Hookpost integrates Razorpay for instant domestic UPI, RuPay, and NetBanking payments at regional pricing (₹699/mo), plus Indian debit and credit cards.",
+          text: "Postiz exclusively uses USD credit card billing, which requires international cards and incurs 3.5% foreign transaction fees. Hookpost integrates Razorpay for instant domestic UPI, RuPay, and NetBanking payments at regional pricing (₹599/mo), plus Indian debit and credit cards.",
         },
       },
       {
@@ -203,7 +203,7 @@ export default function PostizAlternativePage() {
         name: "What is the 3-year Total Cost of Ownership (TCO) difference between Hookpost and Postiz?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "Over 3 years, a creator on Postiz Pro ($49/mo) spends $1,764 plus foreign transaction fees. On Hookpost Standard ($9/mo), the 3-year cost is just $324, representing a direct saving of $1,440. For agencies on Postiz Enterprise ($99/mo vs Hookpost $29/mo), the 3-year savings exceed $2,500.",
+          text: "Over 3 years, a creator on Postiz Pro ($49/mo) spends $1,764 plus foreign transaction fees. On Hookpost Standard ($15/mo), the 3-year cost is just $324, representing a direct saving of $1,440. For agencies on Postiz Enterprise ($99/mo vs Hookpost $29/mo), the 3-year savings exceed $2,500.",
         },
       },
     ],
@@ -309,7 +309,7 @@ export default function PostizAlternativePage() {
             The social media scheduling landscape in 2026 has diverged into three models: legacy enterprise suites like <strong>Hootsuite</strong> ($99+/mo with mandatory annual lock-in), closed cloud schedulers like <strong>Publer</strong> ($12-$30/mo proprietary SaaS), and self-hosted open-source alternatives like <strong>Mixpost</strong> (PHP/Laravel with $29-$149 commercial license restrictions) and <strong>Postiz</strong> (Node.js/Prisma with $29-$99 cloud pricing).
           </p>
           <p className="text-sm sm:text-base text-white/70 leading-relaxed">
-            <strong>Hookpost</strong> combines the best of both worlds: 100% open-source under the AGPLv3 license with zero paid feature gates, modern TypeScript/Next.js microservices, native Model Context Protocol (MCP) server integration for Claude &amp; Cursor, and localized payment rails (Razorpay UPI &amp; Cards) starting at $0 free forever and $9/mo pro.
+            <strong>Hookpost</strong> combines the best of both worlds: 100% open-source under the AGPLv3 license with zero paid feature gates, modern TypeScript/Next.js microservices, native Model Context Protocol (MCP) server integration for Claude &amp; Cursor, and localized payment rails (Razorpay UPI &amp; Cards) starting at $0 free forever and $15/mo pro.
           </p>
         </section>
 
@@ -423,19 +423,19 @@ export default function PostizAlternativePage() {
                 <tr className="hover:bg-white/[0.02]">
                   <td className="p-4 font-semibold text-white">Starter Tier</td>
                   <td className="p-4 font-mono">$29 / month (5 channels)</td>
-                  <td className="p-4 text-white bg-[#FF4CE2]/5 font-bold">$9 / mo (₹699 with UPI)</td>
+                  <td className="p-4 text-white bg-[#FF4CE2]/5 font-bold">$15/mo (₹599 with UPI)</td>
                   <td className="p-4 text-emerald-400 font-semibold">Save $20/mo (69%)</td>
                 </tr>
                 <tr className="hover:bg-white/[0.02]">
                   <td className="p-4 font-semibold text-white">Growth Tier</td>
                   <td className="p-4 font-mono">$39 / month (10 channels)</td>
-                  <td className="p-4 text-white bg-[#FF4CE2]/5 font-bold">$9 / mo (Standard, 5 channels)</td>
+                  <td className="p-4 text-white bg-[#FF4CE2]/5 font-bold">$15/mo (Standard, 5 channels)</td>
                   <td className="p-4 text-emerald-400 font-semibold">Save $30/mo (77%)</td>
                 </tr>
                 <tr className="hover:bg-white/[0.02]">
                   <td className="p-4 font-semibold text-white">Pro Tier</td>
                   <td className="p-4 font-mono">$49 / month (15 channels)</td>
-                  <td className="p-4 text-white bg-[#FF4CE2]/5 font-bold">$9 / mo (MCP Server + Copilot)</td>
+                  <td className="p-4 text-white bg-[#FF4CE2]/5 font-bold">$15/mo (MCP Server + Copilot)</td>
                   <td className="p-4 text-emerald-400 font-semibold">Save $40/mo (82%)</td>
                 </tr>
                 <tr className="hover:bg-white/[0.02]">
@@ -469,7 +469,7 @@ export default function PostizAlternativePage() {
               </h3>
               <ul className="space-y-2 text-sm text-neutral-300">
                 <li className="flex justify-between py-1.5 border-b border-white/5">
-                  <span className="text-emerald-400 font-semibold">Hookpost Cloud Standard ($9/mo):</span>
+                  <span className="text-emerald-400 font-semibold">Hookpost Cloud Standard ($15/mo):</span>
                   <span className="font-mono text-white font-bold">$324 total</span>
                 </li>
                 <li className="flex justify-between py-1.5 border-b border-white/5">

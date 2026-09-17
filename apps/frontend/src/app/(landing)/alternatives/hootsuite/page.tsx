@@ -26,7 +26,7 @@ export const metadata: Metadata = {
 
 export default function HootsuiteAlternativePage() {
   const comparisonData = [
-    { feature: "Starting Monthly Price", hookpost: "₹0 Free Tier / ₹699 ($9/mo)", hootsuite: "$99 / user / month, billed annually (no free tier)", winner: "Hookpost" },
+    { feature: "Starting Monthly Price", hookpost: "₹0 Free Tier / ₹599 ($15/mo)", hootsuite: "$99 / user / month, billed annually (no free tier)", winner: "Hookpost" },
     { feature: "Supported Social Channels", hookpost: "18 Networks (Instagram, X, YouTube, LinkedIn, Pinterest, Threads, Bluesky, Facebook, Discord...)", hootsuite: "5-10 Networks", winner: "Hookpost" },
     { feature: "Self-Hostable (Docker / Local)", hookpost: "✅ 100% Open-Source & Self-Hostable", hootsuite: "❌ Closed Proprietary SaaS Only", winner: "Hookpost" },
     { feature: "AI Post & Reel Copilot", hookpost: "✅ Included with Hooks, Captions & Hashtags", hootsuite: "⚠️ Paid Add-on (OwlyWriter AI)", winner: "Hookpost" },
@@ -73,7 +73,7 @@ export default function HootsuiteAlternativePage() {
         name: "Why is Hookpost the best free alternative to Hootsuite?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "Hootsuite eliminated its free tier and instituted a steep $99/month minimum price. Hookpost provides a permanent $0 free tier, support for 18 social networks, full open-source self-hosting rights, and pro plans starting at just $9/mo (₹699/mo) with native UPI, NetBanking, and card support via Razorpay.",
+          text: "Hootsuite eliminated its free tier and instituted a steep $99/month minimum price. Hookpost provides a permanent $0 free tier, support for 18 social networks, full open-source self-hosting rights, and pro plans starting at just $15/mo (₹599/mo) with native UPI, NetBanking, and card support via Razorpay.",
         },
       },
       {

@@ -135,7 +135,7 @@ export default function MixpostAlternativePage() {
     {
       name: "How does pricing compare between Hookpost and Mixpost?",
       acceptedAnswer: {
-        text: "Hookpost offers a free cloud tier (2 channels, 30 posts/mo) and transparent flat plans starting at ₹699/month with Razorpay (UPI, NetBanking, Cards) and zero per-channel fees. Mixpost operates on a split model: an open-source Lite version with limited features, and a commercial Pro license ($149-$299/year) that requires your own server hosting costs.",
+        text: "Hookpost offers a free cloud tier (2 channels, 30 posts/mo) and transparent flat plans starting at ₹599/month with Razorpay (UPI, NetBanking, Cards) and zero per-channel fees. Mixpost operates on a split model: an open-source Lite version with limited features, and a commercial Pro license ($149-$299/year) that requires your own server hosting costs.",
       },
     },
     {

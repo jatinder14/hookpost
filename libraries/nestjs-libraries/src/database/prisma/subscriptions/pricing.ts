@@ -212,9 +212,16 @@ const TIER_LIMITS = {
     generate_videos: 10,
   },
   PRO: {
-    channel: 30,
-    posts_per_month: 5000,
-    ai_generation_count: 2500,
+    // 20, not 30: the add-channel screen offers 20 platforms, so quoting 30
+    // reads as "30 platforms" to anyone who has not read the channel FAQ.
+    channel: 20,
+    // 2,000 not 5,000. 5,000 across 30 channels is 5.6 posts per channel per
+    // day, which the platforms themselves would treat as spam - LinkedIn's
+    // Community Management dev tier alone is 500 calls/day. A quota nobody can
+    // reach is not generosity, it is a number that invites a support ticket.
+    // 2,000 over 20 channels is 3.3/day, the same intensity as Standard.
+    posts_per_month: 2000,
+    ai_generation_count: 1500,
     image_generation_count: 150,
     community_features: true,
     team_members: true,

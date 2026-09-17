@@ -144,6 +144,7 @@ export const PricingPlans = ({
       features: [
         `${activePricing.FREE.channel} channels`,
         `${activePricing.FREE.posts_per_month} posts / month`,
+        activePricing.FREE.team_members ? 'Unlimited team members' : 'Just you - 1 user',
         'Visual calendar',
         'Public API',
       ],
@@ -164,6 +165,7 @@ export const PricingPlans = ({
       features: [
         `${activePricing.STANDARD.channel} channels`,
         `${activePricing.STANDARD.posts_per_month.toLocaleString(locale)} posts / month`,
+        activePricing.STANDARD.team_members ? 'Unlimited team members' : 'Just you - 1 user',
         `${activePricing.STANDARD.ai_generation_count.toLocaleString(locale)} AI text generations`,
         `${activePricing.STANDARD.image_generation_count} AI images · ${activePricing.STANDARD.generate_videos} AI videos`,
         `${activePricing.STANDARD.webhooks} webhooks`,
@@ -185,6 +187,7 @@ export const PricingPlans = ({
       features: [
         `${activePricing.PRO.channel} channels`,
         `${activePricing.PRO.posts_per_month.toLocaleString(locale)} posts / month`,
+        activePricing.PRO.team_members ? 'Unlimited team members' : 'Just you - 1 user',
         `${activePricing.PRO.ai_generation_count.toLocaleString(locale)} AI text generations`,
         `${activePricing.PRO.image_generation_count} AI images · ${activePricing.PRO.generate_videos} AI videos`,
         `${activePricing.PRO.webhooks} webhooks`,
@@ -231,18 +234,19 @@ export const PricingPlans = ({
           )}
         </div>
 
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+        <div className="flex flex-col items-center gap-6 text-center">
           <div>
             <h2 className="text-3xl font-extrabold tracking-tight font-jakarta sm:text-4xl text-balance">
               Flat pricing, per plan — not per channel
             </h2>
-            <p className="mt-3 max-w-[60ch] text-white/60">
+            <p className="mt-3 mx-auto max-w-[60ch] text-white/60">
               No setup fee and no per-channel charge. Pay by {paymentMethodText}.
             </p>
           </div>
 
-          {/* Dynamic Currency Switcher with Strict Geo-Isolation */}
-          <div className="inline-flex items-center self-start md:self-auto rounded-xl border border-white/15 bg-black/40 p-1.5 backdrop-blur-md">
+          {/* Currency switcher sits under the heading, centred with it, rather
+              than floating off to the right of a three-card row. */}
+          <div className="inline-flex items-center rounded-xl border border-white/15 bg-black/40 p-1.5 backdrop-blur-md">
             {isIndian ? (
               // Indian visitors see INR with USD option
               <>
@@ -315,7 +319,7 @@ export const PricingPlans = ({
           </div>
         </div>
 
-        <div className="mt-12 grid gap-6 md:grid-cols-2 xl:grid-cols-4">
+        <div className="mx-auto mt-12 grid max-w-[1100px] gap-6 md:grid-cols-2 lg:grid-cols-3">
           {plans.map((p) => (
             <div
               key={p.name}
@@ -384,9 +388,12 @@ export const PricingPlans = ({
           ))}
         </div>
 
-        <p className="mt-8 text-sm text-white/60">
-          Ultimate is {sym}{activePricing.ULTIMATE.month_price.toLocaleString(locale)} for 100 channels and 15,000 posts a month.
-          Each connected profile or page counts as one channel.
+        {/* Ultimate is no longer sold (PURCHASABLE_TIERS), so it is not
+            advertised here. Existing Ultimate subscribers keep their plan. */}
+        <p className="mx-auto mt-8 max-w-[70ch] text-center text-sm text-white/60">
+          Each connected profile or page counts as one channel, so three Facebook
+          pages use three of them. Need more than {activePricing.PRO.channel}?
+          Email us and we will size a plan around you.
         </p>
       </div>
     </section>

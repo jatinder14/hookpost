@@ -1,5 +1,17 @@
 import { MetadataRoute } from 'next';
 
+// Paths no crawler should fetch. Kept in one constant because it has to appear
+// in EVERY user-agent group - see the note on the named-agent group below.
+const PRIVATE_PATHS = [
+  '/api/',
+  '/admin/',
+  '/settings/',
+  '/analytics/',
+  '/media/',
+  '/launches/',
+  '/cdn-cgi/',
+];
+
 export default function robots(): MetadataRoute.Robots {
   const baseUrl = 'https://hookpost.hookstep.in';
 
@@ -32,15 +44,7 @@ export default function robots(): MetadataRoute.Robots {
           '/llms-full.txt',
           '/.well-known/',
         ],
-        disallow: [
-          '/api/',
-          '/admin/',
-          '/settings/',
-          '/analytics/',
-          '/media/',
-          '/launches/',
-          '/cdn-cgi/',
-        ],
+        disallow: PRIVATE_PATHS,
       },
       {
         userAgent: [
@@ -74,6 +78,14 @@ export default function robots(): MetadataRoute.Robots {
           'meta-externalagent',
         ],
         allow: '/',
+        // The same disallow list, repeated on purpose. A crawler obeys ONLY its
+        // most specific matching group, so naming Googlebot here meant it never
+        // read the '*' group's disallows at all - it was free to crawl /api/,
+        // /admin/, /settings/ and /launches/. /api/mcp answers 401, which is
+        // exactly the "Blocked due to unauthorised request (401)" that Search
+        // Console started reporting. Naming an agent to grant it access silently
+        // revokes every restriction you set for everyone.
+        disallow: PRIVATE_PATHS,
       },
     ],
     sitemap: `${baseUrl}/sitemap.xml`,

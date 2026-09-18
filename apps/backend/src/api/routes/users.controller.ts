@@ -130,7 +130,7 @@ export class UsersController {
         ? false
         : organization?.isTrailing,
       allowTrial: organization?.allowTrial,
-      streakSince: organization?.streakSince || null,
+      streakSince: await this._orgService.getStreakStart(organization.id),
       publicApi:
         // @ts-ignore
         organization?.users[0]?.role === 'SUPERADMIN' ||

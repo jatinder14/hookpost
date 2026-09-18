@@ -10,8 +10,70 @@ export class OrganizationRepository {
   constructor(
     private _organization: PrismaRepository<'organization'>,
     private _userOrg: PrismaRepository<'userOrganization'>,
-    private _user: PrismaRepository<'user'>
+    private _user: PrismaRepository<'user'>,
+    private _post: PrismaRepository<'post'>
   ) {}
+
+  // The stored `streakSince` is set when a post publishes and cleared 24h later
+  // by a Temporal workflow that sleeps through the whole day. If that workflow
+  // is lost - a worker restart, a deploy landing mid-sleep - nothing ever
+  // clears it, and the badge counts elapsed days forever whether or not anyone
+  // posted. On 2026-09-18 two of the three live streaks were exactly that: org
+  // "testing" showed 13 days with its last publish 11 days earlier, and
+  // "JR Consulting" showed 12 days having published nothing for 12.
+  //
+  // A streak is a fact about the posting history, so derive it instead of
+  // storing it. Returns the first day of the current run of consecutive days
+  // with at least one published post, or null when the run is already broken
+  // (nothing published today or yesterday).
+  async getStreakStart(organizationId: string): Promise<Date | null> {
+    const WINDOW_DAYS = 120;
+    const since = new Date(Date.now() - WINDOW_DAYS * 86400000);
+
+    const posts = await this._post.model.post.findMany({
+      where: {
+        organizationId,
+        state: 'PUBLISHED',
+        deletedAt: null,
+        parentPostId: null,
+        publishDate: { gte: since },
+      },
+      select: { publishDate: true },
+      orderBy: { publishDate: 'desc' },
+    });
+
+    if (!posts.length) {
+      return null;
+    }
+
+    const dayKey = (d: Date) => d.toISOString().slice(0, 10);
+    const published = new Set(posts.map((p) => dayKey(p.publishDate)));
+
+    const today = new Date();
+    // A streak stays alive all of the following day, so it only breaks once a
+    // whole day has passed with nothing published.
+    let cursor = published.has(dayKey(today))
+      ? today
+      : new Date(today.getTime() - 86400000);
+
+    if (!published.has(dayKey(cursor))) {
+      return null;
+    }
+
+    let start = cursor;
+    while (true) {
+      const previous = new Date(cursor.getTime() - 86400000);
+      if (!published.has(dayKey(previous))) {
+        break;
+      }
+      start = previous;
+      cursor = previous;
+    }
+
+    // midnight UTC of the first day in the run, so the frontend's
+    // floor(diff / 1 day) + 1 counts whole days
+    return new Date(`${dayKey(start)}T00:00:00.000Z`);
+  }
 
   createMaxUser(id: string, name: string, saasName: string, email: string) {
     return this._organization.model.organization.create({

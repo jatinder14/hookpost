@@ -38,6 +38,7 @@ import { makeId } from '@hookpost/nestjs-libraries/services/make.is';
 import { ExistingDataContextProvider } from '@hookpost/frontend/components/launches/helpers/use.existing.data';
 import { useT } from '@hookpost/react/translation/get.transation.service.client';
 import { hasExtension } from '@hookpost/helpers/utils/has.extension';
+import { sanitizeRichContent } from '@hookpost/helpers/utils/sanitize.post.content';
 
 export const AgentChat: FC = () => {
   const { backendUrl } = useVariables();
@@ -72,7 +73,9 @@ export const AgentChat: FC = () => {
             className="w-full h-full"
             labels={{
               title: t('your_assistant', 'Your Assistant'),
-              initial: t('agent_welcome_message', `Hello, I am your Hookpost agent 🙌🏻.
+              initial: t(
+                'agent_welcome_message',
+                `Hello, I am your Hookpost agent 🙌🏻.
               
 I can schedule a post or multiple posts to multiple channels and generate pictures and videos.
 
@@ -81,7 +84,8 @@ You can select the channels you want to use from the left menu.
 You can see your previous conversations from the right menu.
 
 You can also use me as an MCP Server, check Settings >> Public API
-`),
+`
+              ),
             }}
             UserMessage={Message}
             Input={NewInput}
@@ -150,22 +154,32 @@ const LoadMessages: FC<{ id: string }> = ({ id }) => {
 
 const Message: FC<UserMessageProps> = (props) => {
   const convertContentToImagesAndVideo = useMemo(() => {
-    return (props.message?.content || '')
-      .replace(/Video: (http.*mp4\n)/g, (match, p1) => {
-        return `<video controls class="h-[150px] w-[150px] rounded-[8px] mb-[10px]"><source src="${p1.trim()}" type="video/mp4">Your browser does not support the video tag.</video>`;
-      })
-      .replace(/Image: (http.*\n)/g, (match, p1) => {
-        return `<img src="${p1.trim()}" class="h-[150px] w-[150px] max-w-full border border-newBgColorInner" />`;
-      })
-      .replace(/\[\-\-Media\-\-\](.*)\[\-\-Media\-\-\]/g, (match, p1) => {
-        return `<div class="flex justify-center mt-[20px]">${p1}</div>`;
-      })
-      .replace(
-        /(\[--integrations--\][\s\S]*?\[--integrations--\])/g,
-        (match, p1) => {
-          return ``;
-        }
-      );
+    // The message body is injected as HTML below, so anything the chat did not
+    // build itself (a user message, or model output echoing a user's text) has
+    // to be neutralised first - otherwise `<img src=x onerror=...>` typed into
+    // the chat runs. Sanitize BEFORE the markers are expanded so the tags this
+    // function adds survive, and again after, so a marker's captured group
+    // cannot smuggle markup back in.
+    const safe = sanitizeRichContent(props.message?.content || '');
+
+    return sanitizeRichContent(
+      safe
+        .replace(/Video: (http.*mp4\n)/g, (match, p1) => {
+          return `<video controls class="h-[150px] w-[150px] rounded-[8px] mb-[10px]"><source src="${p1.trim()}" type="video/mp4">Your browser does not support the video tag.</video>`;
+        })
+        .replace(/Image: (http.*\n)/g, (match, p1) => {
+          return `<img src="${p1.trim()}" class="h-[150px] w-[150px] max-w-full border border-newBgColorInner" />`;
+        })
+        .replace(/\[\-\-Media\-\-\](.*)\[\-\-Media\-\-\]/g, (match, p1) => {
+          return `<div class="flex justify-center mt-[20px]">${p1}</div>`;
+        })
+        .replace(
+          /(\[--integrations--\][\s\S]*?\[--integrations--\])/g,
+          (match, p1) => {
+            return ``;
+          }
+        )
+    );
   }, [props.message?.content]);
   return (
     <div

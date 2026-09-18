@@ -5,6 +5,7 @@ import { stripHtmlValidation } from '@hookpost/helpers/utils/strip.html.validati
 import { textSlicer } from '@hookpost/helpers/utils/count.length';
 import { FC } from 'react';
 import { VideoOrImage } from '@hookpost/react/helpers/video.or.image';
+import { sanitizePostContent } from '@hookpost/helpers/utils/sanitize.post.content';
 
 const Icons = () => {
   return (
@@ -320,7 +321,7 @@ export const LinkedinPreview: FC<{
       <div
         className="text-[14px] font-[400] whitespace-pre-line"
         dangerouslySetInnerHTML={{
-          __html: renderContent?.[0]?.text,
+          __html: sanitizePostContent(renderContent?.[0]?.text),
         }}
       />
       {!!renderContent?.[0]?.images?.length && (
@@ -454,7 +455,7 @@ export const LinkedinPreview: FC<{
                   <div
                     className="whitespace-pre-line text-[14px] font-[400]"
                     dangerouslySetInnerHTML={{
-                      __html: value.text,
+                      __html: sanitizePostContent(value.text),
                     }}
                   />
                   <div className="flex gap-[6px] font-[400] text-[12px] text-textLinkedin items-center">

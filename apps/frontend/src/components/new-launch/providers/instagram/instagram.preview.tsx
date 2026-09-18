@@ -6,6 +6,7 @@ import { textSlicer } from '@hookpost/helpers/utils/count.length';
 import { FC } from 'react';
 import { VideoOrImage } from '@hookpost/react/helpers/video.or.image';
 import { SliderComponent } from '@hookpost/frontend/components/third-parties/slider.component';
+import { sanitizePostContent } from '@hookpost/helpers/utils/sanitize.post.content';
 
 export const InstagramPreview: FC<{
   maximumCharacters?: number;
@@ -84,7 +85,7 @@ export const InstagramPreview: FC<{
       <div
         className="text-[14px] font-[400] whitespace-pre-line"
         dangerouslySetInnerHTML={{
-          __html: renderContent?.[0]?.text,
+          __html: sanitizePostContent(renderContent?.[0]?.text),
         }}
       />
       <div className="py-[8px] text-textColor flex text-[14px] font-[700] gap-[10.5px]">
@@ -183,7 +184,7 @@ export const InstagramPreview: FC<{
                     <div
                       className="whitespace-pre-line text-[14px] font-[400] flex-1"
                       dangerouslySetInnerHTML={{
-                        __html: value.text,
+                        __html: sanitizePostContent(value.text),
                       }}
                     />
                     <div>

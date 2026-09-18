@@ -8,6 +8,7 @@ import { getPresetBackground } from '@hookpost/frontend/components/new-launch/pr
 import { FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 import { VideoOrImage } from '@hookpost/react/helpers/video.or.image';
+import { sanitizePostContent } from '@hookpost/helpers/utils/sanitize.post.content';
 
 const Icons = () => {
   return (
@@ -156,14 +157,14 @@ export const FacebookPreview: FC<{
           className="-mx-[15px] min-h-[320px] flex items-center justify-center text-center px-[32px] py-[32px] text-[28px] font-[700] leading-[36px] whitespace-pre-line break-words"
           style={{ background: background.background, color: background.text }}
           dangerouslySetInnerHTML={{
-            __html: renderContent?.[0]?.text,
+            __html: sanitizePostContent(renderContent?.[0]?.text),
           }}
         />
       ) : (
         <div
           className="text-[14px] font-[400] whitespace-pre-line"
           dangerouslySetInnerHTML={{
-            __html: renderContent?.[0]?.text,
+            __html: sanitizePostContent(renderContent?.[0]?.text),
           }}
         />
       )}
@@ -297,7 +298,7 @@ export const FacebookPreview: FC<{
                     <div
                       className="whitespace-pre-line text-[14px] font-[400]"
                       dangerouslySetInnerHTML={{
-                        __html: value.text,
+                        __html: sanitizePostContent(value.text),
                       }}
                     />
                     {!!value.images?.length && (

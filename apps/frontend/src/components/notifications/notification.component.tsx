@@ -8,6 +8,7 @@ import dayjs from 'dayjs';
 import { useClickAway } from '@uidotdev/usehooks';
 import ReactLoading from '@hookpost/frontend/components/layout/loading';
 import { useT } from '@hookpost/react/translation/get.transation.service.client';
+import { sanitizePostContent } from '@hookpost/helpers/utils/sanitize.post.content';
 function replaceLinks(text: string) {
   const urlRegex =
     /(\bhttps?:\/\/[-A-Z0-9+&@#/%?=~_|!:,.;]*[-A-Z0-9+&@#/%=~_|])/gi;
@@ -40,7 +41,7 @@ export const ShowNotification: FC<{
       <div
         className="break-words"
         dangerouslySetInnerHTML={{
-          __html: replaceLinks(notification.content),
+          __html: sanitizePostContent(replaceLinks(notification.content)),
         }}
       />
       <div
@@ -65,9 +66,7 @@ export const NotificationOpenComponent = () => {
       id="notification-popup"
       className="opacity-0 animate-normalFadeDown mt-[10px] absolute w-[420px] min-h-[200px] top-[100%] end-0 bg-third text-textColor rounded-[16px] flex flex-col border border-tableBorder z-[600]"
     >
-      <div
-        className={`p-[16px] border-b border-tableBorder font-bold`}
-      >
+      <div className={`p-[16px] border-b border-tableBorder font-bold`}>
         {t('notifications', 'Notifications')}
       </div>
 

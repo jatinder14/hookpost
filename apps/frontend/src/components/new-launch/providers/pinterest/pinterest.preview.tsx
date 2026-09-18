@@ -4,6 +4,7 @@ import { stripHtmlValidation } from '@hookpost/helpers/utils/strip.html.validati
 import { textSlicer } from '@hookpost/helpers/utils/count.length';
 import { VideoOrImage } from '@hookpost/react/helpers/video.or.image';
 import { useMediaDirectory } from '@hookpost/react/helpers/use.media.directory';
+import { sanitizePostContent } from '@hookpost/helpers/utils/sanitize.post.content';
 
 export const PinterestPreview: FC<{
   maximumCharacters?: number;
@@ -153,7 +154,9 @@ export const PinterestPreview: FC<{
       </div>
       <div
         className="mt-[13px] whitespace-pre-line"
-        dangerouslySetInnerHTML={{ __html: renderContent?.[0]?.text || '' }}
+        dangerouslySetInnerHTML={{
+          __html: sanitizePostContent(renderContent?.[0]?.text),
+        }}
       ></div>
     </div>
   );

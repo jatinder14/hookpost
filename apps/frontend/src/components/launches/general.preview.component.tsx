@@ -7,6 +7,7 @@ import { textSlicer } from '@hookpost/helpers/utils/count.length';
 import SafeImage from '@hookpost/react/helpers/safe.image';
 import { useLaunchStore } from '@hookpost/frontend/components/new-launch/store';
 import { stripHtmlValidation } from '@hookpost/helpers/utils/strip.html.validation';
+import { sanitizePostContent } from '@hookpost/helpers/utils/sanitize.post.content';
 
 export const GeneralPreviewComponent: FC<{
   maximumCharacters?: number;
@@ -113,7 +114,7 @@ export const GeneralPreviewComponent: FC<{
               <div
                 className={clsx('text-wrap whitespace-pre', 'preview')}
                 dangerouslySetInnerHTML={{
-                  __html: value.text,
+                  __html: sanitizePostContent(value.text),
                 }}
               />
               {!!value?.images?.length && (

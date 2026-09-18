@@ -5,6 +5,7 @@ import { useMediaDirectory } from '@hookpost/react/helpers/use.media.directory';
 import { stripHtmlValidation } from '@hookpost/helpers/utils/strip.html.validation';
 import { textSlicer } from '@hookpost/helpers/utils/count.length';
 import { VideoOrImage } from '@hookpost/react/helpers/video.or.image';
+import { sanitizePostContent } from '@hookpost/helpers/utils/sanitize.post.content';
 
 export const YoutubePreview: FC<{
   maximumCharacters?: number;
@@ -142,7 +143,9 @@ export const YoutubePreview: FC<{
       </div>
       <div
         className="bg-youtubeBgAction rounded-[12px] p-[12px] text-[12px] font-[400] whitespace-pre-line"
-        dangerouslySetInnerHTML={{ __html: renderContent?.[0]?.text }}
+        dangerouslySetInnerHTML={{
+          __html: sanitizePostContent(renderContent?.[0]?.text),
+        }}
       />
     </div>
   );

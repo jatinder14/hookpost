@@ -76,6 +76,12 @@ export const SelectCurrent: FC = () => {
   const contentRef = useRef<HTMLDivElement>(null);
   const hasScroll = useHasScroll(contentRef);
 
+  // Nothing in the composer says a per-channel caption is possible: you only
+  // find out by clicking a channel tab. Hint at it while the globe is active
+  // and there is at least one channel to customise.
+  const showPerChannelHint =
+    current === 'global' && selectedIntegrations.length > 0;
+
   const removeSocial = useCallback(
     (sIntegration: Integrations) => async (e: any) => {
       e.stopPropagation();
@@ -195,8 +201,21 @@ export const SelectCurrent: FC = () => {
             </div>
           ))}
         </div>
+        {showPerChannelHint && (
+          <div className="mt-[6px] text-[11px] leading-[14px] text-[#A3A3A3]">
+            {t(
+              'per_channel_caption_hint',
+              'Writing for every channel at once. Click a channel above to give it its own caption.'
+            )}
+          </div>
+        )}
       </div>
-      <div className={clsx(hasScroll ? 'h-[55px]' : 'h-[40px]')} />
+      <div
+        className={clsx(
+          hasScroll ? 'h-[55px]' : 'h-[40px]',
+          showPerChannelHint && 'mb-[20px]'
+        )}
+      />
     </>
   );
 };

@@ -1,6 +1,17 @@
 import { getT } from '@hookpost/react/translation/get.translation.service.backend';
 
 export const dynamic = 'force-dynamic';
+
+// Search Console files /auth and /auth?provider=GITHUB as "Duplicate without
+// user-selected canonical": same login form, two URLs, and nothing on the page
+// saying which one counts. A login form has nothing to rank for either way, so
+// tell crawlers not to index it at all - they may still follow it, which is
+// what the OAuth flows need. The query-string variants then stop being
+// duplicates of anything.
+export const metadata = {
+  robots: { index: false, follow: true },
+};
+
 import { ReactNode } from 'react';
 import Link from 'next/link';
 import loadDynamic from 'next/dynamic';

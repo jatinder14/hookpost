@@ -136,6 +136,10 @@ interface StoreState {
   // the tab strip needs to show it BEFORE the user presses Post
   setSettingsInvalid: (id: string, invalid: boolean) => void;
   settingsInvalid: Record<string, boolean>;
+  // channels whose provider cannot post a first comment at all, so a comment
+  // written in global mode is silently dropped for them
+  setCommentless: (id: string, commentless: boolean) => void;
+  commentless: Record<string, boolean>;
   setComments: (comments: boolean | 'no-media') => void;
 }
 
@@ -160,6 +164,7 @@ const initialState = {
   internal: [] as Internal[],
   chars: {},
   settingsInvalid: {},
+  commentless: {},
 };
 
 export const useLaunchStore = create<StoreState>()((set) => ({
@@ -644,6 +649,17 @@ export const useLaunchStore = create<StoreState>()((set) => ({
             settingsInvalid: {
               ...state.settingsInvalid,
               [id]: invalid,
+            },
+          }
+    ),
+  setCommentless: (id: string, commentless: boolean) =>
+    set((state) =>
+      state.commentless[id] === commentless
+        ? state
+        : {
+            commentless: {
+              ...state.commentless,
+              [id]: commentless,
             },
           }
     ),

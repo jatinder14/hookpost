@@ -135,6 +135,7 @@ export const EditorWrapper: FC<{
     selectedIntegration,
     chars,
     comments,
+    commentless,
   } = useLaunchStore(
     useShallow((state) => ({
       internal: state.internal.find((p) => p.integration.id === state.current),
@@ -168,7 +169,21 @@ export const EditorWrapper: FC<{
       setLoadedState: state.setLoaded,
       selectedIntegration: state.selectedIntegrations,
       chars: state.chars,
+      commentless: state.commentless,
     }))
+  );
+
+  // Channels that cannot take a first comment at all (YouTube, Pinterest).
+  // In global mode the comment box is shown for everyone, so without this the
+  // comment is written once and silently dropped for them at publish time.
+  const commentlessNames = useMemo(
+    () =>
+      current === 'global'
+        ? selectedIntegration
+            .filter(({ integration }) => commentless[integration.id])
+            .map(({ integration }) => integration.name)
+        : [],
+    [current, selectedIntegration, commentless]
   );
 
   const existingData = useExistingData();
@@ -464,6 +479,21 @@ export const EditorWrapper: FC<{
                               postComment={postComment}
                             />
                           )}
+                          {comments &&
+                            index > 0 &&
+                            commentlessNames.length > 0 && (
+                              <div className="mt-[8px] text-[12px] text-[#FEC84B]">
+                                {t(
+                                  'comment_not_supported_on',
+                                  'This will not be added on'
+                                )}{' '}
+                                {commentlessNames.join(', ')} —{' '}
+                                {t(
+                                  'comment_not_supported_reason',
+                                  'they do not support posting a comment from an app.'
+                                )}
+                              </div>
+                            )}
                         </div>
                         {!!internal && !existingData?.integration && (
                           <div

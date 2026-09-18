@@ -80,6 +80,7 @@ export const withProvider = function <T extends object>(params: {
       setComments,
       setHide,
       setSettingsInvalid,
+      setCommentless,
     } = useLaunchStore(
       useShallow((state) => ({
         date: state.date,
@@ -100,6 +101,7 @@ export const withProvider = function <T extends object>(params: {
         setEditor: state.setEditor,
         setChars: state.setChars,
         setSettingsInvalid: state.setSettingsInvalid,
+        setCommentless: state.setCommentless,
         selectedIntegration: state.selectedIntegrations.find(
           (p) => p.integration.id === props.id
         ),
@@ -195,6 +197,19 @@ export const withProvider = function <T extends object>(params: {
         setSettingsInvalid(props.id, false);
       };
     }, [props.id, settingsValid]);
+
+    // `params.comments: false` already hides the comment box on THIS channel's
+    // own tab, but a comment written in global mode is accepted for everyone
+    // and then dropped for these channels with no warning at all - the backend
+    // only asks `isCommentable` (does the provider implement comment()) once
+    // it is already publishing. Publish it so the editor can say so up front.
+    useEffect(() => {
+      setCommentless(props.id, params.comments === false);
+
+      return () => {
+        setCommentless(props.id, false);
+      };
+    }, [props.id]);
 
     useImperativeHandle(
       ref,

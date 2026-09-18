@@ -37,6 +37,8 @@ export const viewport: Viewport = {
 import { Suspense } from 'react';
 import UtmSaver from '@hookpost/helpers/utils/utm.saver';
 import { ViewContentTracker } from '@hookpost/frontend/components/layout/view-content.tracker';
+import { FacebookComponent } from '@hookpost/frontend/components/layout/facebook.component';
+import { GoogleTagManagerComponent } from '@hookpost/frontend/components/layout/gtm.component';
 import { PUBLISHABLE_CHANNEL_COUNT } from './channels/channel-count';
 
 export const metadata: Metadata = {
@@ -50,8 +52,7 @@ export const metadata: Metadata = {
     default: 'Hookpost: Open-Source AI Social Media Scheduler',
     template: '%s',
   },
-  description:
-    `Open-source social media scheduler for ${PUBLISHABLE_CHANNEL_COUNT} networks. Visual calendar, AI drafting, and an MCP server so Claude or Cursor can publish. Self-host with Docker.`,
+  description: `Open-source social media scheduler for ${PUBLISHABLE_CHANNEL_COUNT} networks. Visual calendar, AI drafting, and an MCP server so Claude or Cursor can publish. Self-host with Docker.`,
   keywords: [
     // Brand & Direct Competitor Search Terms
     'hookpost hookstep',
@@ -122,7 +123,7 @@ export const metadata: Metadata = {
   alternates: {
     canonical: 'https://hookpost.hookstep.in',
     languages: {
-      'en': 'https://hookpost.hookstep.in',
+      en: 'https://hookpost.hookstep.in',
       'en-US': 'https://hookpost.hookstep.in',
       'en-GB': 'https://hookpost.hookstep.in',
       'en-CA': 'https://hookpost.hookstep.in',
@@ -130,21 +131,21 @@ export const metadata: Metadata = {
       'en-IN': 'https://hookpost.hookstep.in',
       'en-NZ': 'https://hookpost.hookstep.in',
       'en-ZA': 'https://hookpost.hookstep.in',
-      'es': 'https://hookpost.hookstep.in',
+      es: 'https://hookpost.hookstep.in',
       'es-ES': 'https://hookpost.hookstep.in',
       'es-MX': 'https://hookpost.hookstep.in',
-      'pt': 'https://hookpost.hookstep.in',
+      pt: 'https://hookpost.hookstep.in',
       'pt-BR': 'https://hookpost.hookstep.in',
-      'de': 'https://hookpost.hookstep.in',
-      'fr': 'https://hookpost.hookstep.in',
-      'ja': 'https://hookpost.hookstep.in',
+      de: 'https://hookpost.hookstep.in',
+      fr: 'https://hookpost.hookstep.in',
+      ja: 'https://hookpost.hookstep.in',
       'x-default': 'https://hookpost.hookstep.in',
     },
   },
   openGraph: {
-    title: 'Hookpost — Open-Source Social Media Scheduler & AI Management Platform',
-    description:
-      `Manage, schedule, and auto-publish across ${PUBLISHABLE_CHANNEL_COUNT} social networks with AI copilot, drag-and-drop calendar, and team workflows. Free and self-hostable.`,
+    title:
+      'Hookpost — Open-Source Social Media Scheduler & AI Management Platform',
+    description: `Manage, schedule, and auto-publish across ${PUBLISHABLE_CHANNEL_COUNT} social networks with AI copilot, drag-and-drop calendar, and team workflows. Free and self-hostable.`,
     url: 'https://hookpost.hookstep.in',
     siteName: 'Hookpost',
     images: [
@@ -160,7 +161,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Hookpost — Open-Source Social Media Scheduler & AI Management Platform',
+    title:
+      'Hookpost — Open-Source Social Media Scheduler & AI Management Platform',
     description:
       'Schedule and auto-publish posts worldwide to Instagram, Pinterest, YouTube, LinkedIn, X, Facebook, and Threads.',
     images: ['https://hookpost.hookstep.in/og-image.png'],
@@ -180,14 +182,14 @@ export const metadata: Metadata = {
   },
 
   other: {
-    'coverage': 'Worldwide',
-    'distribution': 'Global',
-    'rating': 'General',
+    coverage: 'Worldwide',
+    distribution: 'Global',
+    rating: 'General',
     'revisit-after': '1 days',
-    'target': 'all',
+    target: 'all',
     // INR only. This previously listed eight currencies, of which just
     // this one can actually be charged - see the offers block below.
-    'priceCurrency': 'INR',
+    priceCurrency: 'INR',
   },
 };
 
@@ -220,8 +222,7 @@ const globalJsonLd = {
       // Disambiguation for entity resolution: says plainly what this is, in
       // the terms the colliding results are not about.
       alternateName: 'Hookpost Social Media Scheduler',
-      description:
-        `Hookpost is an open-source social media scheduling platform that publishes to ${PUBLISHABLE_CHANNEL_COUNT} networks from one calendar and ships a Model Context Protocol server for AI agents. It is not affiliated with any Shopify application of a similar name.`,
+      description: `Hookpost is an open-source social media scheduling platform that publishes to ${PUBLISHABLE_CHANNEL_COUNT} networks from one calendar and ships a Model Context Protocol server for AI agents. It is not affiliated with any Shopify application of a similar name.`,
       founder: {
         '@type': 'Person',
         name: 'Mohan Bhanushali',
@@ -230,7 +231,6 @@ const globalJsonLd = {
         // No sameAs: the only URLs available were the company's GitHub org
         // and LinkedIn page, and asserting those as a person's identity is
         // wrong. Add his personal LinkedIn/GitHub here when they exist.
-
       },
       contactPoint: {
         '@type': 'ContactPoint',
@@ -266,7 +266,8 @@ const globalJsonLd = {
         '@type': 'SearchAction',
         target: {
           '@type': 'EntryPoint',
-          urlTemplate: 'https://hookpost.hookstep.in/alternatives?q={search_term_string}',
+          urlTemplate:
+            'https://hookpost.hookstep.in/alternatives?q={search_term_string}',
         },
         'query-input': 'required name=search_term_string',
       },
@@ -282,7 +283,8 @@ const globalJsonLd = {
       '@id': 'https://hookpost.hookstep.in/#app',
       name: 'Hookpost: AI Social Scheduler',
       operatingSystem: 'All (any modern browser)',
-      browserRequirements: 'Requires JavaScript. Supports Chrome, Firefox, Safari, and Edge.',
+      browserRequirements:
+        'Requires JavaScript. Supports Chrome, Firefox, Safari, and Edge.',
       applicationCategory: 'BusinessApplication',
       url: 'https://hookpost.hookstep.in',
       softwareVersion: '1.0.0',
@@ -323,12 +325,29 @@ export default function LandingLayout({
       <head>
         <link rel="icon" href="/favicon.ico" sizes="any" />
         <link rel="icon" type="image/png" sizes="48x48" href="/favicon.png" />
-        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
-        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
-        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+        <link
+          rel="icon"
+          type="image/png"
+          sizes="32x32"
+          href="/favicon-32x32.png"
+        />
+        <link
+          rel="icon"
+          type="image/png"
+          sizes="16x16"
+          href="/favicon-16x16.png"
+        />
+        <link
+          rel="apple-touch-icon"
+          sizes="180x180"
+          href="/apple-touch-icon.png"
+        />
         <link rel="manifest" href="/site.webmanifest" />
         <meta name="theme-color" content="#05070a" />
-        <meta name="p:domain_verify" content="173f3dbe31873eabc4da7e0962f5a07f" />
+        <meta
+          name="p:domain_verify"
+          content="173f3dbe31873eabc4da7e0962f5a07f"
+        />
         <meta name="apple-mobile-web-app-title" content="Hookpost" />
         <meta name="application-name" content="Hookpost" />
         <meta name="format-detection" content="telephone=no" />
@@ -389,24 +408,28 @@ export default function LandingLayout({
           inert until NEXT_PUBLIC_FACEBOOK_PIXEL / NEXT_PUBLIC_GTM_ID exist.
         */}
         {/*
-          The Facebook pixel and Google Tag Manager are deliberately NOT mounted
-          on the marketing pages. Measured on the live homepage: gtm.js 114KB +
-          f.js 81KB + the pixel config 12KB came to 208KB - 46% of all
-          JavaScript on the page - and they were the only reason Best Practices
-          failed (third-party cookie) and the only remaining barrier to a
-          performance score in the 90s.
+          These were deliberately left off the marketing pages while nothing was
+          being spent: gtm.js 114KB + f.js 81KB + the pixel config 12KB measured
+          208KB on the live homepage, 46% of its JavaScript, and they were the
+          only reason Best Practices failed on third-party cookies. The note
+          left here said to put them back the day paid campaigns start, because
+          that is when match quality from the _fbp cookie is worth the weight.
 
-          Nothing is lost. Both still load under (app), which is where /auth and
-          every conversion actually happens, so CompleteRegistration,
-          InitiateCheckout, StartTrial and Purchase still fire client-side.
-          ViewContentTracker below posts to our own backend, which forwards to
-          Meta through the Conversions API with event-ID deduplication, so
-          top-of-funnel signal survives at zero page weight. UtmSaver still
-          captures attribution here and it persists to signup.
+          That day is 2026-09-18: Meta campaigns go live on these pages. Without
+          the pixel here the landing view carries no _fbp, so no retargeting
+          audience of visitors can be built at all and click attribution rests
+          entirely on the Conversions API. ViewContentTracker still sends the
+          server-side copy with event-ID deduplication, so the two do not double
+          count.
 
-          Put them back the day paid campaigns start and match quality from the
-          _fbp cookie is worth 208KB - not before.
+          If the campaigns are stopped, take these back out - the page weight is
+          only worth paying for while it is buying something.
         */}
+        <FacebookComponent />
+        <GoogleTagManagerComponent
+          gtmId={process.env.NEXT_PUBLIC_GTM_ID}
+          googleAdsId={process.env.NEXT_PUBLIC_GOOGLE_ADS_ID}
+        />
         {/*
           UtmSaver was mounted only in (app)/(provider)/(extension), never here.
           Paid traffic lands on these marketing pages carrying ?utm_source=...,

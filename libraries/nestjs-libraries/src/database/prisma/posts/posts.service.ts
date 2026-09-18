@@ -400,6 +400,18 @@ export class PostsService {
                 m.path.indexOf('http') === -1
                   ? process.env.UPLOAD_DIRECTORY + m.path
                   : m.path,
+              // The cover a user picks on a video is stored the same way as
+              // `path` - sometimes a bare key, sometimes a full URL - but it
+              // was handed to the providers untouched, so a relative one was
+              // useless to every platform that wants a cover URL.
+              ...(m.thumbnail
+                ? {
+                    thumbnail:
+                      m.thumbnail.indexOf('http') === -1
+                        ? process.env.UPLOAD_DIRECTORY + m.thumbnail
+                        : m.thumbnail,
+                  }
+                : {}),
             };
           })
           .map(async (m) => {
@@ -856,7 +868,10 @@ export class PostsService {
           errors = err?.message || 'Invalid media';
         }
 
-        const maximumCharacters = provider.maxLength(additionalSettings, settings);
+        const maximumCharacters = provider.maxLength(
+          additionalSettings,
+          settings
+        );
 
         const emptyContent = (post.value || []).some((a) => {
           const strip = stripHtmlValidation('normal', a.content || '', true);
@@ -905,7 +920,11 @@ export class PostsService {
   // the platform: require the explicit `republish` opt-in instead. The message
   // doubles as the confirmation dialog for API/MCP automation.
   private guardAgainstRepublish(
-    post: { state: State; publishDate: Date; integration?: { providerIdentifier: string } } | null,
+    post: {
+      state: State;
+      publishDate: Date;
+      integration?: { providerIdentifier: string };
+    } | null,
     source: 'createPost' | 'changeDate'
   ) {
     if (post?.state !== 'PUBLISHED') {
@@ -918,7 +937,9 @@ export class PostsService {
     throw new BadRequestException(
       `This post was already published on ${dayjs
         .utc(post.publishDate)
-        .format('YYYY-MM-DD HH:mm')} UTC. Saving it this way would publish it again to ${
+        .format(
+          'YYYY-MM-DD HH:mm'
+        )} UTC. Saving it this way would publish it again to ${
         post.integration?.providerIdentifier || 'the channel'
       }. To edit without republishing, ${howToUpdate}. To intentionally publish again, pass republish: true.`
     );

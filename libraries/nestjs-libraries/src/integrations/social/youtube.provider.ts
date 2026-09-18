@@ -446,7 +446,10 @@ export class YoutubeProvider extends SocialAbstract implements SocialProvider {
 
   // Resolves the total byte size of the media without loading it into memory:
   // a HEAD request for remote URLs, statSync for local files.
-  private async youtubeMediaSize(path: string, totalRetries = 0): Promise<number> {
+  private async youtubeMediaSize(
+    path: string,
+    totalRetries = 0
+  ): Promise<number> {
     if (path.indexOf('http') === 0) {
       // the media path is user-influenced, keep the SSRF-safe dispatcher that
       // this.fetch applies to every other outbound request. identity encoding
@@ -655,7 +658,12 @@ export class YoutubeProvider extends SocialAbstract implements SocialProvider {
           videoSize,
           path,
           uploadedBytes: 0,
-          thumbnail: settings?.thumbnail?.path || '',
+          // YouTube had its own per-channel thumbnail picker, so a cover set
+          // once on the video was ignored here and the upload fell back to
+          // frame 0 - black, for anything that fades in. Use the channel
+          // setting when there is one, else the video's own cover.
+          thumbnail:
+            settings?.thumbnail?.path || firstPost?.media?.[0]?.thumbnail || '',
         },
       },
     ];

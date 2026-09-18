@@ -940,6 +940,32 @@ export class FacebookProvider extends SocialAbstract implements SocialProvider {
 
       finalUrl = 'https://www.facebook.com/reel/' + videoId;
       finalId = videoId;
+
+      // Facebook picks its own cover (in practice the first frame, which is
+      // black for anything that fades in) unless a preferred thumbnail is
+      // uploaded afterwards - `/videos` itself only takes `thumb` as multipart
+      // and we post it as JSON with a file_url. Best-effort: the reel is
+      // already live, so a cover that fails to attach must not fail the post.
+      const cover = firstPost?.media?.[0]?.thumbnail;
+      if (cover) {
+        try {
+          const { data } = await this.getSsrfSafeAxios().get(cover, {
+            responseType: 'arraybuffer',
+          });
+
+          const form = new FormData();
+          form.append('source', new Blob([data]), 'cover');
+          form.append('is_preferred', 'true');
+
+          await this.fetch(
+            `https://graph.facebook.com/${META_GRAPH_API_VERSION}/${videoId}/thumbnails?access_token=${accessToken}`,
+            { method: 'POST', body: form },
+            'set video cover'
+          );
+        } catch (err) {
+          /**empty - the post is published, the cover is cosmetic**/
+        }
+      }
     } else {
       const uploadPhotos = !firstPost?.media?.length
         ? []

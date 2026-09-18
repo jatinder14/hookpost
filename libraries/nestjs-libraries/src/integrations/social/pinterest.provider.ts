@@ -114,8 +114,12 @@ export class PinterestProvider
     if ((firstItem?.length ?? 0) > 5) {
       return 'You can only have up to 5 media items';
     }
-    if (isMp4 && firstItem?.length !== 2 && !isPicture) {
-      return 'If posting a video you have to also include a cover image as second media';
+    // A cover set on the video itself (media settings -> Create Thumbnail) is
+    // the same picture Pinterest wants, so requiring a SECOND attachment as
+    // well was busywork - and the error said nothing about the cover the user
+    // may already have picked.
+    if (isMp4 && firstItem?.length !== 2 && !isPicture && !isMp4.thumbnail) {
+      return 'If posting a video, set a cover on it (Preview -> Create Thumbnail) or attach a cover image as second media';
     }
     if (isMp4 && (firstItem?.length ?? 0) > 2) {
       return 'If posting a video you can only have two media items';
@@ -205,7 +209,7 @@ export class PinterestProvider
     if (
       body.indexOf('does not have sufficient permissions') > -1 ||
       body.indexOf('Authentication failed') > -1 ||
-      body.indexOf('scope') > -1 && body.indexOf('insufficient') > -1
+      (body.indexOf('scope') > -1 && body.indexOf('insufficient') > -1)
     ) {
       return {
         type: 'refresh-token' as const,
@@ -420,7 +424,9 @@ export class PinterestProvider
             board: postDetails?.[0]?.settings.board,
           },
           imagePaths: (postDetails?.[0]?.media || []).map((m) => m.path),
-          coverPath: picture?.path,
+          // a separate cover attachment wins, otherwise use the cover set on
+          // the video itself
+          coverPath: picture?.path || findMp4?.thumbnail,
         } as PinterestPendingData,
       },
     ];

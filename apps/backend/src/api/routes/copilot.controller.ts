@@ -50,10 +50,26 @@ export class CopilotController {
       return;
     }
 
-    // This endpoint streams straight to OpenAI, so without a quota it is the
-    // one place a fixed-price plan can run up an unbounded bill. One credit
-    // per turn, same meter that already covers images and videos.
-    await this.consumeTextCredit(organization);
+    // CopilotKit talks to this one URL for everything, including the handshake
+    // it fires on EVERY app page load - it is mounted around the whole layout
+    // in new-layout/layout.component.tsx. Charging a credit for that had two
+    // consequences, both bad:
+    //
+    //   1. Opening the calendar spent an AI credit even if nobody typed.
+    //   2. Once the allowance hit zero - immediately, on FREE, which has
+    //      ai_generation_count: 0 - the handshake 402'd, CopilotKit errored,
+    //      and since it wraps the entire layout the channels sidebar and the
+    //      Create Post button never rendered. The calendar just span forever
+    //      while the database had 17 healthy channels.
+    //
+    // Only a real generation is billable. CopilotKit's GraphQL operation for
+    // that is generateCopilotResponse; availableAgents and loadAgentState are
+    // discovery calls that must stay free and must never 402, or the app is
+    // unusable for anyone without an AI quota.
+    const operation = (req.body as any)?.operationName;
+    if (operation === 'generateCopilotResponse') {
+      await this.consumeTextCredit(organization);
+    }
 
     const copilotRuntimeHandler = copilotRuntimeNodeHttpEndpoint({
       endpoint: '/copilot/chat',

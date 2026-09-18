@@ -53,6 +53,7 @@ export const ManageModal: FC<AddEditModalProps> = (props) => {
   const toaster = useToaster();
   const modal = useModals();
   const [showSettings, setShowSettings] = useState(false);
+  const [showPostNow, setShowPostNow] = useState(false);
   const { data: shortlinkPreferenceData } = useShortlinkPreference();
 
   const { addEditSets, mutate, customClose, dummy } = props;
@@ -637,13 +638,21 @@ export const ManageModal: FC<AddEditModalProps> = (props) => {
               </button>
             )}
             {!addEditSets && (
-              <div className="group cursor-pointer relative">
+              <div
+                className="group cursor-pointer relative flex"
+                onMouseLeave={() => setShowPostNow(false)}
+              >
                 <button
                   disabled={
                     selectedIntegrations.length === 0 || loading || locked
                   }
                   onClick={schedule('schedule')}
-                  className="text-white relative min-w-[180px] btnSub disabled:cursor-not-allowed disabled:opacity-80 outline-none gap-[8px] flex justify-center items-center h-[44px] rounded-[8px] bg-[#612BD3] ps-[20px] pe-[16px]"
+                  className={clsx(
+                    'text-white relative min-w-[180px] btnSub disabled:cursor-not-allowed disabled:opacity-80 outline-none gap-[8px] flex justify-center items-center h-[44px] bg-[#612BD3] ps-[20px]',
+                    dummy
+                      ? 'rounded-[8px] pe-[20px]'
+                      : 'rounded-s-[8px] pe-[12px]'
+                  )}
                 >
                   {loading && (
                     <div className="absolute left-[50%] top-[50%] -translate-y-[50%] -translate-x-[50%]">
@@ -666,20 +675,55 @@ export const ManageModal: FC<AddEditModalProps> = (props) => {
                       ? t('schedule', 'Schedule')
                       : t('update', 'Update')}
                   </div>
-                  {!dummy && (
-                    <div className="flex justify-center items-center h-[20px] w-[20px] pt-[4px] arrow-change">
-                      <DropdownArrowSmallIcon className="group-hover:rotate-180 text-white" />
-                    </div>
-                  )}
                 </button>
 
+                {/* The caret used to live INSIDE the button above, so clicking
+                    it to see the publishing options scheduled the post instead
+                    of opening them - and since "Post Now" only appeared on
+                    group-hover, that click was the natural way to reach it.
+                    It is its own toggle now, and the menu opens on hover or on
+                    the toggle, so it is reachable without a mouse too. */}
                 {!dummy && (
                   <button
-                    onClick={schedule('now')}
+                    type="button"
+                    aria-haspopup="menu"
+                    aria-expanded={showPostNow}
+                    aria-label={t(
+                      'more_publish_options',
+                      'More publishing options'
+                    )}
                     disabled={
                       selectedIntegrations.length === 0 || loading || locked
                     }
-                    className="rounded-[8px] z-[300] disabled:cursor-not-allowed disabled:opacity-80 hidden group-hover:flex absolute bottom-[100%] -left-[12px] p-[12px] w-[206px] bg-newBgColorInner"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      setShowPostNow((current) => !current);
+                    }}
+                    className="text-white btnSub disabled:cursor-not-allowed disabled:opacity-80 outline-none flex justify-center items-center h-[44px] w-[36px] rounded-e-[8px] bg-[#612BD3] arrow-change"
+                  >
+                    <DropdownArrowSmallIcon
+                      className={clsx(
+                        'text-white transition-transform',
+                        showPostNow ? 'rotate-180' : 'group-hover:rotate-180'
+                      )}
+                    />
+                  </button>
+                )}
+
+                {!dummy && (
+                  <button
+                    onClick={() => {
+                      setShowPostNow(false);
+                      return schedule('now')();
+                    }}
+                    disabled={
+                      selectedIntegrations.length === 0 || loading || locked
+                    }
+                    className={clsx(
+                      'rounded-[8px] z-[300] disabled:cursor-not-allowed disabled:opacity-80 absolute bottom-[100%] -left-[12px] p-[12px] w-[206px] bg-newBgColorInner',
+                      showPostNow ? 'flex' : 'hidden group-hover:flex'
+                    )}
                   >
                     <div className="text-white rounded-[8px] bg-[#D82D7E] h-[44px] w-full flex justify-center items-center post-now">
                       {t('post_now', 'Post Now')}

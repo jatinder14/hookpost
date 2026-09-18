@@ -132,6 +132,10 @@ interface StoreState {
   setLoaded?: (loaded: boolean) => void;
   setChars: (id: string, chars: number) => void;
   chars: Record<string, number>;
+  // which channel tabs have a required per-channel setting still unfilled -
+  // the tab strip needs to show it BEFORE the user presses Post
+  setSettingsInvalid: (id: string, invalid: boolean) => void;
+  settingsInvalid: Record<string, boolean>;
   setComments: (comments: boolean | 'no-media') => void;
 }
 
@@ -155,6 +159,7 @@ const initialState = {
   global: [] as Values[],
   internal: [] as Internal[],
   chars: {},
+  settingsInvalid: {},
 };
 
 export const useLaunchStore = create<StoreState>()((set) => ({
@@ -369,7 +374,10 @@ export const useLaunchStore = create<StoreState>()((set) => ({
           if (item.integration.id === integrationId) {
             const targetIndex = direction === 'up' ? index - 1 : index + 1;
 
-            if (targetIndex < 0 || targetIndex >= item.integrationValue.length) {
+            if (
+              targetIndex < 0 ||
+              targetIndex >= item.integrationValue.length
+            ) {
               return item;
             }
 
@@ -628,6 +636,17 @@ export const useLaunchStore = create<StoreState>()((set) => ({
         [id]: chars,
       },
     })),
+  setSettingsInvalid: (id: string, invalid: boolean) =>
+    set((state) =>
+      state.settingsInvalid[id] === invalid
+        ? state
+        : {
+            settingsInvalid: {
+              ...state.settingsInvalid,
+              [id]: invalid,
+            },
+          }
+    ),
   setComments: (comments: boolean | 'no-media') =>
     set((state) => ({
       comments,

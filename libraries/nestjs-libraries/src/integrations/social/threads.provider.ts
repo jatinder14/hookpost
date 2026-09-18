@@ -18,6 +18,7 @@ import { Plug } from '@hookpost/helpers/decorators/plug.decorator';
 import { Integration } from '@prisma/client';
 import { stripHtmlValidation } from '@hookpost/helpers/utils/strip.html.validation';
 import { hasExtension } from '@hookpost/helpers/utils/has.extension';
+import { percentageChange } from '@hookpost/helpers/utils/percentage.change';
 
 export class ThreadsProvider extends SocialAbstract implements SocialProvider {
   identifier = 'threads';
@@ -60,8 +61,7 @@ export class ThreadsProvider extends SocialAbstract implements SocialProvider {
     if (body.includes('4279013')) {
       return {
         type: 'bad-body',
-        value:
-          'User restricted',
+        value: 'User restricted',
       };
     }
     if (body.includes('The media could not be fetched from this URI')) {
@@ -576,7 +576,9 @@ export class ThreadsProvider extends SocialAbstract implements SocialProvider {
 
       const { id: containerId } = await (
         await this.fetch(
-          `https://graph.threads.net/v1.0/${integration.internalId}/threads?${params.toString()}`,
+          `https://graph.threads.net/v1.0/${
+            integration.internalId
+          }/threads?${params.toString()}`,
           {
             method: 'POST',
           }
@@ -601,7 +603,11 @@ export class ThreadsProvider extends SocialAbstract implements SocialProvider {
     return {
       status: 'completed',
       postId: threadId,
-      releaseURL: await this.threadPermalink(threadId, accessToken, integration),
+      releaseURL: await this.threadPermalink(
+        threadId,
+        accessToken,
+        integration
+      ),
     };
   }
 
@@ -736,16 +742,20 @@ export class ThreadsProvider extends SocialAbstract implements SocialProvider {
     ).json();
 
     return (
-      data?.map((d: any) => ({
-        label: capitalize(d.name),
-        percentageChange: 5,
-        data: d.total_value
+      data?.map((d: any) => {
+        const series = d.total_value
           ? [{ total: d.total_value.value, date: dayjs().format('YYYY-MM-DD') }]
           : d.values.map((v: any) => ({
               total: v.value,
               date: dayjs(v.end_time).format('YYYY-MM-DD'),
-            })),
-      })) || []
+            }));
+
+        return {
+          label: capitalize(d.name),
+          percentageChange: percentageChange(series),
+          data: series,
+        };
+      }) || []
     );
   }
 

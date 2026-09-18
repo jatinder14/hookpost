@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import EventEmitter from 'events';
 import clsx from 'clsx';
 const toaster = new EventEmitter();
@@ -10,6 +10,9 @@ export const Toaster = () => {
   const [toasterType, setToasterType] = useState<'success' | 'warning' | ''>(
     ''
   );
+  const hideTimer = useRef<ReturnType<typeof setTimeout> | undefined>(
+    undefined
+  );
   useEffect(() => {
     toaster.on(
       'show',
@@ -18,12 +21,21 @@ export const Toaster = () => {
         setToasterText(text);
         setToasterType(type || 'success');
         setShowToaster(true);
-        setTimeout(() => {
+
+        // A warning is the only feedback the user gets when an action was
+        // refused - "Pinterest needs a cover image", "your post is too long".
+        // At 4.2s (of which the fade eats the first and last tenth) it was
+        // routinely missed entirely, and the action just looked dead. Give
+        // warnings 10s, and let any toast be dismissed by clicking it.
+        const visibleFor = (type || 'success') === 'warning' ? 10000 : 4200;
+        clearTimeout(hideTimer.current);
+        hideTimer.current = setTimeout(() => {
           setShowToaster(false);
-        }, 4200);
+        }, visibleFor);
       }
     );
     return () => {
+      clearTimeout(hideTimer.current);
       toaster.removeAllListeners();
     };
   }, []);
@@ -32,8 +44,13 @@ export const Toaster = () => {
   }
   return (
     <div
+      onClick={() => {
+        clearTimeout(hideTimer.current);
+        setShowToaster(false);
+      }}
       className={clsx(
-        'animate-fadeDown rounded-[8px] gap-[18px] flex items-center overflow-hidden bg-customColor8 p-[16px] min-w-[319px] fixed start-[50%] text-white z-[900] top-[32px] -translate-x-[50%] h-[56px]',
+        'cursor-pointer rounded-[8px] gap-[18px] flex items-center overflow-hidden bg-customColor8 p-[16px] min-w-[319px] fixed start-[50%] text-white z-[900] top-[32px] -translate-x-[50%] h-[56px]',
+        toasterType === 'warning' ? 'animate-fadeDownLong' : 'animate-fadeDown',
         toasterType === 'success' ? 'shadow-greenToast' : 'shadow-yellowToast'
       )}
     >

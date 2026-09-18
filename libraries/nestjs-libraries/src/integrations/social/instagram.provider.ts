@@ -23,6 +23,7 @@ import {
   META_GRAPH_API_VERSION,
   grantedPageIds,
 } from '@hookpost/nestjs-libraries/integrations/social/facebook.provider';
+import { percentageChange } from '@hookpost/helpers/utils/percentage.change';
 
 @Rules(
   "Instagram should have at least one attachment, if it's a story, it can have only one picture"
@@ -35,15 +36,15 @@ export class InstagramProvider
   name = 'Instagram\n(Facebook Business)';
   isBetweenSteps = true;
   toolTip = 'Instagram must be business and connected to a Facebook page';
-    // business_management is deliberately NOT requested. It is one of Meta's
-    // most heavily scrutinised permissions, and App Review odds matter more
-    // than the one thing it buys: discovering Pages owned through a Business
-    // Manager (/me/businesses -> owned_pages / client_pages). That lookup is
-    // already wrapped in try/catch as "not available for all users", and
-    // /me/accounts runs first and unconditionally, so without the permission
-    // the Business Manager call simply 403s and users still get every Page
-    // they administer directly. Re-add it in a later review if agency
-    // customers need Business-Manager-owned Pages.
+  // business_management is deliberately NOT requested. It is one of Meta's
+  // most heavily scrutinised permissions, and App Review odds matter more
+  // than the one thing it buys: discovering Pages owned through a Business
+  // Manager (/me/businesses -> owned_pages / client_pages). That lookup is
+  // already wrapped in try/catch as "not available for all users", and
+  // /me/accounts runs first and unconditionally, so without the permission
+  // the Business Manager call simply 403s and users still get every Page
+  // they administer directly. Re-add it in a later review if agency
+  // customers need Business-Manager-owned Pages.
   scopes = [
     'instagram_basic',
     'pages_show_list',
@@ -367,7 +368,7 @@ export class InstagramProvider
       return {
         type: 'retry' as const,
         value: 'Could not upload your media',
-      }
+      };
     }
 
     if (body.indexOf('2207077') > -1) {
@@ -380,8 +381,9 @@ export class InstagramProvider
     if (body.indexOf('too little or too many attachments') > -1) {
       return {
         type: 'bad-body' as const,
-        value: 'Instagram carousel should have between 2 and 10 media attachments',
-      }
+        value:
+          'Instagram carousel should have between 2 and 10 media attachments',
+      };
     }
 
     if (body.indexOf('2207027') > -1) {
@@ -585,7 +587,7 @@ export class InstagramProvider
     // Direct candidate page discovery for NPE / Meta Business Portfolio pages
     const candidatePageIds = [
       '800731239797327', // GodHand Developers
-      '61594450680761',  // Sacred Smiles Bhakti
+      '61594450680761', // Sacred Smiles Bhakti
     ];
     for (const pageId of candidatePageIds) {
       if (seenPageIds.has(pageId)) {
@@ -997,7 +999,9 @@ export class InstagramProvider
       // re-running this is safe)
       const { id: containerId } = await (
         await this.fetch(
-          `https://${pendingData.type}/${META_GRAPH_API_VERSION}/${igId}/media?caption=${encodeURIComponent(
+          `https://${
+            pendingData.type
+          }/${META_GRAPH_API_VERSION}/${igId}/media?caption=${encodeURIComponent(
             pendingData.message || ''
           )}&media_type=CAROUSEL&children=${encodeURIComponent(
             pendingData.containers.join(',')
@@ -1212,20 +1216,26 @@ export class InstagramProvider
     const analytics = [];
 
     analytics.push(
-      ...(data?.map((d: any) => ({
-        label: this.setTitle(d.name),
-        percentageChange: 5,
-        data: d.values.map((v: any) => ({
+      ...(data?.map((d: any) => {
+        const series = d.values.map((v: any) => ({
           total: v.value,
           date: dayjs(v.end_time).format('YYYY-MM-DD'),
-        })),
-      })) || [])
+        }));
+
+        return {
+          label: this.setTitle(d.name),
+          percentageChange: percentageChange(series),
+          data: series,
+        };
+      }) || [])
     );
 
     analytics.push(
+      // a single lifetime total, so there is no earlier period to compare it
+      // with - percentageChange returns 0 and the badge stays hidden
       ...data2.map((d: any) => ({
         label: this.setTitle(d.name),
-        percentageChange: 5,
+        percentageChange: 0,
         data: [
           {
             total: d.total_value.value,

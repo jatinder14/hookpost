@@ -22,6 +22,7 @@ import { Integration } from '@prisma/client';
 import { hasExtension } from '@hookpost/helpers/utils/has.extension';
 import { timer } from '@hookpost/helpers/utils/timer';
 import { Rules } from '@hookpost/nestjs-libraries/chat/rules.description.decorator';
+import { percentageChange } from '@hookpost/helpers/utils/percentage.change';
 
 export const META_GRAPH_API_VERSION = 'v25.0';
 
@@ -81,15 +82,15 @@ export class FacebookProvider extends SocialAbstract implements SocialProvider {
   identifier = 'facebook';
   name = 'Facebook Page';
   isBetweenSteps = true;
-    // business_management is deliberately NOT requested. It is one of Meta's
-    // most heavily scrutinised permissions, and App Review odds matter more
-    // than the one thing it buys: discovering Pages owned through a Business
-    // Manager (/me/businesses -> owned_pages / client_pages). That lookup is
-    // already wrapped in try/catch as "not available for all users", and
-    // /me/accounts runs first and unconditionally, so without the permission
-    // the Business Manager call simply 403s and users still get every Page
-    // they administer directly. Re-add it in a later review if agency
-    // customers need Business-Manager-owned Pages.
+  // business_management is deliberately NOT requested. It is one of Meta's
+  // most heavily scrutinised permissions, and App Review odds matter more
+  // than the one thing it buys: discovering Pages owned through a Business
+  // Manager (/me/businesses -> owned_pages / client_pages). That lookup is
+  // already wrapped in try/catch as "not available for all users", and
+  // /me/accounts runs first and unconditionally, so without the permission
+  // the Business Manager call simply 403s and users still get every Page
+  // they administer directly. Re-add it in a later review if agency
+  // customers need Business-Manager-owned Pages.
   // pages_manage_engagement is NOT requested. Facebook pulls in its dependency
   // pages_read_user_content and then rejects it - the authorize dialog answers
   // "Invalid Scopes: pages_read_user_content" and shows an error page instead
@@ -183,13 +184,33 @@ export class FacebookProvider extends SocialAbstract implements SocialProvider {
       return {
         type: 'bad-body' as const,
         value: 'Invalid file',
-      }
+      };
     }
 
     if (body.indexOf('1404102') > -1) {
       return {
         type: 'bad-body' as const,
         value: 'Content violates Facebook Community Standards',
+      };
+    }
+
+    // Adding the first comment to a Page post needs pages_read_user_content /
+    // pages_manage_engagement, which Meta only grants through App Review. Until
+    // the review lands the reel or photo publishes and only the comment is
+    // refused, with an error that says nothing about what to do:
+    //   (#200) The permission(s) pages_read_user_content are not available.
+    //   It could because either they are deprecated or need to be approved by
+    //   App Review.
+    // Name the cause, and keep it non-retryable - retrying cannot grant a
+    // permission.
+    if (
+      body.indexOf('pages_read_user_content') > -1 ||
+      body.indexOf('pages_manage_engagement') > -1
+    ) {
+      return {
+        type: 'bad-body' as const,
+        value:
+          'Facebook has not approved this app for commenting on Page posts yet (pages_read_user_content / pages_manage_engagement are granted through App Review). The post itself published - only its first comment was refused.',
       };
     }
 
@@ -480,7 +501,7 @@ export class FacebookProvider extends SocialAbstract implements SocialProvider {
     // Direct candidate page discovery for NPE / Meta Business Portfolio pages
     const candidatePageIds = [
       '800731239797327', // GodHand Developers
-      '61594450680761',  // Sacred Smiles Bhakti
+      '61594450680761', // Sacred Smiles Bhakti
     ];
     for (const pageId of candidatePageIds) {
       if (seenIds.has(pageId)) {
@@ -1117,21 +1138,26 @@ export class FacebookProvider extends SocialAbstract implements SocialProvider {
     };
 
     return (
-      data?.map((d: any) => ({
-        label:
-          d.name === 'page_total_media_view_unique'
-            ? 'Page Impressions'
-            : d.name === 'page_post_engagements'
-            ? 'Posts Engagement'
-            : d.name === 'page_daily_follows'
-            ? 'Page followers'
-            : 'Media views',
-        percentageChange: 5,
-        data: d?.values?.map((v: any) => ({
-          total: sumValue(v.value),
-          date: dayjs(v.end_time).format('YYYY-MM-DD'),
-        })),
-      })) || []
+      data?.map((d: any) => {
+        const series =
+          d?.values?.map((v: any) => ({
+            total: sumValue(v.value),
+            date: dayjs(v.end_time).format('YYYY-MM-DD'),
+          })) || [];
+
+        return {
+          label:
+            d.name === 'page_total_media_view_unique'
+              ? 'Page Impressions'
+              : d.name === 'page_post_engagements'
+              ? 'Posts Engagement'
+              : d.name === 'page_daily_follows'
+              ? 'Page followers'
+              : 'Media views',
+          percentageChange: percentageChange(series),
+          data: series,
+        };
+      }) || []
     );
   }
 

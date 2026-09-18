@@ -51,9 +51,11 @@ export function useHasScroll(ref: RefObject<HTMLElement | null>): boolean {
 }
 
 export const SelectCurrent: FC = () => {
+  const t = useT();
   const modals = useDecisionModal();
   const {
     selectedIntegrations,
+    settingsInvalid,
     current,
     setCurrent,
     locked,
@@ -62,6 +64,7 @@ export const SelectCurrent: FC = () => {
   } = useLaunchStore(
     useShallow((state) => ({
       selectedIntegrations: state.selectedIntegrations,
+      settingsInvalid: state.settingsInvalid,
       addOrRemoveSelectedIntegration: state.addOrRemoveSelectedIntegration,
       current: state.current,
       setCurrent: state.setCurrent,
@@ -139,6 +142,20 @@ export const SelectCurrent: FC = () => {
                 X
               </div>
               <IsGlobal id={integration.id} />
+              {settingsInvalid[integration.id] && (
+                <div
+                  {...{
+                    'data-tooltip-id': 'tooltip',
+                    'data-tooltip-content': t(
+                      'channel_settings_incomplete',
+                      'This channel still needs a setting filled in'
+                    ),
+                  }}
+                  className="absolute justify-center items-center flex w-[14px] h-[14px] -top-[4px] -end-[4px] bg-[#FEC84B] text-black rounded-full text-[10px] font-bold leading-none z-20"
+                >
+                  !
+                </div>
+              )}
               <div
                 {...{
                   'data-tooltip-id': 'tooltip',

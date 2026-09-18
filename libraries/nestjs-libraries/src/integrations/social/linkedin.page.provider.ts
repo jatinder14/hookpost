@@ -12,6 +12,7 @@ import { Integration } from '@prisma/client';
 import { Plug } from '@hookpost/helpers/decorators/plug.decorator';
 import { timer } from '@hookpost/helpers/utils/timer';
 import { Rules } from '@hookpost/nestjs-libraries/chat/rules.description.decorator';
+import { percentageChange } from '@hookpost/helpers/utils/percentage.change';
 
 @Rules(
   'LinkedIn can have maximum one attachment when selecting video, when choosing a carousel on LinkedIn minimum amount of attachment must be two, and only pictures, if uploading a video, LinkedIn can have only one attachment'
@@ -60,12 +61,15 @@ export class LinkedinPageProvider
   // re-authorised if the Page app is ever replaced. Falls back to the shared
   // app when the Page-specific variables are unset.
   private get clientId() {
-    return process.env.LINKEDIN_PAGE_CLIENT_ID || process.env.LINKEDIN_CLIENT_ID!;
+    return (
+      process.env.LINKEDIN_PAGE_CLIENT_ID || process.env.LINKEDIN_CLIENT_ID!
+    );
   }
 
   private get clientSecret() {
     return (
-      process.env.LINKEDIN_PAGE_CLIENT_SECRET || process.env.LINKEDIN_CLIENT_SECRET!
+      process.env.LINKEDIN_PAGE_CLIENT_SECRET ||
+      process.env.LINKEDIN_CLIENT_SECRET!
     );
   }
 
@@ -126,7 +130,7 @@ export class LinkedinPageProvider
     integration: Integration,
     originalIntegration: Integration,
     postId: string,
-    information: any,
+    information: any
   ) {
     return super.addComment(
       integration,
@@ -492,13 +496,16 @@ export class LinkedinPageProvider
       }
     );
 
-    return Object.keys(analytics).map((key) => ({
-      label: key,
-      data: analytics[
-        key as 'Page Views' | 'Organic Followers' | 'Paid Followers'
-      ],
-      percentageChange: 5,
-    }));
+    return Object.keys(analytics).map((key) => {
+      const series =
+        analytics[key as 'Page Views' | 'Organic Followers' | 'Paid Followers'];
+
+      return {
+        label: key,
+        data: series,
+        percentageChange: percentageChange(series),
+      };
+    });
   }
 
   async postAnalytics(

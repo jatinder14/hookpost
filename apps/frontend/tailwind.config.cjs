@@ -132,6 +132,9 @@ module.exports = {
         overflow: 'overFlow 0.5s ease-in-out forwards',
         overflowReverse: 'overFlowReverse 0.5s ease-in-out forwards',
         fadeDown: 'fadeDown 4s ease-in-out forwards',
+        // warnings are actionable ("fix your settings", "post is too long"),
+        // so they get long enough to actually read
+        fadeDownLong: 'fadeDown 10s ease-in-out forwards',
         normalFadeDown: 'normalFadeDown 0.5s ease-in-out forwards',
         newMessages: 'newMessages 1s ease-in-out 4s forwards',
         marqueeUp: 'marquee-up 100s linear infinite',

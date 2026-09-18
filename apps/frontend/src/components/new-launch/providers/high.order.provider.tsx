@@ -79,6 +79,7 @@ export const withProvider = function <T extends object>(params: {
       setChars,
       setComments,
       setHide,
+      setSettingsInvalid,
     } = useLaunchStore(
       useShallow((state) => ({
         date: state.date,
@@ -98,6 +99,7 @@ export const withProvider = function <T extends object>(params: {
         setPostComment: state.setPostComment,
         setEditor: state.setEditor,
         setChars: state.setChars,
+        setSettingsInvalid: state.setSettingsInvalid,
         selectedIntegration: state.selectedIntegrations.find(
           (p) => p.integration.id === props.id
         ),
@@ -177,6 +179,22 @@ export const withProvider = function <T extends object>(params: {
       criteriaMode: 'all',
       reValidateMode: 'onChange',
     });
+
+    // A provider whose settings are required (a Pinterest board, a YouTube
+    // title, a Facebook post type) used to look exactly like a finished one:
+    // nothing on the tab said anything was missing until Post now failed
+    // validation server-side. The form already validates against the same DTO
+    // with mode: 'all', so publish that verdict to the tab strip. Providers
+    // without a `dto` resolve against Empty and are always valid, so they never
+    // light up.
+    const settingsValid = form.formState.isValid;
+    useEffect(() => {
+      setSettingsInvalid(props.id, !!dto && !settingsValid);
+
+      return () => {
+        setSettingsInvalid(props.id, false);
+      };
+    }, [props.id, settingsValid]);
 
     useImperativeHandle(
       ref,
@@ -288,7 +306,14 @@ export const withProvider = function <T extends object>(params: {
               ))}
             {(SettingsComponent || !!data?.internalPlugs?.length) &&
               createPortal(
-                <div data-id={props.id} className={isGlobal ? 'bg-newSettings pb-[12px] px-[12px]' : 'hidden bg-newSettings px-[12px] pb-[12px]'}>
+                <div
+                  data-id={props.id}
+                  className={
+                    isGlobal
+                      ? 'bg-newSettings pb-[12px] px-[12px]'
+                      : 'hidden bg-newSettings px-[12px] pb-[12px]'
+                  }
+                >
                   {isGlobal && (
                     <style>{`#wrapper-settings {display: flex !important} #social-empty {display: block !important;}`}</style>
                   )}
@@ -310,7 +335,9 @@ export const withProvider = function <T extends object>(params: {
                           src={`/icons/platforms/${selectedIntegration?.integration.identifier}.png`}
                         />
                       </div>
-                      <div className="text-[20px]">{selectedIntegration?.integration.name}</div>
+                      <div className="text-[20px]">
+                        {selectedIntegration?.integration.name}
+                      </div>
                     </div>
                   )}
                   <SettingsComponent />

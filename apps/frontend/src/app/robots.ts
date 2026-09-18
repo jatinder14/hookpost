@@ -2,14 +2,31 @@ import { MetadataRoute } from 'next';
 
 // Paths no crawler should fetch. Kept in one constant because it has to appear
 // in EVERY user-agent group - see the note on the named-agent group below.
+//
+// No trailing slashes. `Disallow: /launches/` does NOT match `/launches`, and
+// `/launches` is exactly what Googlebot kept fetching - it 307s to /auth, so
+// Search Console filed it under "Page with redirect" along with every other
+// bare app route. A robots.txt path is a prefix match, so `/launches` covers
+// both the route and everything under it.
+//
+// Every route under app/(app)/(site) belongs here; none of the marketing paths
+// start with one of these prefixes, so nothing crawlable is caught. `/posts`
+// is in the list because docs/public-api documents `/posts/:id/settings` as
+// text and Googlebot went and fetched that literal URL.
 const PRIVATE_PATHS = [
-  '/api/',
-  '/admin/',
-  '/settings/',
-  '/analytics/',
-  '/media/',
-  '/launches/',
-  '/cdn-cgi/',
+  '/api',
+  '/admin',
+  '/agents',
+  '/analytics',
+  '/billing',
+  '/err',
+  '/launches',
+  '/media',
+  '/plugs',
+  '/posts',
+  '/settings',
+  '/third-party',
+  '/cdn-cgi',
 ];
 
 export default function robots(): MetadataRoute.Robots {

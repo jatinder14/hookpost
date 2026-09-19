@@ -130,8 +130,13 @@ export const PricingPlans = ({
       : currency === 'GBP'
       ? 'UK credit cards, Apple Pay or PayPal'
       : isUAE
-      ? 'UAE credit/debit cards (Mashreq, ENBD, ADCB) or Apple Pay'
-      : 'International credit/debit cards (Visa, Mastercard, Amex)';
+      ? 'UAE credit/debit cards (Mashreq, ENBD, ADCB)'
+      : // Only what the account can actually take. Verified 2026-09-19 against
+        // the live /v1/methods card_networks and a test-mode USD checkout:
+        // Visa, Mastercard, RuPay and Maestro are live; Amex is still PENDING
+        // and Diners Club is REJECTED, so naming them promised a card that
+        // would be declined at the last step.
+        'International credit/debit cards (Visa, Mastercard)';
 
   // Two paid plans only. TEAM was dropped from the lineup (PURCHASABLE_TIERS in
   // pricing.ts) because four tiers was over-segmentation at this customer count;
@@ -363,7 +368,9 @@ export const PricingPlans = ({
               <div className="mt-5 flex flex-col justify-end min-h-[64px]">
                 {p.anchorPrice ? (
                   <div className="flex items-center gap-2 mb-1">
-                    <span className="text-sm font-semibold text-white/40 line-through tabular-nums">
+                    {/* white/40 measured 3.77:1 against the card background - below the 4.5:1
+                        WCAG AA floor. white/60 clears it and still reads as struck-out. */}
+                    <span className="text-sm font-semibold text-white/60 line-through tabular-nums">
                       {p.anchorPrice}
                     </span>
                     <span className="rounded-full bg-emerald-500/15 border border-emerald-500/30 px-2 py-0.5 text-[10px] font-bold text-emerald-400 uppercase tracking-wider">

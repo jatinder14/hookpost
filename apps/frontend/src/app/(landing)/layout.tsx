@@ -456,9 +456,12 @@ export default function LandingLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(globalJsonLd) }}
         />
-        <div style={{ background: '#05070a', minHeight: '100vh' }}>
+        {/* <main>, not <div>: Lighthouse flagged "Document does not have a main
+            landmark" on every marketing page, and screen-reader users lose the
+            skip-to-content target without it. */}
+        <main style={{ background: '#05070a', minHeight: '100vh' }}>
           {children}
-        </div>
+        </main>
       </body>
     </html>
   );

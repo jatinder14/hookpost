@@ -184,7 +184,11 @@ export const TeamsComponent = () => {
                   ? t('user', 'User')
                   : p.role === 'ADMIN'
                   ? t('admin', 'Admin')
-                  : t('super_admin', 'Super Admin')}
+                  : /* Org-level SUPERADMIN = the person who created this
+                       workspace. Labelled "Owner" because "Super Admin" read
+                       as platform-wide admin (User.isSuperAdmin), which is a
+                       different field held by only two accounts. */
+                    t('org_owner', 'Owner')}
               </div>
               {+myLevel > +getLevel(p.role) ? (
                 <div className="flex-1 flex justify-end">

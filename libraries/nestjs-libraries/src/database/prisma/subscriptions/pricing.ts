@@ -12,6 +12,10 @@ export interface PricingInnerInterface {
   // variable cost on the account.
   ai_generation_count: number;
   team_members: boolean;
+  // Hard seat cap for the org, owner included. `team_members` only says whether
+  // the feature exists; without a number the plan was effectively unlimited
+  // seats, so one TEAM seat could be resold to a whole company.
+  team_member_limit: number;
   community_features: boolean;
   featured_by_gitroom: boolean;
   ai: boolean;
@@ -186,6 +190,7 @@ const TIER_LIMITS = {
     posts_per_month: 30,
     ai_generation_count: 0,
     team_members: false,
+    team_member_limit: 1,
     community_features: false,
     featured_by_gitroom: false,
     ai: false,
@@ -202,6 +207,7 @@ const TIER_LIMITS = {
     ai_generation_count: 500,
     image_generation_count: 20,
     team_members: false,
+    team_member_limit: 1,
     ai: true,
     community_features: false,
     featured_by_gitroom: false,
@@ -219,6 +225,7 @@ const TIER_LIMITS = {
     image_generation_count: 100,
     community_features: true,
     team_members: true,
+    team_member_limit: 5,
     featured_by_gitroom: true,
     ai: true,
     import_from_channels: true,
@@ -242,6 +249,7 @@ const TIER_LIMITS = {
     image_generation_count: 100,
     community_features: true,
     team_members: true,
+    team_member_limit: 15,
     featured_by_gitroom: true,
     ai: true,
     import_from_channels: true,
@@ -270,6 +278,7 @@ const TIER_LIMITS = {
     image_generation_count: 500,
     community_features: true,
     team_members: true,
+    team_member_limit: 100,
     featured_by_gitroom: true,
     ai: true,
     import_from_channels: true,

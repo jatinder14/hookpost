@@ -9,8 +9,10 @@ import {
   pricingGBP,
   getPricing,
   CURRENCY_CONFIG,
+  COLLECTABLE_CURRENCIES,
   SupportedCurrency,
   isIndianRegion,
+  resolveCountryToCurrency,
 } from '@hookpost/nestjs-libraries/database/prisma/subscriptions/pricing';
 
 export interface PricingPlansProps {
@@ -47,29 +49,27 @@ export const PricingPlans = ({
   const isUAE = (initialCountry || '').toUpperCase() === 'AE';
 
   useEffect(() => {
-    // Client-side timezone verification (detects VPN / proxy spoofing)
-    const tz = Intl.DateTimeFormat().resolvedOptions().timeZone.toLowerCase();
-    const detectedIndian = tz.includes('kolkata') || tz.includes('calcutta') || tz.includes('asia/colombo');
-    const isForeignTz =
-      tz.includes('america') ||
-      tz.includes('europe') ||
-      tz.includes('london') ||
-      tz.includes('pacific') ||
-      tz.includes('australia');
+    // The SSR props describe whoever populated the CDN cache, NOT this visitor.
+    // Every marketing path is edge-cached for a day by a Cloudflare cache rule,
+    // and custom cache keys (vary-by-country) are an Enterprise-only feature on
+    // this plan, so one country's HTML is served worldwide. The browser's own
+    // timezone is the only per-visitor signal that survives a cache HIT, so it
+    // is authoritative here; `initialIsIndian` is a pre-hydration default only.
+    // Before this, `detectedIndian || initialIsIndian` let a cached Indian
+    // render pin every foreign visitor to INR.
+    const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || '';
+    const tzIsUsable = tz.includes('/');
+    const detectedIndian = tzIsUsable
+      ? isIndianRegion(undefined, tz)
+      : !!initialIsIndian;
 
-    // Anti-Arbitrage Protection: If a foreign visitor uses an Indian VPN,
-    // their device timezone flags the spoofing. Enforce global USD standard.
-    if (isForeignTz && !initialIsIndian) {
-      setCurrency('USD');
-      setIsIndian(false);
-      if (typeof window !== 'undefined') {
-        localStorage.setItem('hookpost_currency', 'USD');
-        document.cookie = 'hookpost_currency=USD; path=/; max-age=2592000; SameSite=Lax';
-      }
-      return;
-    }
+    // resolveCountryToCurrency is collectability-aware: it falls back to INR for
+    // any currency that COLLECTABLE_CURRENCIES does not list, so we can never
+    // quote a price this Razorpay account cannot actually charge.
+    const regional = tzIsUsable
+      ? resolveCountryToCurrency(undefined, tz)
+      : initialCurrency || 'USD';
 
-    // Read persisted currency from cookie or localStorage
     const saved =
       typeof window !== 'undefined'
         ? (localStorage.getItem('hookpost_currency') ||
@@ -79,30 +79,29 @@ export const PricingPlans = ({
               ?.split('=')[1])
         : null;
 
-    // Strict Anti-INR Leak Protection:
-    // If not detected in India, NEVER allow INR. Always force USD or regional currency.
-    if (!detectedIndian && !initialIsIndian && (saved === 'INR' || !saved)) {
-      setCurrency('USD');
-      setIsIndian(false);
-      if (typeof window !== 'undefined') {
-        localStorage.setItem('hookpost_currency', 'USD');
-        document.cookie = 'hookpost_currency=USD; path=/; max-age=2592000; SameSite=Lax';
-      }
-    } else if (detectedIndian || initialIsIndian) {
-      setIsIndian(true);
-      if (saved === 'USD' || saved === 'INR') {
-        setCurrency(saved as SupportedCurrency);
-      } else {
-        setCurrency('INR');
-      }
-    } else if (saved === 'USD' || saved === 'EUR' || saved === 'GBP') {
-      setCurrency(saved as SupportedCurrency);
+    // An explicit pick is honoured, but only if it is still collectable and a
+    // foreign visitor can never land on the Indian parity rate.
+    const savedIsUsable =
+      !!saved &&
+      COLLECTABLE_CURRENCIES.includes(saved as SupportedCurrency) &&
+      (saved !== 'INR' || detectedIndian);
+
+    const next = (savedIsUsable ? saved : regional) as SupportedCurrency;
+
+    setIsIndian(detectedIndian);
+    setCurrency(next);
+
+    if (typeof window !== 'undefined' && next !== saved) {
+      localStorage.setItem('hookpost_currency', next);
+      document.cookie = `hookpost_currency=${next}; path=/; max-age=2592000; SameSite=Lax`;
     }
-  }, [initialIsIndian]);
+  }, [initialIsIndian, initialCurrency]);
 
   const changeCurrency = (c: SupportedCurrency) => {
     // Prevent foreign visitors from switching to INR
     if (!isIndian && c === 'INR') return;
+    // Never let the switcher park someone on a currency Razorpay cannot charge.
+    if (!COLLECTABLE_CURRENCIES.includes(c)) return;
     setCurrency(c);
     if (typeof window !== 'undefined') {
       localStorage.setItem('hookpost_currency', c);

@@ -4,6 +4,7 @@ import { Injectable } from '@nestjs/common';
 import { AuthService } from '@hookpost/helpers/auth/auth.service';
 import { CreateOrgUserDto } from '@hookpost/nestjs-libraries/dtos/auth/create.org.user.dto';
 import { makeId } from '@hookpost/nestjs-libraries/services/make.is';
+import { pricing } from '@hookpost/nestjs-libraries/database/prisma/subscriptions/pricing';
 
 @Injectable()
 export class OrganizationRepository {
@@ -362,15 +363,31 @@ export class OrganizationRepository {
         },
         select: {
           subscription: true,
+          _count: { select: { users: true } },
         },
       });
 
-    if (
-      process.env.RAZORPAY_KEY_ID &&
-      checkForSubscription?.subscription?.subscriptionTier ===
-        SubscriptionTier.STANDARD
-    ) {
-      return false;
+    // This is the single chokepoint for joining an org - both the invite-link
+    // redemption and addTeamMemberByEmail land here - so the plan gate belongs
+    // here. It used to reject only STANDARD, which meant a FREE org could add
+    // unlimited members through an invite link while a paying STANDARD org
+    // could add none, and TEAM/PRO/ULTIMATE had no seat ceiling at all.
+    if (process.env.RAZORPAY_KEY_ID) {
+      // No subscription row IS the free plan - the Prisma SubscriptionTier
+      // enum only has STANDARD/PRO/TEAM/ULTIMATE, so 'FREE' is a pricing key,
+      // not an enum member.
+      const tier = (checkForSubscription?.subscription?.subscriptionTier ||
+        'FREE') as keyof typeof pricing;
+      const plan = pricing[tier] || pricing.FREE;
+
+      if (!plan.team_members) {
+        return false;
+      }
+
+      const current = checkForSubscription?._count?.users ?? 0;
+      if (current >= plan.team_member_limit) {
+        return false;
+      }
     }
 
     const create = await this._userOrg.model.userOrganization.create({

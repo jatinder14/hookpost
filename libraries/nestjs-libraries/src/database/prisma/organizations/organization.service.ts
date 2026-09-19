@@ -102,6 +102,31 @@ export class OrganizationService {
     user: User,
     body: AddTeamMemberDto
   ) {
+    // This used to mint an invite URL with no plan check at all, so a FREE org
+    // could hand out links all day; redemption then silently failed (or, before
+    // the addUserToOrg fix, silently succeeded). Fail here instead, with a
+    // reason, rather than sending someone a link that cannot work.
+    if (process.env.RAZORPAY_KEY_ID) {
+      const tier = ((org as any)?.subscription?.subscriptionTier ||
+        'FREE') as keyof typeof pricing;
+      const plan = pricing[tier] || pricing.FREE;
+
+      if (!plan.team_members) {
+        throw new HttpException(
+          'The organization plan does not include team members',
+          400
+        );
+      }
+
+      const team = await this._organizationRepository.getTeam(org.id);
+      if ((team?.users?.length ?? 0) >= plan.team_member_limit) {
+        throw new HttpException(
+          `Your plan includes ${plan.team_member_limit} seats and they are all in use. Upgrade to add more members.`,
+          400
+        );
+      }
+    }
+
     const timeLimit = dayjs().add(2, 'day').format('YYYY-MM-DD HH:mm:ss');
     const id = makeId(5);
     const url =
@@ -127,6 +152,17 @@ export class OrganizationService {
     if (!pricing[tier].team_members) {
       throw new HttpException(
         'The organization plan does not include team members',
+        400
+      );
+    }
+
+    // Surface the seat ceiling here so the UI can say why. addUserToOrg
+    // enforces it again at the DB level for the invite-link path.
+    const seats = pricing[tier].team_member_limit;
+    const team = await this._organizationRepository.getTeam(org.id);
+    if ((team?.users?.length ?? 0) >= seats) {
+      throw new HttpException(
+        `Your plan includes ${seats} seats and they are all in use. Upgrade to add more members.`,
         400
       );
     }

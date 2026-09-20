@@ -52,6 +52,14 @@ export const GoogleTagManagerComponent: FC<{
   // is in ("Container quality: No recent data", and Google Ads reports the tag
   // as URGENT / not detected). So render both when both are configured: the
   // container for anything configured in the GTM UI, and gtag for Google Ads.
+  // Every script below is lazyOnload, not afterInteractive. Measured on the
+  // live site with Lighthouse mobile the day tracking actually started
+  // working: GTM cost 163ms of blocking time and 266KB, gtag another 242ms of
+  // script evaluation, and together they took mobile Performance from 100 to
+  // 90 with TBT at 320ms. Nothing here has to run before the page is
+  // interactive - Purchase is fired server-side from the Razorpay webhook,
+  // CompleteRegistration fires on a user action minutes later, and PageView
+  // still fires, just after load rather than ahead of it.
   const container = gtmId && gtmId.startsWith('GTM-') ? gtmId : undefined;
   // If NEXT_PUBLIC_GTM_ID itself holds an AW-/G- id, that is the gtag id.
   const tagId = googleAdsId || (!container ? gtmId : undefined);
@@ -59,7 +67,7 @@ export const GoogleTagManagerComponent: FC<{
   return (
     <>
       {container ? (
-        <Script id="google-tag-manager" strategy="afterInteractive">
+        <Script id="google-tag-manager" strategy="lazyOnload">
           {`
     (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
     new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
@@ -77,10 +85,10 @@ export const GoogleTagManagerComponent: FC<{
           conversion was dropped. Load it from Google directly. */}
       <Script
         src={`https://www.googletagmanager.com/gtag/js?id=${tagId}`}
-        strategy="afterInteractive"
+        strategy="lazyOnload"
       />
 
-      <Script id="google-ads-gtag" strategy="afterInteractive">
+      <Script id="google-ads-gtag" strategy="lazyOnload">
         {`
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}

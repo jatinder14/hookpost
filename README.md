@@ -2,7 +2,7 @@
   <img src="apps/frontend/public/brand-logo.png" alt="Hookpost Logo" width="80" height="80" style="margin-bottom: 12px;"/>
   <h1>Hookpost</h1>
   <p><strong>The All-in-One Open-Source Social Media Scheduler & Multi-Agent AI Copilot</strong></p>
-  <p><em>Postiz & Buffer alternative built for creators, developers, and automation teams.</em></p>
+  <p><em>Schedule to 17 networks from one calendar &mdash; or straight from Claude Code, Cursor and Windsurf.</em></p>
 
   <p>
     <a href="https://hookpost.hookstep.in"><img src="https://img.shields.io/badge/🌐_Cloud_App-hookpost.hookstep.in-FF4CE2?style=for-the-badge" alt="Cloud App"/></a>
@@ -14,7 +14,7 @@
   <p>
     <a href="https://hookpost.hookstep.in/auth"><strong>Get Started for Free (Cloud) »</strong></a> •
     <a href="#-quick-start-self-hosted"><strong>Self-Host with Docker »</strong></a> •
-    <a href="https://hookpost.hookstep.in/alternatives/postiz"><strong>Documentation »</strong></a>
+    <a href="https://hookpost.hookstep.in/docs/public-api"><strong>Documentation »</strong></a>
   </p>
 </div>
 
@@ -80,13 +80,17 @@ Don't want to manage Docker, Redis, PostgreSQL, and OAuth app verification yours
 
 ---
 
-## 📜 Attribution & License
+## 📜 License
 
-**Hookpost is a modified derivative of [Postiz](https://github.com/gitroomhq/postiz-app)**, originally developed by Gitroom Inc. and licensed under **AGPL-3.0**.
+Hookpost is licensed under **AGPL-3.0**. The full licence text is in [`LICENSE`](./LICENSE).
 
-Hookpost is not affiliated with, endorsed by, or sponsored by Postiz or Gitroom Inc. "Postiz" and "Gitroom" are their respective trademarks. See [`NOTICE`](./NOTICE) for the detailed attribution and modified components.
+This is a modified derivative work; upstream attribution, the fork point and the
+list of modified components are recorded in [`NOTICE`](./NOTICE), as AGPL-3.0
+section 5(a) requires. Hookpost is an independent project and is not affiliated
+with, endorsed by or sponsored by any upstream author.
 
-Under AGPL-3.0 Section 13, the complete source code for Hookpost is publicly maintained and free for everyone to use and inspect.
+Under AGPL-3.0 section 13, the complete source for Hookpost is publicly
+maintained and free for anyone to use and inspect.
 
 ---
 

@@ -78,7 +78,31 @@ export const EU_COUNTRIES = new Set([
  * To re-enable a currency: take ONE real subscription in it end to end, watch
  * it reach `authenticated`, then add it here. Nothing else needs changing.
  */
-export const COLLECTABLE_CURRENCIES: SupportedCurrency[] = ['INR'];
+export const COLLECTABLE_CURRENCIES: SupportedCurrency[] = ['INR', 'USD', 'EUR'];
+
+/*
+ * 2026-09-20: USD and EUR re-opened on the founder's explicit call, before the
+ * "one real subscription end to end" test above was done. Recording that
+ * honestly, because the risk it was guarding against has not gone away: as of
+ * today Razorpay still shows 8 payments ever, all INR/UPI, 10 USD subscriptions
+ * created and 0 paid, and 3 USD invoices issued and 0 paid. What changed is the
+ * judgement, not the evidence - 3 invoices is too small a sample to call USD
+ * broken, and being billed in INR is itself a reason a foreign buyer walks.
+ *
+ * EUR has never had a plan on the account. razorpay.service findOrCreatePlan
+ * creates one on the first EUR checkout, so nothing else needs doing - but that
+ * first EUR checkout is also the first test of whether EUR can be collected at
+ * all. Watch it reach `authenticated`.
+ *
+ * GBP is deliberately still out: same unknowns as EUR with a smaller market.
+ *
+ * On VPNs: this resolves currency from country/timezone, which a VPN can fake.
+ * The exposure is one-directional - a foreign buyer masking as Indian to pay
+ * Rs 599 instead of $15. It is mostly self-defending, because an INR Razorpay
+ * subscription needs an Indian instrument (UPI or an Indian card) to authorise,
+ * which a VPN does not provide. Blocking by IP reputation would cost real
+ * customers more than this leaks.
+ */
 
 /**
  * The visitor's true regional currency, before collectability is considered.

@@ -1,6 +1,12 @@
 generator client {
   provider = "prisma-client-js"
   runtime  = "nodejs"
+  // Without binaryTargets Prisma only emits an engine for the machine that ran
+  // `generate`. CI builds on x86 and the Oracle box is ARM (Ampere A1), so the
+  // deployed client would look for a linux-arm64 engine that was never built
+  // and fail at the first query. Listing both keeps one artifact working on
+  // either architecture.
+  binaryTargets = ["native", "debian-openssl-3.0.x", "linux-arm64-openssl-3.0.x"]
 }
 
 datasource db {

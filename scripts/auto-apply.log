@@ -22,3 +22,898 @@
 [2026-09-19T15:00:10.107Z] Navigating to job view: 4463659234
 [2026-09-19T15:00:14.531Z] Job info: "Staff Software Engineer | Come Near | LinkedIn" at "" | EasyApply: true | AlreadyApplied: false
 [2026-09-19T15:00:14.739Z] Clicked Easy Apply: CLICKED
+[2026-09-20T04:39:40.745Z] ========================================================
+[2026-09-20T04:39:40.748Z] Starting LinkedIn Autonomous Background Application Daemon
+[2026-09-20T04:39:40.748Z] Running in ISOLATED Background Window — NEVER touching User Window
+[2026-09-20T04:39:40.748Z] Target: $100k-$250k / Staff / Principal / Lead / Relocation
+[2026-09-20T04:39:40.748Z] ========================================================
+[2026-09-20T04:39:40.891Z] Dedicated Background Bot Window ID: 347987937
+[2026-09-20T04:39:40.891Z] Searching: https://www.linkedin.com/jobs/search/?f_AL=true&f_WT=2&keywords=Staff%20Software%20Engineer&location=Worldwide
+[2026-09-20T04:39:47.172Z] Found 25 jobs on search page.
+[2026-09-20T04:39:47.173Z] Navigating to job view: 4467829990
+[2026-09-20T04:39:51.964Z] Job info: "Remote Senior Software Engineer – Python | Turing | LinkedIn" at "" | EasyApply: true | AlreadyApplied: false
+[2026-09-20T04:39:52.148Z] Clicked Easy Apply: CLICKED
+[2026-09-20T04:39:54.936Z] Step 1 result: {"status":"NEXT","btn":"Next"}
+[2026-09-20T04:39:57.573Z] Step 2 result: {"status":"NEXT","btn":"Next"}
+[2026-09-20T04:40:00.218Z] Step 3 result: {"status":"NEXT","btn":"Review"}
+[2026-09-20T04:40:02.841Z] Step 4 result: {"status":"SUBMITTED"}
+[2026-09-20T04:40:02.841Z] >>> SUCCESS! Application successfully submitted for 4467829990 (Remote Senior Software Engineer – Python | Turing | LinkedIn) <<<
+[2026-09-20T04:40:09.955Z] Total applied in this session: 1
+[2026-09-20T04:40:09.956Z] Navigating to job view: 4465410858
+[2026-09-20T04:40:14.764Z] Job info: "Senior Full-Stack Product Engineer | Vairified Corp | LinkedIn" at "" | EasyApply: true | AlreadyApplied: false
+[2026-09-20T04:40:15.084Z] Clicked Easy Apply: CLICKED
+[2026-09-20T04:40:17.924Z] Step 1 result: {"status":"NEXT","btn":"Next"}
+[2026-09-20T04:40:20.576Z] Step 2 result: {"status":"NEXT","btn":"Next"}
+[2026-09-20T04:40:23.231Z] Step 3 result: {"status":"NEXT","btn":"Review"}
+[2026-09-20T04:40:25.875Z] Step 4 result: {"status":"SUBMITTED"}
+[2026-09-20T04:40:25.876Z] >>> SUCCESS! Application successfully submitted for 4465410858 (Senior Full-Stack Product Engineer | Vairified Corp | LinkedIn) <<<
+[2026-09-20T04:40:33.045Z] Total applied in this session: 2
+[2026-09-20T04:40:33.046Z] Navigating to job view: 4461812614
+[2026-09-20T04:40:37.913Z] Job info: "Staff Software Engineer, Infrastructure - Marimo | CoreWeave | LinkedIn" at "" | EasyApply: true | AlreadyApplied: false
+[2026-09-20T04:40:38.226Z] Clicked Easy Apply: CLICKED
+[2026-09-20T04:40:41.056Z] Step 1 result: {"status":"NEXT","btn":"Next"}
+[2026-09-20T04:40:43.723Z] Step 2 result: {"status":"NEXT","btn":"Next"}
+[2026-09-20T04:40:46.431Z] Step 3 result: {"status":"NEXT","btn":"Next"}
+[2026-09-20T04:40:49.131Z] Step 4 result: {"status":"NEXT","btn":"Review"}
+[2026-09-20T04:40:51.763Z] Step 5 result: {"status":"NEXT","btn":"Review"}
+[2026-09-20T04:40:54.403Z] Step 6 result: {"status":"NEXT","btn":"Review"}
+[2026-09-20T04:40:57.053Z] Step 7 result: {"status":"NEXT","btn":"Review"}
+[2026-09-20T04:40:59.678Z] Step 8 result: {"status":"NEXT","btn":"Review"}
+[2026-09-20T04:41:02.307Z] Step 9 result: {"status":"NEXT","btn":"Review"}
+[2026-09-20T04:41:04.941Z] Step 10 result: {"status":"NEXT","btn":"Review"}
+[2026-09-20T04:41:11.945Z] Navigating to job view: 4464501312
+[2026-09-20T04:41:16.737Z] Job info: "Tech Lead Full-Stack | HealthRecon Connect | LinkedIn" at "" | EasyApply: true | AlreadyApplied: false
+[2026-09-20T04:41:16.966Z] Clicked Easy Apply: CLICKED
+[2026-09-20T04:41:19.781Z] Step 1 result: {"status":"NEXT","btn":"Next"}
+[2026-09-20T04:41:22.443Z] Step 2 result: {"status":"NEXT","btn":"Next"}
+[2026-09-20T04:41:25.133Z] Step 3 result: {"status":"NEXT","btn":"Review"}
+[2026-09-20T04:41:27.776Z] Step 4 result: {"status":"SUBMITTED"}
+[2026-09-20T04:41:27.776Z] >>> SUCCESS! Application successfully submitted for 4464501312 (Tech Lead Full-Stack | HealthRecon Connect | LinkedIn) <<<
+[2026-09-20T04:41:34.953Z] Total applied in this session: 3
+[2026-09-20T04:41:34.954Z] Navigating to job view: 4432498982
+[2026-09-20T04:41:39.781Z] Job info: "Staff Software Engineer, Full Stack | Empower Pharmacy | LinkedIn" at "" | EasyApply: true | AlreadyApplied: false
+[2026-09-20T04:41:40.050Z] Clicked Easy Apply: CLICKED
+[2026-09-20T04:41:42.921Z] Step 1 result: {"status":"NEXT","btn":"Next"}
+[2026-09-20T04:41:45.710Z] Step 2 result: {"status":"NEXT","btn":"Next"}
+[2026-09-20T04:41:48.390Z] Step 3 result: {"status":"NEXT","btn":"Next"}
+[2026-09-20T04:41:51.160Z] Step 4 result: {"status":"NEXT","btn":"Next"}
+[2026-09-20T04:41:53.854Z] Step 5 result: {"status":"NEXT","btn":"Review"}
+[2026-09-20T04:41:56.520Z] Step 6 result: {"status":"NEXT","btn":"Review"}
+[2026-09-20T04:41:59.184Z] Step 7 result: {"status":"NEXT","btn":"Review"}
+[2026-09-20T04:42:01.879Z] Step 8 result: {"status":"NEXT","btn":"Review"}
+[2026-09-20T04:42:04.545Z] Step 9 result: {"status":"NEXT","btn":"Review"}
+[2026-09-20T04:42:07.201Z] Step 10 result: {"status":"NEXT","btn":"Review"}
+[2026-09-20T04:42:14.202Z] Navigating to job view: 4465990026
+[2026-09-20T04:42:19.176Z] Job info: "Software Engineer – GitHub & Open Source (Remote | $50–$100/hr) | Synthires | LinkedIn" at "" | EasyApply: true | AlreadyApplied: false
+[2026-09-20T04:42:19.504Z] Clicked Easy Apply: CLICKED
+[2026-09-20T04:42:22.451Z] Step 1 result: {"status":"NEXT","btn":"Next"}
+[2026-09-20T04:42:25.128Z] Step 2 result: {"status":"NEXT","btn":"Next"}
+[2026-09-20T04:42:27.810Z] Step 3 result: {"status":"NEXT","btn":"Next"}
+[2026-09-20T04:42:30.531Z] Step 4 result: {"status":"NEXT","btn":"Review"}
+[2026-09-20T04:42:33.447Z] Step 5 result: {"status":"SUBMITTED"}
+[2026-09-20T04:42:33.447Z] >>> SUCCESS! Application successfully submitted for 4465990026 (Software Engineer – GitHub & Open Source (Remote | $50–$100/hr) | Synthires | LinkedIn) <<<
+[2026-09-20T04:42:40.832Z] Total applied in this session: 4
+[2026-09-20T04:42:40.834Z] Navigating to job view: 4437918531
+[2026-09-20T04:42:45.858Z] Job info: "Staff Software Engineer, Product | Included Health | LinkedIn" at "" | EasyApply: true | AlreadyApplied: false
+[2026-09-20T04:42:46.304Z] Clicked Easy Apply: CLICKED
+[2026-09-20T04:42:49.427Z] Step 1 result: {"status":"NEXT","btn":"Next"}
+[2026-09-20T04:42:52.111Z] Step 2 result: {"status":"NEXT","btn":"Next"}
+[2026-09-20T04:42:54.843Z] Step 3 result: {"status":"NEXT","btn":"Next"}
+[2026-09-20T04:42:57.496Z] Step 4 result: {"status":"NEXT","btn":"Next"}
+[2026-09-20T04:43:00.153Z] Step 5 result: {"status":"NEXT","btn":"Next"}
+[2026-09-20T04:43:02.805Z] Step 6 result: {"status":"NEXT","btn":"Next"}
+[2026-09-20T04:43:05.449Z] Step 7 result: {"status":"NEXT","btn":"Next"}
+[2026-09-20T04:43:08.110Z] Step 8 result: {"status":"NEXT","btn":"Review"}
+[2026-09-20T04:43:10.752Z] Step 9 result: {"status":"SUBMITTED"}
+[2026-09-20T04:43:10.752Z] >>> SUCCESS! Application successfully submitted for 4437918531 (Staff Software Engineer, Product | Included Health | LinkedIn) <<<
+[2026-09-20T04:43:17.962Z] Total applied in this session: 5
+[2026-09-20T04:43:17.962Z] Navigating to job view: 4461657544
+[2026-09-20T04:43:22.865Z] Job info: "Senior Technical Lead — Agentic AI / Generative AI | EazyML | LinkedIn" at "" | EasyApply: true | AlreadyApplied: false
+[2026-09-20T04:43:23.185Z] Clicked Easy Apply: CLICKED
+[2026-09-20T04:43:26.103Z] Step 1 result: {"status":"NEXT","btn":"Next"}
+[2026-09-20T04:43:28.799Z] Step 2 result: {"status":"NEXT","btn":"Next"}
+[2026-09-20T04:43:31.445Z] Step 3 result: {"status":"NEXT","btn":"Next"}
+[2026-09-20T04:43:34.120Z] Step 4 result: {"status":"NEXT","btn":"Review"}
+[2026-09-20T04:43:36.760Z] Step 5 result: {"status":"SUBMITTED"}
+[2026-09-20T04:43:36.760Z] >>> SUCCESS! Application successfully submitted for 4461657544 (Senior Technical Lead — Agentic AI / Generative AI | EazyML | LinkedIn) <<<
+[2026-09-20T04:43:43.918Z] Total applied in this session: 6
+[2026-09-20T04:43:43.919Z] Navigating to job view: 4429620567
+[2026-09-20T04:43:48.694Z] Job info: "Senior / Staff Software Engineer | Bowser AI | LinkedIn" at "" | EasyApply: true | AlreadyApplied: false
+[2026-09-20T04:43:48.855Z] Clicked Easy Apply: CLICKED
+[2026-09-20T04:43:51.507Z] Step 1 result: {"status":"SUBMITTED"}
+[2026-09-20T04:43:51.507Z] >>> SUCCESS! Application successfully submitted for 4429620567 (Senior / Staff Software Engineer | Bowser AI | LinkedIn) <<<
+[2026-09-20T04:43:58.642Z] Total applied in this session: 7
+[2026-09-20T04:43:58.643Z] Navigating to job view: 4446508254
+[2026-09-20T04:44:03.441Z] Job info: "Staff Software Engineer | LINQ | LinkedIn" at "" | EasyApply: true | AlreadyApplied: false
+[2026-09-20T04:44:03.601Z] Clicked Easy Apply: CLICKED
+[2026-09-20T04:44:06.365Z] Step 1 result: {"status":"NEXT","btn":"Next"}
+[2026-09-20T04:44:09.025Z] Step 2 result: {"status":"NEXT","btn":"Next"}
+[2026-09-20T04:44:11.775Z] Step 3 result: {"status":"NEXT","btn":"Next"}
+[2026-09-20T04:44:14.426Z] Step 4 result: {"status":"NEXT","btn":"Next"}
+[2026-09-20T04:44:17.083Z] Step 5 result: {"status":"NEXT","btn":"Next"}
+[2026-09-20T04:44:19.777Z] Step 6 result: {"status":"NEXT","btn":"Next"}
+[2026-09-20T04:44:22.565Z] Step 7 result: {"status":"NEXT","btn":"Review"}
+[2026-09-20T04:44:25.212Z] Step 8 result: {"status":"SUBMITTED"}
+[2026-09-20T04:44:25.212Z] >>> SUCCESS! Application successfully submitted for 4446508254 (Staff Software Engineer | LINQ | LinkedIn) <<<
+[2026-09-20T04:44:32.337Z] Total applied in this session: 8
+[2026-09-20T04:44:32.338Z] Navigating to job view: 4437433866
+[2026-09-20T04:44:37.125Z] Job info: "Staff Software Developer - Integration(Remote First) | Zensurance | LinkedIn" at "" | EasyApply: true | AlreadyApplied: false
+[2026-09-20T04:44:37.281Z] Clicked Easy Apply: CLICKED
+[2026-09-20T04:44:40.029Z] Step 1 result: {"status":"NEXT","btn":"Next"}
+[2026-09-20T04:44:42.671Z] Step 2 result: {"status":"NEXT","btn":"Next"}
+[2026-09-20T04:44:45.329Z] Step 3 result: {"status":"NEXT","btn":"Next"}
+[2026-09-20T04:44:48.031Z] Step 4 result: {"status":"NEXT","btn":"Next"}
+[2026-09-20T04:44:50.702Z] Step 5 result: {"status":"NEXT","btn":"Review"}
+[2026-09-20T04:44:53.316Z] Step 6 result: {"status":"SUBMITTED"}
+[2026-09-20T04:44:53.316Z] >>> SUCCESS! Application successfully submitted for 4437433866 (Staff Software Developer - Integration(Remote First) | Zensurance | LinkedIn) <<<
+[2026-09-20T04:45:00.448Z] Total applied in this session: 9
+[2026-09-20T04:45:00.449Z] Navigating to job view: 4446705481
+[2026-09-20T04:45:05.229Z] Job info: "Staff Software Engineer | Wrike | LinkedIn" at "" | EasyApply: true | AlreadyApplied: false
+[2026-09-20T04:45:05.431Z] Clicked Easy Apply: CLICKED
+[2026-09-20T04:45:08.165Z] Step 1 result: {"status":"NEXT","btn":"Next"}
+[2026-09-20T04:45:10.859Z] Step 2 result: {"status":"NEXT","btn":"Next"}
+[2026-09-20T04:45:13.560Z] Step 3 result: {"status":"NEXT","btn":"Next"}
+[2026-09-20T04:45:16.200Z] Step 4 result: {"status":"NEXT","btn":"Next"}
+[2026-09-20T04:45:18.840Z] Step 5 result: {"status":"NEXT","btn":"Next"}
+[2026-09-20T04:45:21.478Z] Step 6 result: {"status":"NEXT","btn":"Next"}
+[2026-09-20T04:45:24.096Z] Step 7 result: {"status":"NEXT","btn":"Next"}
+[2026-09-20T04:45:26.741Z] Step 8 result: {"status":"NEXT","btn":"Next"}
+[2026-09-20T04:45:29.358Z] Step 9 result: {"status":"NEXT","btn":"Next"}
+[2026-09-20T04:45:31.999Z] Step 10 result: {"status":"NEXT","btn":"Next"}
+[2026-09-20T04:45:39.004Z] Navigating to job view: 4454497109
+[2026-09-20T04:45:43.791Z] Job info: "Staff Software Engineer - Harness / AI Orchestration | Third Intelligence | LinkedIn" at "" | EasyApply: true | AlreadyApplied: true
+[2026-09-20T04:45:43.791Z] Navigating to job view: 4401007854
+[2026-09-20T04:45:48.633Z] Job info: "Staff Software Engineer | NewRich Network | LinkedIn" at "" | EasyApply: true | AlreadyApplied: false
+[2026-09-20T04:45:48.818Z] Clicked Easy Apply: CLICKED
+[2026-09-20T04:45:51.542Z] Step 1 result: {"status":"NEXT","btn":"Next"}
+[2026-09-20T04:45:54.217Z] Step 2 result: {"status":"NEXT","btn":"Next"}
+[2026-09-20T04:45:56.871Z] Step 3 result: {"status":"NEXT","btn":"Next"}
+[2026-09-20T04:45:59.525Z] Step 4 result: {"status":"NEXT","btn":"Next"}
+[2026-09-20T04:46:02.201Z] Step 5 result: {"status":"NEXT","btn":"Review"}
+[2026-09-20T04:46:04.847Z] Step 6 result: {"status":"SUBMITTED"}
+[2026-09-20T04:46:04.847Z] >>> SUCCESS! Application successfully submitted for 4401007854 (Staff Software Engineer | NewRich Network | LinkedIn) <<<
+[2026-09-20T04:46:11.968Z] Total applied in this session: 10
+[2026-09-20T04:46:11.969Z] Navigating to job view: 4468383373
+[2026-09-20T04:46:16.748Z] Job info: "Staff Software Engineer | Jobgether | LinkedIn" at "" | EasyApply: true | AlreadyApplied: false
+[2026-09-20T04:46:16.924Z] Clicked Easy Apply: CLICKED
+[2026-09-20T04:46:19.619Z] Step 1 result: {"status":"NEXT","btn":"Next"}
+[2026-09-20T04:46:22.256Z] Step 2 result: {"status":"NEXT","btn":"Next"}
+[2026-09-20T04:46:24.920Z] Step 3 result: {"status":"NEXT","btn":"Review"}
+[2026-09-20T04:46:27.566Z] Step 4 result: {"status":"SUBMITTED"}
+[2026-09-20T04:46:27.566Z] >>> SUCCESS! Application successfully submitted for 4468383373 (Staff Software Engineer | Jobgether | LinkedIn) <<<
+[2026-09-20T04:46:34.699Z] Total applied in this session: 11
+[2026-09-20T04:46:34.700Z] Navigating to job view: 4466837834
+[2026-09-20T04:46:39.479Z] Job info: "Development Lead (Software) | Cherry Bekaert | LinkedIn" at "" | EasyApply: true | AlreadyApplied: false
+[2026-09-20T04:46:39.664Z] Clicked Easy Apply: CLICKED
+[2026-09-20T04:46:42.348Z] Step 1 result: {"status":"NEXT","btn":"Next"}
+[2026-09-20T04:46:45.000Z] Step 2 result: {"status":"NEXT","btn":"Next"}
+[2026-09-20T04:46:47.651Z] Step 3 result: {"status":"NEXT","btn":"Review"}
+[2026-09-20T04:46:50.300Z] Step 4 result: {"status":"SUBMITTED"}
+[2026-09-20T04:46:50.300Z] >>> SUCCESS! Application successfully submitted for 4466837834 (Development Lead (Software) | Cherry Bekaert | LinkedIn) <<<
+[2026-09-20T04:46:57.431Z] Total applied in this session: 12
+[2026-09-20T04:46:57.433Z] Navigating to job view: 4441693907
+[2026-09-20T04:47:02.202Z] Job info: "Staff Software Engineer, Platform & Solutions | Wpromote | LinkedIn" at "" | EasyApply: true | AlreadyApplied: false
+[2026-09-20T04:47:02.383Z] Clicked Easy Apply: CLICKED
+[2026-09-20T04:47:05.092Z] Step 1 result: {"status":"NEXT","btn":"Next"}
+[2026-09-20T04:47:07.745Z] Step 2 result: {"status":"NEXT","btn":"Next"}
+[2026-09-20T04:47:10.392Z] Step 3 result: {"status":"NEXT","btn":"Next"}
+[2026-09-20T04:47:13.004Z] Step 4 result: {"status":"NEXT","btn":"Next"}
+[2026-09-20T04:47:15.647Z] Step 5 result: {"status":"NEXT","btn":"Next"}
+[2026-09-20T04:47:18.282Z] Step 6 result: {"status":"NEXT","btn":"Next"}
+[2026-09-20T04:47:20.923Z] Step 7 result: {"status":"NEXT","btn":"Next"}
+[2026-09-20T04:47:23.566Z] Step 8 result: {"status":"NEXT","btn":"Next"}
+[2026-09-20T04:47:26.204Z] Step 9 result: {"status":"NEXT","btn":"Next"}
+[2026-09-20T04:47:28.845Z] Step 10 result: {"status":"NEXT","btn":"Next"}
+[2026-09-20T04:47:35.848Z] Navigating to job view: 4464679957
+[2026-09-20T04:47:40.631Z] Job info: "Staff Software Engineer | Bloc Recruitment | LinkedIn" at "" | EasyApply: true | AlreadyApplied: false
+[2026-09-20T04:47:40.811Z] Clicked Easy Apply: CLICKED
+[2026-09-20T04:47:43.504Z] Step 1 result: {"status":"NEXT","btn":"Next"}
+[2026-09-20T04:47:46.158Z] Step 2 result: {"status":"NEXT","btn":"Next"}
+[2026-09-20T04:47:48.820Z] Step 3 result: {"status":"NEXT","btn":"Review"}
+[2026-09-20T04:47:51.466Z] Step 4 result: {"status":"SUBMITTED"}
+[2026-09-20T04:47:51.466Z] >>> SUCCESS! Application successfully submitted for 4464679957 (Staff Software Engineer | Bloc Recruitment | LinkedIn) <<<
+[2026-09-20T04:47:58.604Z] Total applied in this session: 13
+[2026-09-20T04:47:58.605Z] Navigating to job view: 4466290357
+[2026-09-20T04:48:03.397Z] Job info: "Senior Full Stack .NET Developer (SC Cleared) | Montash | LinkedIn" at "" | EasyApply: true | AlreadyApplied: false
+[2026-09-20T04:48:03.572Z] Clicked Easy Apply: CLICKED
+[2026-09-20T04:48:06.324Z] Step 1 result: {"status":"NEXT","btn":"Next"}
+[2026-09-20T04:48:08.946Z] Step 2 result: {"status":"NEXT","btn":"Next"}
+[2026-09-20T04:48:11.628Z] Step 3 result: {"status":"NEXT","btn":"Review"}
+[2026-09-20T04:48:14.255Z] Step 4 result: {"status":"SUBMITTED"}
+[2026-09-20T04:48:14.255Z] >>> SUCCESS! Application successfully submitted for 4466290357 (Senior Full Stack .NET Developer (SC Cleared) | Montash | LinkedIn) <<<
+[2026-09-20T04:48:21.384Z] Total applied in this session: 14
+[2026-09-20T04:48:21.384Z] Navigating to job view: 4419303122
+[2026-09-20T04:48:26.165Z] Job info: "Staff Software Engineer | Zeta Global | LinkedIn" at "" | EasyApply: true | AlreadyApplied: false
+[2026-09-20T04:48:26.398Z] Clicked Easy Apply: CLICKED
+[2026-09-20T04:48:29.020Z] Step 1 result: {"status":"NEXT","btn":"Next"}
+[2026-09-20T04:48:31.663Z] Step 2 result: {"status":"NEXT","btn":"Next"}
+[2026-09-20T04:48:34.284Z] Step 3 result: {"status":"NEXT","btn":"Next"}
+[2026-09-20T04:48:36.916Z] Step 4 result: {"status":"NEXT","btn":"Next"}
+[2026-09-20T04:48:39.553Z] Step 5 result: {"status":"NEXT","btn":"Next"}
+[2026-09-20T04:48:42.190Z] Step 6 result: {"status":"NEXT","btn":"Next"}
+[2026-09-20T04:48:44.832Z] Step 7 result: {"status":"NEXT","btn":"Next"}
+[2026-09-20T04:48:47.457Z] Step 8 result: {"status":"NEXT","btn":"Next"}
+[2026-09-20T04:48:50.118Z] Step 9 result: {"status":"NEXT","btn":"Next"}
+[2026-09-20T04:48:52.746Z] Step 10 result: {"status":"NEXT","btn":"Next"}
+[2026-09-20T04:48:59.751Z] Navigating to job view: 4432282189
+[2026-09-20T04:49:04.524Z] Job info: "Principal Engineer | Emeritus | LinkedIn" at "" | EasyApply: true | AlreadyApplied: false
+[2026-09-20T04:49:04.696Z] Clicked Easy Apply: CLICKED
+[2026-09-20T04:49:07.403Z] Step 1 result: {"status":"NEXT","btn":"Next"}
+[2026-09-20T04:49:10.058Z] Step 2 result: {"status":"NEXT","btn":"Next"}
+[2026-09-20T04:49:12.703Z] Step 3 result: {"status":"NEXT","btn":"Review"}
+[2026-09-20T04:49:15.353Z] Step 4 result: {"status":"SUBMITTED"}
+[2026-09-20T04:49:15.353Z] >>> SUCCESS! Application successfully submitted for 4432282189 (Principal Engineer | Emeritus | LinkedIn) <<<
+[2026-09-20T04:49:22.482Z] Total applied in this session: 15
+[2026-09-20T04:49:22.483Z] Navigating to job view: 4460635446
+[2026-09-20T04:49:27.254Z] Job info: "Staff Software Engineer (Contract) | TekRek | LinkedIn" at "" | EasyApply: true | AlreadyApplied: false
+[2026-09-20T04:49:27.433Z] Clicked Easy Apply: CLICKED
+[2026-09-20T04:49:30.150Z] Step 1 result: {"status":"NEXT","btn":"Next"}
+[2026-09-20T04:49:32.801Z] Step 2 result: {"status":"NEXT","btn":"Next"}
+[2026-09-20T04:49:35.461Z] Step 3 result: {"status":"NEXT","btn":"Review"}
+[2026-09-20T04:49:38.104Z] Step 4 result: {"status":"SUBMITTED"}
+[2026-09-20T04:49:38.104Z] >>> SUCCESS! Application successfully submitted for 4460635446 (Staff Software Engineer (Contract) | TekRek | LinkedIn) <<<
+[2026-09-20T04:49:45.241Z] Total applied in this session: 16
+[2026-09-20T04:49:45.242Z] Navigating to job view: 4461460144
+[2026-09-20T04:49:50.030Z] Job info: "Founding Full Stack Engineer | Stealth Startup | LinkedIn" at "" | EasyApply: true | AlreadyApplied: false
+[2026-09-20T04:49:50.199Z] Clicked Easy Apply: CLICKED
+[2026-09-20T04:49:52.916Z] Step 1 result: {"status":"NEXT","btn":"Next"}
+[2026-09-20T04:49:55.567Z] Step 2 result: {"status":"NEXT","btn":"Next"}
+[2026-09-20T04:49:58.220Z] Step 3 result: {"status":"NEXT","btn":"Review"}
+[2026-09-20T04:50:00.860Z] Step 4 result: {"status":"SUBMITTED"}
+[2026-09-20T04:50:00.860Z] >>> SUCCESS! Application successfully submitted for 4461460144 (Founding Full Stack Engineer | Stealth Startup | LinkedIn) <<<
+[2026-09-20T04:50:07.970Z] Total applied in this session: 17
+[2026-09-20T04:50:07.971Z] Navigating to job view: 4460587358
+[2026-09-20T04:50:12.739Z] Job info: "Full-Stack Software Engineer – HR Application Development | Sovenson Limited | LinkedIn" at "" | EasyApply: true | AlreadyApplied: false
+[2026-09-20T04:50:12.911Z] Clicked Easy Apply: CLICKED
+[2026-09-20T04:50:15.629Z] Step 1 result: {"status":"NEXT","btn":"Next"}
+[2026-09-20T04:50:18.269Z] Step 2 result: {"status":"NEXT","btn":"Next"}
+[2026-09-20T04:50:20.924Z] Step 3 result: {"status":"NEXT","btn":"Review"}
+[2026-09-20T04:50:23.556Z] Step 4 result: {"status":"NEXT","btn":"Review"}
+[2026-09-20T04:50:26.197Z] Step 5 result: {"status":"NEXT","btn":"Review"}
+[2026-09-20T04:50:28.821Z] Step 6 result: {"status":"NEXT","btn":"Review"}
+[2026-09-20T04:50:31.443Z] Step 7 result: {"status":"NEXT","btn":"Review"}
+[2026-09-20T04:50:34.082Z] Step 8 result: {"status":"NEXT","btn":"Review"}
+[2026-09-20T04:50:36.722Z] Step 9 result: {"status":"NEXT","btn":"Review"}
+[2026-09-20T04:50:39.360Z] Step 10 result: {"status":"NEXT","btn":"Review"}
+[2026-09-20T04:50:46.364Z] Navigating to job view: 4466680849
+[2026-09-20T04:50:51.149Z] Job info: "Full Stack Engineer – Web & Mobile Applications | VirtuProse | LinkedIn" at "" | EasyApply: true | AlreadyApplied: false
+[2026-09-20T04:50:51.330Z] Clicked Easy Apply: CLICKED
+[2026-09-20T04:50:54.032Z] Step 1 result: {"status":"NEXT","btn":"Next"}
+[2026-09-20T04:50:56.683Z] Step 2 result: {"status":"NEXT","btn":"Next"}
+[2026-09-20T04:50:59.329Z] Step 3 result: {"status":"NEXT","btn":"Next"}
+[2026-09-20T04:51:01.991Z] Step 4 result: {"status":"NEXT","btn":"Review"}
+[2026-09-20T04:51:04.609Z] Step 5 result: {"status":"SUBMITTED"}
+[2026-09-20T04:51:04.609Z] >>> SUCCESS! Application successfully submitted for 4466680849 (Full Stack Engineer – Web & Mobile Applications | VirtuProse | LinkedIn) <<<
+[2026-09-20T04:51:11.756Z] Total applied in this session: 18
+[2026-09-20T04:51:11.757Z] Finished query. Resting 6 seconds before next query rotation...
+[2026-09-20T04:51:17.758Z] Searching: https://www.linkedin.com/jobs/search/?f_AL=true&f_WT=2&keywords=Principal%20Engineer&location=Worldwide
+[2026-09-20T04:51:24.032Z] Found 25 jobs on search page.
+[2026-09-20T04:51:24.033Z] Navigating to job view: 4457366308
+[2026-09-20T04:51:28.791Z] Job info: "Principal AI Engineer | Berg Search | LinkedIn" at "" | EasyApply: true | AlreadyApplied: false
+[2026-09-20T04:51:28.964Z] Clicked Easy Apply: CLICKED
+[2026-09-20T04:51:31.673Z] Step 1 result: {"status":"NEXT","btn":"Next"}
+[2026-09-20T04:51:34.324Z] Step 2 result: {"status":"NEXT","btn":"Review"}
+[2026-09-20T04:51:36.961Z] Step 3 result: {"status":"SUBMITTED"}
+[2026-09-20T04:51:36.961Z] >>> SUCCESS! Application successfully submitted for 4457366308 (Principal AI Engineer | Berg Search | LinkedIn) <<<
+[2026-09-20T04:51:44.093Z] Total applied in this session: 19
+[2026-09-20T04:51:44.094Z] Navigating to job view: 4453460546
+[2026-09-20T04:51:48.860Z] Job info: "Principal Software Engineer | Xello | LinkedIn" at "" | EasyApply: true | AlreadyApplied: true
+[2026-09-20T04:51:48.861Z] Navigating to job view: 4459533369
+[2026-09-20T04:51:53.592Z] Job info: "Principal AI Engineer & Data Analyst | Concepts Beyond | LinkedIn" at "" | EasyApply: true | AlreadyApplied: false
+[2026-09-20T04:51:53.761Z] Clicked Easy Apply: CLICKED
+[2026-09-20T04:51:56.464Z] Step 1 result: {"status":"NEXT","btn":"Next"}
+[2026-09-20T04:51:59.112Z] Step 2 result: {"status":"NEXT","btn":"Next"}
+[2026-09-20T04:52:01.771Z] Step 3 result: {"status":"NEXT","btn":"Review"}
+[2026-09-20T04:52:04.415Z] Step 4 result: {"status":"SUBMITTED"}
+[2026-09-20T04:52:04.415Z] >>> SUCCESS! Application successfully submitted for 4459533369 (Principal AI Engineer & Data Analyst | Concepts Beyond | LinkedIn) <<<
+[2026-09-20T04:52:11.543Z] Total applied in this session: 20
+[2026-09-20T04:52:11.544Z] Navigating to job view: 4464348370
+[2026-09-20T04:52:16.331Z] Job info: "Principal AI Engineer | The Owners Forum | LinkedIn" at "" | EasyApply: true | AlreadyApplied: true
+[2026-09-20T04:52:16.332Z] Navigating to job view: 4464471931
+[2026-09-20T04:52:21.070Z] Job info: "Principal Software Engineer | Runtime | LinkedIn" at "" | EasyApply: true | AlreadyApplied: false
+[2026-09-20T04:52:21.236Z] Clicked Easy Apply: CLICKED
+[2026-09-20T04:52:23.923Z] Step 1 result: {"status":"NEXT","btn":"Next"}
+[2026-09-20T04:52:26.580Z] Step 2 result: {"status":"NEXT","btn":"Next"}
+[2026-09-20T04:52:29.217Z] Step 3 result: {"status":"NEXT","btn":"Review"}
+[2026-09-20T04:52:31.856Z] Step 4 result: {"status":"SUBMITTED"}
+[2026-09-20T04:52:31.856Z] >>> SUCCESS! Application successfully submitted for 4464471931 (Principal Software Engineer | Runtime | LinkedIn) <<<
+[2026-09-20T04:52:38.978Z] Total applied in this session: 21
+[2026-09-20T04:52:38.978Z] Navigating to job view: 4460625008
+[2026-09-20T04:52:43.747Z] Job info: "Senior AI Platform Engineer or Principal AI Platform Engineer | Addition | LinkedIn" at "" | EasyApply: true | AlreadyApplied: true
+[2026-09-20T04:52:43.747Z] Navigating to job view: 4464351472
+[2026-09-20T04:52:48.503Z] Job info: "Principal AI Engineer | Bluebird | LinkedIn" at "" | EasyApply: true | AlreadyApplied: false
+[2026-09-20T04:52:48.684Z] Clicked Easy Apply: CLICKED
+[2026-09-20T04:52:51.399Z] Step 1 result: {"status":"NEXT","btn":"Next"}
+[2026-09-20T04:52:54.038Z] Step 2 result: {"status":"NEXT","btn":"Next"}
+[2026-09-20T04:52:56.697Z] Step 3 result: {"status":"NEXT","btn":"Review"}
+[2026-09-20T04:52:59.317Z] Step 4 result: {"status":"SUBMITTED"}
+[2026-09-20T04:52:59.317Z] >>> SUCCESS! Application successfully submitted for 4464351472 (Principal AI Engineer | Bluebird | LinkedIn) <<<
+[2026-09-20T04:53:06.442Z] Total applied in this session: 22
+[2026-09-20T04:53:06.443Z] Navigating to job view: 4462812447
+[2026-09-20T04:53:11.220Z] Job info: "Principal AI Engineer | Blend | LinkedIn" at "" | EasyApply: true | AlreadyApplied: false
+[2026-09-20T04:53:11.418Z] Clicked Easy Apply: CLICKED
+[2026-09-20T04:53:14.145Z] Step 1 result: {"status":"NEXT","btn":"Next"}
+[2026-09-20T04:53:16.829Z] Step 2 result: {"status":"NEXT","btn":"Next"}
+[2026-09-20T04:53:19.443Z] Step 3 result: {"status":"NEXT","btn":"Next"}
+[2026-09-20T04:53:22.094Z] Step 4 result: {"status":"NEXT","btn":"Next"}
+[2026-09-20T04:53:24.733Z] Step 5 result: {"status":"NEXT","btn":"Next"}
+[2026-09-20T04:53:27.383Z] Step 6 result: {"status":"NEXT","btn":"Next"}
+[2026-09-20T04:53:29.999Z] Step 7 result: {"status":"NEXT","btn":"Next"}
+[2026-09-20T04:53:32.639Z] Step 8 result: {"status":"NEXT","btn":"Next"}
+[2026-09-20T04:53:35.278Z] Step 9 result: {"status":"NEXT","btn":"Next"}
+[2026-09-20T04:53:37.915Z] Step 10 result: {"status":"NEXT","btn":"Next"}
+[2026-09-20T04:53:44.917Z] Navigating to job view: 4466253955
+[2026-09-20T04:53:49.696Z] Job info: "Research Engineer – Code Generation (Remote | $50–$100/hr) | Synthires | LinkedIn" at "" | EasyApply: true | AlreadyApplied: false
+[2026-09-20T04:53:49.869Z] Clicked Easy Apply: CLICKED
+[2026-09-20T04:53:52.579Z] Step 1 result: {"status":"NEXT","btn":"Next"}
+[2026-09-20T04:53:55.243Z] Step 2 result: {"status":"NEXT","btn":"Next"}
+[2026-09-20T04:53:57.890Z] Step 3 result: {"status":"NEXT","btn":"Review"}
+[2026-09-20T04:54:00.531Z] Step 4 result: {"status":"SUBMITTED"}
+[2026-09-20T04:54:00.531Z] >>> SUCCESS! Application successfully submitted for 4466253955 (Research Engineer – Code Generation (Remote | $50–$100/hr) | Synthires | LinkedIn) <<<
+[2026-09-20T04:54:07.649Z] Total applied in this session: 23
+[2026-09-20T04:54:07.651Z] Navigating to job view: 4462293977
+[2026-09-20T04:54:12.439Z] Job info: "Principal AI Engineer | Change Digital – Digital & Tech Recruitment | LinkedIn" at "" | EasyApply: true | AlreadyApplied: false
+[2026-09-20T04:54:12.622Z] Clicked Easy Apply: CLICKED
+[2026-09-20T04:54:15.336Z] Step 1 result: {"status":"NEXT","btn":"Next"}
+[2026-09-20T04:54:17.955Z] Step 2 result: {"status":"NEXT","btn":"Next"}
+[2026-09-20T04:54:20.602Z] Step 3 result: {"status":"NEXT","btn":"Review"}
+[2026-09-20T04:54:23.211Z] Step 4 result: {"status":"SUBMITTED"}
+[2026-09-20T04:54:23.211Z] >>> SUCCESS! Application successfully submitted for 4462293977 (Principal AI Engineer | Change Digital – Digital & Tech Recruitment | LinkedIn) <<<
+[2026-09-20T04:54:30.338Z] Total applied in this session: 24
+[2026-09-20T04:54:30.339Z] Navigating to job view: 4456883994
+[2026-09-20T04:54:35.116Z] Job info: "(US) Principal ML System Engineer | PointClickCare | LinkedIn" at "" | EasyApply: true | AlreadyApplied: true
+[2026-09-20T04:54:35.116Z] Navigating to job view: 4464646815
+[2026-09-20T04:54:39.906Z] Job info: "Sr. Principal Software Engineer (Platform) | Rafay | LinkedIn" at "" | EasyApply: true | AlreadyApplied: true
+[2026-09-20T04:54:39.907Z] Navigating to job view: 4466456038
+[2026-09-20T04:54:44.680Z] Job info: "Technical Architect (Remote) | Hire Feed | LinkedIn" at "" | EasyApply: true | AlreadyApplied: true
+[2026-09-20T04:54:44.680Z] Navigating to job view: 4468258461
+[2026-09-20T04:54:49.450Z] Job info: "Principal AI Software Engineer | Selby Jennings | LinkedIn" at "" | EasyApply: true | AlreadyApplied: true
+[2026-09-20T04:54:49.451Z] Navigating to job view: 4445132959
+[2026-09-20T04:54:54.208Z] Job info: "Principal Engineer - AI | Egnyte | LinkedIn" at "" | EasyApply: true | AlreadyApplied: false
+[2026-09-20T04:54:54.385Z] Clicked Easy Apply: CLICKED
+[2026-09-20T04:54:57.117Z] Step 1 result: {"status":"NEXT","btn":"Next"}
+[2026-09-20T04:54:59.773Z] Step 2 result: {"status":"NEXT","btn":"Next"}
+[2026-09-20T04:55:02.415Z] Step 3 result: {"status":"NEXT","btn":"Review"}
+[2026-09-20T04:55:05.063Z] Step 4 result: {"status":"SUBMITTED"}
+[2026-09-20T04:55:05.063Z] >>> SUCCESS! Application successfully submitted for 4445132959 (Principal Engineer - AI | Egnyte | LinkedIn) <<<
+[2026-09-20T04:55:12.197Z] Total applied in this session: 25
+[2026-09-20T04:55:12.198Z] Navigating to job view: 4464857501
+[2026-09-20T04:55:16.967Z] Job info: "Robotics Architect | Lawrence Harvey | LinkedIn" at "" | EasyApply: true | AlreadyApplied: false
+[2026-09-20T04:55:17.151Z] Clicked Easy Apply: CLICKED
+[2026-09-20T04:55:19.867Z] Step 1 result: {"status":"NEXT","btn":"Next"}
+[2026-09-20T04:55:22.492Z] Step 2 result: {"status":"NEXT","btn":"Next"}
+[2026-09-20T04:55:25.152Z] Step 3 result: {"status":"NEXT","btn":"Review"}
+[2026-09-20T04:55:27.782Z] Step 4 result: {"status":"SUBMITTED"}
+[2026-09-20T04:55:27.782Z] >>> SUCCESS! Application successfully submitted for 4464857501 (Robotics Architect | Lawrence Harvey | LinkedIn) <<<
+[2026-09-20T04:55:34.905Z] Total applied in this session: 26
+[2026-09-20T04:55:34.906Z] Navigating to job view: 4462885245
+[2026-09-20T04:55:39.695Z] Job info: "Principal Software Engineer (Java) | Resource Innovations | LinkedIn" at "" | EasyApply: true | AlreadyApplied: false
+[2026-09-20T04:55:39.897Z] Clicked Easy Apply: CLICKED
+[2026-09-20T04:55:42.609Z] Step 1 result: {"status":"NEXT","btn":"Next"}
+[2026-09-20T04:55:45.301Z] Step 2 result: {"status":"NEXT","btn":"Next"}
+[2026-09-20T04:55:47.937Z] Step 3 result: {"status":"NEXT","btn":"Next"}
+[2026-09-20T04:55:50.590Z] Step 4 result: {"status":"NEXT","btn":"Next"}
+[2026-09-20T04:55:53.249Z] Step 5 result: {"status":"NEXT","btn":"Next"}
+[2026-09-20T04:55:55.912Z] Step 6 result: {"status":"NEXT","btn":"Review"}
+[2026-09-20T04:55:58.555Z] Step 7 result: {"status":"NEXT","btn":"Review"}
+[2026-09-20T04:56:01.198Z] Step 8 result: {"status":"NEXT","btn":"Review"}
+[2026-09-20T04:56:03.840Z] Step 9 result: {"status":"NEXT","btn":"Review"}
+[2026-09-20T04:56:06.471Z] Step 10 result: {"status":"NEXT","btn":"Review"}
+[2026-09-20T04:56:13.473Z] Navigating to job view: 4461615138
+[2026-09-20T04:56:18.252Z] Job info: "Senior/Principal Applied AI Engineer | Harnham | LinkedIn" at "" | EasyApply: true | AlreadyApplied: true
+[2026-09-20T04:56:18.252Z] Navigating to job view: 4465494278
+[2026-09-20T04:56:23.006Z] Job info: "Principal Engineer | Kaliba | LinkedIn" at "" | EasyApply: true | AlreadyApplied: false
+[2026-09-20T04:56:23.182Z] Clicked Easy Apply: CLICKED
+[2026-09-20T04:56:25.899Z] Step 1 result: {"status":"NEXT","btn":"Next"}
+[2026-09-20T04:56:28.553Z] Step 2 result: {"status":"NEXT","btn":"Next"}
+[2026-09-20T04:56:31.209Z] Step 3 result: {"status":"NEXT","btn":"Review"}
+[2026-09-20T04:56:33.853Z] Step 4 result: {"status":"SUBMITTED"}
+[2026-09-20T04:56:33.854Z] >>> SUCCESS! Application successfully submitted for 4465494278 (Principal Engineer | Kaliba | LinkedIn) <<<
+[2026-09-20T04:56:40.980Z] Total applied in this session: 27
+[2026-09-20T04:56:40.981Z] Navigating to job view: 4442672051
+[2026-09-20T04:56:45.757Z] Job info: "Principal Software Engineer, Backend (Go) | Skool | LinkedIn" at "" | EasyApply: true | AlreadyApplied: false
+[2026-09-20T04:56:45.943Z] Clicked Easy Apply: CLICKED
+[2026-09-20T04:56:48.642Z] Step 1 result: {"status":"NEXT","btn":"Next"}
+[2026-09-20T04:56:51.277Z] Step 2 result: {"status":"NEXT","btn":"Next"}
+[2026-09-20T04:56:53.915Z] Step 3 result: {"status":"NEXT","btn":"Next"}
+[2026-09-20T04:56:56.588Z] Step 4 result: {"status":"NEXT","btn":"Review"}
+[2026-09-20T04:56:59.235Z] Step 5 result: {"status":"SUBMITTED"}
+[2026-09-20T04:56:59.236Z] >>> SUCCESS! Application successfully submitted for 4442672051 (Principal Software Engineer, Backend (Go) | Skool | LinkedIn) <<<
+[2026-09-20T04:57:06.371Z] Total applied in this session: 28
+[2026-09-20T04:57:06.372Z] Navigating to job view: 4465702781
+[2026-09-20T04:57:11.114Z] Job info: "Principal Software Engineer | TheDriveGroup | LinkedIn" at "" | EasyApply: false | AlreadyApplied: false
+[2026-09-20T04:57:11.114Z] No Easy Apply for 4465702781. Skipping.
+[2026-09-20T04:57:11.114Z] Job 4461657544 already applied previously. Skipping.
+[2026-09-20T04:57:11.114Z] Navigating to job view: 4466448454
+[2026-09-20T04:57:15.854Z] Job info: "Go Software Engineer (Remote) | Hired | LinkedIn" at "" | EasyApply: false | AlreadyApplied: false
+[2026-09-20T04:57:15.854Z] No Easy Apply for 4466448454. Skipping.
+[2026-09-20T04:57:15.855Z] Navigating to job view: 4466287267
+[2026-09-20T04:57:20.584Z] Job info: "Principal AI Engineer | Mitratech | LinkedIn" at "" | EasyApply: false | AlreadyApplied: true
+[2026-09-20T04:57:20.584Z] Navigating to job view: 4459960387
+[2026-09-20T04:57:25.340Z] Job info: "Senior Backend Engineer (TypeScript/Python/C#) - Remote | Kake | LinkedIn" at "" | EasyApply: false | AlreadyApplied: true
+[2026-09-20T04:57:25.341Z] Finished query. Resting 6 seconds before next query rotation...
+[2026-09-20T04:57:31.342Z] Searching: https://www.linkedin.com/jobs/search/?f_AL=true&f_WT=2&keywords=Lead%20AI%20Engineer&location=Worldwide
+[2026-09-20T04:57:37.631Z] Found 25 jobs on search page.
+[2026-09-20T04:57:37.631Z] Navigating to job view: 4450632165
+[2026-09-20T04:57:42.381Z] Job info: "Forward Deployed AI Engineer (India) | SaxeCap | LinkedIn" at "" | EasyApply: false | AlreadyApplied: true
+[2026-09-20T04:57:42.382Z] Navigating to job view: 4464423224
+[2026-09-20T04:57:47.121Z] Job info: "Lead AI Engineer | ProFound People | LinkedIn" at "" | EasyApply: false | AlreadyApplied: true
+[2026-09-20T04:57:47.121Z] Navigating to job view: 4461125778
+[2026-09-20T04:57:51.855Z] Job info: "Senior AI ML Engineer | Mobius by Gaian | LinkedIn" at "" | EasyApply: false | AlreadyApplied: true
+[2026-09-20T04:57:51.856Z] Navigating to job view: 4461978769
+[2026-09-20T04:57:56.631Z] Job info: "Applied AI Developer | Ribit | LinkedIn" at "" | EasyApply: false | AlreadyApplied: true
+[2026-09-20T04:57:56.632Z] Navigating to job view: 4465810305
+[2026-09-20T04:58:01.391Z] Job info: "Senior AI Engineer | FindingVega | LinkedIn" at "" | EasyApply: false | AlreadyApplied: false
+[2026-09-20T04:58:01.391Z] No Easy Apply for 4465810305. Skipping.
+[2026-09-20T04:58:01.392Z] Navigating to job view: 4466597502
+[2026-09-20T04:58:06.112Z] Job info: "Lead AI Engineer | Nityo Infotech | LinkedIn" at "" | EasyApply: false | AlreadyApplied: true
+[2026-09-20T04:58:06.113Z] Navigating to job view: 4461142387
+[2026-09-20T04:58:10.869Z] Job info: "Senior AI Engineer, Agents | Nacre Capital | LinkedIn" at "" | EasyApply: false | AlreadyApplied: true
+[2026-09-20T04:58:10.869Z] Navigating to job view: 4464859950
+[2026-09-20T04:58:15.634Z] Job info: "AI & Digital Engineering Professionals | AI, Data, Platform, Full Stack & Product Roles | Auxo Talent | LinkedIn" at "" | EasyApply: false | AlreadyApplied: true
+[2026-09-20T04:58:15.635Z] Navigating to job view: 4458195308
+[2026-09-20T04:58:20.403Z] Job info: "AI Principal Engineer | Teamified | LinkedIn" at "" | EasyApply: false | AlreadyApplied: false
+[2026-09-20T04:58:20.403Z] No Easy Apply for 4458195308. Skipping.
+[2026-09-20T04:58:20.403Z] Navigating to job view: 4466162212
+[2026-09-20T04:58:25.165Z] Job info: "Applied AI Engineer | Jobgether | LinkedIn" at "" | EasyApply: false | AlreadyApplied: true
+[2026-09-20T04:58:25.165Z] Navigating to job view: 4460988820
+[2026-09-20T04:58:29.942Z] Job info: "Artificial Intelligence Engineer | Arrows | LinkedIn" at "" | EasyApply: false | AlreadyApplied: false
+[2026-09-20T04:58:29.943Z] No Easy Apply for 4460988820. Skipping.
+[2026-09-20T04:58:29.943Z] Job 4464348370 already applied previously. Skipping.
+[2026-09-20T04:58:29.943Z] Navigating to job view: 4463873128
+[2026-09-20T04:58:34.730Z] Job info: "Principal GCP & AI Engineer | Addition | LinkedIn" at "" | EasyApply: false | AlreadyApplied: true
+[2026-09-20T04:58:34.730Z] Navigating to job view: 4457152072
+[2026-09-20T04:58:39.485Z] Job info: "Senior AI Engineer | Braind AI | LinkedIn" at "" | EasyApply: false | AlreadyApplied: true
+[2026-09-20T04:58:39.485Z] Navigating to job view: 4463666610
+[2026-09-20T04:58:44.254Z] Job info: "Senior AI Engineer | Mault | LinkedIn" at "" | EasyApply: false | AlreadyApplied: true
+[2026-09-20T04:58:44.255Z] Navigating to job view: 4465938604
+[2026-09-20T04:58:49.016Z] Job info: "Artificial Intelligence Engineer Fully Remote | BLOOMTECH, Inc | LinkedIn" at "" | EasyApply: false | AlreadyApplied: true
+[2026-09-20T04:58:49.016Z] Navigating to job view: 4467485077
+[2026-09-20T04:58:53.784Z] Job info: "AI Engineer/Architect | Aezion, Inc | LinkedIn" at "" | EasyApply: false | AlreadyApplied: true
+[2026-09-20T04:58:53.785Z] Navigating to job view: 4469189080
+[2026-09-20T04:58:58.560Z] Job info: "Senior AI Engineer (Remote, Contract) | INFUSE | LinkedIn" at "" | EasyApply: false | AlreadyApplied: false
+[2026-09-20T04:58:58.560Z] No Easy Apply for 4469189080. Skipping.
+[2026-09-20T04:58:58.561Z] Navigating to job view: 4465550496
+[2026-09-20T04:59:03.339Z] Job info: "Principal AI Platform Engineer - Python & Generative AI | Andela | LinkedIn" at "" | EasyApply: false | AlreadyApplied: false
+[2026-09-20T04:59:03.339Z] No Easy Apply for 4465550496. Skipping.
+[2026-09-20T04:59:03.339Z] Navigating to job view: 4466251375
+[2026-09-20T04:59:08.083Z] Job info: "Artificial Intelligence Engineer | Stealth Startup | LinkedIn" at "" | EasyApply: false | AlreadyApplied: true
+[2026-09-20T04:59:08.083Z] Navigating to job view: 4466907161
+[2026-09-20T04:59:12.835Z] Job info: "Artificial Intelligence Engineer | Code Compass 🧭 | LinkedIn" at "" | EasyApply: false | AlreadyApplied: false
+[2026-09-20T04:59:12.836Z] No Easy Apply for 4466907161. Skipping.
+[2026-09-20T04:59:12.836Z] Navigating to job view: 4423553043
+[2026-09-20T04:59:17.630Z] Job info: "Lead Machine Learning Engineer | CoreLabel | LinkedIn" at "" | EasyApply: false | AlreadyApplied: false
+[2026-09-20T04:59:17.630Z] No Easy Apply for 4423553043. Skipping.
+[2026-09-20T04:59:17.631Z] Navigating to job view: 4443828651
+[2026-09-20T04:59:22.408Z] Job info: "Senior AI Engineer | Teradata | LinkedIn" at "" | EasyApply: false | AlreadyApplied: true
+[2026-09-20T04:59:22.409Z] Navigating to job view: 4463314277
+[2026-09-20T04:59:27.180Z] Job info: "Senior AI Engineer | iTechScope | LinkedIn" at "" | EasyApply: false | AlreadyApplied: false
+[2026-09-20T04:59:27.180Z] No Easy Apply for 4463314277. Skipping.
+[2026-09-20T04:59:27.180Z] Navigating to job view: 4459659771
+[2026-09-20T04:59:31.931Z] Job info: "Senior AI Engineer | Vivid Resourcing | LinkedIn" at "" | EasyApply: false | AlreadyApplied: false
+[2026-09-20T04:59:31.931Z] No Easy Apply for 4459659771. Skipping.
+[2026-09-20T04:59:31.931Z] Finished query. Resting 6 seconds before next query rotation...
+[2026-09-20T04:59:37.932Z] Searching: https://www.linkedin.com/jobs/search/?f_AL=true&f_WT=2&keywords=Senior%20Backend%20Engineer%20Node&location=Worldwide
+[2026-09-20T04:59:44.189Z] Found 25 jobs on search page.
+[2026-09-20T04:59:44.189Z] Navigating to job view: 4467705109
+[2026-09-20T04:59:48.914Z] Job info: "Staff Backend Engineer | TREQS | LinkedIn" at "" | EasyApply: false | AlreadyApplied: false
+[2026-09-20T04:59:48.914Z] No Easy Apply for 4467705109. Skipping.
+[2026-09-20T04:59:48.914Z] Navigating to job view: 4467446283
+[2026-09-20T04:59:53.662Z] Job info: "Senior Backend Engineer - Node.js & AWS (Remote) | Quik Hire Staffing | LinkedIn" at "" | EasyApply: false | AlreadyApplied: false
+[2026-09-20T04:59:53.663Z] No Easy Apply for 4467446283. Skipping.
+[2026-09-20T04:59:53.663Z] Navigating to job view: 4462859134
+[2026-09-20T04:59:58.407Z] Job info: "REMOTE-Backend Engineer | IntePros | LinkedIn" at "" | EasyApply: false | AlreadyApplied: false
+[2026-09-20T04:59:58.407Z] No Easy Apply for 4462859134. Skipping.
+[2026-09-20T04:59:58.407Z] Navigating to job view: 4466447254
+[2026-09-20T05:00:03.162Z] Job info: "Senior Backend Engineer (Remote) | Hire Feed | LinkedIn" at "" | EasyApply: false | AlreadyApplied: false
+[2026-09-20T05:00:03.162Z] No Easy Apply for 4466447254. Skipping.
+[2026-09-20T05:00:03.163Z] Navigating to job view: 4468225441
+[2026-09-20T05:00:07.922Z] Job info: "Senior Backend / DevOps Engineer - Bulgaria | Photocert | LinkedIn" at "" | EasyApply: false | AlreadyApplied: false
+[2026-09-20T05:00:07.922Z] No Easy Apply for 4468225441. Skipping.
+[2026-09-20T05:00:07.923Z] Navigating to job view: 4465967936
+[2026-09-20T05:00:12.679Z] Job info: "Senior Backend Engineer (Node.js) | Storyteq | LinkedIn" at "" | EasyApply: false | AlreadyApplied: false
+[2026-09-20T05:00:12.679Z] No Easy Apply for 4465967936. Skipping.
+[2026-09-20T05:00:12.680Z] Navigating to job view: 4465952744
+[2026-09-20T05:00:17.438Z] Job info: "Senior Full-Stack Software Engineer (Remote | $50–$100/hr) | Synthires | LinkedIn" at "" | EasyApply: false | AlreadyApplied: false
+[2026-09-20T05:00:17.439Z] No Easy Apply for 4465952744. Skipping.
+[2026-09-20T05:00:17.439Z] Navigating to job view: 4447912339
+[2026-09-20T05:00:22.197Z] Job info: "Senior Backend Engineer | MAM Gruppe | LinkedIn" at "" | EasyApply: false | AlreadyApplied: false
+[2026-09-20T05:00:22.197Z] No Easy Apply for 4447912339. Skipping.
+[2026-09-20T05:00:22.197Z] Navigating to job view: 4466679053
+[2026-09-20T05:00:26.943Z] Job info: "Senior Backend Engineer (Node/TS) | Fully Remote | AI Fintech Scale-up | Up to £100k + Benefits | Oliver Bernard | LinkedIn" at "" | EasyApply: false | AlreadyApplied: true
+[2026-09-20T05:00:26.944Z] Navigating to job view: 4412743403
+[2026-09-20T05:00:31.699Z] Job info: "Senior Backend Developer | Jobgether | LinkedIn" at "" | EasyApply: false | AlreadyApplied: false
+[2026-09-20T05:00:31.699Z] No Easy Apply for 4412743403. Skipping.
+[2026-09-20T05:00:31.699Z] Navigating to job view: 4468277235
+[2026-09-20T05:00:36.470Z] Job info: "Senior Engineer, Fullstack (Remote, US) | Renew Home | LinkedIn" at "" | EasyApply: false | AlreadyApplied: false
+[2026-09-20T05:00:36.470Z] No Easy Apply for 4468277235. Skipping.
+[2026-09-20T05:00:36.471Z] Navigating to job view: 4460258569
+[2026-09-20T05:00:41.238Z] Job info: "Agentic AI Engineer | Xcede | LinkedIn" at "" | EasyApply: false | AlreadyApplied: false
+[2026-09-20T05:00:41.239Z] No Easy Apply for 4460258569. Skipping.
+[2026-09-20T05:00:41.239Z] Navigating to job view: 4462874100
+[2026-09-20T05:00:45.999Z] Job info: "Senior Backend Engineer | Ryft | LinkedIn" at "" | EasyApply: false | AlreadyApplied: false
+[2026-09-20T05:00:46.000Z] No Easy Apply for 4462874100. Skipping.
+[2026-09-20T05:00:46.000Z] Navigating to job view: 4468686001
+[2026-09-20T05:00:50.757Z] Job info: "Freelance AI Engineer | RAG, Agents & Enterprise AI | Arantic Digital | LinkedIn" at "" | EasyApply: false | AlreadyApplied: false
+[2026-09-20T05:00:50.757Z] No Easy Apply for 4468686001. Skipping.
+[2026-09-20T05:00:50.757Z] Navigating to job view: 4466097793
+[2026-09-20T05:00:55.507Z] Job info: "Backend Developer (Remote) | Hired | LinkedIn" at "" | EasyApply: false | AlreadyApplied: true
+[2026-09-20T05:00:55.507Z] Navigating to job view: 4446682802
+[2026-09-20T05:01:00.286Z] Job info: "Senior Backend Engineer (TypeScript/Python/C#) - Remote | Kake | LinkedIn" at "" | EasyApply: false | AlreadyApplied: true
+[2026-09-20T05:01:00.286Z] Navigating to job view: 4469554640
+[2026-09-20T05:01:05.031Z] Job info: "Backend Engineer | crewlia | LinkedIn" at "" | EasyApply: false | AlreadyApplied: true
+[2026-09-20T05:01:05.031Z] Navigating to job view: 4468232400
+[2026-09-20T05:01:09.784Z] Job info: "Node Backend Developer - Remote Work | INDI Staffing Services | LinkedIn" at "" | EasyApply: false | AlreadyApplied: false
+[2026-09-20T05:01:09.785Z] No Easy Apply for 4468232400. Skipping.
+[2026-09-20T05:01:09.786Z] Navigating to job view: 4469544611
+[2026-09-20T05:01:14.549Z] Job info: "DevOps Engineer | Helic & Co | LinkedIn" at "" | EasyApply: false | AlreadyApplied: false
+[2026-09-20T05:01:14.549Z] No Easy Apply for 4469544611. Skipping.
+[2026-09-20T05:01:14.549Z] Navigating to job view: 4454062805
+[2026-09-20T05:01:19.298Z] Job info: "Senior Backend Engineer | Nametag | LinkedIn" at "" | EasyApply: false | AlreadyApplied: false
+[2026-09-20T05:01:19.298Z] No Easy Apply for 4454062805. Skipping.
+[2026-09-20T05:01:19.299Z] Navigating to job view: 4465980569
+[2026-09-20T05:01:24.070Z] Job info: "Senior Performance Engineer _ Remote role | IRIS Centre of Excellence - India | LinkedIn" at "" | EasyApply: false | AlreadyApplied: false
+[2026-09-20T05:01:24.070Z] No Easy Apply for 4465980569. Skipping.
+[2026-09-20T05:01:24.070Z] Navigating to job view: 4468396633
+[2026-09-20T05:01:28.847Z] Job info: "Contract Software Engineer | Morson Edge | LinkedIn" at "" | EasyApply: false | AlreadyApplied: false
+[2026-09-20T05:01:28.847Z] No Easy Apply for 4468396633. Skipping.
+[2026-09-20T05:01:28.848Z] Navigating to job view: 4465992845
+[2026-09-20T05:01:33.602Z] Job info: "Backend developer,+ AWS Terraform | CAS Training | LinkedIn" at "" | EasyApply: false | AlreadyApplied: true
+[2026-09-20T05:01:33.603Z] Navigating to job view: 4457233180
+[2026-09-20T05:01:38.389Z] Job info: "Senior Backend Engineer - Gen AI | Zartis | LinkedIn" at "" | EasyApply: false | AlreadyApplied: true
+[2026-09-20T05:01:38.390Z] Navigating to job view: 4450134634
+[2026-09-20T05:01:43.154Z] Job info: "Senior .NET Developer – Technical Lead | BKN301 | LinkedIn" at "" | EasyApply: false | AlreadyApplied: false
+[2026-09-20T05:01:43.154Z] No Easy Apply for 4450134634. Skipping.
+[2026-09-20T05:01:43.154Z] Finished query. Resting 6 seconds before next query rotation...
+[2026-09-20T05:01:49.156Z] Searching: https://www.linkedin.com/jobs/search/?f_AL=true&f_WT=2&keywords=Founding%20Engineer%20Remote&location=Worldwide
+[2026-09-20T05:01:55.617Z] Found 25 jobs on search page.
+[2026-09-20T05:01:55.618Z] Job 4450632165 already applied previously. Skipping.
+[2026-09-20T05:01:55.618Z] Navigating to job view: 4467705109
+[2026-09-20T05:02:00.389Z] Job info: "Staff Backend Engineer | TREQS | LinkedIn" at "" | EasyApply: false | AlreadyApplied: false
+[2026-09-20T05:02:00.390Z] No Easy Apply for 4467705109. Skipping.
+[2026-09-20T05:02:00.390Z] Navigating to job view: 4454634113
+[2026-09-20T05:02:05.152Z] Job info: "Generative AI Architect | Quantiphi | LinkedIn" at "" | EasyApply: false | AlreadyApplied: true
+[2026-09-20T05:02:05.153Z] Navigating to job view: 4469244383
+[2026-09-20T05:02:09.895Z] Job info: "Senior AI Software Engineer | RedRiver Systems, LLC | LinkedIn" at "" | EasyApply: false | AlreadyApplied: true
+[2026-09-20T05:02:09.896Z] Navigating to job view: 4465591662
+[2026-09-20T05:02:14.654Z] Job info: "AI Engineer | LawPro.ai | LinkedIn" at "" | EasyApply: false | AlreadyApplied: true
+[2026-09-20T05:02:14.654Z] Navigating to job view: 4456485288
+[2026-09-20T05:02:19.416Z] Job info: "Agentic AI Engineer (ex-Full Stack Engineer) - Up to £130k - UK Remote | Few&Far | LinkedIn" at "" | EasyApply: false | AlreadyApplied: false
+[2026-09-20T05:02:19.416Z] No Easy Apply for 4456485288. Skipping.
+[2026-09-20T05:02:19.417Z] Navigating to job view: 4464739780
+[2026-09-20T05:02:24.177Z] Job info: "AI Engineering & Consulting Lead | Primus Connect | LinkedIn" at "" | EasyApply: false | AlreadyApplied: true
+[2026-09-20T05:02:24.178Z] Job 4464348370 already applied previously. Skipping.
+[2026-09-20T05:02:24.178Z] Navigating to job view: 4468370608
+[2026-09-20T05:02:28.933Z] Job info: "KT2i is looking for an experienced Full Stack Developer to join our engineering team for a Production Support role. | KT2i & Aktionable AI. | LinkedIn" at "" | EasyApply: false | AlreadyApplied: false
+[2026-09-20T05:02:28.934Z] No Easy Apply for 4468370608. Skipping.
+[2026-09-20T05:02:28.934Z] Navigating to job view: 4466852308
+[2026-09-20T05:02:33.701Z] Job info: "Lead AI/ML Engineer | Jobgether | LinkedIn" at "" | EasyApply: false | AlreadyApplied: true
+[2026-09-20T05:02:33.702Z] Navigating to job view: 4469176531
+[2026-09-20T05:02:38.452Z] Job info: "(Senior) Engineering Manager | AI SaaS | €30 Million Funding | Germany (Remote) | Singularity Search | LinkedIn" at "" | EasyApply: false | AlreadyApplied: true
+[2026-09-20T05:02:38.453Z] Navigating to job view: 4465952744
+[2026-09-20T05:02:43.219Z] Job info: "Senior Full-Stack Software Engineer (Remote | $50–$100/hr) | Synthires | LinkedIn" at "" | EasyApply: false | AlreadyApplied: false
+[2026-09-20T05:02:43.219Z] No Easy Apply for 4465952744. Skipping.
+[2026-09-20T05:02:43.219Z] Navigating to job view: 4461141425
+[2026-09-20T05:02:47.984Z] Job info: "Senior AI Engineer, Agents | Nacre Capital | LinkedIn" at "" | EasyApply: false | AlreadyApplied: true
+[2026-09-20T05:02:47.985Z] Job 4457152072 already applied previously. Skipping.
+[2026-09-20T05:02:47.985Z] Job 4463666610 already applied previously. Skipping.
+[2026-09-20T05:02:47.985Z] Navigating to job view: 4452371012
+[2026-09-20T05:02:52.745Z] Job info: "Senior Staff Engineer | Sprinto | LinkedIn" at "" | EasyApply: false | AlreadyApplied: false
+[2026-09-20T05:02:52.745Z] No Easy Apply for 4452371012. Skipping.
+[2026-09-20T05:02:52.746Z] Navigating to job view: 4468686001
+[2026-09-20T05:02:57.483Z] Job info: "Freelance AI Engineer | RAG, Agents & Enterprise AI | Arantic Digital | LinkedIn" at "" | EasyApply: false | AlreadyApplied: false
+[2026-09-20T05:02:57.483Z] No Easy Apply for 4468686001. Skipping.
+[2026-09-20T05:02:57.484Z] Navigating to job view: 4467853382
+[2026-09-20T05:03:02.223Z] Job info: "Full Stack Engineer – AI-native productivity startup (well-funded) - Fully Remote - Competitve Salary | La Fosse | LinkedIn" at "" | EasyApply: false | AlreadyApplied: true
+[2026-09-20T05:03:02.223Z] Navigating to job view: 4421213926
+[2026-09-20T05:03:06.965Z] Job info: "AI Engineer | Portless | LinkedIn" at "" | EasyApply: false | AlreadyApplied: true
+[2026-09-20T05:03:06.966Z] Navigating to job view: 4460477761
+[2026-09-20T05:03:11.737Z] Job info: "Cloud AI Engineer – AWS Serverless (m/w/d) | PAGNOS | LinkedIn" at "" | EasyApply: false | AlreadyApplied: false
+[2026-09-20T05:03:11.738Z] No Easy Apply for 4460477761. Skipping.
+[2026-09-20T05:03:11.738Z] Navigating to job view: 4456573561
+[2026-09-20T05:03:16.491Z] Job info: "AI-Native Platform Architect - Ruby on Rails | SkillsCapital | LinkedIn" at "" | EasyApply: false | AlreadyApplied: false
+[2026-09-20T05:03:16.491Z] No Easy Apply for 4456573561. Skipping.
+[2026-09-20T05:03:16.491Z] Navigating to job view: 4466357043
+[2026-09-20T05:03:21.251Z] Job info: "Software Engineer - AI Products agent prototype/building (UK) | STARLIMS | LinkedIn" at "" | EasyApply: false | AlreadyApplied: true
+[2026-09-20T05:03:21.252Z] Navigating to job view: 4457951494
+[2026-09-20T05:03:26.005Z] Job info: "Sr. Applied AI Engineer - Wellness | Vi | LinkedIn" at "" | EasyApply: false | AlreadyApplied: true
+[2026-09-20T05:03:26.005Z] Job 4466679053 already applied previously. Skipping.
+[2026-09-20T05:03:26.005Z] Navigating to job view: 4466795060
+[2026-09-20T05:03:30.745Z] Job info: "Co-Founder (Remote & Flexible Hours) | Your Software Supplier | LinkedIn" at "" | EasyApply: false | AlreadyApplied: false
+[2026-09-20T05:03:30.745Z] No Easy Apply for 4466795060. Skipping.
+[2026-09-20T05:03:30.745Z] Finished query. Resting 6 seconds before next query rotation...
+[2026-09-20T05:03:36.743Z] Searching: https://www.linkedin.com/jobs/search/?f_AL=true&keywords=software%20engineer%20visa%20sponsorship&location=Germany
+[2026-09-20T05:03:45.824Z] Found 25 jobs on search page.
+[2026-09-20T05:03:45.824Z] Navigating to job view: 4467998206
+[2026-09-20T05:03:50.537Z] Job info: "Full Stack Engineer | Remote | Crossing Hurdles | LinkedIn" at "" | EasyApply: false | AlreadyApplied: false
+[2026-09-20T05:03:50.537Z] No Easy Apply for 4467998206. Skipping.
+[2026-09-20T05:03:50.537Z] Navigating to job view: 4465969962
+[2026-09-20T05:03:55.272Z] Job info: "Software Engineer – Open Source (Remote | $50–$100/hr) | Synthires | LinkedIn" at "" | EasyApply: false | AlreadyApplied: true
+[2026-09-20T05:03:55.272Z] Navigating to job view: 4463999452
+[2026-09-20T05:04:00.022Z] Job info: "Technical Lead | Stott and May | LinkedIn" at "" | EasyApply: false | AlreadyApplied: false
+[2026-09-20T05:04:00.022Z] No Easy Apply for 4463999452. Skipping.
+[2026-09-20T05:04:00.022Z] Navigating to job view: 4465994126
+[2026-09-20T05:04:04.759Z] Job info: "Senior Software Engineer | Stealth AI Start-up | Munich (On-site) | Oliver Bernard | LinkedIn" at "" | EasyApply: false | AlreadyApplied: false
+[2026-09-20T05:04:04.759Z] No Easy Apply for 4465994126. Skipping.
+[2026-09-20T05:04:04.760Z] Navigating to job view: 4457367035
+[2026-09-20T05:04:09.510Z] Job info: "Lead Full-Stack AI Engineer | Lufinity AI | LinkedIn" at "" | EasyApply: false | AlreadyApplied: false
+[2026-09-20T05:04:09.511Z] No Easy Apply for 4457367035. Skipping.
+[2026-09-20T05:04:09.511Z] Navigating to job view: 4444350404
+[2026-09-20T05:04:14.258Z] Job info: "Senior Software AI Engineer | MAM Gruppe | LinkedIn" at "" | EasyApply: false | AlreadyApplied: false
+[2026-09-20T05:04:14.259Z] No Easy Apply for 4444350404. Skipping.
+[2026-09-20T05:04:14.259Z] Job 4464348370 already applied previously. Skipping.
+[2026-09-20T05:04:14.259Z] Navigating to job view: 4467058511
+[2026-09-20T05:04:19.019Z] Job info: "Senior AI Engineer (Ref: 197454) | Forsyth Barnes | LinkedIn" at "" | EasyApply: false | AlreadyApplied: false
+[2026-09-20T05:04:19.019Z] No Easy Apply for 4467058511. Skipping.
+[2026-09-20T05:04:19.019Z] Navigating to job view: 4466222154
+[2026-09-20T05:04:23.790Z] Job info: "Lead AI Egineer | AI Futures | LinkedIn" at "" | EasyApply: false | AlreadyApplied: true
+[2026-09-20T05:04:23.790Z] Navigating to job view: 4467493246
+[2026-09-20T05:04:28.558Z] Job info: "Software Architect - Java, Cloud, Kubernetes, Microservices, AI-Enabled Systems - Remote - €100,000 | Findr | LinkedIn" at "" | EasyApply: false | AlreadyApplied: false
+[2026-09-20T05:04:28.558Z] No Easy Apply for 4467493246. Skipping.
+[2026-09-20T05:04:28.558Z] Navigating to job view: 4454645397
+[2026-09-20T05:04:33.324Z] Job info: "Senior AI Engineer | develop | LinkedIn" at "" | EasyApply: false | AlreadyApplied: false
+[2026-09-20T05:04:33.324Z] No Easy Apply for 4454645397. Skipping.
+[2026-09-20T05:04:33.324Z] Navigating to job view: 4455857645
+[2026-09-20T05:04:38.081Z] Job info: "Freelance Software Engineer | HartleyCo | LinkedIn" at "" | EasyApply: false | AlreadyApplied: false
+[2026-09-20T05:04:38.081Z] No Easy Apply for 4455857645. Skipping.
+[2026-09-20T05:04:38.082Z] Navigating to job view: 4469518125
+[2026-09-20T05:04:42.853Z] Job info: "Software Engineer | crewlia | LinkedIn" at "" | EasyApply: false | AlreadyApplied: true
+[2026-09-20T05:04:42.854Z] Navigating to job view: 4460477761
+[2026-09-20T05:04:47.607Z] Job info: "Cloud AI Engineer – AWS Serverless (m/w/d) | PAGNOS | LinkedIn" at "" | EasyApply: false | AlreadyApplied: false
+[2026-09-20T05:04:47.607Z] No Easy Apply for 4460477761. Skipping.
+[2026-09-20T05:04:47.608Z] Navigating to job view: 4463418910
+[2026-09-20T05:04:52.354Z] Job info: "Lead Software Architect | WorkGenius Group | LinkedIn" at "" | EasyApply: false | AlreadyApplied: false
+[2026-09-20T05:04:52.354Z] No Easy Apply for 4463418910. Skipping.
+[2026-09-20T05:04:52.354Z] Navigating to job view: 4468686001
+[2026-09-20T05:04:57.110Z] Job info: "Freelance AI Engineer | RAG, Agents & Enterprise AI | Arantic Digital | LinkedIn" at "" | EasyApply: false | AlreadyApplied: false
+[2026-09-20T05:04:57.110Z] No Easy Apply for 4468686001. Skipping.
+[2026-09-20T05:04:57.110Z] Navigating to job view: 4414387883
+[2026-09-20T05:05:01.879Z] Job info: "Senior Fullstack Engineer AI (m/f/d) | AI-powered web development & security in Düsseldorf | CLOUDYRION | LinkedIn" at "" | EasyApply: false | AlreadyApplied: false
+[2026-09-20T05:05:01.879Z] No Easy Apply for 4414387883. Skipping.
+[2026-09-20T05:05:01.879Z] Navigating to job view: 4466270442
+[2026-09-20T05:05:06.651Z] Job info: "Senior Software Engineer, AI Agents | IFS | LinkedIn" at "" | EasyApply: false | AlreadyApplied: false
+[2026-09-20T05:05:06.651Z] No Easy Apply for 4466270442. Skipping.
+[2026-09-20T05:05:06.651Z] Navigating to job view: 4467460057
+[2026-09-20T05:05:11.412Z] Job info: "AI/ML Engineer (Remote) | Quik Hire Staffing | LinkedIn" at "" | EasyApply: false | AlreadyApplied: true
+[2026-09-20T05:05:11.412Z] Navigating to job view: 4461972634
+[2026-09-20T05:05:16.163Z] Job info: "Senior Python Software Engineer – (FastAPI / LangGraph / Agent Orchestration) 95% Home-office – Up to €90,000 | Lawrence Harvey | LinkedIn" at "" | EasyApply: false | AlreadyApplied: false
+[2026-09-20T05:05:16.164Z] No Easy Apply for 4461972634. Skipping.
+[2026-09-20T05:05:16.164Z] Navigating to job view: 4466980288
+[2026-09-20T05:05:20.913Z] Job info: "Senior Software Developer (Volunteer) | Project 2042 | LinkedIn" at "" | EasyApply: false | AlreadyApplied: false
+[2026-09-20T05:05:20.913Z] No Easy Apply for 4466980288. Skipping.
+[2026-09-20T05:05:20.913Z] Navigating to job view: 4466886072
+[2026-09-20T05:05:25.693Z] Job info: "Senior Software Engineer | Trust In SODA | LinkedIn" at "" | EasyApply: false | AlreadyApplied: false
+[2026-09-20T05:05:25.693Z] No Easy Apply for 4466886072. Skipping.
+[2026-09-20T05:05:25.694Z] Navigating to job view: 4463264264
+[2026-09-20T05:05:30.460Z] Job info: "Senior AI Engineer (with Backend & Platform experience) | 1GLOBAL | LinkedIn" at "" | EasyApply: false | AlreadyApplied: false
+[2026-09-20T05:05:30.460Z] No Easy Apply for 4463264264. Skipping.
+[2026-09-20T05:05:30.460Z] Navigating to job view: 4464785489
+[2026-09-20T05:05:35.214Z] Job info: "AI Solutions Engineer/ AI Enablement Engineer (m/f/d) | Redcare Pharmacy | LinkedIn" at "" | EasyApply: false | AlreadyApplied: true
+[2026-09-20T05:05:35.214Z] Navigating to job view: 4412743403
+[2026-09-20T05:05:39.981Z] Job info: "Senior Backend Developer | Jobgether | LinkedIn" at "" | EasyApply: false | AlreadyApplied: false
+[2026-09-20T05:05:39.981Z] No Easy Apply for 4412743403. Skipping.
+[2026-09-20T05:05:39.981Z] Finished query. Resting 6 seconds before next query rotation...
+[2026-09-20T05:05:45.982Z] Searching: https://www.linkedin.com/jobs/search/?f_AL=true&keywords=relocation%20software%20engineer&location=Netherlands
+[2026-09-20T05:05:52.261Z] Found 25 jobs on search page.
+[2026-09-20T05:05:52.262Z] Navigating to job view: 4467998206
+[2026-09-20T05:05:57.023Z] Job info: "Full Stack Engineer | Remote | Crossing Hurdles | LinkedIn" at "" | EasyApply: false | AlreadyApplied: false
+[2026-09-20T05:05:57.024Z] No Easy Apply for 4467998206. Skipping.
+[2026-09-20T05:05:57.024Z] Job 4465969962 already applied previously. Skipping.
+[2026-09-20T05:05:57.025Z] Navigating to job view: 4459681513
+[2026-09-20T05:06:01.829Z] Job info: "Senior Software Engineer | Runware | LinkedIn" at "" | EasyApply: false | AlreadyApplied: false
+[2026-09-20T05:06:01.830Z] No Easy Apply for 4459681513. Skipping.
+[2026-09-20T05:06:01.830Z] Job 4469518125 already applied previously. Skipping.
+[2026-09-20T05:06:01.830Z] Navigating to job view: 4466835351
+[2026-09-20T05:06:06.602Z] Job info: "Senior Software Engineer | CodeGuild | LinkedIn" at "" | EasyApply: false | AlreadyApplied: false
+[2026-09-20T05:06:06.602Z] No Easy Apply for 4466835351. Skipping.
+[2026-09-20T05:06:06.602Z] Navigating to job view: 4466508264
+[2026-09-20T05:06:11.396Z] Job info: "AI Software Engineer | Venquis | LinkedIn" at "" | EasyApply: false | AlreadyApplied: false
+[2026-09-20T05:06:11.397Z] No Easy Apply for 4466508264. Skipping.
+[2026-09-20T05:06:11.399Z] Navigating to job view: 4466269975
+[2026-09-20T05:06:16.291Z] Job info: "Senior Software Engineer, AI Agents | IFS | LinkedIn" at "" | EasyApply: false | AlreadyApplied: false
+[2026-09-20T05:06:16.292Z] No Easy Apply for 4466269975. Skipping.
+[2026-09-20T05:06:16.293Z] Navigating to job view: 4466849218
+[2026-09-20T05:06:22.082Z] Job info: "Senior Agentic AI Engineer | GenAI & Software Development | Utrecht | €4500 - €6500 | DBR Groep | LinkedIn" at "" | EasyApply: false | AlreadyApplied: true
+[2026-09-20T05:06:22.082Z] Navigating to job view: 4467779198
+[2026-09-20T05:06:26.783Z] Job info: "AI Application Engineer - LangGraph & Agentic AI | Belmont Lavan | LinkedIn" at "" | EasyApply: false | AlreadyApplied: true
+[2026-09-20T05:06:26.783Z] Navigating to job view: 4464787824
+[2026-09-20T05:06:31.529Z] Job info: "Principal Software Engineer | Suitsupply | LinkedIn" at "" | EasyApply: false | AlreadyApplied: false
+[2026-09-20T05:06:31.529Z] No Easy Apply for 4464787824. Skipping.
+[2026-09-20T05:06:31.529Z] Navigating to job view: 4448988083
+[2026-09-20T05:06:36.296Z] Job info: "Forward Deployed Engineer | ENDGAME | LinkedIn" at "" | EasyApply: false | AlreadyApplied: false
+[2026-09-20T05:06:36.297Z] No Easy Apply for 4448988083. Skipping.
+[2026-09-20T05:06:36.297Z] Navigating to job view: 4416210454
+[2026-09-20T05:06:41.023Z] Job info: "(Sr/Staff) Platform Engineer - AI Cloud infra - Software Engineer turned Platform - Multi-Cloud & Python - First dedicated Platform hire - Small team AI Scale up - 135K base + stockpackage | Sprint and Partners | LinkedIn" at "" | EasyApply: false | AlreadyApplied: false
+[2026-09-20T05:06:41.023Z] No Easy Apply for 4416210454. Skipping.
+[2026-09-20T05:06:41.023Z] Navigating to job view: 4462512050
+[2026-09-20T05:06:45.801Z] Job info: "Senior Engineer- AI Developer Tools & IDE Innovation | Qplox engineering | LinkedIn" at "" | EasyApply: false | AlreadyApplied: false
+[2026-09-20T05:06:45.801Z] No Easy Apply for 4462512050. Skipping.
+[2026-09-20T05:06:45.802Z] Navigating to job view: 4461752501
+[2026-09-20T05:06:50.582Z] Job info: "Senior Quantitative Engineer – (Relocation Provided) | Wypoon Technologies | LinkedIn" at "" | EasyApply: false | AlreadyApplied: false
+[2026-09-20T05:06:50.582Z] No Easy Apply for 4461752501. Skipping.
+[2026-09-20T05:06:50.582Z] Navigating to job view: 4467543349
+[2026-09-20T05:06:55.350Z] Job info: "Founding Software Engineer - New Product | Jobgether | LinkedIn" at "" | EasyApply: false | AlreadyApplied: false
+[2026-09-20T05:06:55.351Z] No Easy Apply for 4467543349. Skipping.
+[2026-09-20T05:06:55.351Z] Navigating to job view: 4455184844
+[2026-09-20T05:07:00.128Z] Job info: "Senior Full Stack Engineer | Digital Health | 5+ yrs full-stack, ideally TypeScript | Hybrid (Amsterdam) | €70–90k | Vondel Venture Development | LinkedIn" at "" | EasyApply: false | AlreadyApplied: false
+[2026-09-20T05:07:00.128Z] No Easy Apply for 4455184844. Skipping.
+[2026-09-20T05:07:00.128Z] Job 4466251375 already applied previously. Skipping.
+[2026-09-20T05:07:00.129Z] Navigating to job view: 4463865592
+[2026-09-20T05:07:04.897Z] Job info: "Full Stack Engineer | Doghouse Recruitment | LinkedIn" at "" | EasyApply: false | AlreadyApplied: false
+[2026-09-20T05:07:04.898Z] No Easy Apply for 4463865592. Skipping.
+[2026-09-20T05:07:04.898Z] Navigating to job view: 4466093907
+[2026-09-20T05:07:09.677Z] Job info: "Back End Developer | Digital Green B.V. | LinkedIn" at "" | EasyApply: false | AlreadyApplied: false
+[2026-09-20T05:07:09.677Z] No Easy Apply for 4466093907. Skipping.
+[2026-09-20T05:07:09.677Z] Navigating to job view: 4465227351
+[2026-09-20T05:07:14.450Z] Job info: "Software Engineer | Coltech | LinkedIn" at "" | EasyApply: false | AlreadyApplied: true
+[2026-09-20T05:07:14.451Z] Navigating to job view: 4469198371
+[2026-09-20T05:07:19.218Z] Job info: "Senior AI Front-End Engineer | Sytac | LinkedIn" at "" | EasyApply: false | AlreadyApplied: false
+[2026-09-20T05:07:19.218Z] No Easy Apply for 4469198371. Skipping.
+[2026-09-20T05:07:19.218Z] Navigating to job view: 4429952934
+[2026-09-20T05:07:23.994Z] Job info: "Back End Lead Software Engineer - Accommodation/Flights/Supply/FinTech(Bangkok based - Relocation provided) | Agoda | LinkedIn" at "" | EasyApply: false | AlreadyApplied: false
+[2026-09-20T05:07:23.994Z] No Easy Apply for 4429952934. Skipping.
+[2026-09-20T05:07:23.994Z] Navigating to job view: 4467512029
+[2026-09-20T05:07:28.769Z] Job info: "Backend Typescript developer | Haystack People | LinkedIn" at "" | EasyApply: false | AlreadyApplied: false
+[2026-09-20T05:07:28.769Z] No Easy Apply for 4467512029. Skipping.
+[2026-09-20T05:07:28.769Z] Navigating to job view: 4459659771
+[2026-09-20T05:07:33.556Z] Job info: "Senior AI Engineer | Vivid Resourcing | LinkedIn" at "" | EasyApply: false | AlreadyApplied: false
+[2026-09-20T05:07:33.556Z] No Easy Apply for 4459659771. Skipping.
+[2026-09-20T05:07:33.556Z] Navigating to job view: 4465995640
+[2026-09-20T05:07:38.329Z] Job info: "AI Developer Platform Engineer | XpertDirect | LinkedIn" at "" | EasyApply: false | AlreadyApplied: false
+[2026-09-20T05:07:38.330Z] No Easy Apply for 4465995640. Skipping.
+[2026-09-20T05:07:38.330Z] Finished query. Resting 6 seconds before next query rotation...
+[2026-09-20T05:07:44.331Z] Searching: https://www.linkedin.com/jobs/search/?f_AL=true&keywords=software%20engineer%20relocation&location=European%20Union
+[2026-09-20T05:07:50.638Z] Found 25 jobs on search page.
+[2026-09-20T05:07:50.638Z] Navigating to job view: 4467441992
+[2026-09-20T05:07:55.403Z] Job info: "Senior Full-Stack Software Engineer (Remote) | Quik Hire Staffing | LinkedIn" at "" | EasyApply: false | AlreadyApplied: false
+[2026-09-20T05:07:55.403Z] No Easy Apply for 4467441992. Skipping.
+[2026-09-20T05:07:55.403Z] Navigating to job view: 4462295955
+[2026-09-20T05:08:00.166Z] Job info: "Lead AI Engineer | Oliver Bernard | LinkedIn" at "" | EasyApply: false | AlreadyApplied: true
+[2026-09-20T05:08:00.166Z] Navigating to job view: 4465810305
+[2026-09-20T05:08:04.936Z] Job info: "Senior AI Engineer | FindingVega | LinkedIn" at "" | EasyApply: false | AlreadyApplied: false
+[2026-09-20T05:08:04.936Z] No Easy Apply for 4465810305. Skipping.
+[2026-09-20T05:08:04.937Z] Navigating to job view: 4457367035
+[2026-09-20T05:08:09.704Z] Job info: "Lead Full-Stack AI Engineer | Lufinity AI | LinkedIn" at "" | EasyApply: false | AlreadyApplied: false
+[2026-09-20T05:08:09.704Z] No Easy Apply for 4457367035. Skipping.
+[2026-09-20T05:08:09.705Z] Navigating to job view: 4465979899
+[2026-09-20T05:08:14.467Z] Job info: "Senior Node.JS / AWS engineer (contractor) | Morgan Black | LinkedIn" at "" | EasyApply: false | AlreadyApplied: false
+[2026-09-20T05:08:14.468Z] No Easy Apply for 4465979899. Skipping.
+[2026-09-20T05:08:14.468Z] Navigating to job view: 4469116726
+[2026-09-20T05:08:19.223Z] Job info: "Senior Gen AI Developer | Stelfox Tech Recruitment | LinkedIn" at "" | EasyApply: false | AlreadyApplied: false
+[2026-09-20T05:08:19.224Z] No Easy Apply for 4469116726. Skipping.
+[2026-09-20T05:08:19.224Z] Job 4464348370 already applied previously. Skipping.
+[2026-09-20T05:08:19.224Z] Navigating to job view: 4455857645
+[2026-09-20T05:08:23.978Z] Job info: "Freelance Software Engineer | HartleyCo | LinkedIn" at "" | EasyApply: false | AlreadyApplied: false
+[2026-09-20T05:08:23.978Z] No Easy Apply for 4455857645. Skipping.
+[2026-09-20T05:08:23.979Z] Navigating to job view: 4467969642
+[2026-09-20T05:08:28.724Z] Job info: "Generative AI Engineer | Oakwell Hampton Group | LinkedIn" at "" | EasyApply: false | AlreadyApplied: false
+[2026-09-20T05:08:28.724Z] No Easy Apply for 4467969642. Skipping.
+[2026-09-20T05:08:28.724Z] Navigating to job view: 4444350404
+[2026-09-20T05:08:33.470Z] Job info: "Senior Software AI Engineer | MAM Gruppe | LinkedIn" at "" | EasyApply: false | AlreadyApplied: false
+[2026-09-20T05:08:33.470Z] No Easy Apply for 4444350404. Skipping.
+[2026-09-20T05:08:33.471Z] Navigating to job view: 4465217589
+[2026-09-20T05:08:38.239Z] Job info: "Senior AI Engineer | Nicoll Curtin | LinkedIn" at "" | EasyApply: false | AlreadyApplied: false
+[2026-09-20T05:08:38.239Z] No Easy Apply for 4465217589. Skipping.
+[2026-09-20T05:08:38.239Z] Navigating to job view: 4456215658
+[2026-09-20T05:08:42.994Z] Job info: "Founding Senior Full Stack Engineer | Trust In SODA | LinkedIn" at "" | EasyApply: false | AlreadyApplied: false
+[2026-09-20T05:08:42.994Z] No Easy Apply for 4456215658. Skipping.
+[2026-09-20T05:08:42.994Z] Navigating to job view: 4468099264
+[2026-09-20T05:08:47.742Z] Job info: "Senior Software Engineer | Doghouse Recruitment | LinkedIn" at "" | EasyApply: false | AlreadyApplied: true
+[2026-09-20T05:08:47.743Z] Navigating to job view: 4466263790
+[2026-09-20T05:08:52.505Z] Job info: "Senior Backend Python Engineer (Gateway) - Relocation to Cyprus | payabl. | LinkedIn" at "" | EasyApply: false | AlreadyApplied: false
+[2026-09-20T05:08:52.506Z] No Easy Apply for 4466263790. Skipping.
+[2026-09-20T05:08:52.506Z] Navigating to job view: 4464739299
+[2026-09-20T05:08:57.272Z] Job info: "Founding AI Engineer | AI Futures | LinkedIn" at "" | EasyApply: false | AlreadyApplied: true
+[2026-09-20T05:08:57.272Z] Navigating to job view: 4466835351
+[2026-09-20T05:09:02.042Z] Job info: "Senior Software Engineer | CodeGuild | LinkedIn" at "" | EasyApply: false | AlreadyApplied: false
+[2026-09-20T05:09:02.042Z] No Easy Apply for 4466835351. Skipping.
+[2026-09-20T05:09:02.042Z] Navigating to job view: 4466785118
+[2026-09-20T05:09:06.804Z] Job info: "Forward-Deployed AI Engineer - Claude Code - €120,000 - Munich - Hybrid | Findr | LinkedIn" at "" | EasyApply: false | AlreadyApplied: false
+[2026-09-20T05:09:06.804Z] No Easy Apply for 4466785118. Skipping.
+[2026-09-20T05:09:06.804Z] Navigating to job view: 4469182496
+[2026-09-20T05:09:11.559Z] Job info: "Lead DevOps Engineer | K&K Talents | LinkedIn" at "" | EasyApply: false | AlreadyApplied: false
+[2026-09-20T05:09:11.560Z] No Easy Apply for 4469182496. Skipping.
+[2026-09-20T05:09:11.560Z] Navigating to job view: 4466260303
+[2026-09-20T05:09:16.318Z] Job info: "AI Native SW Engineer | Accenture | LinkedIn" at "" | EasyApply: false | AlreadyApplied: true
+[2026-09-20T05:09:16.320Z] Navigating to job view: 4466508264
+[2026-09-20T05:13:54.826Z] Job info: "AI Software Engineer | Venquis | LinkedIn" at "" | EasyApply: false | AlreadyApplied: false
+[2026-09-20T05:13:54.826Z] No Easy Apply for 4466508264. Skipping.
+[2026-09-20T05:13:54.827Z] Navigating to job view: 4467058511
+[2026-09-20T05:13:59.608Z] Job info: "Senior AI Engineer (Ref: 197454) | Forsyth Barnes | LinkedIn" at "" | EasyApply: false | AlreadyApplied: false
+[2026-09-20T05:13:59.608Z] No Easy Apply for 4467058511. Skipping.
+[2026-09-20T05:13:59.609Z] Navigating to job view: 4454645397
+[2026-09-20T05:30:54.689Z] Job info: "" at "" | EasyApply: false | AlreadyApplied: false
+[2026-09-20T05:30:54.690Z] No Easy Apply for 4454645397. Skipping.
+[2026-09-20T05:30:54.691Z] Navigating to job view: 4457609941
+[2026-09-20T05:30:59.831Z] Job info: "Lead AI Engineer | Impala Search | LinkedIn" at "" | EasyApply: false | AlreadyApplied: false
+[2026-09-20T05:30:59.833Z] No Easy Apply for 4457609941. Skipping.
+[2026-09-20T05:30:59.834Z] Navigating to job view: 4462516311
+[2026-09-20T05:32:09.526Z] Job info: "Lead AI Software Engineer | CoverTree | LinkedIn" at "" | EasyApply: false | AlreadyApplied: false
+[2026-09-20T05:32:09.526Z] No Easy Apply for 4462516311. Skipping.
+[2026-09-20T05:32:09.526Z] Navigating to job view: 4464787824
+[2026-09-20T05:32:14.309Z] Job info: "Principal Software Engineer | Suitsupply | LinkedIn" at "" | EasyApply: false | AlreadyApplied: false
+[2026-09-20T05:32:14.309Z] No Easy Apply for 4464787824. Skipping.
+[2026-09-20T05:32:14.309Z] Finished query. Resting 6 seconds before next query rotation...
+[2026-09-20T05:32:20.310Z] Searching: https://www.linkedin.com/jobs/search/?f_AL=true&f_WT=2&keywords=Staff%20Software%20Engineer&location=United%20Kingdom
+[2026-09-20T05:32:26.615Z] Found 20 jobs on search page.
+[2026-09-20T05:32:26.615Z] Navigating to job view: 4465314172
+[2026-09-20T05:32:31.365Z] Job info: "Senior Software Engineer | HireQ Talent | LinkedIn" at "" | EasyApply: false | AlreadyApplied: false
+[2026-09-20T05:32:31.365Z] No Easy Apply for 4465314172. Skipping.
+[2026-09-20T05:32:31.365Z] Navigating to job view: 4469557058
+[2026-09-20T05:32:36.125Z] Job info: "Senior Software Engineer | dynamism | LinkedIn" at "" | EasyApply: false | AlreadyApplied: false
+[2026-09-20T05:32:36.126Z] No Easy Apply for 4469557058. Skipping.
+[2026-09-20T05:32:36.126Z] Job 4467075427 already applied previously. Skipping.
+[2026-09-20T05:32:36.126Z] Navigating to job view: 4468631513
+[2026-09-20T05:32:40.887Z] Job info: "Senior Lead Software Engineer | Grove Talent | LinkedIn" at "" | EasyApply: false | AlreadyApplied: false
+[2026-09-20T05:32:40.887Z] No Easy Apply for 4468631513. Skipping.
+[2026-09-20T05:32:40.887Z] Job 4462201910 already applied previously. Skipping.
+[2026-09-20T05:32:40.887Z] Navigating to job view: 4394614277
+[2026-09-20T05:32:45.651Z] Job info: "Staff Software Engineer - Backend & AI Infra | MLabs | LinkedIn" at "" | EasyApply: false | AlreadyApplied: false
+[2026-09-20T05:32:45.652Z] No Easy Apply for 4394614277. Skipping.
+[2026-09-20T05:32:45.653Z] Navigating to job view: 4456485288
+[2026-09-20T05:32:50.423Z] Job info: "Agentic AI Engineer (ex-Full Stack Engineer) - Up to £130k - UK Remote | Few&Far | LinkedIn" at "" | EasyApply: false | AlreadyApplied: true
+[2026-09-20T05:32:50.424Z] Navigating to job view: 4408509871
+[2026-09-20T05:32:55.184Z] Job info: "Staff Software Engineer - Serverless | Runware | LinkedIn" at "" | EasyApply: false | AlreadyApplied: false
+[2026-09-20T05:32:55.184Z] No Easy Apply for 4408509871. Skipping.
+[2026-09-20T05:32:55.185Z] Navigating to job view: 4462928096
+[2026-09-20T05:32:59.932Z] Job info: "Senior Software Engineer (AI Enabled Products) | Eames Consulting | LinkedIn" at "" | EasyApply: false | AlreadyApplied: false
+[2026-09-20T05:32:59.932Z] No Easy Apply for 4462928096. Skipping.
+[2026-09-20T05:32:59.932Z] Navigating to job view: 4459332707
+[2026-09-20T05:33:04.686Z] Job info: "Senior Full Stack Engineer - REMOTE / React.js / Typescript / Node.js / AI | ardotec. | LinkedIn" at "" | EasyApply: false | AlreadyApplied: false
+[2026-09-20T05:33:04.686Z] No Easy Apply for 4459332707. Skipping.
+[2026-09-20T05:33:04.686Z] Navigating to job view: 4467712838
+[2026-09-20T05:33:09.426Z] Job info: "Software Engineer | In Product | LinkedIn" at "" | EasyApply: false | AlreadyApplied: true
+[2026-09-20T05:33:09.427Z] Navigating to job view: 4453206157
+[2026-09-20T05:33:14.170Z] Job info: "Technical Lead (TypeScript | Node.js | AWS | Serverless | Headless Ecommerce) | Acquire | LinkedIn" at "" | EasyApply: false | AlreadyApplied: false
+[2026-09-20T05:33:14.170Z] No Easy Apply for 4453206157. Skipping.
+[2026-09-20T05:33:14.171Z] Navigating to job view: 4448179068
+[2026-09-20T05:33:18.915Z] Job info: "Staff Forward Deployed Engineer | Matillion | LinkedIn" at "" | EasyApply: false | AlreadyApplied: false
+[2026-09-20T05:33:18.915Z] No Easy Apply for 4448179068. Skipping.
+[2026-09-20T05:33:18.915Z] Navigating to job view: 4466063205
+[2026-09-20T05:33:23.654Z] Job info: "Staff Forward Deployed Engineer | Matillion | LinkedIn" at "" | EasyApply: false | AlreadyApplied: false
+[2026-09-20T05:33:23.654Z] No Easy Apply for 4466063205. Skipping.
+[2026-09-20T05:33:23.654Z] Navigating to job view: 4467029286
+[2026-09-20T05:33:28.415Z] Job info: "Staff Engineer — Data Platform | Yuno | LinkedIn" at "" | EasyApply: false | AlreadyApplied: false
+[2026-09-20T05:33:28.416Z] No Easy Apply for 4467029286. Skipping.
+[2026-09-20T05:33:28.416Z] Navigating to job view: 4466829680
+[2026-09-20T05:33:33.182Z] Job info: "Staff Software Engineer - Curated Data | Jobgether | LinkedIn" at "" | EasyApply: false | AlreadyApplied: false
+[2026-09-20T05:33:33.182Z] No Easy Apply for 4466829680. Skipping.
+[2026-09-20T05:33:33.183Z] Navigating to job view: 4466905929
+[2026-09-20T05:33:37.951Z] Job info: "Sr. Software Engineer, Cloud Platform | Samsara | LinkedIn" at "" | EasyApply: false | AlreadyApplied: true
+[2026-09-20T05:33:37.952Z] Navigating to job view: 4418130218
+[2026-09-20T05:33:42.719Z] Job info: "Polyglot Engineer (JS/Python/Go) | YLD | LinkedIn" at "" | EasyApply: false | AlreadyApplied: true
+[2026-09-20T05:33:42.720Z] Navigating to job view: 4468233126
+[2026-09-20T05:33:47.486Z] Job info: "Senior Software Engineer | CipherTek Recruitment | LinkedIn" at "" | EasyApply: false | AlreadyApplied: false
+[2026-09-20T05:33:47.486Z] No Easy Apply for 4468233126. Skipping.
+[2026-09-20T05:33:47.486Z] Navigating to job view: 4467565017
+[2026-09-20T05:33:52.244Z] Job info: "Senior Android Engineer (Fully Remote - £100k+) | La Fosse | LinkedIn" at "" | EasyApply: false | AlreadyApplied: false
+[2026-09-20T05:33:52.244Z] No Easy Apply for 4467565017. Skipping.
+[2026-09-20T05:33:52.245Z] Finished query. Resting 6 seconds before next query rotation...
+[2026-09-20T05:33:58.246Z] Searching: https://www.linkedin.com/jobs/search/?f_AL=true&f_WT=2&keywords=Staff%20Engineer%20150k&location=United%20States
+[2026-09-20T05:34:04.507Z] Found 8 jobs on search page.
+[2026-09-20T05:34:04.508Z] Navigating to job view: 4467401105
+[2026-09-20T05:34:09.235Z] Job info: "Grow | LinkedIn" at "" | EasyApply: false | AlreadyApplied: false
+[2026-09-20T05:34:09.236Z] No Easy Apply for 4467401105. Skipping.
+[2026-09-20T05:34:09.236Z] Navigating to job view: 4465546990
+[2026-09-20T05:34:13.973Z] Job info: "Senior Software Engineer (Remote | $50–$100/hr) | Synthires | LinkedIn" at "" | EasyApply: false | AlreadyApplied: true
+[2026-09-20T05:34:13.973Z] Navigating to job view: 4454041502
+[2026-09-20T05:34:18.703Z] Job info: "" at "" | EasyApply: false | AlreadyApplied: false
+[2026-09-20T05:34:18.703Z] No Easy Apply for 4454041502. Skipping.
+[2026-09-20T05:34:18.703Z] Navigating to job view: 4467848104
+[2026-09-20T05:34:23.429Z] Job info: "" at "" | EasyApply: false | AlreadyApplied: false
+[2026-09-20T05:34:23.430Z] No Easy Apply for 4467848104. Skipping.
+[2026-09-20T05:34:23.430Z] Navigating to job view: 4467931649
+[2026-09-20T05:34:28.134Z] Job info: "" at "" | EasyApply: false | AlreadyApplied: false
+[2026-09-20T05:34:28.135Z] No Easy Apply for 4467931649. Skipping.
+[2026-09-20T05:34:28.135Z] Navigating to job view: 4458195308
+[2026-09-20T05:34:32.852Z] Job info: "" at "" | EasyApply: false | AlreadyApplied: false
+[2026-09-20T05:34:32.852Z] No Easy Apply for 4458195308. Skipping.
+[2026-09-20T05:34:32.852Z] Job 4464859950 already applied previously. Skipping.
+[2026-09-20T05:34:32.853Z] Navigating to job view: 4469104982
+[2026-09-20T05:34:37.579Z] Job info: "" at "" | EasyApply: false | AlreadyApplied: false
+[2026-09-20T05:34:37.579Z] No Easy Apply for 4469104982. Skipping.
+[2026-09-20T05:34:37.579Z] Finished query. Resting 6 seconds before next query rotation...
+[2026-09-20T05:34:43.581Z] Searching: https://www.linkedin.com/jobs/search/?f_AL=true&f_WT=2&keywords=Lead%20Backend%20Engineer%20Remote&location=United%20States
+[2026-09-20T05:34:49.817Z] Found 0 jobs on search page.
+[2026-09-20T05:34:49.817Z] Finished query. Resting 6 seconds before next query rotation...
+[2026-09-20T05:34:55.819Z] Batch run complete. Total applications submitted in this session: 28

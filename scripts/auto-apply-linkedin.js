@@ -23,6 +23,8 @@ const SEARCH_QUERIES = [
   'https://www.linkedin.com/jobs/search/?f_AL=true&f_WT=2&keywords=Lead%20Backend%20Engineer%20Remote&location=United%20States',
 ];
 
+let BOT_WIN_ID = null;
+
 function log(msg) {
   const timestamp = new Date().toISOString();
   const line = `[${timestamp}] ${msg}`;
@@ -51,45 +53,70 @@ function sleep(ms) {
   return new Promise((r) => setTimeout(r, ms));
 }
 
-function runInTab(jsCode) {
-  const cleanCode = jsCode.replace(/\\/g, '\\\\').replace(/"/g, '\\"');
+// Finds or creates a dedicated background window so user's main windows are NEVER touched
+function ensureBotWindow() {
   const script = `
 tell application "Google Chrome"
+    -- Check if we can find an existing single-tab LinkedIn window
     repeat with w in every window
-        repeat with t in every tab of w
-            if URL of t contains "linkedin.com/jobs" then
-                return execute t javascript "${cleanCode}"
+        if (count of tabs of w) = 1 then
+            if URL of active tab of w contains "linkedin.com/jobs" then
+                return (id of w as string)
             end if
-        end repeat
+        end if
     end repeat
-    return "NO_TAB"
+
+    -- If not found, create a new separate window
+    set botWin to make new window
+    set URL of active tab of botWin to "https://www.linkedin.com/jobs/"
+    -- Position it neatly
+    set bounds of botWin to {80, 80, 1100, 850}
+    return (id of botWin as string)
 end tell
 `;
   try {
-    const res = execSync('osascript', { input: script, encoding: 'utf8', timeout: 20000 });
+    const res = execSync('osascript', { input: script, encoding: 'utf8', timeout: 15000 }).trim();
+    BOT_WIN_ID = res;
+    log(`Dedicated Background Bot Window ID: ${BOT_WIN_ID}`);
+    return BOT_WIN_ID;
+  } catch (e) {
+    log(`Failed to get bot window: ${e.message}`);
+    return null;
+  }
+}
+
+// Executes JS purely in the background bot window — NEVER steals focus or activates
+function runInTab(jsCode) {
+  if (!BOT_WIN_ID) ensureBotWindow();
+  const cleanCode = jsCode.replace(/\\/g, '\\\\').replace(/"/g, '\\"');
+  const script = `
+tell application "Google Chrome"
+    tell active tab of window id ${BOT_WIN_ID}
+        return execute javascript "${cleanCode}"
+    end tell
+end tell
+`;
+  try {
+    const res = execSync('osascript', { input: script, encoding: 'utf8', timeout: 25000 });
     return res.trim();
   } catch (err) {
     return 'ERROR: ' + err.message;
   }
 }
 
+// Navigates purely in the background via location.href — NEVER brings window to front
 function navigateTab(url) {
+  if (!BOT_WIN_ID) ensureBotWindow();
   const script = `
 tell application "Google Chrome"
-    repeat with w in every window
-        repeat with t in every tab of w
-            if URL of t contains "linkedin.com/jobs" then
-                set URL of t to "${url}"
-                return "NAVIGATED"
-            end if
-        end repeat
-    end repeat
-    return "NO_TAB"
+    tell active tab of window id ${BOT_WIN_ID}
+        execute javascript "window.location.href = '${url}';"
+    end tell
 end tell
 `;
   try {
-    const res = execSync('osascript', { input: script, encoding: 'utf8', timeout: 15000 });
-    return res.trim();
+    execSync('osascript', { input: script, encoding: 'utf8', timeout: 15000 });
+    return 'NAVIGATED';
   } catch (err) {
     return 'ERROR: ' + err.message;
   }
@@ -141,12 +168,13 @@ function getJobInfo() {
 // Solves one step of the Easy Apply modal
 function solveModalStep() {
   const code = `(() => {
-    // 1. Check if Submit button exists and is enabled
     const buttons = Array.from(document.querySelectorAll('button'));
+    
+    // 1. Check if Submit button exists and is enabled
     const submitBtn = buttons.find(b => b.innerText && b.innerText.trim() === 'Submit application');
     if (submitBtn && !submitBtn.disabled) {
       submitBtn.click();
-      return { status: 'SUBMITTED' };
+      return JSON.stringify({ status: 'SUBMITTED' });
     }
 
     // 2. Fill Phone & Country Code if present
@@ -214,19 +242,15 @@ function solveModalStep() {
 
     for (const [name, radios] of Object.entries(radioGroups)) {
       if (radios.some(r => r.checked)) continue;
-      // Find question text
       const container = radios[0].closest('fieldset, .jobs-easy-apply-form-element, div');
       const qText = container ? container.innerText.toLowerCase() : '';
       
       let chooseIndex = 0; // Default to first radio (usually Yes)
       if (qText.includes('authorized to work in the united states') && !qText.includes('sponsorship')) {
-        // If US authorization is strictly asked, select No (offshore/needs sponsorship)
         chooseIndex = radios.length > 1 ? 1 : 0;
       } else if (qText.includes('require sponsorship')) {
-        // Require sponsorship -> Yes
         chooseIndex = 0;
       } else if (qText.includes('criminal') || qText.includes('felony') || qText.includes('fired')) {
-        // Disqualification questions -> No
         chooseIndex = radios.length > 1 ? 1 : 0;
       }
 
@@ -237,14 +261,24 @@ function solveModalStep() {
       }
     }
 
-    // 6. Next or Review button
+    // 6. Handle Checkboxes (Terms / Agreements)
+    Array.from(document.querySelectorAll('input[type="checkbox"]')).forEach(cb => {
+      if (!cb.checked) {
+        cb.click();
+        cb.checked = true;
+        cb.dispatchEvent(new Event('change', { bubbles: true }));
+      }
+    });
+
+    // 7. Next or Review button
     const nextBtn = buttons.find(b => b.innerText && (b.innerText.trim() === 'Next' || b.innerText.trim() === 'Review'));
     if (nextBtn && !nextBtn.disabled) {
+      const btnText = nextBtn.innerText.trim();
       nextBtn.click();
-      return { status: 'NEXT', btn: nextBtn.innerText.trim() };
+      return JSON.stringify({ status: 'NEXT', btn: btnText });
     }
 
-    return { status: 'STUCK' };
+    return JSON.stringify({ status: 'STUCK' });
   })()`;
   const res = runInTab(code);
   try {
@@ -296,7 +330,7 @@ async function applyToJob(jobId) {
 
   log(`Navigating to job view: ${jobId}`);
   navigateTab(`https://www.linkedin.com/jobs/view/${jobId}/`);
-  await sleep(4000);
+  await sleep(4500);
 
   const info = getJobInfo();
   log(`Job info: "${info.title}" at "${info.company}" | EasyApply: ${info.hasEasyApply} | AlreadyApplied: ${info.isAlreadyApplied}`);
@@ -364,22 +398,25 @@ async function applyToJob(jobId) {
     }
   }
 
-  await sleep(4000); // Friendly pacing
+  await sleep(4500); // Friendly pacing
   return success;
 }
 
 async function runAutoApply() {
   log('========================================================');
-  log('Starting LinkedIn Autonomous Bulk Application Daemon');
+  log('Starting LinkedIn Autonomous Background Application Daemon');
+  log('Running in ISOLATED Background Window — NEVER touching User Window');
   log('Target: $100k-$250k / Staff / Principal / Lead / Relocation');
   log('========================================================');
+
+  ensureBotWindow();
 
   let totalAppliedSession = 0;
 
   for (const query of SEARCH_QUERIES) {
     log(`Searching: ${query}`);
     navigateTab(query);
-    await sleep(5000);
+    await sleep(6000);
 
     const jobIds = getJobIdsFromSearchPage();
     log(`Found ${jobIds.length} jobs on search page.`);
@@ -403,7 +440,7 @@ async function runAutoApply() {
     await sleep(6000);
   }
 
-  log(`Batch run complete. Total applications submitted: ${totalAppliedSession}`);
+  log(`Batch run complete. Total applications submitted in this session: ${totalAppliedSession}`);
 }
 
 runAutoApply().catch((err) => log('Fatal error: ' + err.message));

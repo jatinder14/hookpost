@@ -15,6 +15,7 @@ import clsx from 'clsx';
 import { GoogleProvider } from '@hookpost/frontend/components/auth/providers/google.provider';
 import { AppleProvider } from '@hookpost/frontend/components/auth/providers/apple.provider';
 import { OauthProvider } from '@hookpost/frontend/components/auth/providers/oauth.provider';
+import { InAppBrowserNotice } from '@hookpost/frontend/components/auth/in-app-browser-notice';
 import { useFireEvents } from '@hookpost/helpers/utils/use.fire.events';
 import { useVariables } from '@hookpost/react/helpers/variable.context';
 import { useTrack } from '@hookpost/react/helpers/use.track';
@@ -170,6 +171,9 @@ export function RegisterAfter({
             {t('continue_with', 'Continue With')}
           </div>
           <div className="flex flex-col text-[14px]">
+            {/* 89% of paid traffic arrives in Facebook's in-app browser, where
+                Google refuses OAuth outright. Say so before they tap it. */}
+            <InAppBrowserNotice />
             {!isAfterProvider && (
               <div className="gap-[8px] flex">
                 {genericOauth ? (

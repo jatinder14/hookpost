@@ -11,6 +11,7 @@ import { LoginUserDto } from '@hookpost/nestjs-libraries/dtos/auth/login.user.dt
 import { GithubProvider } from '@hookpost/frontend/components/auth/providers/github.provider';
 import { OauthProvider } from '@hookpost/frontend/components/auth/providers/oauth.provider';
 import { GoogleProvider } from '@hookpost/frontend/components/auth/providers/google.provider';
+import { InAppBrowserNotice } from '@hookpost/frontend/components/auth/in-app-browser-notice';
 import { AppleProvider } from '@hookpost/frontend/components/auth/providers/apple.provider';
 import { useVariables } from '@hookpost/react/helpers/variable.context';
 import { FarcasterProvider } from '@hookpost/frontend/components/auth/providers/farcaster.provider';
@@ -95,6 +96,9 @@ export function Login() {
             {t('continue_with', 'Continue With')}
           </div>
           <div className="flex flex-col">
+            {/* Same trap as the signup page: Meta ads open in Facebook's in-app
+                browser and Google refuses OAuth there. */}
+            <InAppBrowserNotice />
             {genericOauth ? (
               <OauthProvider />
             ) : (

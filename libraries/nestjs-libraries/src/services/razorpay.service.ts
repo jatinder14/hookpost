@@ -106,6 +106,52 @@ export class RazorpayService {
     }
   }
 
+  /**
+   * Cancel every live subscription this org holds except `keepId`.
+   *
+   * Only ever called from the activation webhook, once the replacement is
+   * confirmed live, so a failed or abandoned checkout can never strand the
+   * customer with nothing. Each cancel is best-effort and isolated: one failure
+   * must not abort the others or the webhook itself, because a webhook that
+   * throws gets retried and would re-run the whole activation.
+   */
+  private async retireSupersededSubscriptions(
+    organizationId: string,
+    keepId: string
+  ) {
+    try {
+      const all = await this.getCustomerSubscriptions(organizationId);
+      const stale = (all?.items || []).filter(
+        (s: any) =>
+          s?.id &&
+          s.id !== keepId &&
+          LIVE_STATES.includes(s.status) &&
+          (s.notes || {}).service === 'hookpost'
+      );
+
+      for (const s of stale) {
+        await this.client
+          .request('POST', `/subscriptions/${s.id}/cancel`, {
+            cancel_at_cycle_end: 0,
+          })
+          .then(() =>
+            this.logger.warn(
+              `Cancelled superseded subscription ${s.id} for org ${organizationId} (replaced by ${keepId}).`
+            )
+          )
+          .catch((e: any) =>
+            this.logger.error(
+              `Failed cancelling superseded subscription ${s.id}: ${e}`
+            )
+          );
+      }
+    } catch (e) {
+      this.logger.error(
+        `retireSupersededSubscriptions failed for ${organizationId}: ${e}`
+      );
+    }
+  }
+
   /** A subscription became live (first activation, or a renewal charge). */
   async createSubscription(subscription: any, payment?: any) {
     if (!subscription?.id) return { ok: true };
@@ -149,7 +195,23 @@ export class RazorpayService {
       orgId
     );
 
-    if (orgId) {
+    if (orgId && isOurs) {
+      // Retire any OTHER live subscription this org still holds.
+      //
+      // changeSubscription switches plans in place with a PATCH, but Razorpay
+      // rejects that outright on a UPI mandate - "subscriptions cannot be
+      // updated when payment mode is upi" - and every payment this account has
+      // ever taken was UPI. The PATCH failure is caught and we fall through to
+      // issuing a fresh mandate, which is the right recovery, except nothing
+      // ever cancelled the old one: the customer ended up authorising the new
+      // plan while the previous plan kept charging. An upgrade from Standard to
+      // Pro billed Rs 599 AND Rs 1,999 every month, forever.
+      //
+      // Guarded on isOurs and on id inequality: this Razorpay account is shared
+      // with other products, and cancelling a foreign subscription here would
+      // be far worse than the bug it fixes.
+      await this.retireSupersededSubscriptions(orgId, subscription.id);
+
       // Report the revenue conversion. TrackService was injected here but never
       // called, so Purchase - the only event that says an ad actually produced
       // money - never fired at all. Without it, ad platforms optimise towards

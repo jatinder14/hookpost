@@ -1,0 +1,24 @@
+[2026-09-19T14:59:26.687Z] ========================================================
+[2026-09-19T14:59:26.695Z] Starting LinkedIn Autonomous Bulk Application Daemon
+[2026-09-19T14:59:26.695Z] Target: $100k-$250k / Staff / Principal / Lead / Relocation
+[2026-09-19T14:59:26.695Z] ========================================================
+[2026-09-19T14:59:26.695Z] Searching: https://www.linkedin.com/jobs/search/?f_AL=true&f_WT=2&keywords=Staff%20Software%20Engineer&location=Worldwide
+[2026-09-19T14:59:32.102Z] Found 25 jobs on search page.
+[2026-09-19T14:59:32.103Z] Navigating to job view: 4466825095
+[2026-09-19T14:59:36.441Z] Job info: "Staff Software Engineer | Lookahead | LinkedIn" at "" | EasyApply: true | AlreadyApplied: false
+[2026-09-19T14:59:36.631Z] Clicked Easy Apply: CLICKED
+[2026-09-19T14:59:39.440Z] Step 1 result: {"status":"ERROR","message":"btn:Next, status:NEXT"}
+[2026-09-19T14:59:39.441Z] Stuck or unsupported form on step 1. Aborting application.
+[2026-09-19T14:59:44.828Z] Navigating to job view: 4432441168
+[2026-09-19T14:59:49.283Z] Job info: "Staff Software Engineer | Harrison Clarke | LinkedIn" at "" | EasyApply: true | AlreadyApplied: false
+[2026-09-19T14:59:49.495Z] Clicked Easy Apply: CLICKED
+[2026-09-19T14:59:52.163Z] Step 1 result: {"status":"ERROR","message":"status:SUBMITTED"}
+[2026-09-19T14:59:52.163Z] Stuck or unsupported form on step 1. Aborting application.
+[2026-09-19T14:59:57.481Z] Navigating to job view: 4459151331
+[2026-09-19T15:00:01.786Z] Job info: "Staff Software Engineer - Serverless | Runware | LinkedIn" at "" | EasyApply: true | AlreadyApplied: false
+[2026-09-19T15:00:01.946Z] Clicked Easy Apply: CLICKED
+[2026-09-19T15:00:04.736Z] Step 1 result: {"status":"ERROR","message":"btn:Next, status:NEXT"}
+[2026-09-19T15:00:04.736Z] Stuck or unsupported form on step 1. Aborting application.
+[2026-09-19T15:00:10.107Z] Navigating to job view: 4463659234
+[2026-09-19T15:00:14.531Z] Job info: "Staff Software Engineer | Come Near | LinkedIn" at "" | EasyApply: true | AlreadyApplied: false
+[2026-09-19T15:00:14.739Z] Clicked Easy Apply: CLICKED

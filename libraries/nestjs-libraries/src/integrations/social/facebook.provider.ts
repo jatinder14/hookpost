@@ -27,6 +27,52 @@ import { percentageChange } from '@hookpost/helpers/utils/percentage.change';
 export const META_GRAPH_API_VERSION = 'v25.0';
 
 /**
+ * Build the Meta OAuth dialog URL for either login product.
+ *
+ * Classic Facebook Login sends the permission set inline as `scope`. Facebook
+ * Login for Business does not: the permissions live in a *configuration* you
+ * create in the app dashboard, and the dialog is told which one to use with
+ * `config_id`. Sending both is not additive - `scope` is ignored once a
+ * config_id is present - so they are mutually exclusive here.
+ *
+ * Meta requires the Business flow before an app that manages Pages, Instagram
+ * or Threads on behalf of other businesses can be published. Until the
+ * configuration exists in the dashboard the env var is unset and this falls
+ * back to the classic dialog, so nothing changes for the accounts that already
+ * work. The moment the id is set, new connections go through the Business flow.
+ *
+ * The configuration is per permission set, so Facebook and Instagram need their
+ * own ids - one config cannot cover both.
+ */
+export const buildMetaLoginUrl = ({
+  redirectPath,
+  state,
+  scopes,
+  configId,
+}: {
+  redirectPath: string;
+  state: string;
+  scopes: string[];
+  configId?: string;
+}) => {
+  const base =
+    `https://www.facebook.com/${META_GRAPH_API_VERSION}/dialog/oauth` +
+    `?client_id=${process.env.FACEBOOK_APP_ID}` +
+    `&redirect_uri=${encodeURIComponent(
+      `${process.env.FRONTEND_URL}${redirectPath}`
+    )}` +
+    `&state=${state}`;
+
+  if (configId) {
+    return `${base}&config_id=${configId}&response_type=code&override_default_response_type=true`;
+  }
+
+  return (
+    `${base}&scope=${encodeURIComponent(scopes.join(','))}` + `&auth_type=rerequest`
+  );
+};
+
+/**
  * Page ids the token was actually granted, taken from the token itself.
  *
  * Pages owned through a Business portfolio never appear on /me/accounts - that
@@ -327,15 +373,12 @@ export class FacebookProvider extends SocialAbstract implements SocialProvider {
   async generateAuthUrl() {
     const state = makeId(6);
     return {
-      url:
-        `https://www.facebook.com/${META_GRAPH_API_VERSION}/dialog/oauth` +
-        `?client_id=${process.env.FACEBOOK_APP_ID}` +
-        `&redirect_uri=${encodeURIComponent(
-          `${process.env.FRONTEND_URL}/integrations/social/facebook`
-        )}` +
-        `&state=${state}` +
-        `&scope=${this.scopes.join(',')}` +
-        `&auth_type=rerequest`,
+      url: buildMetaLoginUrl({
+        redirectPath: '/integrations/social/facebook',
+        state,
+        scopes: this.scopes,
+        configId: process.env.FACEBOOK_LOGIN_CONFIG_ID,
+      }),
       codeVerifier: makeId(10),
       state,
     };

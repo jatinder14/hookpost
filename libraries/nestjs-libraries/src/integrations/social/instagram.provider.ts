@@ -22,6 +22,7 @@ import { hasExtension } from '@hookpost/helpers/utils/has.extension';
 import {
   META_GRAPH_API_VERSION,
   grantedPageIds,
+  buildMetaLoginUrl,
 } from '@hookpost/nestjs-libraries/integrations/social/facebook.provider';
 import { percentageChange } from '@hookpost/helpers/utils/percentage.change';
 
@@ -430,15 +431,12 @@ export class InstagramProvider
   async generateAuthUrl() {
     const state = makeId(6);
     return {
-      url:
-        `https://www.facebook.com/${META_GRAPH_API_VERSION}/dialog/oauth` +
-        `?client_id=${process.env.FACEBOOK_APP_ID}` +
-        `&redirect_uri=${encodeURIComponent(
-          `${process.env.FRONTEND_URL}/integrations/social/instagram`
-        )}` +
-        `&state=${state}` +
-        `&scope=${encodeURIComponent(this.scopes.join(','))}` +
-        `&auth_type=rerequest`,
+      url: buildMetaLoginUrl({
+        redirectPath: '/integrations/social/instagram',
+        state,
+        scopes: this.scopes,
+        configId: process.env.INSTAGRAM_LOGIN_CONFIG_ID,
+      }),
       codeVerifier: makeId(10),
       state,
     };

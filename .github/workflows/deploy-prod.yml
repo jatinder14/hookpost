@@ -95,3 +95,14 @@ jobs:
         run: |
           chmod +x ./scripts/deploy.sh
           ./scripts/deploy.sh
+
+      # Tell Bing the pages changed instead of waiting for a crawl. This runs
+      # last and deliberately does not fail the deploy: the site is already
+      # live by this point, and IndexNow being briefly unreachable is not a
+      # reason to mark a good deploy red.
+      #
+      # Worth more than it looks - ChatGPT's retrieval runs on Bing's index,
+      # so a page Bing has not re-crawled cannot be cited there.
+      - name: Ping IndexNow
+        continue-on-error: true
+        run: node ./scripts/indexnow-submit.js

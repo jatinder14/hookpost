@@ -30,6 +30,7 @@ export const SiteNav = () => {
     let active = true;
 
     // 1. Fast synchronous check via document.cookie for zero-delay paint
+    let hasLoginMarker = false;
     try {
       const cookies = document.cookie.split(';');
       for (let i = 0; i < cookies.length; i++) {
@@ -40,12 +41,27 @@ export const SiteNav = () => {
         ) {
           const val = c.split('=')[1]?.trim();
           if (val && val !== '""' && val !== "''") {
+            hasLoginMarker = true;
             setIsLoggedIn(true);
             break;
           }
         }
       }
     } catch (e) {}
+
+    // No marker means the visitor cannot be signed in, so skip the verification
+    // call entirely. Every path in auth.controller.ts that writes the HttpOnly
+    // `auth` cookie writes the readable `hp_logged_in` companion in the same
+    // response, and logout clears both - checked all four, so the marker is a
+    // reliable negative.
+    //
+    // This is not a micro-optimisation. Anonymous visitors are almost all of
+    // the marketing traffic, and for every one of them this fetch returned 401.
+    // The browser logs that as a failed request whatever the JS does with it,
+    // which cost a Lighthouse Best Practices audit ("Browser errors were logged
+    // to the console") on every landing page, and spent a round trip to learn
+    // something the absent cookie already said.
+    if (!hasLoginMarker) return;
 
     // 2. Reliable session verification with server credentials (works even with HttpOnly cookies)
     fetch('/api/user/self', { credentials: 'include' })

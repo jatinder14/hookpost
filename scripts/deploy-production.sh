@@ -201,14 +201,40 @@ if [ -z "$CHUNKS" ]; then
   echo "WARNING: No CSS chunks detected in homepage output! Checking alternative route..."
 fi
 
+# A single request through Cloudflare is not evidence about the build.
+# 2026-09-21: a deploy failed here on HTTP 520 for a chunk that was present on
+# disk and served 200 from the origin - Cloudflare had hiccuped during the PM2
+# restart a few lines earlier. The old check took that at face value, restarted
+# the frontend again and marked a good deploy red. That is how the frontend
+# accumulated restarts nothing had asked for.
+#
+# So: retry before believing a failure, and when it still looks bad, ask the
+# ORIGIN. If the origin serves the chunk, the build is fine and the edge is
+# having a moment - restarting PM2 cannot help and only adds an outage.
 ALL_PASSED=true
 for CHUNK in $CHUNKS; do
   URL="https://hookpost.hookstep.in$CHUNK"
-  STATUS=$(curl -s -o /dev/null -w "%{http_code}" "$URL")
+  STATUS=000
+  for attempt in 1 2 3; do
+    STATUS=$(curl -s -o /dev/null -w "%{http_code}" --max-time 20 "$URL")
+    [ "$STATUS" = "200" ] && break
+    echo "    attempt $attempt: HTTP $STATUS, retrying in 5s"
+    sleep 5
+  done
+
   if [ "$STATUS" = "200" ]; then
     echo " [OK] $CHUNK -> HTTP 200"
+    continue
+  fi
+
+  ORIGIN_STATUS=$(ssh -i "$SSH_KEY" "$VM_HOST" \
+    "curl -sk -o /dev/null -w '%{http_code}' --max-time 20 \
+     --resolve hookpost.hookstep.in:443:127.0.0.1 'https://hookpost.hookstep.in$CHUNK'" 2>/dev/null)
+
+  if [ "$ORIGIN_STATUS" = "200" ]; then
+    echo " [WARN] $CHUNK -> edge HTTP $STATUS but origin HTTP 200 - Cloudflare issue, not the build"
   else
-    echo " [FAIL] $CHUNK -> HTTP $STATUS"
+    echo " [FAIL] $CHUNK -> edge HTTP $STATUS, origin HTTP $ORIGIN_STATUS"
     ALL_PASSED=false
   fi
 done

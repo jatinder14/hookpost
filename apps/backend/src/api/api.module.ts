@@ -40,6 +40,11 @@ import {
 } from '@hookpost/backend/api/routes/oauth.controller';
 import { AnnouncementsController } from '@hookpost/backend/api/routes/announcements.controller';
 import { MetaCallbacksController } from '@hookpost/backend/api/routes/meta.callbacks.controller';
+import { ClippingController } from '@hookpost/backend/api/routes/clipping.controller';
+import { MediaWidgetController } from '@hookpost/backend/api/routes/media.widget.controller';
+import { ClippingWidgetController } from '@hookpost/backend/api/routes/clipping.widget.controller';
+import { UploadWidgetAuthMiddleware } from '@hookpost/backend/services/auth/upload.widget.auth.middleware';
+import { ClippingWidgetAuthMiddleware } from '@hookpost/backend/services/auth/clipping.widget.auth.middleware';
 import { AdminController } from '@hookpost/backend/api/routes/admin.controller';
 import { AuthProviderManager } from '@hookpost/backend/services/auth/providers/providers.manager';
 import { GithubProvider } from '@hookpost/backend/services/auth/providers/github.provider';
@@ -56,6 +61,7 @@ const authenticatedController = [
   SettingsController,
   PostsController,
   MediaController,
+  ClippingController,
   BillingController,
   NotificationsController,
   CopilotController,
@@ -73,7 +79,12 @@ const authenticatedController = [
 @Module({
   imports: [UploadModule],
   controllers: process.env.MCP_ONLY
-    ? [RootController, OAuthController]
+    ? [
+        RootController,
+        OAuthController,
+        MediaWidgetController,
+        ClippingWidgetController,
+      ]
     : [
         RootController,
         RazorpayController,
@@ -84,6 +95,8 @@ const authenticatedController = [
         NoAuthIntegrationsController,
         MetaCallbacksController,
         OAuthController,
+        MediaWidgetController,
+        ClippingWidgetController,
         ...authenticatedController,
       ],
   providers: [
@@ -92,6 +105,7 @@ const authenticatedController = [
     OpenaiService,
     ExtractContentService,
     AuthMiddleware,
+    UploadWidgetAuthMiddleware,
     PoliciesGuard,
     PermissionsService,
     CodesService,
@@ -113,5 +127,12 @@ const authenticatedController = [
 export class ApiModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer.apply(AuthMiddleware).forRoutes(...authenticatedController);
+    // The widget controllers authenticate with a short-lived ticket issued by
+    // the MCP tools, not the session cookie, so they get their own middleware
+    // and stay out of authenticatedController.
+    consumer.apply(UploadWidgetAuthMiddleware).forRoutes(MediaWidgetController);
+    consumer
+      .apply(ClippingWidgetAuthMiddleware)
+      .forRoutes(ClippingWidgetController);
   }
 }

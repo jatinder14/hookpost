@@ -44,6 +44,9 @@ import { ErrorsRepository } from '@hookpost/nestjs-libraries/database/prisma/err
 import { ErrorsService } from '@hookpost/nestjs-libraries/database/prisma/errors/errors.service';
 import { AdminStatsRepository } from '@hookpost/nestjs-libraries/database/prisma/admin-stats/admin-stats.repository';
 import { AdminStatsService } from '@hookpost/nestjs-libraries/database/prisma/admin-stats/admin-stats.service';
+import { DeepgramService } from '@hookpost/nestjs-libraries/deepgram/deepgram.service';
+import { ClippingService } from '@hookpost/nestjs-libraries/database/prisma/clipping/clipping.service';
+import { ClippingRepository } from '@hookpost/nestjs-libraries/database/prisma/clipping/clipping.repository';
 
 @Global()
 @Module({
@@ -97,6 +100,14 @@ import { AdminStatsService } from '@hookpost/nestjs-libraries/database/prisma/ad
     ErrorsService,
     AdminStatsRepository,
     AdminStatsService,
+    // Clipping only. Upstream also registers StripeService, PaymentService,
+    // PaymentProviderManager and RevenueCatProvider alongside these - all four
+    // are deliberately left out. This product bills through Razorpay and has a
+    // standing rule against Stripe, and RazorpayService sits in this same
+    // providers list where upstream's StripeService would go.
+    DeepgramService,
+    ClippingService,
+    ClippingRepository,
   ],
   get exports() {
     return this.providers;

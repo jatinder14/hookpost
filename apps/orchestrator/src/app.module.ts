@@ -5,6 +5,10 @@ import { DatabaseModule } from '@hookpost/nestjs-libraries/database/prisma/datab
 import { AutopostService } from '@hookpost/nestjs-libraries/database/prisma/autopost/autopost.service';
 import { EmailActivity } from '@hookpost/orchestrator/activities/email.activity';
 import { IntegrationsActivity } from '@hookpost/orchestrator/activities/integrations.activity';
+import { VideoActivity } from '@hookpost/orchestrator/activities/video.activity';
+import { MediaActivity } from '@hookpost/orchestrator/activities/media.activity';
+import { ClippingActivity } from '@hookpost/orchestrator/activities/clipping.activity';
+import { VideoModule } from '@hookpost/nestjs-libraries/videos/video.module';
 import { HealthController } from '@hookpost/orchestrator/health.controller';
 
 const activities = [
@@ -12,10 +16,14 @@ const activities = [
   AutopostService,
   EmailActivity,
   IntegrationsActivity,
+  VideoActivity,
+  MediaActivity,
+  ClippingActivity,
 ];
 @Module({
   imports: [
     DatabaseModule,
+    VideoModule,
     getTemporalModule(true, require.resolve('./workflows'), activities),
   ],
   controllers: [HealthController],

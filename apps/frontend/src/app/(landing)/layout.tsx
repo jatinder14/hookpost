@@ -208,13 +208,30 @@ const globalJsonLd = {
       // "Hookle" for the query and AI models have no clean signal to resolve
       // the entity. Third-party pages we demonstrably control are the only
       // corroboration available: the npm registry entries are independent,
-      // dated, and name the product exactly. All of these were checked to
-      // return 200 - a dead sameAs is worse than none.
+      // dated, and name the product exactly.
+      //
+      // A 200 is NOT the check. This list used to carry
+      // 'https://x.com/hookstep', which returns 200 all day because it is a
+      // real account - belonging to "Billy Twotrees", joined June 2026, zero
+      // posts, one follower. sameAs asserts identity, so we were telling Google
+      // and every AI model that a stranger's empty profile IS Hookpost, on the
+      // exact entity signal this array exists to fix. Removed 2026-09-22, the
+      // night before the Product Hunt launch.
+      //
+      // The rule the old comment should have stated: verify each URL is OURS,
+      // by name and content, not that it resolves. Re-checked on removal -
+      // hookstep.in 200, github.com/hookstep is our org, the LinkedIn company
+      // page is ours, and all three npm packages resolve in the registry with
+      // Hookpost descriptions (npmjs.com itself 403s a bare curl, which is bot
+      // protection, not a dead link).
+      //
+      // No X account: there is no Hookpost brand handle. The only X channels
+      // connected in production are two personal accounts. Add one here when a
+      // brand account exists - never the closest-looking name.
       sameAs: [
         'https://hookstep.in',
         'https://github.com/hookstep',
         'https://www.linkedin.com/company/hookpost',
-        'https://x.com/hookstep',
         'https://www.npmjs.com/package/hookpost',
         'https://www.npmjs.com/package/@hookpost/node',
         'https://www.npmjs.com/package/n8n-nodes-hookpost',

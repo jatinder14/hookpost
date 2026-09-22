@@ -962,6 +962,23 @@ export class RazorpayService {
       },
     });
 
+    // Retire any older live subscription this org still holds, now rather than
+    // only on activation.
+    //
+    // This same call already runs from createSubscription(), which fires on the
+    // activation webhook. That covers the case where a customer authenticates a
+    // replacement - but it can never fire for a subscription that is never
+    // authenticated, and those are exactly the ones that pile up. One customer
+    // produced a MONTHLY and a YEARLY mandate in the same minute on 12 Sep 2026
+    // by toggling the period on the billing page; both sat in `created` until
+    // they expired, and the cleanup never ran because neither ever activated.
+    //
+    // LIVE_STATES already includes 'created', so the existing filter catches
+    // them. It just needed calling from here as well. Awaited rather than fired
+    // and forgotten: the function swallows and logs its own errors, and a
+    // duplicate live mandate is worse than a few hundred ms before the modal.
+    await this.retireSupersededSubscriptions(organizationId, created.id);
+
     return { id, url: created.short_url, subscriptionId: created.id };
   }
 

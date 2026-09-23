@@ -60,19 +60,17 @@ export async function proxy(request: NextRequest) {
   }
 
   // A hint with no session behind it makes the landing nav offer "Dashboard"
-  // to someone who is signed out. Clear it here, in both shapes it can exist
-  // in: the backend sets it with an explicit domain and the client helper also
-  // writes a host-only copy, which is why two of them showed up side by side.
+  // to someone who is signed out. Clear the domain-scoped copy the backend sets.
+  // The client helper also writes a host-only copy (hence two identical cookies
+  // in a browser that hit this); NextResponse keeps one Set-Cookie per name, so
+  // a second, host-only clear here is silently dropped - verified with curl.
+  // The landing layout's inline script removes that copy after a 401 instead.
   if (staleLoginHint) {
     topResponse.cookies.set('hp_logged_in', '', {
       path: '/',
       maxAge: -1,
       domain: getCookieUrlFromDomain(process.env.FRONTEND_URL!),
     });
-    topResponse.headers.append(
-      'Set-Cookie',
-      'hp_logged_in=; Path=/; Max-Age=0'
-    );
   }
 
   // Multi-currency Geo-IP detection with Anti-INR Leak Protection

@@ -364,21 +364,32 @@ export default function LandingLayout({
           dangerouslySetInnerHTML={{
             __html: `
               (function() {
+                // The homepage is served from the Cloudflare cache even to
+                // signed-in users, so the middleware never sees those requests
+                // and this is what sends them to the app. It used to redirect
+                // on the readable hint alone. A hint outlives its session, so a
+                // signed-out visitor went / -> /launches -> /auth, which is the
+                // SIGN-UP page, and a returning customer could not get back to
+                // the homepage at all. Now it asks the backend first: 200 goes
+                // to the app, 401 deletes the stale hint in both the domain and
+                // host-only shapes it can be stored in, and the visitor stays.
                 try {
-                  var cookies = document.cookie.split(';');
-                  for (var i = 0; i < cookies.length; i++) {
-                    var c = cookies[i].trim();
-                    var isAuth = (c.indexOf('hp_logged_in=1') === 0) || (c.indexOf('auth=') === 0 && c.length > 5);
-                    if (isAuth) {
-                      var val = c.substring(c.indexOf('=') + 1).trim();
-                      if (val && val !== '""' && val !== "''") {
-                        if (window.location.pathname === '/') {
-                          window.location.replace('/launches');
-                          break;
-                        }
+                  if (window.location.pathname !== '/') return;
+                  var hinted = document.cookie.split(';').some(function (c) {
+                    return c.trim().indexOf('hp_logged_in=1') === 0;
+                  });
+                  if (!hinted) return;
+                  fetch('/api/user/self', { credentials: 'include', cache: 'no-store' })
+                    .then(function (r) {
+                      if (r.ok) { window.location.replace('/launches'); return; }
+                      if (r.status === 401) {
+                        var h = window.location.hostname.split('.');
+                        var d = h.length > 2 ? '; domain=.' + h.slice(-2).join('.') : '';
+                        document.cookie = 'hp_logged_in=; path=/; max-age=0';
+                        document.cookie = 'hp_logged_in=; path=/; max-age=0' + d;
                       }
-                    }
-                  }
+                    })
+                    .catch(function () {});
                 } catch (e) {}
               })();
             `,

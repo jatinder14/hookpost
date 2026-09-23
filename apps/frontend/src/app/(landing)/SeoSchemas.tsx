@@ -1,5 +1,5 @@
 import React from 'react';
-import { pricing } from '@hookpost/nestjs-libraries/database/prisma/subscriptions/pricing';
+import { pricingUSD, pricingINR, PURCHASABLE_TIERS } from '@hookpost/nestjs-libraries/database/prisma/subscriptions/pricing';
 import { FAQ_DATA } from './LandingFaq';
 import { CHANNEL_COUNT, PUBLISHABLE_CHANNEL_COUNT } from './channels/channel-count';
 
@@ -22,27 +22,32 @@ export default function SeoSchemas() {
         publisher: {
           '@id': 'https://hookpost.hookstep.in/#organization',
         },
+        // Was INR-only with highPrice = ULTIMATE and offerCount 5. ULTIMATE
+        // (and TEAM) are retired - PURCHASABLE_TIERS is FREE/STANDARD/PRO - so
+        // the schema advertised a top price nobody can pay. And Googlebot crawls
+        // from the US, where the visible page now says $15: an INR-only offer
+        // no longer matched the price on the page it described. USD is the
+        // aggregate; the INR offers carry eligibleRegion IN.
         offers: {
           '@type': 'AggregateOffer',
-          priceCurrency: 'INR',
-          lowPrice: String(pricing.FREE.month_price),
-          highPrice: String(pricing.ULTIMATE.month_price),
-          offerCount: '5',
+          priceCurrency: 'USD',
+          lowPrice: String(pricingUSD.FREE.month_price),
+          highPrice: String(pricingUSD.PRO.month_price),
+          offerCount: String(PURCHASABLE_TIERS.length * 2),
           offers: [
-            {
+            ...PURCHASABLE_TIERS.map((tier) => ({
               '@type': 'Offer',
-              name: 'Free Plan',
-              price: String(pricing.FREE.month_price),
-              priceCurrency: 'INR',
-              description: `Free social media scheduling and multi-platform publishing across ${PUBLISHABLE_CHANNEL_COUNT} channels.`,
-            },
-            {
+              name: tier === 'FREE' ? 'Free Plan' : tier.charAt(0) + tier.slice(1).toLowerCase(),
+              price: String(pricingUSD[tier].month_price),
+              priceCurrency: 'USD',
+            })),
+            ...PURCHASABLE_TIERS.map((tier) => ({
               '@type': 'Offer',
-              name: 'Standard',
-              price: String(pricing.STANDARD.month_price),
+              name: `${tier === 'FREE' ? 'Free Plan' : tier.charAt(0) + tier.slice(1).toLowerCase()} (India)`,
+              price: String(pricingINR[tier].month_price),
               priceCurrency: 'INR',
-              description: 'Multi-Channel Publishing, Multi-Agent AI Copilot, Visual Calendar, MCP Server & Analytics.',
-            },
+              eligibleRegion: 'IN',
+            })),
           ],
         },
         featureList: [

@@ -1,5 +1,5 @@
 import '../landing-global.scss';
-import { pricing } from '@hookpost/nestjs-libraries/database/prisma/subscriptions/pricing';
+import { pricingUSD, pricingINR } from '@hookpost/nestjs-libraries/database/prisma/subscriptions/pricing';
 import { Metadata, Viewport } from 'next';
 import { DM_Sans, Plus_Jakarta_Sans } from 'next/font/google';
 import { FAQ_DATA } from './LandingFaq';
@@ -187,9 +187,11 @@ export const metadata: Metadata = {
     rating: 'General',
     'revisit-after': '1 days',
     target: 'all',
-    // INR only. This previously listed eight currencies, of which just
-    // this one can actually be charged - see the offers block below.
-    priceCurrency: 'INR',
+    // Single-value legacy meta. It said INR because on 2026-09-17 INR was the
+    // only currency that could be charged; USD and EUR were re-opened on
+    // 2026-09-20 and the visible page is now priced per visitor, USD outside
+    // India. USD is the global default and what crawlers see.
+    priceCurrency: 'USD',
   },
 };
 
@@ -308,25 +310,15 @@ const globalJsonLd = {
       // No aggregateRating until there are real reviews to point at —
       // fabricated ratings are a Google spam-policy violation that can kill
       // rich results site-wide.
+      // USD for the world, INR restricted to India - see SeoSchemas.tsx for
+      // why an INR-only offer stopped matching the visible page.
       offers: [
-        {
-          '@type': 'Offer',
-          price: String(pricing.FREE.month_price),
-          priceCurrency: 'INR',
-          name: 'Free Forever',
-        },
-        {
-          '@type': 'Offer',
-          price: String(pricing.STANDARD.month_price),
-          priceCurrency: 'INR',
-          name: 'Standard (UPI / NetBanking / card via Razorpay)',
-        },
-        {
-          '@type': 'Offer',
-          price: String(pricing.PRO.month_price),
-          priceCurrency: 'INR',
-          name: 'Pro',
-        },
+        { '@type': 'Offer', price: String(pricingUSD.FREE.month_price), priceCurrency: 'USD', name: 'Free Forever' },
+        { '@type': 'Offer', price: String(pricingUSD.STANDARD.month_price), priceCurrency: 'USD', name: 'Standard' },
+        { '@type': 'Offer', price: String(pricingUSD.PRO.month_price), priceCurrency: 'USD', name: 'Pro' },
+        { '@type': 'Offer', price: String(pricingINR.FREE.month_price), priceCurrency: 'INR', eligibleRegion: 'IN', name: 'Free Forever (India)' },
+        { '@type': 'Offer', price: String(pricingINR.STANDARD.month_price), priceCurrency: 'INR', eligibleRegion: 'IN', name: 'Standard (India - UPI / NetBanking / card via Razorpay)' },
+        { '@type': 'Offer', price: String(pricingINR.PRO.month_price), priceCurrency: 'INR', eligibleRegion: 'IN', name: 'Pro (India)' },
       ],
     },
   ],

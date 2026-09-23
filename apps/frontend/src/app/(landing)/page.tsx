@@ -156,7 +156,7 @@ export default async function HomePage() {
       </section>
 
       {/* ------------------------------------------------- direct answer block */}
-      <AeoAnswerCapsule />
+      <AeoAnswerCapsule currency={currency} />
 
       {/* ------------------------------------------------------------ who for */}
       <section className="mx-auto w-full max-w-[1280px] px-5 py-20 sm:px-10">

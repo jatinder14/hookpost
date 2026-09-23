@@ -1,6 +1,17 @@
 import React from 'react';
 import { PUBLISHABLE_CHANNEL_COUNT, CHANNEL_COUNT } from './channels/channel-count';
-import { pricing } from '@hookpost/nestjs-libraries/database/prisma/subscriptions/pricing';
+import { pricing, pricingUSD, pricingINR } from '@hookpost/nestjs-libraries/database/prisma/subscriptions/pricing';
+
+// FAQ_DATA is module-level and also feeds the FAQPage schema in layout.tsx and
+// SeoSchemas.tsx, so it cannot follow the visitor's currency. It used to quote
+// rupees only - "Hookpost is priced in rupees", "Standard is ₹599/mo" - which a
+// US visitor read under a hero that already says $15, and which every AI model
+// quoting the schema repeated as if Hookpost only sold in INR. It now leads with
+// USD and gives the India price in brackets, the same form the /alternatives
+// pages already use. Counts (channels, posts, AI allowances) are identical in
+// every currency, so `pricing` is still fine for those.
+const usd = (n: number) => `$${n.toLocaleString('en-US')}`;
+const inr = (n: number) => `\u20b9${n.toLocaleString('en-IN')}`;
 
 export const FAQ_DATA = [
   {
@@ -17,7 +28,7 @@ export const FAQ_DATA = [
   },
   {
     q: 'Does Hookpost support Indian payment methods like UPI and Razorpay?',
-    a: `Yes. Hookpost is priced in rupees, starting at \u20b9${pricing.STANDARD.month_price.toLocaleString('en-IN')}/month, with native UPI (Google Pay, PhonePe, Paytm), NetBanking, and Indian cards processed securely via Razorpay.`,
+    a: `Yes. Customers in India are billed in rupees, from ${inr(pricingINR.STANDARD.month_price)}/month, with native UPI (Google Pay, PhonePe, Paytm), NetBanking, and Indian cards processed securely via Razorpay. Everywhere else, plans are priced in US dollars from ${usd(pricingUSD.STANDARD.month_price)}/month.`,
   },
   {
     q: 'Can Hookpost auto-repeat or recycle evergreen posts?',
@@ -49,7 +60,7 @@ export const FAQ_DATA = [
   },
   {
     q: "How much does Hookpost cost, and what's included in each plan?",
-    a: `Hookpost has two paid plans plus a free tier, with monthly or annual billing (saving ~20%). Free is ₹0 for ${pricing.FREE.channel} channels and ${pricing.FREE.posts_per_month} posts a month. Standard is ₹${pricing.STANDARD.month_price.toLocaleString('en-IN')}/mo for ${pricing.STANDARD.channel} channels, ${pricing.STANDARD.posts_per_month.toLocaleString('en-IN')} posts/month, ${pricing.STANDARD.ai_generation_count.toLocaleString('en-IN')} AI text generations, ${pricing.STANDARD.image_generation_count} AI images, ${pricing.STANDARD.generate_videos ? pricing.STANDARD.generate_videos + ' AI videos, ' : ''}API, and ${pricing.STANDARD.webhooks} webhooks. Pro is ₹${pricing.PRO.month_price.toLocaleString('en-IN')}/mo for ${pricing.PRO.channel} channels, ${pricing.PRO.posts_per_month.toLocaleString('en-IN')} posts/month, team members, ${pricing.PRO.ai_generation_count.toLocaleString('en-IN')} AI text generations, ${pricing.PRO.image_generation_count} AI images, ${pricing.PRO.generate_videos ? pricing.PRO.generate_videos + ' AI videos, ' : ''}and ${pricing.PRO.webhooks} webhooks.`,
+    a: `Hookpost has two paid plans plus a free tier, with monthly or annual billing (annual is two months free). Free is $0 for ${pricing.FREE.channel} channels and ${pricing.FREE.posts_per_month} posts a month. Standard is ${usd(pricingUSD.STANDARD.month_price)}/mo (${inr(pricingINR.STANDARD.month_price)} in India) for ${pricing.STANDARD.channel} channels, ${pricing.STANDARD.posts_per_month.toLocaleString('en-IN')} posts/month, ${pricing.STANDARD.ai_generation_count.toLocaleString('en-IN')} AI text generations, ${pricing.STANDARD.image_generation_count} AI images, ${pricing.STANDARD.generate_videos ? pricing.STANDARD.generate_videos + ' AI videos, ' : ''}API, and ${pricing.STANDARD.webhooks} webhooks. Pro is ${usd(pricingUSD.PRO.month_price)}/mo (${inr(pricingINR.PRO.month_price)} in India) for ${pricing.PRO.channel} channels, ${pricing.PRO.posts_per_month.toLocaleString('en-IN')} posts/month, team members, ${pricing.PRO.ai_generation_count.toLocaleString('en-IN')} AI text generations, ${pricing.PRO.image_generation_count} AI images, ${pricing.PRO.generate_videos ? pricing.PRO.generate_videos + ' AI videos, ' : ''}and ${pricing.PRO.webhooks} webhooks.`,
   },
   {
     q: 'Can I swap or change my connected channels after choosing a plan?',

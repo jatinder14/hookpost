@@ -193,12 +193,47 @@ pm2 restart hookpost-frontend --update-env
 REMOTECOMMANDS
 
 echo "==> Step 5: Live Verification & Self-Healing Health Check..."
-sleep 5
 
-CHUNKS=$(curl -s "https://hookpost.hookstep.in/?r=$(date +%s)" | grep -o '/_next/static/chunks/[^"]*\.css' | sort -u)
+# This step used to fail good deploys, and not for the reason the comment
+# further down describes. The script runs under `set -euo pipefail`, and the
+# first thing it did was
+#     CHUNKS=$(curl ... | grep -o '...css' | sort -u)
+# five seconds after restarting the frontend. Next.js takes longer than that to
+# boot, so the request came back as a Cloudflare error page with no CSS links,
+# grep exited 1, pipefail carried it out of the pipeline, and set -e killed the
+# script right there - before the "No CSS chunks" warning that was written for
+# exactly this case, and before any of the retries below, which only ever
+# covered the chunk fetches. Run 35745451077 (2026-09-22) died this way 25s after
+# the restart while the new build was already serving correctly.
+#
+# So: wait for the ORIGIN to answer first (Next.js boot, no Cloudflare in the
+# path), then fetch the homepage with retries, and never let an empty grep end
+# the script on its own.
+echo "    waiting for the frontend on the origin..."
+ORIGIN_UP=false
+for i in $(seq 1 30); do
+  CODE=$(ssh -i "$SSH_KEY" "$VM_HOST" "curl -s -o /dev/null -w '%{http_code}' --max-time 5 http://127.0.0.1:4200/" 2>/dev/null || true)
+  if [ "$CODE" = "200" ]; then ORIGIN_UP=true; echo "    origin 200 after ~$((i * 3))s"; break; fi
+  sleep 3
+done
+if [ "$ORIGIN_UP" != true ]; then
+  echo "==> ERROR: frontend never answered 200 on the origin within 90s"
+  exit 1
+fi
+
+CHUNKS=""
+for attempt in 1 2 3 4 5; do
+  CHUNKS=$(curl -s --max-time 20 "https://hookpost.hookstep.in/?r=$(date +%s)" \
+    | { grep -o '/_next/static/chunks/[^"]*\.css' || true; } | sort -u)
+  [ -n "$CHUNKS" ] && break
+  echo "    attempt $attempt: no CSS chunks in the edge response yet, retrying in 6s"
+  sleep 6
+done
 
 if [ -z "$CHUNKS" ]; then
-  echo "WARNING: No CSS chunks detected in homepage output! Checking alternative route..."
+  # The origin is up (checked above), so an edge that still shows no chunks is
+  # Cloudflare, not the build. Say so and let the chunk loop below no-op.
+  echo "WARNING: origin serves 200 but the edge still returned no CSS chunks - treating as a Cloudflare hiccup, not a broken build."
 fi
 
 # A single request through Cloudflare is not evidence about the build.

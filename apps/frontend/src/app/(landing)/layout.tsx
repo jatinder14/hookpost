@@ -1,5 +1,5 @@
 import '../landing-global.scss';
-import { pricing } from '@hookpost/nestjs-libraries/database/prisma/subscriptions/pricing';
+import { pricingUSD, pricingINR } from '@hookpost/nestjs-libraries/database/prisma/subscriptions/pricing';
 import { Metadata, Viewport } from 'next';
 import { DM_Sans, Plus_Jakarta_Sans } from 'next/font/google';
 import { FAQ_DATA } from './LandingFaq';
@@ -187,9 +187,11 @@ export const metadata: Metadata = {
     rating: 'General',
     'revisit-after': '1 days',
     target: 'all',
-    // INR only. This previously listed eight currencies, of which just
-    // this one can actually be charged - see the offers block below.
-    priceCurrency: 'INR',
+    // Single-value legacy meta. It said INR because on 2026-09-17 INR was the
+    // only currency that could be charged; USD and EUR were re-opened on
+    // 2026-09-20 and the visible page is now priced per visitor, USD outside
+    // India. USD is the global default and what crawlers see.
+    priceCurrency: 'USD',
   },
 };
 
@@ -208,13 +210,30 @@ const globalJsonLd = {
       // "Hookle" for the query and AI models have no clean signal to resolve
       // the entity. Third-party pages we demonstrably control are the only
       // corroboration available: the npm registry entries are independent,
-      // dated, and name the product exactly. All of these were checked to
-      // return 200 - a dead sameAs is worse than none.
+      // dated, and name the product exactly.
+      //
+      // A 200 is NOT the check. This list used to carry
+      // 'https://x.com/hookstep', which returns 200 all day because it is a
+      // real account - belonging to "Billy Twotrees", joined June 2026, zero
+      // posts, one follower. sameAs asserts identity, so we were telling Google
+      // and every AI model that a stranger's empty profile IS Hookpost, on the
+      // exact entity signal this array exists to fix. Removed 2026-09-22, the
+      // night before the Product Hunt launch.
+      //
+      // The rule the old comment should have stated: verify each URL is OURS,
+      // by name and content, not that it resolves. Re-checked on removal -
+      // hookstep.in 200, github.com/hookstep is our org, the LinkedIn company
+      // page is ours, and all three npm packages resolve in the registry with
+      // Hookpost descriptions (npmjs.com itself 403s a bare curl, which is bot
+      // protection, not a dead link).
+      //
+      // No X account: there is no Hookpost brand handle. The only X channels
+      // connected in production are two personal accounts. Add one here when a
+      // brand account exists - never the closest-looking name.
       sameAs: [
         'https://hookstep.in',
         'https://github.com/hookstep',
         'https://www.linkedin.com/company/hookpost',
-        'https://x.com/hookstep',
         'https://www.npmjs.com/package/hookpost',
         'https://www.npmjs.com/package/@hookpost/node',
         'https://www.npmjs.com/package/n8n-nodes-hookpost',
@@ -291,25 +310,15 @@ const globalJsonLd = {
       // No aggregateRating until there are real reviews to point at —
       // fabricated ratings are a Google spam-policy violation that can kill
       // rich results site-wide.
+      // USD for the world, INR restricted to India - see SeoSchemas.tsx for
+      // why an INR-only offer stopped matching the visible page.
       offers: [
-        {
-          '@type': 'Offer',
-          price: String(pricing.FREE.month_price),
-          priceCurrency: 'INR',
-          name: 'Free Forever',
-        },
-        {
-          '@type': 'Offer',
-          price: String(pricing.STANDARD.month_price),
-          priceCurrency: 'INR',
-          name: 'Standard (UPI / NetBanking / card via Razorpay)',
-        },
-        {
-          '@type': 'Offer',
-          price: String(pricing.PRO.month_price),
-          priceCurrency: 'INR',
-          name: 'Pro',
-        },
+        { '@type': 'Offer', price: String(pricingUSD.FREE.month_price), priceCurrency: 'USD', name: 'Free Forever' },
+        { '@type': 'Offer', price: String(pricingUSD.STANDARD.month_price), priceCurrency: 'USD', name: 'Standard' },
+        { '@type': 'Offer', price: String(pricingUSD.PRO.month_price), priceCurrency: 'USD', name: 'Pro' },
+        { '@type': 'Offer', price: String(pricingINR.FREE.month_price), priceCurrency: 'INR', eligibleRegion: 'IN', name: 'Free Forever (India)' },
+        { '@type': 'Offer', price: String(pricingINR.STANDARD.month_price), priceCurrency: 'INR', eligibleRegion: 'IN', name: 'Standard (India - UPI / NetBanking / card via Razorpay)' },
+        { '@type': 'Offer', price: String(pricingINR.PRO.month_price), priceCurrency: 'INR', eligibleRegion: 'IN', name: 'Pro (India)' },
       ],
     },
   ],
@@ -355,21 +364,32 @@ export default function LandingLayout({
           dangerouslySetInnerHTML={{
             __html: `
               (function() {
+                // The homepage is served from the Cloudflare cache even to
+                // signed-in users, so the middleware never sees those requests
+                // and this is what sends them to the app. It used to redirect
+                // on the readable hint alone. A hint outlives its session, so a
+                // signed-out visitor went / -> /launches -> /auth, which is the
+                // SIGN-UP page, and a returning customer could not get back to
+                // the homepage at all. Now it asks the backend first: 200 goes
+                // to the app, 401 deletes the stale hint in both the domain and
+                // host-only shapes it can be stored in, and the visitor stays.
                 try {
-                  var cookies = document.cookie.split(';');
-                  for (var i = 0; i < cookies.length; i++) {
-                    var c = cookies[i].trim();
-                    var isAuth = (c.indexOf('hp_logged_in=1') === 0) || (c.indexOf('auth=') === 0 && c.length > 5);
-                    if (isAuth) {
-                      var val = c.substring(c.indexOf('=') + 1).trim();
-                      if (val && val !== '""' && val !== "''") {
-                        if (window.location.pathname === '/') {
-                          window.location.replace('/launches');
-                          break;
-                        }
+                  if (window.location.pathname !== '/') return;
+                  var hinted = document.cookie.split(';').some(function (c) {
+                    return c.trim().indexOf('hp_logged_in=1') === 0;
+                  });
+                  if (!hinted) return;
+                  fetch('/api/user/self', { credentials: 'include', cache: 'no-store' })
+                    .then(function (r) {
+                      if (r.ok) { window.location.replace('/launches'); return; }
+                      if (r.status === 401) {
+                        var h = window.location.hostname.split('.');
+                        var d = h.length > 2 ? '; domain=.' + h.slice(-2).join('.') : '';
+                        document.cookie = 'hp_logged_in=; path=/; max-age=0';
+                        document.cookie = 'hp_logged_in=; path=/; max-age=0' + d;
                       }
-                    }
-                  }
+                    })
+                    .catch(function () {});
                 } catch (e) {}
               })();
             `,

@@ -115,6 +115,61 @@ export class BadBody extends ApplicationFailure {
   }
 }
 
+// When a provider's handleErrors() does not recognise a failure, every call
+// site below used to fall back to the literal string "Unknown Error", and that
+// is exactly what reached the user and the post's error column. The provider
+// had usually said precisely what was wrong: in the 14 days to 2026-09-23 two
+// Facebook and two X failures are stored as nothing but "Unknown Error" /
+// bad_body. Pinterest already got this treatment in its own provider (see the
+// note in pinterest.provider.ts); this does it once for all of them.
+//
+// Reads the common shapes: Graph API (Facebook/Instagram/Threads)
+// {"error":{"message","type","code","error_subcode"}}, X v2 {"detail","title"}
+// and {"errors":[{"message"}]}, OAuth {"error_description"}, and plain
+// {"message"}. Returns undefined when nothing usable is there, so the caller
+// still says "Unknown Error" rather than inventing something.
+export function extractProviderMessage(raw: unknown): string | undefined {
+  if (raw == null) return undefined;
+  let obj: any = raw;
+  if (typeof raw === 'string') {
+    const text = raw.trim();
+    if (!text) return undefined;
+    try {
+      obj = JSON.parse(text);
+    } catch {
+      const m = text.match(/"(?:message|error_description|detail)"\s*:\s*"((?:[^"\\]|\\.){3,300})"/);
+      return m?.[1]?.replace(/\\"/g, '"');
+    }
+  }
+  if (!obj || typeof obj !== 'object') return undefined;
+
+  const pick = (...vals: unknown[]) =>
+    vals.find((v) => typeof v === 'string' && v.trim().length > 2) as
+      | string
+      | undefined;
+
+  const e = obj.error;
+  const graph =
+    e && typeof e === 'object'
+      ? pick(e.error_user_msg, e.message) &&
+        [
+          pick(e.error_user_msg, e.message),
+          e.code != null ? `(code ${e.code}${e.error_subcode != null ? `/${e.error_subcode}` : ''})` : '',
+        ]
+          .filter(Boolean)
+          .join(' ')
+      : undefined;
+
+  const first = Array.isArray(obj.errors) ? obj.errors[0] : undefined;
+  const message =
+    graph ||
+    pick(obj.error_description, obj.detail, obj.title && obj.detail ? `${obj.title}: ${obj.detail}` : undefined) ||
+    pick(first?.message, first?.detail) ||
+    pick(typeof e === 'string' ? e : undefined, obj.message);
+
+  return message ? message.slice(0, 300) : undefined;
+}
+
 export class NotEnoughScopes {
   constructor(
     public message = 'Not enough scopes, when choosing a provider, please add all the scopes'
@@ -422,7 +477,7 @@ export abstract class SocialAbstract {
         identifier,
         json,
         '{}',
-        handleError?.value || 'Unknown Error'
+        handleError?.value || extractProviderMessage(json) || 'Unknown Error'
       );
     }
   }
@@ -449,7 +504,13 @@ export abstract class SocialAbstract {
       value = await func();
     } catch (err) {
       const handle = this.handleErrors(safeStringify(err), 200);
-      value = { err: true, value: 'Unknown Error', ...(handle || {}) };
+      value = {
+        err: true,
+        value:
+          extractProviderMessage((err as any)?.response?.data ?? (err as any)?.body ?? (err as any)?.message) ||
+          'Unknown Error',
+        ...(handle || {}),
+      };
       globalErr = err;
     }
 
@@ -533,7 +594,7 @@ export abstract class SocialAbstract {
         identifier,
         totalRetries + 1,
         ignoreConcurrency,
-        handleError?.value || 'Unknown Error'
+        handleError?.value || extractProviderMessage(json) || 'Unknown Error'
       );
     }
 
@@ -545,7 +606,7 @@ export abstract class SocialAbstract {
         identifier,
         totalRetries + 1,
         ignoreConcurrency,
-        handleError?.value || 'Unknown Error'
+        handleError?.value || extractProviderMessage(json) || 'Unknown Error'
       );
     }
 
@@ -575,7 +636,7 @@ export abstract class SocialAbstract {
       identifier,
       json,
       options.body!,
-      handleError?.value || 'Unknown Error'
+      handleError?.value || extractProviderMessage(json) || 'Unknown Error'
     );
   }
 

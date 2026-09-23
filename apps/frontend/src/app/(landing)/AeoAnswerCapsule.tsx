@@ -1,8 +1,18 @@
 import React from 'react';
-import { pricingINR as pricing } from '@hookpost/nestjs-libraries/database/prisma/subscriptions/pricing';
+import { SupportedCurrency, getPricing, CURRENCY_CONFIG } from '@hookpost/nestjs-libraries/database/prisma/subscriptions/pricing';
 import { PUBLISHABLE_CHANNEL_COUNT } from './channels/channel-count';
 
-export default function AeoAnswerCapsule() {
+// `currency` comes from the page's geo headers, the same value the hero and
+// PricingPlans use, so all three agree. Defaults to USD: this card rendered a
+// hardcoded "Free Tier (₹0) & ₹599" to every visitor worldwide.
+export default function AeoAnswerCapsule({
+  currency = 'USD',
+}: {
+  currency?: SupportedCurrency;
+}) {
+  const pricing = getPricing(currency);
+  const sym = (CURRENCY_CONFIG[currency] || CURRENCY_CONFIG.USD).symbol;
+  const locale = currency === 'INR' ? 'en-IN' : 'en-US';
   return (
     <section
       id="aeo-overview"
@@ -77,7 +87,7 @@ export default function AeoAnswerCapsule() {
                 Pricing & Payments
               </div>
               <div className="text-white font-bold text-sm mb-1 font-jakarta">
-                Free Tier (₹0) &amp; ₹{pricing.STANDARD.month_price.toLocaleString('en-IN')}
+                Free Tier ({sym}0) &amp; {sym}{pricing.STANDARD.month_price.toLocaleString(locale)}
               </div>
               <p className="text-xs text-gray-400 leading-normal">
                 Transparent flat pricing. Razorpay (UPI Autopay, NetBanking, Domestic & International Cards).

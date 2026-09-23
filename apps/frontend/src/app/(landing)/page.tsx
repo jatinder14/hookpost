@@ -20,7 +20,7 @@ import LandingFaq from "./LandingFaq";
 import { PricingPlans } from './PricingPlans';
 import { PricingContrast } from './PricingContrast';
 import { PUBLISHABLE_CHANNEL_COUNT } from './channels/channel-count';
-import { SupportedCurrency, pricingINR as pricing } from '@hookpost/nestjs-libraries/database/prisma/subscriptions/pricing';
+import { SupportedCurrency, pricingINR as pricing, getPricing, CURRENCY_CONFIG } from '@hookpost/nestjs-libraries/database/prisma/subscriptions/pricing';
 
 const CHANNELS = [
   "instagram", "youtube", "linkedin", "x", "facebook",
@@ -54,6 +54,13 @@ export default async function HomePage() {
   const rawCurrency = headerList.get('x-hookpost-currency') as SupportedCurrency | null;
   const isIndian = headerList.get('x-hookpost-is-indian') === '1' || country === 'IN';
   const currency: SupportedCurrency = rawCurrency || (isIndian ? 'INR' : 'USD');
+
+  // Hero price line. `pricing` stays imported as pricingINR because the free
+  // tier's channel and post counts are identical in every currency; only the
+  // paid figure and its symbol vary.
+  const heroPricing = getPricing(currency);
+  const heroCurrencyConfig = CURRENCY_CONFIG[currency] || CURRENCY_CONFIG.USD;
+  const heroLocale = currency === 'INR' ? 'en-IN' : 'en-US';
 
   return (
     <div className="min-h-screen bg-black text-white font-dm selection:bg-[#FF4CE2] selection:text-white">
@@ -99,7 +106,18 @@ export default async function HomePage() {
             <p className="mt-5 text-sm text-white/60">
               Free tier is {pricing.FREE.channel} channels and{' '}
               {pricing.FREE.posts_per_month} posts a month, and does not expire.
-              Paid plans start at ₹{pricing.STANDARD.month_price.toLocaleString('en-IN')}.
+              {/*
+                This line used to be hardcoded to `pricingINR` and a literal ₹,
+                while the pricing section further down this same page already
+                took `currency` (line above, passed to PricingPlans). So a US
+                visitor read "Paid plans start at ₹599" in the hero and "$15" in
+                the pricing table - two different prices on one page, and the
+                rupee one first. /pricing was always correct; only the home page
+                hero was not, which is the page that paid and launch traffic
+                actually lands on.
+              */}
+              Paid plans start at {heroCurrencyConfig.symbol}
+              {heroPricing.STANDARD.month_price.toLocaleString(heroLocale)}.
             </p>
           </div>
 
@@ -138,7 +156,7 @@ export default async function HomePage() {
       </section>
 
       {/* ------------------------------------------------- direct answer block */}
-      <AeoAnswerCapsule />
+      <AeoAnswerCapsule currency={currency} />
 
       {/* ------------------------------------------------------------ who for */}
       <section className="mx-auto w-full max-w-[1280px] px-5 py-20 sm:px-10">

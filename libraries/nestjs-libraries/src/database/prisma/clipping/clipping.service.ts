@@ -154,9 +154,15 @@ export class ClippingService {
   }
 
   // Minutes the organization can still spend. An install without billing has no
-  // plans to meter against, the same way image generation treats it
+  // plans to meter against, the same way image generation treats it.
+  //
+  // Hookpost change: upstream decides "billing is configured" from its card
+  // provider's key, which Hookpost never sets - so on this deployment every
+  // organization, FREE included, would have been handed MAX_SOURCE_MINUTES of
+  // unmetered clipping, each minute paid for in transcription and GPU time.
+  // Billing here is Razorpay, so that is the key that decides.
   private async balance(organizationId: string) {
-    if (!process.env.STRIPE_PUBLISHABLE_KEY) {
+    if (!process.env.RAZORPAY_KEY_ID) {
       return MAX_SOURCE_MINUTES;
     }
 

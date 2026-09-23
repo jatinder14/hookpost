@@ -61,6 +61,12 @@ export class OrganizationService {
     return this._organizationRepository.getOrgById(id);
   }
 
+  // Upstream (clipping): the clipping service needs the org's tier and
+  // lifetime flag to size its minute allowance.
+  getOrgByIdWithSubscription(id: string) {
+    return this._organizationRepository.getOrgByIdWithSubscription(id);
+  }
+
   getOrgByApiKey(api: string) {
     return this._organizationRepository.getOrgByApiKey(api);
   }
@@ -250,5 +256,9 @@ export class OrganizationService {
 
   setTrialFinished(orgId: string) {
     return this._organizationRepository.setTrialFinished(orgId);
+  }
+
+  getAccountOverview(orgId: string) {
+    return this._organizationRepository.getAccountOverview(orgId);
   }
 }

@@ -236,6 +236,41 @@ export class SubscriptionRepository {
     });
   }
 
+  // Upstream (clipping): reserve credits under a caller-chosen id so a job can
+  // be charged once (upsert is a no-op on retry) and refunded exactly if it
+  // fails. Plain Credits rows - no payment provider involved.
+  chargeCredits(
+    id: string,
+    organizationId: string,
+    type: string,
+    credits: number
+  ) {
+    return this._credits.model.credits.upsert({
+      where: {
+        id,
+      },
+      create: {
+        id,
+        organizationId,
+        credits,
+        type,
+      },
+      update: {},
+      select: {
+        id: true,
+      },
+    });
+  }
+
+  refundCredits(organizationId: string, id: string) {
+    return this._credits.model.credits.deleteMany({
+      where: {
+        id,
+        organizationId,
+      },
+    });
+  }
+
   async getCreditsFrom(
     organizationId: string,
     from: dayjs.Dayjs,

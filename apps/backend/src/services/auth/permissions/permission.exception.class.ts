@@ -4,6 +4,7 @@ export enum Sections {
   CHANNEL = 'channel',
   POSTS_PER_MONTH = 'posts_per_month',
   VIDEOS_PER_MONTH = 'videos_per_month',
+  CLIPPING_MINUTES = 'clipping_minutes',
   AI_GENERATIONS = 'ai_generation_count',
   TEAM_MEMBERS = 'team_members',
   COMMUNITY_FEATURES = 'community_features',

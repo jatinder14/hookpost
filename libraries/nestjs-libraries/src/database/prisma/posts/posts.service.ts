@@ -1407,4 +1407,8 @@ export class PostsService {
   ) {
     return this._postRepository.createComment(orgId, userId, postId, comment);
   }
+
+  async getPostTimeline(postId: string, orgId: string) {
+    return this._postRepository.getPostTimeline(postId, orgId);
+  }
 }

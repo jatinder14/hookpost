@@ -23,6 +23,10 @@ export interface PricingInnerInterface {
   image_generator?: boolean;
   image_generation_count: number;
   generate_videos: number;
+  // Upstream clipping: monthly minutes of source video. Values are upstream's
+  // defaults, adopted unchanged on the port branch - a pricing decision to
+  // confirm before merge, since every minute costs transcription plus GPU time.
+  clipping_minutes: number;
   public_api: boolean;
   webhooks: number;
   autoPost: boolean;
@@ -224,6 +228,7 @@ const TIER_LIMITS = {
     webhooks: 0,
     autoPost: false,
     generate_videos: 0,
+    clipping_minutes: 0,
   },
   STANDARD: {
     channel: 5,
@@ -241,6 +246,7 @@ const TIER_LIMITS = {
     webhooks: 2,
     autoPost: false,
     generate_videos: 0,
+    clipping_minutes: 60,
   },
   TEAM: {
     channel: 10,
@@ -258,6 +264,7 @@ const TIER_LIMITS = {
     webhooks: 10,
     autoPost: true,
     generate_videos: 10,
+    clipping_minutes: 120,
   },
   PRO: {
     // 20, not 30: the add-channel screen offers 20 platforms, so quoting 30
@@ -294,6 +301,7 @@ const TIER_LIMITS = {
     // to roughly 17% of plan price on every tier, matching the worst-case
     // discipline applied to posts above.
     generate_videos: 0,
+    clipping_minutes: 300,
   },
   ULTIMATE: {
     channel: 100,
@@ -311,6 +319,7 @@ const TIER_LIMITS = {
     webhooks: 10000,
     autoPost: true,
     generate_videos: 25,
+    clipping_minutes: 600,
   },
 };
 

@@ -63,6 +63,8 @@ export class SubscriptionService {
         ? pricing[tier].image_generation_count
         : checkType === 'ai_text'
         ? pricing[tier].ai_generation_count
+        : checkType === 'clipping_minutes'
+        ? pricing[tier].clipping_minutes
         : pricing[tier].generate_videos;
 
     return { max: max || 0, from: date.subtract(1, 'month') };
@@ -270,6 +272,24 @@ export class SubscriptionService {
 
   async getSubscription(organizationId: string) {
     return this._subscriptionRepository.getSubscription(organizationId);
+  }
+
+  chargeCredits(
+    id: string,
+    organizationId: string,
+    type: string,
+    credits: number
+  ) {
+    return this._subscriptionRepository.chargeCredits(
+      id,
+      organizationId,
+      type,
+      credits
+    );
+  }
+
+  refundCredits(organizationId: string, id: string) {
+    return this._subscriptionRepository.refundCredits(organizationId, id);
   }
 
   async checkCredits(organization: Organization, checkType = 'ai_images') {

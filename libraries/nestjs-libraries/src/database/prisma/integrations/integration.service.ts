@@ -776,4 +776,8 @@ export class IntegrationService {
       }, [] as number[])
     );
   }
+
+  getChannelHealth(org: string, includeDeleted = false) {
+    return this._integrationRepository.getChannelHealth(org, includeDeleted);
+  }
 }

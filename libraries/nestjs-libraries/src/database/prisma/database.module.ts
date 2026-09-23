@@ -100,11 +100,10 @@ import { ClippingRepository } from '@hookpost/nestjs-libraries/database/prisma/c
     ErrorsService,
     AdminStatsRepository,
     AdminStatsService,
-    // Clipping only. Upstream also registers StripeService, PaymentService,
-    // PaymentProviderManager and RevenueCatProvider alongside these - all four
-    // are deliberately left out. This product bills through Razorpay and has a
-    // standing rule against Stripe, and RazorpayService sits in this same
-    // providers list where upstream's StripeService would go.
+    // Clipping only. Upstream also registers its card-payment service, a
+    // payment service, a payment-provider manager and a RevenueCat provider
+    // alongside these - all four are deliberately left out. Hookpost bills
+    // through Razorpay alone, and RazorpayService sits in this same list.
     DeepgramService,
     ClippingService,
     ClippingRepository,

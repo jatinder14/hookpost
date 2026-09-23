@@ -18,11 +18,25 @@ acceptLanguage.languages(languages);
 // This function can be marked `async` if using `await` inside
 export async function proxy(request: NextRequest) {
   const nextUrl = request.nextUrl;
+  // `hp_logged_in` is deliberately NOT here. It is a readable hint for the
+  // landing nav, not a credential, and it outlives the session it describes:
+  // when `auth` expires or is rejected, the hint stays behind (and the app shell
+  // used to re-set it on every mount before knowing whether the user was signed
+  // in). With the hint counted as auth, a visitor whose session had died was
+  // bounced from "/" and from /auth/login to /launches, flashed the calendar
+  // shell, took a 401 and only then reached the login form - and never saw the
+  // homepage at all. That broke the hard rule that /auth/login must never be
+  // redirect-bounced. Verified 2026-09-23: with only `hp_logged_in=1`, both "/"
+  // and /auth/login returned 307 -> /launches.
+  //
+  // `auth` is httpOnly but scoped to .hookstep.in, so this middleware reads it
+  // on every request; the hint was never needed for redirect decisions.
   const authCookie =
     request.cookies.get('auth') ||
     request.headers.get('auth') ||
-    request.cookies.get('hp_logged_in') ||
     nextUrl.searchParams.get('loggedAuth');
+  const staleLoginHint =
+    !authCookie && request.cookies.get('hp_logged_in')?.value === '1';
   const lng = request.cookies.has(cookieName)
     ? acceptLanguage.get(request.cookies.get(cookieName).value)
     : acceptLanguage.get(
@@ -43,6 +57,22 @@ export async function proxy(request: NextRequest) {
 
   if (lng) {
     topResponse.headers.set(cookieName, lng);
+  }
+
+  // A hint with no session behind it makes the landing nav offer "Dashboard"
+  // to someone who is signed out. Clear it here, in both shapes it can exist
+  // in: the backend sets it with an explicit domain and the client helper also
+  // writes a host-only copy, which is why two of them showed up side by side.
+  if (staleLoginHint) {
+    topResponse.cookies.set('hp_logged_in', '', {
+      path: '/',
+      maxAge: -1,
+      domain: getCookieUrlFromDomain(process.env.FRONTEND_URL!),
+    });
+    topResponse.headers.append(
+      'Set-Cookie',
+      'hp_logged_in=; Path=/; Max-Age=0'
+    );
   }
 
   // Multi-currency Geo-IP detection with Anti-INR Leak Protection

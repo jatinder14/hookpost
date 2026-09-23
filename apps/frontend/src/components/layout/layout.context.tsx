@@ -1,6 +1,6 @@
 'use client';
 
-import { ReactNode, useCallback, useEffect } from 'react';
+import { ReactNode, useCallback } from 'react';
 import { FetchWrapperComponent } from '@hookpost/helpers/utils/custom.fetch';
 import { deleteDialog } from '@hookpost/react/helpers/delete.dialog';
 import { useReturnUrl } from '@hookpost/frontend/app/(app)/auth/return.url.component';
@@ -33,9 +33,10 @@ function LayoutContextInner(params: { children: ReactNode }) {
   const returnUrl = useReturnUrl();
   const { backendUrl, isGeneral, isSecured } = useVariables();
 
-  useEffect(() => {
-    setCookie('hp_logged_in', '1', 365);
-  }, []);
+  // The readable login hint used to be written here on every mount, before
+  // anything knew whether the visitor was signed in - so an expired session
+  // re-armed it on the way to its own 401. It is now written only when the
+  // backend confirms the session (see afterRequest: a 2xx from /user/self).
   const afterRequest = useCallback(
     async (url: string, options: RequestInit, response: Response) => {
       if (
@@ -56,6 +57,9 @@ function LayoutContextInner(params: { children: ReactNode }) {
         response?.headers?.get('logout') || response?.headers?.get('Logout');
       if (headerAuth) {
         setCookie('auth', headerAuth, 365);
+      }
+      if (response?.ok && url.includes('/user/self')) {
+        setCookie('hp_logged_in', '1', 365);
       }
       if (showOrg) {
         setCookie('showorg', showOrg, 365);

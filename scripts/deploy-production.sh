@@ -223,7 +223,9 @@ fi
 
 CHUNKS=""
 for attempt in 1 2 3 4 5; do
-  CHUNKS=$(curl -s --max-time 20 "https://hookpost.hookstep.in/?r=$(date +%s)" \
+  # curl is guarded as well as grep: a 20s edge timeout exits 28, and under
+  # pipefail that alone killed run 35986179970 after the origin was already up.
+  CHUNKS=$({ curl -s --max-time 20 "https://hookpost.hookstep.in/?r=$(date +%s)" || true; } \
     | { grep -o '/_next/static/chunks/[^"]*\.css' || true; } | sort -u)
   [ -n "$CHUNKS" ] && break
   echo "    attempt $attempt: no CSS chunks in the edge response yet, retrying in 6s"

@@ -251,6 +251,45 @@ export const MainBillingComponent: FC<{
   const [period, setPeriod] = useState<'MONTHLY' | 'YEARLY'>(
     subscription?.period || 'MONTHLY'
   );
+  // Website coupon: validated here, sent with the checkout request, applied by
+  // the backend when the Razorpay subscription is created.
+  const [couponInput, setCouponInput] = useState('');
+  const [appliedCoupon, setAppliedCoupon] = useState<{
+    code: string;
+    percentOff: number | null;
+    freeMonths: number | null;
+  } | null>(null);
+  const [couponMessage, setCouponMessage] = useState('');
+  const [couponChecking, setCouponChecking] = useState(false);
+  const applyCoupon = useCallback(async () => {
+    const code = couponInput.trim();
+    if (!code) return;
+    setCouponChecking(true);
+    try {
+      const res = await (
+        await fetch(`/billing/coupon/validate?code=${encodeURIComponent(code)}`)
+      ).json();
+      if (!res?.valid) {
+        setAppliedCoupon(null);
+        setCouponMessage(res?.reason || 'This coupon code is not valid.');
+        return;
+      }
+      setAppliedCoupon({
+        code: res.code,
+        percentOff: res.percentOff,
+        freeMonths: res.freeMonths,
+      });
+      setCouponMessage(
+        res.percentOff
+          ? `${res.code}: ${res.percentOff}% off your plan - the discounted price shows at checkout`
+          : `${res.code}: first ${res.freeMonths} month${res.freeMonths > 1 ? 's' : ''} free`
+      );
+    } catch {
+      setCouponMessage('Could not check the coupon. Try again.');
+    } finally {
+      setCouponChecking(false);
+    }
+  }, [couponInput, fetch]);
   const [monthlyOrYearly, setMonthlyOrYearly] = useState<'on' | 'off'>(
     period === 'MONTHLY' ? 'off' : 'on'
   );
@@ -435,7 +474,7 @@ export const MainBillingComponent: FC<{
         }
         setLoading(true);
         setLoadingPack(billing);
-        const { url, portal, blocked, subscriptionId, keyId, currency: returnedCurrency } = await (
+        const embeddedResponse = await (
           await fetch('/billing/embedded', {
             method: 'POST',
             body: JSON.stringify({
@@ -444,9 +483,21 @@ export const MainBillingComponent: FC<{
               billing,
               currency,
               ...(dub ? { dub } : {}),
+              ...(appliedCoupon ? { coupon: appliedCoupon.code } : {}),
             }),
           })
         ).json();
+        if (embeddedResponse?.statusCode >= 400) {
+          toast.show(
+            String(embeddedResponse.message || 'Could not start checkout'),
+            'warning'
+          );
+          setLoading(false);
+          setLoadingPack('');
+          return;
+        }
+        const { url, portal, blocked, subscriptionId, keyId, currency: returnedCurrency } =
+          embeddedResponse;
         if (blocked) {
           setLoading(false);
           setLoadingPack('');
@@ -559,7 +610,7 @@ export const MainBillingComponent: FC<{
         setLoading(false);
         setLoadingPack('');
       },
-    [monthlyOrYearly, subscription, user, utm, fetch, toast, t, currency, activePricing]
+    [monthlyOrYearly, subscription, user, utm, fetch, toast, t, currency, activePricing, appliedCoupon]
   );
   if (user?.isLifetime) {
     router.replace('/');
@@ -619,6 +670,42 @@ export const MainBillingComponent: FC<{
           </div>
         </div>
       </div>
+
+      {!subscription?.identifier && (
+        <div className="flex flex-col gap-[6px]">
+          <div className="flex gap-[8px] items-center flex-wrap">
+            <input
+              value={couponInput}
+              onChange={(e) => {
+                setCouponInput(e.target.value.toUpperCase());
+                setAppliedCoupon(null);
+                setCouponMessage('');
+              }}
+              onKeyDown={(e) => e.key === 'Enter' && applyCoupon()}
+              placeholder={t('coupon_code', 'Coupon code')}
+              maxLength={40}
+              className="h-[40px] px-[12px] rounded-[8px] bg-newBgColorInner border border-newTableBorder text-[14px] uppercase w-[220px]"
+            />
+            <button
+              type="button"
+              onClick={applyCoupon}
+              disabled={couponChecking || !couponInput.trim()}
+              className="h-[40px] px-[16px] rounded-[8px] border border-newTableBorder text-[14px] disabled:opacity-50"
+            >
+              {couponChecking ? t('checking', 'Checking...') : t('apply', 'Apply')}
+            </button>
+          </div>
+          {!!couponMessage && (
+            <div
+              className={`text-[13px] ${
+                appliedCoupon ? 'text-green-400' : 'text-red-400'
+              }`}
+            >
+              {couponMessage}
+            </div>
+          )}
+        </div>
+      )}
 
       {finishTrial && <FinishTrial close={() => setFinishTrial(false)} />}
       <div className="flex gap-[16px] [@media(max-width:1024px)]:flex-col [@media(max-width:1024px)]:text-center">

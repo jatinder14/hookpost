@@ -272,6 +272,60 @@ export class SubscriptionService {
     return this._subscriptionRepository.getSubscription(organizationId);
   }
 
+  // Website coupons. Returns a reason a buyer can read instead of throwing, so
+  // the checkout can show it next to the code field.
+  async validateCoupon(rawCode: string, organizationId: string) {
+    const code = (rawCode || '').trim().toUpperCase();
+    const coupon = code
+      ? await this._subscriptionRepository.findCouponByCode(code)
+      : null;
+    if (!coupon || !coupon.active) {
+      return { ok: false as const, reason: 'This coupon code is not valid.' };
+    }
+    if (coupon.expiresAt && coupon.expiresAt < new Date()) {
+      return { ok: false as const, reason: 'This coupon has expired.' };
+    }
+    if (
+      coupon.maxRedemptions != null &&
+      (await this._subscriptionRepository.countCouponRedemptions(coupon.id)) >=
+        coupon.maxRedemptions
+    ) {
+      return { ok: false as const, reason: 'This coupon has been fully used.' };
+    }
+    if (
+      await this._subscriptionRepository.hasRedeemedCoupon(
+        coupon.id,
+        organizationId
+      )
+    ) {
+      return {
+        ok: false as const,
+        reason: 'This coupon was already used on your workspace.',
+      };
+    }
+    return { ok: true as const, coupon };
+  }
+
+  redeemCoupon(couponId: string, organizationId: string, subscriptionId: string) {
+    return this._subscriptionRepository.redeemCoupon(
+      couponId,
+      organizationId,
+      subscriptionId
+    );
+  }
+
+  createCoupon(data: Parameters<SubscriptionRepository['createCoupon']>[0]) {
+    return this._subscriptionRepository.createCoupon(data);
+  }
+
+  listCoupons() {
+    return this._subscriptionRepository.listCoupons();
+  }
+
+  setCouponActive(id: string, active: boolean) {
+    return this._subscriptionRepository.setCouponActive(id, active);
+  }
+
   async checkCredits(organization: Organization, checkType = 'ai_images') {
     const { max, from } = this.creditAllowance(organization, checkType);
 

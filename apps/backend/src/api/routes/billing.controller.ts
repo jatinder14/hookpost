@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpException, Param, Post, Req } from '@nestjs/common';
+import { Body, Controller, Get, HttpException, Param, Post, Query, Req } from '@nestjs/common';
 import { SubscriptionService } from '@hookpost/nestjs-libraries/database/prisma/subscriptions/subscription.service';
 import { RazorpayService } from '@hookpost/nestjs-libraries/services/razorpay.service';
 import { GetOrgFromRequest } from '@hookpost/nestjs-libraries/user/org.from.request';
@@ -12,7 +12,7 @@ import { Request } from 'express';
 import { AuthService } from '@hookpost/helpers/auth/auth.service';
 import { UsersService } from '@hookpost/nestjs-libraries/database/prisma/users/users.service';
 import { OrganizationService } from '@hookpost/nestjs-libraries/database/prisma/organizations/organization.service';
-import { pricing } from '@hookpost/nestjs-libraries/database/prisma/subscriptions/pricing';
+import { pricing, getPricing } from '@hookpost/nestjs-libraries/database/prisma/subscriptions/pricing';
 
 // Why the admin coupon tool cannot apply anything on this deployment. Upstream
 // built it for a card provider that can re-price a live subscription. Razorpay
@@ -221,6 +221,105 @@ export class BillingController {
     }
 
     return this._razorpayService.cancelSubscription(org.id);
+  }
+
+  // ---- Website coupons (buyer-facing) ----
+  @Get('/coupon/validate')
+  async validateWebsiteCoupon(
+    @GetOrgFromRequest() org: Organization,
+    @Query('code') code: string,
+    @Query('billing') billing?: string,
+    @Query('period') period?: string,
+    @Query('currency') currency?: string
+  ) {
+    const check = await this._subscriptionService.validateCoupon(code, org.id);
+    if (!check.ok) {
+      return { valid: false, reason: check.reason };
+    }
+    const { coupon } = check;
+    const plan =
+      billing && (getPricing(currency || 'INR') as any)[billing.toUpperCase()];
+    const base = plan
+      ? period === 'YEARLY'
+        ? plan.year_price
+        : plan.month_price
+      : null;
+    return {
+      valid: true,
+      code: coupon.code,
+      percentOff: coupon.percentOff,
+      freeMonths: coupon.freeMonths,
+      price: base,
+      discountedPrice:
+        base != null && coupon.percentOff
+          ? Math.round(base * (100 - coupon.percentOff)) / 100
+          : base,
+    };
+  }
+
+  // ---- Website coupons (platform admin) ----
+  @Get('/admin/coupons')
+  async listCoupons(@GetUserFromRequest() user: User) {
+    if (!user.isSuperAdmin) {
+      throw new HttpException('Unauthorized', 400);
+    }
+    return this._subscriptionService.listCoupons();
+  }
+
+  @Post('/admin/coupons')
+  async createCoupon(
+    @GetUserFromRequest() user: User,
+    @Body()
+    body: {
+      code: string;
+      percentOff?: number;
+      freeMonths?: number;
+      maxRedemptions?: number;
+      expiresAt?: string;
+      note?: string;
+    }
+  ) {
+    if (!user.isSuperAdmin) {
+      throw new HttpException('Unauthorized', 400);
+    }
+    const code = String(body.code || '').trim().toUpperCase();
+    const pct = body.percentOff != null ? Number(body.percentOff) : null;
+    const months = body.freeMonths != null ? Number(body.freeMonths) : null;
+    if (!/^[A-Z0-9_-]{3,40}$/.test(code)) {
+      throw new HttpException('Code: 3-40 letters, digits, - or _', 400);
+    }
+    // Exactly one kind. 90% is the ceiling: Razorpay rejects a plan below
+    // Rs 1, and a 100%-off plan is what freeMonths is for.
+    if ((pct == null) === (months == null)) {
+      throw new HttpException('Give either percentOff or freeMonths', 400);
+    }
+    if (pct != null && (!Number.isInteger(pct) || pct < 1 || pct > 90)) {
+      throw new HttpException('percentOff must be a whole number 1-90', 400);
+    }
+    if (months != null && (!Number.isInteger(months) || months < 1 || months > 12)) {
+      throw new HttpException('freeMonths must be a whole number 1-12', 400);
+    }
+    return this._subscriptionService.createCoupon({
+      code,
+      percentOff: pct,
+      freeMonths: months,
+      maxRedemptions:
+        body.maxRedemptions != null ? Number(body.maxRedemptions) : null,
+      expiresAt: body.expiresAt ? new Date(body.expiresAt) : null,
+      note: body.note || null,
+    });
+  }
+
+  @Post('/admin/coupons/:id/active')
+  async setCouponActive(
+    @GetUserFromRequest() user: User,
+    @Param('id') id: string,
+    @Body() body: { active: boolean }
+  ) {
+    if (!user.isSuperAdmin) {
+      throw new HttpException('Unauthorized', 400);
+    }
+    return this._subscriptionService.setCouponActive(id, !!body.active);
   }
 
   @Get('/coupon-info')

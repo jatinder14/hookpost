@@ -1,4 +1,4 @@
-import { IsIn, IsOptional } from 'class-validator';
+import { IsIn, IsOptional, IsString, MaxLength } from 'class-validator';
 import { PURCHASABLE_TIERS } from '@hookpost/nestjs-libraries/database/prisma/subscriptions/pricing';
 
 // Derived, never retyped. This used to hardcode
@@ -25,5 +25,11 @@ export class BillingSubscribeDto {
 
   datafast_session_id: string;
   datafast_visitor_id: string;
+
+  // Website coupon code, applied only when a new subscription is created.
+  @IsOptional()
+  @IsString()
+  @MaxLength(40)
+  coupon?: string;
 }
 

@@ -15,8 +15,56 @@ export class SubscriptionRepository {
     private readonly _user: PrismaRepository<'user'>,
     private readonly _credits: PrismaRepository<'credits'>,
     private _usedCodes: PrismaRepository<'usedCodes'>,
-    private _transaction: PrismaTransaction
+    private _transaction: PrismaTransaction,
+    private _coupon: PrismaRepository<'coupon'>,
+    private _couponRedemption: PrismaRepository<'couponRedemption'>
   ) {}
+
+  findCouponByCode(code: string) {
+    return this._coupon.model.coupon.findUnique({ where: { code } });
+  }
+
+  countCouponRedemptions(couponId: string) {
+    return this._couponRedemption.model.couponRedemption.count({
+      where: { couponId },
+    });
+  }
+
+  async hasRedeemedCoupon(couponId: string, organizationId: string) {
+    return !!(await this._couponRedemption.model.couponRedemption.findUnique({
+      where: { couponId_organizationId: { couponId, organizationId } },
+    }));
+  }
+
+  redeemCoupon(couponId: string, organizationId: string, subscriptionId: string) {
+    return this._couponRedemption.model.couponRedemption.upsert({
+      where: { couponId_organizationId: { couponId, organizationId } },
+      create: { couponId, organizationId, subscriptionId },
+      update: { subscriptionId },
+    });
+  }
+
+  createCoupon(data: {
+    code: string;
+    percentOff?: number | null;
+    freeMonths?: number | null;
+    maxRedemptions?: number | null;
+    expiresAt?: Date | null;
+    note?: string | null;
+  }) {
+    return this._coupon.model.coupon.create({ data });
+  }
+
+  listCoupons() {
+    return this._coupon.model.coupon.findMany({
+      orderBy: { createdAt: 'desc' },
+      include: { _count: { select: { redemptions: true } } },
+    });
+  }
+
+  setCouponActive(id: string, active: boolean) {
+    return this._coupon.model.coupon.update({ where: { id }, data: { active } });
+  }
 
   getUserAccount(userId: string) {
     return this._user.model.user.findFirst({

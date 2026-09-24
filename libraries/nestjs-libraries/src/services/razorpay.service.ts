@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, BadRequestException } from '@nestjs/common';
 import { Organization } from '@prisma/client';
 import { SubscriptionService } from '@hookpost/nestjs-libraries/database/prisma/subscriptions/subscription.service';
 import { OrganizationService } from '@hookpost/nestjs-libraries/database/prisma/organizations/organization.service';
@@ -743,10 +743,13 @@ export class RazorpayService {
   private async findOrCreatePlan(
     billing: Billing,
     period: Period,
-    currency: string = CURRENCY_CODE
+    currency: string = CURRENCY_CODE,
+    // Set by a percentOff coupon. The plan key includes the amount, so a
+    // discounted price gets its own plan and never touches the list-price one.
+    amountOverride?: number
   ) {
     const curr = (currency || CURRENCY_CODE).toUpperCase();
-    const amount = this.amountFor(billing, period, curr);
+    const amount = amountOverride ?? this.amountFor(billing, period, curr);
     const key = buildPlanKey(billing, period, amount, curr);
     const cached = this.planCache.get(key);
     if (cached) return cached;
@@ -765,7 +768,9 @@ export class RazorpayService {
       period: period === 'MONTHLY' ? 'monthly' : 'yearly',
       interval: 1,
       item: {
-        name: `Hookpost ${billing} ${period} (${curr})`,
+        name: `Hookpost ${billing} ${period} (${curr})${
+          amountOverride != null ? ' - coupon price' : ''
+        }`,
         amount,
         currency: curr,
       },
@@ -881,11 +886,43 @@ export class RazorpayService {
 
     const org = (await this._organizationService.getOrgById(organizationId))!;
     const customerId = await this.createOrGetCustomer(org);
-    const planId = await this.findOrCreatePlan(billing, period, currency);
+
+    // Website coupon, applied only when a subscription is created: Razorpay
+    // cannot re-price a live UPI Autopay mandate. percentOff buys a discounted
+    // plan for the life of the subscription; freeMonths delays its start.
+    let coupon: { id: string; code: string; percentOff: number | null; freeMonths: number | null } | undefined;
+    let amountOverride: number | undefined;
+    if (body.coupon && body.coupon.trim()) {
+      const check = await this._subscriptionService.validateCoupon(
+        body.coupon,
+        organizationId
+      );
+      if (!check.ok) {
+        throw new BadRequestException(check.reason);
+      }
+      coupon = check.coupon;
+      if (coupon.percentOff) {
+        const base = this.amountFor(billing, period, currency);
+        amountOverride = Math.round((base * (100 - coupon.percentOff)) / 100);
+      }
+    }
+
+    const planId = await this.findOrCreatePlan(
+      billing,
+      period,
+      currency,
+      amountOverride
+    );
 
     const current = await this._subscriptionService.getSubscription(
       organizationId
     );
+
+    if (coupon && current?.identifier) {
+      throw new BadRequestException(
+        'Coupons apply to new subscriptions only. This workspace already has one.'
+      );
+    }
 
     // Existing mandate -> switch plans in place, no new authorisation needed.
     if (current?.identifier) {
@@ -935,10 +972,16 @@ export class RazorpayService {
         ? TRIAL_DAYS_DEFAULT
         : Number(configuredTrial);
 
-    const startAt =
+    const trialStart =
       allowTrial && Number.isFinite(trialDays) && trialDays > 0
         ? Math.floor(Date.now() / 1000) + trialDays * 86400
         : undefined;
+    // freeMonths coupon: push the first charge out by that many 30-day months,
+    // on top of any trial.
+    const couponDelay = (coupon?.freeMonths || 0) * 30 * 86400;
+    const startAt = couponDelay
+      ? (trialStart || Math.floor(Date.now() / 1000)) + couponDelay
+      : trialStart;
 
     const created = await this.client.request('POST', '/subscriptions', {
       plan_id: planId,
@@ -959,8 +1002,17 @@ export class RazorpayService {
         userId,
         id,
         ud: uniqueId,
+        ...(coupon ? { coupon: coupon.code } : {}),
       },
     });
+
+    if (coupon) {
+      await this._subscriptionService.redeemCoupon(
+        coupon.id,
+        organizationId,
+        created.id
+      );
+    }
 
     // Retire any older live subscription this org still holds, now rather than
     // only on activation.

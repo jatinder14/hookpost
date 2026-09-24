@@ -1018,3 +1018,34 @@ model ContactMessage {
   @@index([createdAt])
   @@index([ip, createdAt])
 }
+
+// Website coupon codes a buyer types at checkout. Razorpay cannot re-price a
+// live UPI Autopay subscription and Offers can only be made in its dashboard,
+// so a coupon is applied when the subscription is CREATED: percentOff buys a
+// discounted plan (plans can be created over the API) for the life of that
+// subscription, freeMonths pushes its start date out. No relation to
+// Organization on purpose - adding these tables must not alter existing ones.
+model Coupon {
+  id             String             @id @default(uuid())
+  code           String             @unique
+  percentOff     Int?
+  freeMonths     Int?
+  maxRedemptions Int?
+  expiresAt      DateTime?
+  active         Boolean            @default(true)
+  note           String?
+  createdAt      DateTime           @default(now())
+  redemptions    CouponRedemption[]
+}
+
+model CouponRedemption {
+  id             String   @id @default(uuid())
+  couponId       String
+  organizationId String
+  subscriptionId String?
+  createdAt      DateTime @default(now())
+  coupon         Coupon   @relation(fields: [couponId], references: [id])
+
+  @@unique([couponId, organizationId])
+  @@index([organizationId])
+}

@@ -191,12 +191,16 @@ const ApplyCouponModal: FC<{ close: () => void }> = ({ close }) => {
 
   return (
     <div className="flex flex-col gap-[16px]">
-      <div className="text-newTextColor/60 text-[13px]">
-        {t(
-          'apply_coupon_subtitle',
-          "The coupon applied here is simply a deduction from the user's next billing cycle(s) — one or more, depending on how many months you choose to apply it for. It is NOT a refund; this is applied as a Razorpay offer on the next cycle."
-        )}
-      </div>
+      {/* Only describe how a coupon works when one can actually be applied;
+          otherwise it contradicts the "can't be applied" reason below. */}
+      {info?.supported && (
+        <div className="text-newTextColor/60 text-[13px]">
+          {t(
+            'apply_coupon_subtitle',
+            "The coupon applied here is simply a deduction from the user's next billing cycle(s) — one or more, depending on how many months you choose to apply it for. It is NOT a refund; this is applied as a Razorpay offer on the next cycle."
+          )}
+        </div>
+      )}
       {!info ? (
         <div className="text-center py-[20px] text-newTextColor/60">
           {t('loading', 'Loading...')}

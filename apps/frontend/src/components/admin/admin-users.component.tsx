@@ -606,8 +606,16 @@ export const AdminUsersComponent: FC = () => {
                             <div className="font-[600] text-white">
                               {mainOrg.name}
                             </div>
-                            <div className="text-[11px] opacity-60 capitalize">
-                              {role.toLowerCase()}
+                            <div className="text-[11px] opacity-60">
+                              {/* Workspace role, not platform role. Every
+                                  signup owns its own workspace, so this read
+                                  "Superadmin" for all 18 users - the platform
+                                  super admins are the amber badge above. */}
+                              {role === 'SUPERADMIN'
+                                ? 'Owner'
+                                : role === 'ADMIN'
+                                ? 'Admin'
+                                : 'Member'}
                             </div>
                           </div>
                         ) : (

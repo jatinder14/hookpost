@@ -12,6 +12,16 @@ import { Request } from 'express';
 import { AuthService } from '@hookpost/helpers/auth/auth.service';
 import { UsersService } from '@hookpost/nestjs-libraries/database/prisma/users/users.service';
 import { OrganizationService } from '@hookpost/nestjs-libraries/database/prisma/organizations/organization.service';
+import { pricing } from '@hookpost/nestjs-libraries/database/prisma/subscriptions/pricing';
+
+// Why the admin coupon tool cannot apply anything on this deployment. Upstream
+// built it for a card provider that can re-price a live subscription. Razorpay
+// cannot: a UPI Autopay mandate fixes the amount at signup, and Offers can only
+// be created in the Razorpay dashboard and attached when a subscription is
+// created. The old stubs returned a shape the modal did not expect (no
+// `coupons` array) and it crashed on `info.coupons.length`.
+const COUPON_UNSUPPORTED_REASON =
+  "Razorpay can't change the price of a running subscription - UPI Autopay locks the amount at signup. To discount a user, create an Offer in the Razorpay dashboard; it applies when they subscribe.";
 
 @ApiTags('Billing')
 @Controller('/billing')
@@ -193,6 +203,23 @@ export class BillingController {
       throw new HttpException('Unauthorized', 400);
     }
 
+    // A workspace on the free plan has nothing to cancel. The dialog used to
+    // warn "the user will be downgraded to FREE" for users already on FREE.
+    const sub = await this._subscriptionService.getSubscription(org.id);
+    if (!sub) {
+      return {
+        ok: false,
+        reason: 'This workspace has no paid subscription to cancel.',
+      };
+    }
+    if (sub.isLifetime) {
+      return {
+        ok: false,
+        reason:
+          'This is a lifetime plan with no Razorpay subscription behind it. Change the tier instead of cancelling.',
+      };
+    }
+
     return this._razorpayService.cancelSubscription(org.id);
   }
 
@@ -205,7 +232,21 @@ export class BillingController {
       throw new HttpException('Unauthorized', 400);
     }
 
-    return this._razorpayService.getCouponInfo(org.id);
+    const sub = await this._subscriptionService.getSubscription(org.id);
+    const tier = sub?.subscriptionTier || null;
+    const plan = tier ? (pricing as any)[tier] : undefined;
+    return {
+      tier,
+      period: sub?.period || null,
+      isLifetime: !!sub?.isLifetime,
+      monthlyPrice: plan?.month_price || 0,
+      planPrice:
+        (sub?.period === 'YEARLY' ? plan?.year_price : plan?.month_price) || 0,
+      nextPayment: null,
+      coupons: [],
+      supported: false,
+      reason: COUPON_UNSUPPORTED_REASON,
+    };
   }
 
   @Post('/apply-coupon')
@@ -218,7 +259,7 @@ export class BillingController {
       throw new HttpException('Unauthorized', 400);
     }
 
-    return this._razorpayService.applyCoupon(org.id, body);
+    return { applied: false, reason: COUPON_UNSUPPORTED_REASON };
   }
 
   @Post('/cancel-coupon')
@@ -230,7 +271,7 @@ export class BillingController {
       throw new HttpException('Unauthorized', 400);
     }
 
-    return this._razorpayService.cancelCoupon(org.id);
+    return { cancelled: false, reason: COUPON_UNSUPPORTED_REASON };
   }
 
   @Get('/chatbase-refund/preview')

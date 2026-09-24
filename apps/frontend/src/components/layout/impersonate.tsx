@@ -296,10 +296,11 @@ const ApplyCouponModal: FC<{ close: () => void }> = ({ close }) => {
             </div>
           ) : (
             <div className="text-newTextColor/60 text-[13px]">
-              {t(
-                'apply_coupon_not_supported',
-                "We currently don't support applying a coupon for users either under an annual plan, with a lifetime deal or with another active coupon."
-              )}
+              {(info as any).reason ||
+                t(
+                  'apply_coupon_not_supported',
+                  "Coupons can't be applied to this subscription."
+                )}
             </div>
           )}
           {!!error && <div className="text-red-400 text-[12px]">{error}</div>}
@@ -325,9 +326,17 @@ const ApplyCouponModal: FC<{ close: () => void }> = ({ close }) => {
 
 const ChargesModal: FC<{ close: () => void }> = ({ close }) => {
   const fetch = useFetch();
+  const toast = useToaster();
   const t = useT();
   const { openModal } = useModals();
   const { data: charges, mutate } = useCharges();
+  // Tier of the impersonated workspace, so Cancel Subscription is only offered
+  // when there is a paid, non-lifetime subscription to cancel.
+  const { data: billingInfo } = useCouponInfo();
+  const hasPaidSubscription =
+    !!billingInfo?.tier &&
+    billingInfo.tier !== 'FREE' &&
+    !billingInfo.isLifetime;
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [refunding, setRefunding] = useState(false);
   const [cancelling, setCancelling] = useState(false);
@@ -397,9 +406,19 @@ const ChargesModal: FC<{ close: () => void }> = ({ close }) => {
     }
     setCancelling(true);
     try {
-      await fetch('/billing/cancel-subscription', {
+      const response = await fetch('/billing/cancel-subscription', {
         method: 'POST',
       });
+      const json = await response.json().catch(() => ({}));
+      if (!response.ok || json.ok === false) {
+        toast.show(
+          json.reason ||
+            t('cancel_subscription_failed', 'Could not cancel the subscription'),
+          'warning'
+        );
+        setCancelling(false);
+        return;
+      }
       close();
       window.location.reload();
     } catch {
@@ -527,13 +546,21 @@ const ChargesModal: FC<{ close: () => void }> = ({ close }) => {
           {t('refund_selected', 'Refund Selected')}
           {selected.size > 0 && ` (${selected.size})`}
         </Button>
-        <Button
-          onClick={handleCancel}
-          loading={cancelling}
-          className="!bg-red-700 rounded-[4px]"
-        >
-          {t('cancel_subscription', 'Cancel Subscription')}
-        </Button>
+        {hasPaidSubscription ? (
+          <Button
+            onClick={handleCancel}
+            loading={cancelling}
+            className="!bg-red-700 rounded-[4px]"
+          >
+            {t('cancel_subscription', 'Cancel Subscription')}
+          </Button>
+        ) : (
+          <div className="self-center text-[12px] text-newTextColor/60">
+            {billingInfo?.isLifetime
+              ? t('lifetime_no_cancel', 'Lifetime plan - nothing to cancel')
+              : t('free_no_cancel', 'Free plan - no subscription to cancel')}
+          </div>
+        )}
       </div>
     </div>
   );

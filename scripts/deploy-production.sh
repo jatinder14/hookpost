@@ -253,7 +253,7 @@ for CHUNK in $CHUNKS; do
   URL="https://hookpost.hookstep.in$CHUNK"
   STATUS=000
   for attempt in 1 2 3; do
-    STATUS=$(curl -s -o /dev/null -w "%{http_code}" --max-time 20 "$URL")
+    STATUS=$(curl -s -o /dev/null -w "%{http_code}" --max-time 20 "$URL" || true)
     [ "$STATUS" = "200" ] && break
     echo "    attempt $attempt: HTTP $STATUS, retrying in 5s"
     sleep 5
@@ -266,7 +266,7 @@ for CHUNK in $CHUNKS; do
 
   ORIGIN_STATUS=$(ssh -i "$SSH_KEY" "$VM_HOST" \
     "curl -sk -o /dev/null -w '%{http_code}' --max-time 20 \
-     --resolve hookpost.hookstep.in:443:127.0.0.1 'https://hookpost.hookstep.in$CHUNK'" 2>/dev/null)
+     --resolve hookpost.hookstep.in:443:127.0.0.1 'https://hookpost.hookstep.in$CHUNK'" 2>/dev/null || true)
 
   if [ "$ORIGIN_STATUS" = "200" ]; then
     echo " [WARN] $CHUNK -> edge HTTP $STATUS but origin HTTP 200 - Cloudflare issue, not the build"

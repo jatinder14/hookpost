@@ -26,7 +26,7 @@ const REASONS = [
   },
   {
     title: 'Self-hosting & source',
-    body: 'Hookpost is licensed under AGPL-3.0. The public source release is not out yet, so ask here and we will share the repository.',
+    body: 'Hookpost is open source under AGPL-3.0. The code is at https://github.com/jatinder14/hookpost.',
   },
   {
     title: 'API & partnerships',

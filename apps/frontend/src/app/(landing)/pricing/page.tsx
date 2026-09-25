@@ -20,9 +20,11 @@ import {
 // "$19, $39, $79 or $159"; when the paid tiers were repriced the cards below
 // updated from pricing.ts and this sentence did not, so the page stated two
 // different prices at once. Derived strings cannot drift.
-const paidUSD = [pricingUSD.STANDARD, pricingUSD.TEAM, pricingUSD.PRO, pricingUSD.ULTIMATE]
+// Sold tiers only (PURCHASABLE_TIERS). TEAM and ULTIMATE are retired and
+// were still being quoted here as buyable.
+const paidUSD = [pricingUSD.STANDARD, pricingUSD.PRO]
   .map((t) => `$${t.month_price}`);
-const paidINR = [pricingINR.STANDARD, pricingINR.TEAM, pricingINR.PRO, pricingINR.ULTIMATE]
+const paidINR = [pricingINR.STANDARD, pricingINR.PRO]
   .map((t) => `\u20b9${t.month_price.toLocaleString('en-IN')}`);
 const listUSD = `${paidUSD.slice(0, -1).join(', ')} or ${paidUSD[paidUSD.length - 1]}`;
 // AI videos are only advertised while a sold tier actually grants them; the
@@ -49,7 +51,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Hookpost Pricing — flat plans, no per-channel fee',
     description:
-      'Free tier plus four paid plans with every limit listed, including posts per month and AI generation caps.',
+      'Free tier plus two paid plans with every limit listed, including posts per month and AI generation caps.',
     url: CANONICAL,
     siteName: 'Hookpost',
     type: 'website',
@@ -66,7 +68,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Hookpost Pricing — flat plans, no per-channel fee',
     description:
-      'Free tier plus four paid plans. No per-channel fee and no setup fee.',
+      'Free tier plus two paid plans. No per-channel fee and no setup fee.',
     images: ['https://hookpost.hookstep.in/og-image.png'],
   },
 };
@@ -80,11 +82,11 @@ const FAQ = [
   },
   {
     q: 'What currencies can I pay in?',
-    a: 'Hookpost supports US Dollars (USD $), European Euros (EUR €), British Pounds (GBP £), and Indian Rupees (INR ₹). Pay using international cards (Visa, Mastercard, American Express), SEPA, UPI, or NetBanking.',
+    a: 'Plans are billed in Indian rupees through Razorpay. Pay with UPI Autopay, a debit or credit card, or NetBanking.',
   },
   {
     q: 'Is there a free plan?',
-    a: 'Yes. The Free plan is $0 forever and includes 2 channels, 30 posts a month, the visual calendar and public API access. It does not include AI generation.',
+    a: 'Yes. The Free plan is $0 forever and includes 2 channels, 30 posts a month and the visual calendar. It does not include AI generation or API access.',
   },
   {
     q: 'What happens when I hit the monthly post limit?',
@@ -146,7 +148,7 @@ export default async function PricingPage() {
           url: CANONICAL,
           priceCurrency: currency,
           lowPrice: '0',
-          highPrice: String(activePricing.ULTIMATE.month_price),
+          highPrice: String(activePricing.PRO.month_price),
           offerCount: String(TIERS.length),
           offers: TIERS.map((t) => ({
             '@type': 'Offer',
@@ -194,14 +196,14 @@ export default async function PricingPage() {
         {isIndian ? (
           <p className="mt-4 max-w-[70ch] text-lg text-white/70">
             Hookpost costs ₹0 a month on the Free plan and {listINR} a month
-            on the four paid plans.
+            on the two paid plans.
             There is no per-channel fee and no setup fee, and the open-source
             version can be self-hosted at no licence cost.
           </p>
         ) : (
           <p className="mt-4 max-w-[70ch] text-lg text-white/70">
             Hookpost costs $0 a month on the Free plan and {listUSD} a month
-            on the four paid plans.
+            on the two paid plans.
             There is no per-channel fee and no setup fee, and the open-source
             version can be self-hosted at no licence cost.
           </p>

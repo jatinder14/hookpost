@@ -155,7 +155,7 @@ export default function McpPage() {
         name: "Is the Hookpost MCP Server free and open-source?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "Yes, Hookpost MCP is licensed under AGPL-3.0. The public source release is not out yet, so the repository is shared on request. You can use it with free cloud accounts or self-host your own Docker instance with zero subscription fees.",
+          text: "Yes, Hookpost MCP is licensed under AGPL-3.0. The source is public at https://github.com/jatinder14/hookpost. You can use it with free cloud accounts or self-host your own Docker instance with zero subscription fees.",
         },
       },
       {

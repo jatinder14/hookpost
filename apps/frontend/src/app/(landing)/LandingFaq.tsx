@@ -20,7 +20,7 @@ export const FAQ_DATA = [
   },
   {
     q: 'Can I self-host Hookpost with Docker for free?',
-    a: 'Yes. Hookpost is licensed under AGPL-3.0 and self-hosts with `docker compose up -d`, running the whole stack (Next.js frontend, NestJS backend, Temporal orchestrator, PostgreSQL, and Redis) on your own VPS with no per-seat or per-channel fees. The public source release is not out yet, so the repository is shared on request rather than by public clone - ask via our about page and we will send it over with a deployment key.',
+    a: 'Yes. Hookpost is licensed under AGPL-3.0 and self-hosts with `docker compose up -d`, running the whole stack (Next.js frontend, NestJS backend, Temporal orchestrator, PostgreSQL, and Redis) on your own VPS with no per-seat or per-channel fees. The source is public at https://github.com/jatinder14/hookpost.',
   },
   {
     q: 'Does Hookpost support AI agents, Claude, and Model Context Protocol (MCP)?',

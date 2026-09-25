@@ -139,6 +139,11 @@ export async function proxy(request: NextRequest) {
     nextUrl.pathname.startsWith('/contact') ||
     nextUrl.pathname.startsWith('/mcp') ||
     nextUrl.pathname.startsWith('/vs') ||
+    // Search landing pages and free tools. A new marketing route that is not
+    // listed here 307s to /auth for every crawler and logged-out visitor.
+    nextUrl.pathname.startsWith('/free-social-media-scheduler') ||
+    nextUrl.pathname.startsWith('/social-media-scheduler-india') ||
+    nextUrl.pathname.startsWith('/tools') ||
     nextUrl.pathname === '/sitemap.xml' ||
     nextUrl.pathname === '/robots.txt' ||
     nextUrl.pathname === '/manifest.json'

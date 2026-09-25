@@ -248,7 +248,10 @@ export async function generateMetadata({ params }: { params: Promise<{ channel: 
     // Was `${name} Scheduler — ${tagline} | Hookpost`, which ran to 87
     // characters and got truncated. The tagline already appears in the
     // description, so it does not need to be in both.
-    title: `${data.name} Scheduler & Auto-Posting | Hookpost`,
+    // Pending channels do not promise a free scheduler they cannot deliver yet.
+    title: CHANNEL_SPECS[data.slug]?.pending
+      ? `${data.name} Scheduler: Coming Soon | Hookpost`
+      : `Schedule ${data.name} Posts: Free ${data.name} Scheduler | Hookpost`,
     description: data.description,
     keywords: data.keywords,
     alternates: {

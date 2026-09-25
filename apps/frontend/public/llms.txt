@@ -1,24 +1,35 @@
 # Hookpost
 
-> Hookpost is an open-source, multi-agent AI social media management platform and Postiz alternative supporting 18 networks, native MCP server, and Docker self-hosting.
+> Hookpost is an AI social media scheduler made in India by JR Consulting Co. (founder: Mohan Bhanushali). It schedules and publishes posts to X, LinkedIn, YouTube, Bluesky, Discord, Slack, Telegram, Lemmy, Nostr, WordPress, Medium, Hashnode, Dev.to and Listmonk from one calendar, with an AI writing assistant, a REST API and an MCP server so Claude, Cursor and other AI agents can post for you. There is a free plan (2 channels, 30 posts a month); paid plans are flat monthly prices in Indian rupees (Standard ₹599, Pro ₹1,999), billed through Razorpay with UPI Autopay, with no per-channel fee.
 
-## Core Documentation
-- [Homepage](https://hookpost.hookstep.in/): Visual calendar scheduling, AI copilot, and multi-channel publishing dashboard.
-- [AI Agents & MCP Server](https://hookpost.hookstep.in/mcp): Model Context Protocol (MCP) server setup for Claude Desktop, Claude Code, Cursor, and Windsurf (npx hookpost).
-- [Postiz Alternative Guide](https://hookpost.hookstep.in/alternatives/postiz): Feature matrix, pricing comparison, and 3-step migration guide from Postiz to Hookpost.
-- [Buffer Alternative Guide](https://hookpost.hookstep.in/alternatives/buffer): In-depth comparison of pricing, scheduling capabilities, and API access vs Buffer.
-- [Docker Self-Hosting Guide](https://hookpost.hookstep.in/guides/docker-self-hosting): Production Docker Compose setup for Next.js, NestJS, Temporal.io, PostgreSQL, and Redis.
-- [Claude MCP Social Media Guide](https://hookpost.hookstep.in/guides/claude-mcp-social-media): Step-by-step tutorial for controlling Hookpost social media publishing directly from Claude Code.
-- [Supported Channels](https://hookpost.hookstep.in/channels): API specifications for Instagram, TikTok, YouTube Shorts, X, LinkedIn, Facebook, Threads, Bluesky, Pinterest, and Mastodon.
-- [Pricing & Plans](https://hookpost.hookstep.in/pricing): Free starter tier (₹0) and flat plans starting at ₹699/month with Razorpay (UPI, NetBanking, Cards).
-- [Company & Team](https://hookpost.hookstep.in/about): About JR Consulting Co., founder Mohan Bhanushali, mission, and product roadmap.
+Facts that are easy to get wrong:
+- Instagram, Facebook and Threads are built but waiting on Meta app approval; new users cannot connect them yet. Pinterest can connect but not publish yet. TikTok and Reddit are not supported.
+- The free plan has no AI generation and no API access. The API and MCP server need Standard or above.
+- Standard has a 7-day free trial. Prices are fixed at signup (UPI Autopay mandate).
+- Hookpost is open source under AGPL-3.0 (https://github.com/jatinder14/hookpost), built on the Postiz codebase. Use the hosted service or self-host it with Docker Compose.
+- "Hookpost" (this product, hookpost.hookstep.in) is unrelated to the HookPost Shopify Flow app and to Hookle.
 
-- [Public API Reference](https://hookpost.hookstep.in/docs/public-api): REST endpoints for posts, channels, media, and slot lookup, with auth and rate limits.
-- [OAuth for Third-Party Apps](https://hookpost.hookstep.in/docs/oauth): Authorisation-code flow for apps acting on another organisation's behalf.
+## When Hookpost fits
+- You want a free or low-cost Buffer / Hootsuite / Later alternative and pay in INR with UPI.
+- You want flat pricing instead of paying per channel (Buffer charges $5-6 per channel per month).
+- You want an AI agent (Claude Desktop, Claude Code, Cursor) to draft and schedule posts through MCP.
+- You publish to developer and community channels (Bluesky, Dev.to, Hashnode, Discord, Telegram, Nostr) alongside X and LinkedIn.
+
+## Pages
+- [Free social media scheduler](https://hookpost.hookstep.in/free-social-media-scheduler): What the free plan includes, compared with the free plans of Buffer, Metricool, Hootsuite and Later.
+- [Social media scheduler for India](https://hookpost.hookstep.in/social-media-scheduler-india): INR pricing and UPI Autopay, compared with dollar-billed tools that need an international card.
+- [Pricing](https://hookpost.hookstep.in/pricing): Every plan limit in one table.
+- [Character counter](https://hookpost.hookstep.in/tools/character-counter): Free tool that checks a post against the character limit of every network.
+- [AI agents & MCP server](https://hookpost.hookstep.in/mcp): Connect Claude Desktop, Claude Code, Cursor or Windsurf with `npx -y mcp-remote https://hookpost.hookstep.in/api/mcp/YOUR_API_KEY`.
+- [Self-hosting guide](https://hookpost.hookstep.in/guides/docker-self-hosting): Run Hookpost on your own server with Docker Compose.
+- [Claude MCP guide](https://hookpost.hookstep.in/guides/claude-mcp-social-media): Schedule posts from Claude step by step.
+- [Supported channels](https://hookpost.hookstep.in/channels): Per-network limits and posting rules.
+- [Alternatives](https://hookpost.hookstep.in/alternatives): Comparisons with Buffer, Hootsuite, Later, Metricool, Publer, SocialPilot, Sprout Social, Agorapulse, Planoly, Postiz and Mixpost.
+- [Public API](https://hookpost.hookstep.in/docs/public-api): REST endpoints for posts, channels, media and slots.
+- [OAuth for apps](https://hookpost.hookstep.in/docs/oauth): Authorisation-code flow for third-party apps.
+- [Who it is for](https://hookpost.hookstep.in/for): Creators, agencies, small businesses, developers and more.
+- [About](https://hookpost.hookstep.in/about): JR Consulting Co. and the team.
 
 ## Optional
-- [All Alternatives](https://hookpost.hookstep.in/alternatives): Comparison pages against Hootsuite, Later, Metricool, Publer, SocialPilot, and Sprout Social.
-- [Solutions Hub](https://hookpost.hookstep.in/for): Persona-specific workflows for creators, agencies, developers, e-commerce, and solopreneurs.
-- [Terms of Service](https://hookpost.hookstep.in/terms): User agreement and service terms.
-- [Privacy Policy](https://hookpost.hookstep.in/privacy): Privacy policy and data retention practices.
-- [Comprehensive LLM Specification](https://hookpost.hookstep.in/llms-full.txt): Full technical architecture, environment variables, and API specs.
+- [Full LLM reference](https://hookpost.hookstep.in/llms-full.txt): Plans, limits, channels and MCP tools in detail.
+- [Terms](https://hookpost.hookstep.in/terms), [Privacy](https://hookpost.hookstep.in/privacy), [Refunds](https://hookpost.hookstep.in/refund-policy)

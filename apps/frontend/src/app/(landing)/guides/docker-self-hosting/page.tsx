@@ -162,16 +162,14 @@ export default function DockerSelfHostingGuidePage() {
             Clone the Repository
           </h2>
           <p className="text-[#bbb] text-base leading-relaxed">
-            Hookpost is licensed under AGPL-3.0. The public source release is
-            not out yet, so the repository is available on request rather than
-            by public clone &mdash; ask via the contact details on{' '}
-            <a href="/about" className="text-[#FF4CE2] underline">
-              our about page
-            </a>{' '}
-            and you will get the repo plus a deployment key. Once you have it:
+            Hookpost is open source under AGPL-3.0. Clone it from 
+            <a href="https://github.com/jatinder14/hookpost" className="text-[#FF4CE2] underline">
+              GitHub
+            </a>
+            :
           </p>
           <div className="bg-[#141414] border border-[#2a2a2a] rounded-xl p-4 text-xs font-mono text-[#eee] overflow-x-auto">
-            <pre>{`git clone <your-access-url> hookpost
+            <pre>{`git clone https://github.com/jatinder14/hookpost.git hookpost
 cd hookpost`}</pre>
           </div>
         </section>

@@ -13,6 +13,7 @@ const UPDATED = {
   home: '2026-09-06',
   docs: '2026-09-06',
   guides: '2026-08-28',
+  landing: '2026-09-25',
   alternatives: '2026-08-28',
   personas: '2026-08-20',
   channels: '2026-08-20',
@@ -51,6 +52,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
     page('/contact', UPDATED.home, 0.7, 'monthly'),
     // The guides hub. LandingFaq linked here long before the page existed.
     page('/guides', UPDATED.guides, 0.75, 'monthly'),
+    // Search landing pages and free tools (added 2026-09-25).
+    page('/free-social-media-scheduler', UPDATED.landing, 0.9, 'monthly'),
+    page('/social-media-scheduler-india', UPDATED.landing, 0.9, 'monthly'),
+    page('/tools/character-counter', UPDATED.landing, 0.8, 'monthly'),
   ];
 
   // Developer docs — these were live and indexable but missing from the

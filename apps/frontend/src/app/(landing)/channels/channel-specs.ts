@@ -1,5 +1,13 @@
 import { PUBLISH_PENDING } from '@hookpost/nestjs-libraries/integrations/social/publish-caveats';
 
+// Marketing-only, unlike PUBLISH_PENDING: the Meta app is unpublished, so only
+// accounts with a role on the app can connect. Accounts already connected keep
+// working, which is why this is not in PUBLISH_PENDING (that map also badges
+// the composer, and would warn users whose channel publishes fine). Delete it
+// the day the Meta app goes Live.
+const META_PENDING =
+  'Hookpost supports this network, but connecting a new account is waiting on Meta app approval. Until that lands, new accounts cannot connect it. X, LinkedIn, YouTube, Bluesky and the other channels work today.';
+
 // Only channels a signed-up user can actually connect appear here.
 //
 // The site previously carried spec pages for TikTok, Reddit, Dribbble, Mastodon,
@@ -42,12 +50,12 @@ export interface ChannelSpec {
 }
 
 export const CHANNEL_SPECS: Record<string, ChannelSpec> = {
-  'instagram': { limit: '2,200 characters', auth: 'Connect once with OAuth', rules: ["At least one image or video per post", "Carousels up to 10 items", "Reels: one video, no mixing with images", "Business or Creator account required"] },
+  'instagram': { pending: META_PENDING, limit: '2,200 characters', auth: 'Connect once with OAuth', rules: ["At least one image or video per post", "Carousels up to 10 items", "Reels: one video, no mixing with images", "Business or Creator account required"] },
   'pinterest': { limit: '500 characters', auth: 'Connect once with OAuth', pending: PUBLISH_PENDING.pinterest, rules: ["At least one image or video per Pin", "Up to 5 media items", "Video Pins need a cover image as the second item"] },
   'youtube': { limit: '5,000 characters', auth: 'Connect once with OAuth', rules: ["One video per upload", "Title and visibility set per post", "Video only — images are not accepted"] },
   'linkedin': { limit: '3,000 characters', auth: 'Connect once with OAuth', rules: ["Carousels need 2+ images and no video", "One media item when posting video", "Comments are text only"] },
-  'facebook': { limit: '63,206 characters', auth: 'Connect once with OAuth', rules: ["Stories require at least one media item", "Posts to a Page, not a personal profile"] },
-  'threads': { limit: '500 characters', auth: 'Connect once with OAuth', rules: ["Text, image or video"] },
+  'facebook': { pending: META_PENDING, limit: '63,206 characters', auth: 'Connect once with OAuth', rules: ["Stories require at least one media item", "Posts to a Page, not a personal profile"] },
+  'threads': { pending: META_PENDING, limit: '500 characters', auth: 'Connect once with OAuth', rules: ["Text, image or video"] },
   'x': { limit: '280 characters (25,000 on Premium)', auth: 'Connect once with OAuth', rules: ["Threads supported", "Articles accept images only"] },
   'bluesky': { limit: '300 characters', auth: 'Connect with your own credentials', rules: ["Up to 4 images per post", "One video per post", "Connects with an App Password, not your account password"] },
   'discord': { limit: '1,980 characters', auth: 'Connect once with OAuth', rules: ["Posts to a channel in your server", "Bot must be invited to the server"] },

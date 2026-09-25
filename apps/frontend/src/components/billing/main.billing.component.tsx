@@ -12,6 +12,12 @@ import { useToaster } from '@hookpost/react/toaster/toaster';
 import dayjs from 'dayjs';
 import clsx from 'clsx';
 import {
+  AppliedCoupon,
+  CouponField,
+  discounted,
+  formatMoney,
+} from '@hookpost/frontend/components/billing/coupon.field';
+import {
   pricing,
   getPricing,
   getCurrencyConfig,
@@ -253,43 +259,7 @@ export const MainBillingComponent: FC<{
   );
   // Website coupon: validated here, sent with the checkout request, applied by
   // the backend when the Razorpay subscription is created.
-  const [couponInput, setCouponInput] = useState('');
-  const [appliedCoupon, setAppliedCoupon] = useState<{
-    code: string;
-    percentOff: number | null;
-    freeMonths: number | null;
-  } | null>(null);
-  const [couponMessage, setCouponMessage] = useState('');
-  const [couponChecking, setCouponChecking] = useState(false);
-  const applyCoupon = useCallback(async () => {
-    const code = couponInput.trim();
-    if (!code) return;
-    setCouponChecking(true);
-    try {
-      const res = await (
-        await fetch(`/billing/coupon/validate?code=${encodeURIComponent(code)}`)
-      ).json();
-      if (!res?.valid) {
-        setAppliedCoupon(null);
-        setCouponMessage(res?.reason || 'This coupon code is not valid.');
-        return;
-      }
-      setAppliedCoupon({
-        code: res.code,
-        percentOff: res.percentOff,
-        freeMonths: res.freeMonths,
-      });
-      setCouponMessage(
-        res.percentOff
-          ? `${res.code}: ${res.percentOff}% off your plan - the discounted price shows at checkout`
-          : `${res.code}: first ${res.freeMonths} month${res.freeMonths > 1 ? 's' : ''} free`
-      );
-    } catch {
-      setCouponMessage('Could not check the coupon. Try again.');
-    } finally {
-      setCouponChecking(false);
-    }
-  }, [couponInput, fetch]);
+  const [appliedCoupon, setAppliedCoupon] = useState<AppliedCoupon | null>(null);
   const [monthlyOrYearly, setMonthlyOrYearly] = useState<'on' | 'off'>(
     period === 'MONTHLY' ? 'off' : 'on'
   );
@@ -672,39 +642,11 @@ export const MainBillingComponent: FC<{
       </div>
 
       {!subscription?.identifier && (
-        <div className="flex flex-col gap-[6px]">
-          <div className="flex gap-[8px] items-center flex-wrap">
-            <input
-              value={couponInput}
-              onChange={(e) => {
-                setCouponInput(e.target.value.toUpperCase());
-                setAppliedCoupon(null);
-                setCouponMessage('');
-              }}
-              onKeyDown={(e) => e.key === 'Enter' && applyCoupon()}
-              placeholder={t('coupon_code', 'Coupon code')}
-              maxLength={40}
-              className="h-[40px] px-[12px] rounded-[8px] bg-newBgColorInner border border-newTableBorder text-[14px] uppercase w-[220px]"
-            />
-            <button
-              type="button"
-              onClick={applyCoupon}
-              disabled={couponChecking || !couponInput.trim()}
-              className="h-[40px] px-[16px] rounded-[8px] border border-newTableBorder text-[14px] disabled:opacity-50"
-            >
-              {couponChecking ? t('checking', 'Checking...') : t('apply', 'Apply')}
-            </button>
-          </div>
-          {!!couponMessage && (
-            <div
-              className={`text-[13px] ${
-                appliedCoupon ? 'text-green-400' : 'text-red-400'
-              }`}
-            >
-              {couponMessage}
-            </div>
-          )}
-        </div>
+        <CouponField
+          className="max-w-[420px]"
+          applied={appliedCoupon}
+          onChange={setAppliedCoupon}
+        />
       )}
 
       {finishTrial && <FinishTrial close={() => setFinishTrial(false)} />}
@@ -722,10 +664,19 @@ export const MainBillingComponent: FC<{
               <div className="text-[38px] flex gap-[2px] items-center">
                 <div>
                   {currencySymbol}
-                  {monthlyOrYearly === 'on'
-                    ? values.year_price
-                    : values.month_price}
+                  {formatMoney(
+                    discounted(
+                      monthlyOrYearly === 'on' ? values.year_price : values.month_price,
+                      values.month_price ? appliedCoupon : null
+                    )
+                  )}
                 </div>
+                {appliedCoupon?.percentOff && values.month_price ? (
+                  <div className="text-[16px] text-customColor18 line-through">
+                    {currencySymbol}
+                    {monthlyOrYearly === 'on' ? values.year_price : values.month_price}
+                  </div>
+                ) : null}
                 <div className={`text-[14px] text-customColor18`}>
                   {monthlyOrYearly === 'on' ? '/year' : '/month'}
                 </div>

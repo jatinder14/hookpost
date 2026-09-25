@@ -233,6 +233,11 @@ const globalJsonLd = {
       sameAs: [
         'https://hookstep.in',
         'https://github.com/hookstep',
+        // The public source repository (AGPL-3.0, public since 2026-09-09).
+        'https://github.com/jatinder14/hookpost',
+        // Directory listings verified ours by content on 2026-09-25.
+        'https://www.producthunt.com/products/hookpost',
+        'https://www.saashub.com/hookpost-in',
         'https://www.linkedin.com/company/hookpost',
         'https://www.npmjs.com/package/hookpost',
         'https://www.npmjs.com/package/@hookpost/node',

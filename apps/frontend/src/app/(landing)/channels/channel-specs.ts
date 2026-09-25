@@ -60,7 +60,7 @@ export const CHANNEL_SPECS: Record<string, ChannelSpec> = {
   'bluesky': { limit: '300 characters', auth: 'Connect with your own credentials', rules: ["Up to 4 images per post", "One video per post", "Connects with an App Password, not your account password"] },
   'discord': { limit: '1,980 characters', auth: 'Connect once with OAuth', rules: ["Posts to a channel in your server", "Bot must be invited to the server"] },
   'slack': { limit: 'No practical limit', auth: 'Connect once with OAuth', rules: ["Posts to a channel your app is added to"] },
-  'telegram': { limit: '4,096 characters per message', auth: 'Connect once with OAuth', rules: ["Posts to a channel or group", "No practical character limit"] },
+  'telegram': { limit: '4,096 characters per message (1,024 with media)', auth: 'Connect by adding the bot to your channel or group', rules: ["Posts to a channel or group", "Captions stop at 1,024 characters once media is attached"] },
   'lemmy': { limit: '10,000 characters', auth: 'Connect with your own credentials', rules: ["Posts to a community on your instance"] },
   'nostr': { limit: 'No practical limit', auth: 'Connect with your own credentials', rules: ["Connects with a HEX private key"] },
   'listmonk': { limit: 'No practical limit', auth: 'Connect with your own credentials', rules: ["Sends to a mailing list, not a social feed"] },

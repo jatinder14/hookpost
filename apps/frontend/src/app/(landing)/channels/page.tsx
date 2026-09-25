@@ -6,7 +6,7 @@ import { CHANNEL_COUNT } from "./channel-count";
 export const metadata: Metadata = {
   title: "Supported Social Media Channels (2026) | Hookpost",
   description:
-    `Schedule and auto-publish across ${CHANNEL_COUNT} social platforms from one dashboard: Instagram, YouTube, LinkedIn, X, Threads, Pinterest, and more.`,
+    `Schedule and auto-publish across ${CHANNEL_COUNT} social platforms from one dashboard: X, LinkedIn, YouTube, Bluesky, Telegram, Discord and more.`,
   keywords: [
     "supported social media platforms",
     "social media channels hookpost",

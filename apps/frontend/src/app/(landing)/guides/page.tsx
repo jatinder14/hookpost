@@ -6,9 +6,9 @@ import Link from 'next/link';
 // their URLs; the rewrite post in particular is the most substantial technical
 // writing on the site and nothing linked to it.
 export const metadata: Metadata = {
-  title: 'Engineering Guides | Hookpost',
+  title: 'Social Media Scheduling Guides & Free Tools | Hookpost',
   description:
-    'Self-hosting with Docker, driving the scheduler from Claude via MCP, and what running a social scheduler in production actually breaks.',
+    'Guides and free tools for scheduling social media: a character counter for every network, the free plan explained, self-hosting with Docker and posting from Claude via MCP.',
   alternates: { canonical: 'https://hookpost.hookstep.in/guides' },
 };
 
@@ -27,7 +27,48 @@ const GUIDES = [
       'Connect the Model Context Protocol server to Claude Desktop, Claude Code, Cursor or Windsurf, and have your assistant draft and queue posts directly.',
     tag: 'AI agents',
   },
-  ];
+];
+
+// Pages that answer a scheduling question on their own. Linked from here so
+// the hub is not a two-item list and the landing pages have a crawled parent.
+const RESOURCES = [
+  {
+    href: '/tools/character-counter',
+    title: 'Social media character counter',
+    blurb: 'Paste a post and see how many characters are left on X, LinkedIn, Instagram, Threads, Bluesky and YouTube at once. X links and emoji are weighted the way X counts them.',
+    tag: 'Free tool',
+  },
+  {
+    href: '/free-social-media-scheduler',
+    title: 'What a free social media scheduler actually includes',
+    blurb: 'Hookpost\'s free plan next to the free plans of Buffer, Metricool, Hootsuite and Later, with the limits read off each pricing page.',
+    tag: 'Comparison',
+  },
+  {
+    href: '/social-media-scheduler-india',
+    title: 'Scheduling social media from India, paid in rupees',
+    blurb: 'Plans in INR, how UPI Autopay mandates work for a subscription, and what five channels cost in rupees against a dollar-billed tool.',
+    tag: 'India',
+  },
+  {
+    href: '/channels/x',
+    title: 'How to schedule posts and threads on X',
+    blurb: 'Post types, the per-post settings and the one constraint that trips people up when scheduling to X.',
+    tag: 'Channel guide',
+  },
+  {
+    href: '/channels/linkedin',
+    title: 'How to schedule LinkedIn posts to a profile or company page',
+    blurb: 'Carousels, video and the rules LinkedIn enforces on each post type.',
+    tag: 'Channel guide',
+  },
+  {
+    href: '/channels/youtube',
+    title: 'How to schedule YouTube videos and Shorts',
+    blurb: 'Titles, visibility, thumbnails and tags set per upload, and what YouTube rejects.',
+    tag: 'Channel guide',
+  },
+];
 
 export default function GuidesIndex() {
   return (
@@ -41,11 +82,12 @@ export default function GuidesIndex() {
         </Link>
 
         <h1 className="mt-6 text-4xl font-extrabold tracking-tight font-jakarta sm:text-5xl text-balance">
-          Engineering guides
+          Guides and free tools
         </h1>
         <p className="mt-4 max-w-[58ch] text-[17px] leading-relaxed text-white/60">
-          How to run Hookpost yourself, how to drive it from an AI agent, and
-          what broke when we ran it in production.
+          Practical answers for scheduling social media: how each network
+          behaves, what the free options really include, how to run Hookpost
+          yourself and how to drive it from an AI agent.
         </p>
 
         <div className="mt-14 flex flex-col gap-5">
@@ -64,6 +106,25 @@ export default function GuidesIndex() {
               <p className="mt-3 text-[15px] leading-relaxed text-white/60">
                 {g.blurb}
               </p>
+            </Link>
+          ))}
+        </div>
+
+        <h2 className="mt-16 text-2xl font-bold font-jakarta">Scheduling guides and tools</h2>
+        <div className="mt-6 grid gap-5 sm:grid-cols-2">
+          {RESOURCES.map((g) => (
+            <Link
+              key={g.href}
+              href={g.href}
+              className="group rounded-2xl border border-white/10 bg-white/[0.02] p-6 transition-colors hover:border-[#FF4CE2]/40"
+            >
+              <span className="text-xs font-bold uppercase tracking-wider text-[#FF4CE2]">
+                {g.tag}
+              </span>
+              <h3 className="mt-2 text-lg font-bold font-jakarta group-hover:text-[#FF4CE2]">
+                {g.title}
+              </h3>
+              <p className="mt-2 text-[14px] leading-relaxed text-white/60">{g.blurb}</p>
             </Link>
           ))}
         </div>

@@ -94,8 +94,8 @@ const FAQ = [
 ];
 
 export const metadata: Metadata = {
-  title: 'Free Social Media Scheduler: 30 posts/month, X & LinkedIn | Hookpost',
-  description: `Schedule posts to X, LinkedIn, YouTube, Bluesky and more for free: ${FREE.channel} channels and ${FREE.posts_per_month} posts a month, no card. Compared with the free plans of Buffer, Metricool, Hootsuite and Later.`,
+  title: 'Free Social Media Scheduler for X & LinkedIn | Hookpost',
+  description: `Schedule ${FREE.posts_per_month} posts a month to X, LinkedIn, YouTube and Bluesky free, no card. Compared with the free plans of Buffer, Metricool and Hootsuite.`,
   alternates: { canonical: CANONICAL },
   openGraph: {
     title: 'Free social media scheduler - Hookpost',

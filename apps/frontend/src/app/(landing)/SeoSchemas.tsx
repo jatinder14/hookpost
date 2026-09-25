@@ -18,7 +18,7 @@ export default function SeoSchemas() {
         url: 'https://hookpost.hookstep.in',
         image: 'https://hookpost.hookstep.in/brand-logo.png',
         description:
-          `Open-source social media management and scheduling platform. Schedule, automate, and publish posts to ${PUBLISHABLE_CHANNEL_COUNT} networks including Instagram, Pinterest, YouTube, LinkedIn, X, Facebook, and Threads.`,
+          `Open-source social media management and scheduling platform. Schedule, automate, and publish posts to ${PUBLISHABLE_CHANNEL_COUNT} networks including X, LinkedIn, YouTube, Bluesky, Telegram, Discord, Slack, WordPress and Dev.to.`,
         publisher: {
           '@id': 'https://hookpost.hookstep.in/#organization',
         },
@@ -53,10 +53,13 @@ export default function SeoSchemas() {
         featureList: [
           'Multi-channel visual content calendar',
           `${CHANNEL_COUNT} supported social platforms`,
-          'Instagram Reels and carousel auto-publishing',
-          'Facebook Reels and Page video scheduling',
-          'YouTube Shorts auto-publishing',
-          'Pinterest Pin board scheduling',
+          // Only channels a new account can publish to today. Instagram,
+          // Facebook, Threads and Pinterest return once their platform
+          // approvals land - see channel-specs.ts.
+          'X post and thread scheduling',
+          'LinkedIn profile and company page publishing',
+          'YouTube video and Shorts auto-publishing',
+          'Bluesky, Telegram, Discord and Slack publishing',
           'AI caption and hashtag generation',
           'Team workspace and role management',
           'Real-time social analytics & engagement tracking',

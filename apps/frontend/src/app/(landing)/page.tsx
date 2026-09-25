@@ -377,8 +377,8 @@ export default async function HomePage() {
             </div>
 
             {[
-              ["Product", [["Channels", "/channels"], ["AI agents & MCP", "/mcp"], ["Pricing", "/pricing"], ["By role", "/for"]]],
-              ["Developers", [["Public API", "/docs/public-api"], ["OAuth apps", "/docs/oauth"], ["Self-hosting", "/guides/docker-self-hosting"], ["Guides", "/guides/claude-mcp-social-media"]]],
+              ["Product", [["Channels", "/channels"], ["AI agents & MCP", "/mcp"], ["Pricing", "/pricing"], ["Free plan", "/free-social-media-scheduler"], ["For India (₹, UPI)", "/social-media-scheduler-india"], ["By role", "/for"]]],
+              ["Developers", [["Public API", "/docs/public-api"], ["OAuth apps", "/docs/oauth"], ["Self-hosting", "/guides/docker-self-hosting"], ["Guides", "/guides"], ["Character counter", "/tools/character-counter"]]],
               ["Company", [["About", "/about"], ["Contact", "/contact"], ["Comparisons", "/alternatives"], ["Privacy", "/privacy"], ["Terms", "/terms"]]],
               // Razorpay's payment-method review looks for these five policy
               // pages linked from the site, not just reachable by URL.

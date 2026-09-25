@@ -46,7 +46,7 @@ const CANONICAL = 'https://hookpost.hookstep.in/pricing';
 export const metadata: Metadata = {
   title: 'Hookpost Pricing: Flat plans, no per-channel fee',
   description:
-    'Flat per-plan pricing for Hookpost across 17+ networks. Free starter tier and transparent flat plans with zero per-channel fees, visual calendar, and native MCP support.',
+    'Hookpost pricing: a free plan, then flat monthly plans in rupees with no per-channel fee. Every limit listed, from posts per month to AI captions.',
   alternates: { canonical: CANONICAL },
   openGraph: {
     title: 'Hookpost Pricing — flat plans, no per-channel fee',

@@ -9,7 +9,7 @@ export const COUNTER_NETWORKS: { key: string; name: string; limit: number; note?
   { key: 'discord', name: 'Discord', limit: 1980 },
   { key: 'instagram', name: 'Instagram', limit: 2200, note: 'Caption.' },
   { key: 'linkedin', name: 'LinkedIn', limit: 3000 },
-  { key: 'telegram', name: 'Telegram', limit: 4096, note: 'Per message.' },
+  { key: 'telegram', name: 'Telegram', limit: 4096, note: 'Per message; 1,024 with media.' },
   { key: 'youtube', name: 'YouTube', limit: 5000, note: 'Description.' },
   { key: 'lemmy', name: 'Lemmy', limit: 10000 },
   { key: 'facebook', name: 'Facebook', limit: 63206 },

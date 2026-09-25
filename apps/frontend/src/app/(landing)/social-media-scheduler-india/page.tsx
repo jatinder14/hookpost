@@ -42,8 +42,8 @@ const FAQ = [
 ];
 
 export const metadata: Metadata = {
-  title: `Social Media Scheduler in India: ${inr(STANDARD.month_price)}/month, UPI Autopay | Hookpost`,
-  description: `Schedule posts to X, LinkedIn, YouTube and more, billed in rupees. Free plan, then ${inr(STANDARD.month_price)}/month flat for ${STANDARD.channel} channels with UPI Autopay. No dollar card or per-channel fee.`,
+  title: `Social Media Scheduler in India, ${inr(STANDARD.month_price)}/mo with UPI | Hookpost`,
+  description: `Schedule posts to X, LinkedIn and YouTube, billed in rupees. Free plan, then ${inr(STANDARD.month_price)}/month flat for ${STANDARD.channel} channels with UPI Autopay.`,
   alternates: { canonical: CANONICAL },
   openGraph: {
     title: 'Social media scheduler for India - pay in rupees with UPI',

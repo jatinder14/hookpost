@@ -33,9 +33,9 @@ const FAQ = [
 ];
 
 export const metadata: Metadata = {
-  title: 'Social Media Character Counter: X, LinkedIn, Instagram, Bluesky | Hookpost',
+  title: 'Character Counter for X, LinkedIn & Instagram | Hookpost',
   description:
-    'Free character counter for every network. Paste a post and see how many characters are left on X, LinkedIn, Instagram, Threads, Bluesky, YouTube and more, with X weighted counting for links and emoji.',
+    'Free character counter: see characters left on X, LinkedIn, Instagram, Threads, Bluesky and YouTube as you type. Counts links and emoji the way X does.',
   alternates: { canonical: CANONICAL },
   openGraph: {
     title: 'Free social media character counter',

@@ -306,6 +306,22 @@ export class SubscriptionService {
     return { ok: true as const, coupon };
   }
 
+  async redeemCouponByCode(
+    rawCode: string,
+    organizationId: string,
+    subscriptionId: string
+  ) {
+    const coupon = await this._subscriptionRepository.findCouponByCode(
+      (rawCode || '').trim().toUpperCase()
+    );
+    if (!coupon) return;
+    return this._subscriptionRepository.redeemCoupon(
+      coupon.id,
+      organizationId,
+      subscriptionId
+    );
+  }
+
   redeemCoupon(couponId: string, organizationId: string, subscriptionId: string) {
     return this._subscriptionRepository.redeemCoupon(
       couponId,

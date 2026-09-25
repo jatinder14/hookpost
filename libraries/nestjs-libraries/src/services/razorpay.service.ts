@@ -81,8 +81,11 @@ export class RazorpayService {
     switch (type) {
       case 'subscription.authenticated':
       case 'subscription.activated':
-      case 'subscription.charged':
-        return this.createSubscription(subscription, payment);
+      case 'subscription.charged': {
+        const result = await this.createSubscription(subscription, payment);
+        await this.recordCouponRedemption(subscription);
+        return result;
+      }
       case 'subscription.updated':
         return this.updateSubscription(subscription);
       case 'subscription.cancelled':
@@ -103,6 +106,30 @@ export class RazorpayService {
         return { ok: true };
       default:
         return { ok: true };
+    }
+  }
+
+  /**
+   * Count a website coupon as used once the customer has actually
+   * authenticated the subscription it was applied to. Idempotent (upsert on
+   * coupon + org), because Razorpay sends authenticated, activated and charged
+   * for the same subscription. Best-effort: a failure here must not make the
+   * activation webhook throw and be retried.
+   */
+  private async recordCouponRedemption(subscription: any) {
+    const code = subscription?.notes?.coupon;
+    const orgId = subscription?.notes?.orgId;
+    if (!code || !orgId || !subscription?.id) return;
+    try {
+      await this._subscriptionService.redeemCouponByCode(
+        code,
+        orgId,
+        subscription.id
+      );
+    } catch (e) {
+      this.logger.warn(
+        `Coupon ${code} redemption for ${subscription.id} failed: ${(e as Error).message}`
+      );
     }
   }
 
@@ -1006,13 +1033,12 @@ export class RazorpayService {
       },
     });
 
-    if (coupon) {
-      await this._subscriptionService.redeemCoupon(
-        coupon.id,
-        organizationId,
-        created.id
-      );
-    }
+    // The coupon is NOT redeemed here. Creating a subscription only opens
+    // checkout; the plan screen rebuilds it on every tier or period toggle, and
+    // most are abandoned. Redeeming at creation burned single-use codes on
+    // checkouts nobody paid for, and made the second toggle fail with "already
+    // used on your workspace". It is redeemed from notes.coupon when the
+    // authentication webhook arrives - see recordCouponRedemption.
 
     // Retire any older live subscription this org still holds, now rather than
     // only on activation.

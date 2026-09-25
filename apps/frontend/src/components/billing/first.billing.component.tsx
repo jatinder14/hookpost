@@ -67,6 +67,19 @@ export const FirstBillingComponent = () => {
   const [isIndian, setIsIndian] = useState(true);
   const [currency, setCurrency] = useState<SupportedCurrency>('INR');
 
+  // Website coupon. Checked against /billing/coupon/validate first, then sent
+  // with /billing/embedded, which creates the Razorpay subscription on the
+  // discounted plan. It is part of the SWR key so applying one rebuilds the
+  // checkout at the new price.
+  const [couponInput, setCouponInput] = useState('');
+  const [appliedCoupon, setAppliedCoupon] = useState<{
+    code: string;
+    percentOff: number | null;
+    freeMonths: number | null;
+  } | null>(null);
+  const [couponMessage, setCouponMessage] = useState('');
+  const [couponChecking, setCouponChecking] = useState(false);
+
   useEffect(() => {
     const tz = Intl.DateTimeFormat().resolvedOptions().timeZone.toLowerCase();
     const detectedIndian = tz.includes('kolkata') || tz.includes('calcutta');
@@ -115,10 +128,43 @@ export const FirstBillingComponent = () => {
             ? { datafast_visitor_id, datafast_session_id }
             : {}),
           ...(dub ? { dub } : {}),
+          ...(appliedCoupon ? { coupon: appliedCoupon.code } : {}),
         }),
       })
     ).json();
-  }, [tier, period, currency]);
+  }, [tier, period, currency, appliedCoupon]);
+
+  const applyCoupon = useCallback(async () => {
+    const code = couponInput.trim();
+    if (!code) return;
+    setCouponChecking(true);
+    try {
+      const res = await (
+        await fetch(`/billing/coupon/validate?code=${encodeURIComponent(code)}`)
+      ).json();
+      if (!res?.valid) {
+        setAppliedCoupon(null);
+        setCouponMessage(res?.reason || 'This coupon code is not valid.');
+        return;
+      }
+      setAppliedCoupon({
+        code: res.code,
+        percentOff: res.percentOff,
+        freeMonths: res.freeMonths,
+      });
+      setCouponMessage(
+        res.percentOff
+          ? `${res.code} applied: ${res.percentOff}% off`
+          : `${res.code} applied: first ${res.freeMonths} month${
+              res.freeMonths > 1 ? 's' : ''
+            } free`
+      );
+    } catch {
+      setCouponMessage('Could not check the coupon. Try again.');
+    } finally {
+      setCouponChecking(false);
+    }
+  }, [couponInput, fetch]);
 
   const showYouTube = () => {
     modals.openModal({
@@ -136,7 +182,7 @@ export const FirstBillingComponent = () => {
   };
 
   const { data, isLoading } = useSWR(
-    `/billing-${tier}-${period}-${currency}`,
+    `/billing-${tier}-${period}-${currency}-${appliedCoupon?.code || ''}`,
     loadCheckout,
     {
       revalidateOnFocus: false,
@@ -269,21 +315,68 @@ export const FirstBillingComponent = () => {
                 'Another account with this email already has an active subscription. Please log off and sign in to that account to manage your subscription.'
               )}
             </div>
+          ) : (
+            <>
+          <div className="mt-[24px] flex flex-col gap-[6px]">
+            <div className="flex gap-[8px] items-center flex-wrap">
+              <input
+                value={couponInput}
+                onChange={(e) => {
+                  setCouponInput(e.target.value.toUpperCase());
+                  if (appliedCoupon) setAppliedCoupon(null);
+                  setCouponMessage('');
+                }}
+                onKeyDown={(e) => e.key === 'Enter' && applyCoupon()}
+                placeholder={t('coupon_code_optional', 'Have a coupon code?')}
+                maxLength={40}
+                aria-label="Coupon code"
+                className="h-[40px] px-[12px] rounded-[8px] bg-newBgColorInner border border-newColColor text-[14px] uppercase flex-1 min-w-0 max-w-[260px]"
+              />
+              <button
+                type="button"
+                onClick={applyCoupon}
+                disabled={couponChecking || !couponInput.trim()}
+                className="h-[40px] px-[16px] rounded-[8px] border border-newColColor text-[14px] disabled:opacity-50"
+              >
+                {couponChecking ? t('checking', 'Checking...') : t('apply', 'Apply')}
+              </button>
+            </div>
+            {!!couponMessage && (
+              <div
+                role="status"
+                className={`text-[13px] ${
+                  appliedCoupon ? 'text-green-400' : 'text-red-400'
+                }`}
+              >
+                {couponMessage}
+              </div>
+            )}
+          </div>
+          {!isLoading && data?.statusCode >= 400 ? (
+            <div className="mt-[16px] text-[14px] text-red-400" role="alert">
+              {data.message || 'Could not start checkout.'}
+            </div>
           ) : !isLoading && data ? (
             <RazorpayBilling
               subscriptionId={data.subscriptionId}
               url={data.url}
               keyId={data.keyId || razorpayKeyId}
               currency={data.currency || currency}
-              amountLabel={`${getCurrencyConfig(data.currency || currency).symbol}${
-                period === 'MONTHLY'
-                  ? activePricing[tier]?.month_price
-                  : activePricing[tier]?.year_price
-              }`}
+              amountLabel={`${getCurrencyConfig(data.currency || currency).symbol}${(() => {
+                const base =
+                  period === 'MONTHLY'
+                    ? activePricing[tier]?.month_price
+                    : activePricing[tier]?.year_price;
+                return appliedCoupon?.percentOff && base
+                  ? Math.round(base * (100 - appliedCoupon.percentOff)) / 100
+                  : base;
+              })()}`}
               allowTrial={!!user?.allowTrial}
             />
           ) : (
             <LoadingComponent />
+          )}
+            </>
           )}
         </div>
         <div className="flex flex-col ps-[40px] tablet:!ps-[0] border-l border-newColColor py-[40px] mobile:!pt-[24px] tablet:border-none tablet:pb-0">

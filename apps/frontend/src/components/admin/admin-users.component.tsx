@@ -46,6 +46,7 @@ interface UserRow {
   providerName: string;
   createdAt: string;
   organizations: {
+    id: string;
     role: string;
     organization: OrganizationInfo;
   }[];
@@ -332,8 +333,13 @@ export const AdminUsersComponent: FC = () => {
     toaster.show(`${label} copied to clipboard`, 'success');
   }, [toaster]);
 
-  const handleImpersonate = useCallback((userId: string, email: string) => {
-    setCookie('impersonate', userId, 365);
+  // The cookie must hold the UserOrganization id: auth.middleware resolves it
+  // with getUserOrg(). This used to pass the user id, which matches nothing -
+  // the banner said "Currently Impersonating" while every page still showed
+  // the admin's own workspace and channels.
+  const handleImpersonate = useCallback((userOrgId: string, email: string) => {
+    if (!userOrgId) return;
+    setCookie('impersonate', userOrgId, 365);
     toaster.show(`Impersonating ${email}...`, 'success');
     setTimeout(() => {
       window.location.reload();
@@ -720,7 +726,7 @@ export const AdminUsersComponent: FC = () => {
                           </button>
 
                           <button
-                            onClick={() => handleImpersonate(u.id, u.email)}
+                            onClick={() => handleImpersonate(u.organizations[0]?.id, u.email)}
                             className="px-[10px] py-[5px] bg-primary/20 hover:bg-primary text-primary hover:text-white border border-primary/40 rounded-[6px] text-[12px] font-[600] transition-all cursor-pointer inline-flex items-center gap-[4px]"
                           >
                             <span>🎭</span> Impersonate

@@ -79,6 +79,9 @@ export class AdminController {
             createdAt: true,
             organizations: {
               select: {
+                // The UserOrganization id - what the impersonate cookie must
+                // hold (auth.middleware resolves it with getUserOrg).
+                id: true,
                 role: true,
                 organization: {
                   select: {

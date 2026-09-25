@@ -240,6 +240,20 @@ export function generateStaticParams() {
   return ALL_CHANNEL_SLUGS.map((channel) => ({ channel }));
 }
 
+// What people call a scheduled item on each network, in the words they search
+// with. Search Console shows "schedule discord" queries from people who say
+// messages, not posts; the blog platforms publish articles.
+const CONTENT_NOUN: Record<string, string> = {
+  discord: 'Messages',
+  slack: 'Messages',
+  telegram: 'Messages',
+  wordpress: 'Articles',
+  medium: 'Articles',
+  hashnode: 'Articles',
+  devto: 'Articles',
+  listmonk: 'Newsletters',
+};
+
 export async function generateMetadata({ params }: { params: Promise<{ channel: string }> | { channel: string } }): Promise<Metadata> {
   const resolved = await Promise.resolve(params);
   const data = getChannelData(resolved.channel || '');
@@ -251,7 +265,7 @@ export async function generateMetadata({ params }: { params: Promise<{ channel: 
     // Pending channels do not promise a free scheduler they cannot deliver yet.
     title: CHANNEL_SPECS[data.slug]?.pending
       ? `${data.name} Scheduler: Coming Soon | Hookpost`
-      : `Schedule ${data.name} Posts: Free ${data.name} Scheduler | Hookpost`,
+      : `Schedule ${data.name} ${CONTENT_NOUN[data.slug] || 'Posts'}: Free ${data.name} Scheduler | Hookpost`,
     description: data.description,
     keywords: data.keywords,
     alternates: {

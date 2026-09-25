@@ -8,7 +8,7 @@ import Link from 'next/link';
 export const metadata: Metadata = {
   title: 'Social Media Scheduling Guides & Free Tools | Hookpost',
   description:
-    'Guides and free tools for scheduling social media: a character counter for every network, the free plan explained, self-hosting with Docker and posting from Claude via MCP.',
+    'Guides and free tools for scheduling social media: a character counter, the free plan explained, self-hosting with Docker and posting from Claude.',
   alternates: { canonical: 'https://hookpost.hookstep.in/guides' },
 };
 

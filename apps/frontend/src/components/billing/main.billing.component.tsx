@@ -274,33 +274,18 @@ export const MainBillingComponent: FC<{
     const detectedIndian = tz.includes('kolkata') || tz.includes('calcutta');
     setIsIndian(detectedIndian);
 
-    const saved =
-      typeof window !== 'undefined'
-        ? (localStorage.getItem('hookpost_currency') ||
-            document.cookie
-              .split('; ')
-              .find((row) => row.startsWith('hookpost_currency='))
-              ?.split('=')[1])
-        : null;
-
-    if (!detectedIndian && (saved === 'INR' || !saved)) {
-      setCurrency('USD');
-    } else if (saved === 'USD' || saved === 'INR') {
-      setCurrency(saved as SupportedCurrency);
-    } else if (detectedIndian) {
-      setCurrency('INR');
-    } else {
-      setCurrency('USD');
+    // Region decides and there is no switcher. An Indian visitor is billed in
+    // rupees only (no USD checkout has ever completed on this account), and a
+    // foreign visitor can never reach the Indian rate. A stale saved
+    // 'hookpost_currency' is overwritten rather than honoured.
+    const next: SupportedCurrency = detectedIndian ? 'INR' : 'USD';
+    setCurrency(next);
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('hookpost_currency', next);
+      document.cookie = `hookpost_currency=${next}; path=/; max-age=2592000; SameSite=Lax`;
     }
   }, []);
 
-  const changeCurrency = (c: SupportedCurrency) => {
-    setCurrency(c);
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('hookpost_currency', c);
-      document.cookie = `hookpost_currency=${c}; path=/; max-age=2592000; SameSite=Lax`;
-    }
-  };
 
   const activePricing = useMemo(() => getPricing(currency), [currency]);
   const currencySymbol = useMemo(() => getCurrencyConfig(currency).symbol, [currency]);
@@ -592,44 +577,10 @@ export const MainBillingComponent: FC<{
         <div className="flex-1 text-[20px] font-bold">{t('plans', 'Plans')}</div>
         <div className="flex items-center gap-[16px] flex-wrap">
           {/* Aesthetic Currency Switcher */}
-          <div className="inline-flex items-center rounded-lg border border-customColor6 bg-sixth p-1 text-[13px] font-semibold">
-            {isIndian ? (
-              <>
-                <button
-                  type="button"
-                  onClick={() => changeCurrency('INR')}
-                  className={clsx(
-                    'px-2.5 py-1 rounded-[4px] transition-colors',
-                    currency === 'INR'
-                      ? 'bg-[#FF4CE2] text-black font-bold shadow-sm'
-                      : 'text-white/60 hover:text-white'
-                  )}
-                >
-                  ₹ INR
-                </button>
-                <button
-                  type="button"
-                  onClick={() => changeCurrency('USD')}
-                  className={clsx(
-                    'px-2.5 py-1 rounded-[4px] transition-colors',
-                    currency === 'USD'
-                      ? 'bg-[#FF4CE2] text-black font-bold shadow-sm'
-                      : 'text-white/60 hover:text-white'
-                  )}
-                >
-                  $ USD
-                </button>
-              </>
-            ) : (
-              <button
-                type="button"
-                onClick={() => changeCurrency('USD')}
-                className="px-2.5 py-1 rounded-[4px] bg-[#FF4CE2] text-black font-bold shadow-sm"
-              >
-                $ USD
-              </button>
-            )}
-          </div>
+          <div className="inline-flex items-center gap-[6px] rounded-full border border-customColor6 px-[12px] py-[5px] text-[13px] font-semibold text-textItemBlur">
+                  <span>{currencySymbol}</span>
+                  <span>Prices in {currency}</span>
+                </div>
 
           <div className="flex items-center gap-[12px]">
             <div>{t('monthly', 'MONTHLY')}</div>

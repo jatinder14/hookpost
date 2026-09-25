@@ -304,6 +304,86 @@ const MetricCard: FC<{
   </div>
 );
 
+interface CheckoutPayment {
+  id: string;
+  status: string;
+  amount: number;
+  currency: string;
+  method: string;
+  at: string;
+  error: string | null;
+}
+interface CheckoutSignal {
+  checkoutsOpened: number;
+  currencies: string[];
+  lastOpenedAt: string | null;
+  authenticated: boolean;
+  failedAuthAttempts: number;
+  payments: CheckoutPayment[];
+}
+
+const money = (amount: number, currency: string) =>
+  `${currency === 'INR' ? '₹' : currency === 'USD' ? '$' : currency === 'EUR' ? '€' : currency + ' '}${amount.toLocaleString(
+    currency === 'INR' ? 'en-IN' : 'en-US'
+  )}`;
+
+// Captured, authorised and refunded all mean the money actually moved: the
+// Rs 5 mandate check is refunded straight after it succeeds.
+const PAID = ['captured', 'authorized', 'refunded'];
+
+/**
+ * What this workspace did at checkout, from Razorpay: opened it and left,
+ * tried the Rs 5 mandate authorisation and failed, or paid. The line under
+ * the Razorpay ID answers "did they actually want to pay?".
+ */
+const CheckoutSignalCell = ({ signal }: { signal?: CheckoutSignal }) => {
+  if (!signal) return null;
+  const latest = signal.payments[0];
+  const paid = signal.payments.filter((p) => PAID.includes(p.status));
+  const failed = signal.payments.filter((p) => p.status === 'failed');
+  const chip = (cls: string, text: string, title?: string) => (
+    <span
+      title={title}
+      className={`inline-flex w-max items-center gap-[4px] rounded-full border px-[7px] py-[1px] text-[10px] font-[700] ${cls}`}
+    >
+      {text}
+    </span>
+  );
+  return (
+    <div className="mt-[6px] flex flex-col gap-[3px]">
+      {paid.length > 0
+        ? chip(
+            'bg-emerald-500/15 text-emerald-300 border-emerald-500/40',
+            `✓ ${money(paid[0].amount, paid[0].currency)} paid${
+              paid[0].status === 'refunded' ? ' (auth, refunded)' : ''
+            } · ${dayjs(paid[0].at).format('D MMM')}`
+          )
+        : latest && latest.status === 'failed'
+        ? chip(
+            'bg-red-500/15 text-red-300 border-red-500/40',
+            `✗ ${money(latest.amount, latest.currency)} failed${
+              failed.length > 1 ? ` ×${failed.length}` : ''
+            } · ${dayjs(latest.at).format('D MMM')}`,
+            latest.error || undefined
+          )
+        : signal.checkoutsOpened > 0
+        ? chip(
+            'bg-amber-500/15 text-amber-300 border-amber-500/40',
+            `Checkout opened ${signal.checkoutsOpened}× · never paid`
+          )
+        : null}
+      {(signal.checkoutsOpened > 0 || failed.length > 0) && (
+        <span className="text-[10px] opacity-60">
+          {signal.checkoutsOpened} checkout{signal.checkoutsOpened === 1 ? '' : 's'}
+          {signal.currencies.length ? ` · ${signal.currencies.join('/')}` : ''}
+          {signal.lastOpenedAt ? ` · last ${dayjs(signal.lastOpenedAt).fromNow()}` : ''}
+          {paid.length === 0 && latest?.error ? ` · "${latest.error.slice(0, 60)}${latest.error.length > 60 ? '…' : ''}"` : ''}
+        </span>
+      )}
+    </div>
+  );
+};
+
 export const AdminUsersComponent: FC = () => {
   const user = useUser();
   const fetch = useFetch();
@@ -326,6 +406,15 @@ export const AdminUsersComponent: FC = () => {
       revalidateOnFocus: false,
       revalidateOnReconnect: false,
     }
+  );
+
+  const { data: checkoutSignals } = useSWR<Record<string, CheckoutSignal>>(
+    'admin-checkout-signals',
+    async () => {
+      const res = await fetch('/admin/checkout-signals');
+      return res.ok ? res.json() : {};
+    },
+    { revalidateOnFocus: false }
   );
 
   const handleCopy = useCallback((text: string, label: string) => {
@@ -657,6 +746,9 @@ export const AdminUsersComponent: FC = () => {
                         ) : (
                           <span className="text-[12px] opacity-40">No Razorpay ID</span>
                         )}
+                        <CheckoutSignalCell
+                          signal={mainOrg?.id ? checkoutSignals?.[mainOrg.id] : undefined}
+                        />
                       </td>
 
                       {/* Subscription Tier */}

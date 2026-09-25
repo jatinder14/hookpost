@@ -14,6 +14,7 @@ import { ErrorsService } from '@hookpost/nestjs-libraries/database/prisma/errors
 import { AdminStatsService } from '@hookpost/nestjs-libraries/database/prisma/admin-stats/admin-stats.service';
 import { PrismaRepository } from '@hookpost/nestjs-libraries/database/prisma/prisma.service';
 import dayjs from 'dayjs';
+import { RazorpayClient } from '@hookpost/nestjs-libraries/services/razorpay.client';
 
 @ApiTags('Admin')
 @Controller('/admin')
@@ -28,6 +29,9 @@ export class AdminController {
     private _post: PrismaRepository<'post'>,
     private _contactMessage: PrismaRepository<'contactMessage'>
   ) {}
+
+  private readonly _razorpay = new RazorpayClient();
+  private _checkoutCache?: { at: number; data: Record<string, any> };
 
   private assertSuperAdmin(user: User) {
     if (!user?.isSuperAdmin) {
@@ -138,6 +142,100 @@ export class AdminController {
       },
       users,
     };
+  }
+
+  /**
+   * Per-workspace checkout intent, read live from Razorpay.
+   *
+   * Opening checkout creates a Razorpay subscription (tagged notes.orgId), and
+   * authorising the UPI/card mandate takes a small refundable payment (Rs 5)
+   * against the customer. So "opened N times, never paid", "Rs 5 failed" and
+   * "Rs 5 paid" separate someone who wanted to pay from someone who looked.
+   * The account is shared with VetNow, hence the notes.service filter.
+   * Cached for two minutes: it walks every payment and subscription.
+   */
+  @Get('/checkout-signals')
+  async checkoutSignals(
+    @GetUserFromRequest() user: User,
+    @Query('fresh') fresh?: string
+  ) {
+    this.assertSuperAdmin(user);
+    if (!fresh && this._checkoutCache && Date.now() - this._checkoutCache.at < 120_000) {
+      return this._checkoutCache.data;
+    }
+
+    const all = async (path: string) => {
+      const items: any[] = [];
+      for (let skip = 0; skip < 2000; skip += 100) {
+        const page: any = await this._razorpay.request(
+          'GET',
+          `${path}?count=100&skip=${skip}`
+        );
+        items.push(...(page?.items || []));
+        if (!page?.items || page.items.length < 100) break;
+      }
+      return items;
+    };
+
+    const [subscriptions, payments, orgs] = await Promise.all([
+      all('/subscriptions'),
+      all('/payments'),
+      this._organization.model.organization.findMany({
+        where: { paymentId: { not: null } },
+        select: { id: true, paymentId: true },
+      }),
+    ]);
+
+    const customerToOrg: Record<string, string> = {};
+    for (const o of orgs) if (o.paymentId) customerToOrg[o.paymentId] = o.id;
+
+    const out: Record<string, any> = {};
+    const bucket = (orgId: string) =>
+      (out[orgId] ||= {
+        checkoutsOpened: 0,
+        currencies: [] as string[],
+        lastOpenedAt: null as string | null,
+        authenticated: false,
+        failedAuthAttempts: 0,
+        payments: [] as any[],
+      });
+
+    for (const sub of subscriptions) {
+      const notes = sub?.notes || {};
+      if (notes.service !== 'hookpost' || !notes.orgId) continue;
+      if (sub.customer_id) customerToOrg[sub.customer_id] ||= notes.orgId;
+      const b = bucket(notes.orgId);
+      b.checkoutsOpened += 1;
+      if (notes.currency && !b.currencies.includes(notes.currency)) {
+        b.currencies.push(notes.currency);
+      }
+      const at = new Date(sub.created_at * 1000).toISOString();
+      if (!b.lastOpenedAt || at > b.lastOpenedAt) b.lastOpenedAt = at;
+      if (['authenticated', 'active', 'pending', 'halted', 'completed'].includes(sub.status) || sub.paid_count > 0) {
+        b.authenticated = true;
+      }
+      b.failedAuthAttempts += sub.auth_attempts || 0;
+    }
+
+    for (const pay of payments) {
+      const orgId = pay?.customer_id && customerToOrg[pay.customer_id];
+      if (!orgId) continue;
+      bucket(orgId).payments.push({
+        id: pay.id,
+        status: pay.status,
+        amount: pay.amount / 100,
+        currency: pay.currency,
+        method: pay.method,
+        at: new Date(pay.created_at * 1000).toISOString(),
+        error: pay.error_description || null,
+      });
+    }
+    for (const b of Object.values(out)) {
+      b.payments.sort((x: any, y: any) => (x.at < y.at ? 1 : -1));
+    }
+
+    this._checkoutCache = { at: Date.now(), data: out };
+    return out;
   }
 
   @Get('/errors')

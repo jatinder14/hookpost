@@ -79,14 +79,10 @@ export const PricingPlans = ({
               ?.split('=')[1])
         : null;
 
-    // An explicit pick is honoured, but only if it is still collectable and a
-    // foreign visitor can never land on the Indian parity rate.
-    const savedIsUsable =
-      !!saved &&
-      COLLECTABLE_CURRENCIES.includes(saved as SupportedCurrency) &&
-      (saved !== 'INR' || detectedIndian);
 
-    const next = (savedIsUsable ? saved : regional) as SupportedCurrency;
+    // Region decides, not a saved pick: the switcher is gone, and a stale
+    // 'USD' cookie must not keep an Indian visitor on the dollar plan.
+    const next = regional as SupportedCurrency;
 
     setIsIndian(detectedIndian);
     setCurrency(next);
@@ -97,17 +93,6 @@ export const PricingPlans = ({
     }
   }, [initialIsIndian, initialCurrency]);
 
-  const changeCurrency = (c: SupportedCurrency) => {
-    // Prevent foreign visitors from switching to INR
-    if (!isIndian && c === 'INR') return;
-    // Never let the switcher park someone on a currency Razorpay cannot charge.
-    if (!COLLECTABLE_CURRENCIES.includes(c)) return;
-    setCurrency(c);
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('hookpost_currency', c);
-      document.cookie = `hookpost_currency=${c}; path=/; max-age=2592000; SameSite=Lax`;
-    }
-  };
 
   const activePricing = getPricing(currency);
   const config = CURRENCY_CONFIG[currency] || CURRENCY_CONFIG.USD;
@@ -260,78 +245,13 @@ export const PricingPlans = ({
             </p>
           </div>
 
-          {/* Currency switcher sits under the heading, centred with it, rather
-              than floating off to the right of a three-card row. */}
-          <div className="inline-flex items-center rounded-xl border border-white/15 bg-black/40 p-1.5 backdrop-blur-md">
-            {isIndian ? (
-              // Indian visitors see INR with USD option
-              <>
-                <button
-                  type="button"
-                  onClick={() => changeCurrency('INR')}
-                  className={`flex items-center gap-1.5 rounded-lg px-3.5 py-1.5 text-xs font-semibold tracking-wide transition-all ${
-                    currency === 'INR'
-                      ? 'bg-[#FF4CE2] text-black shadow-md'
-                      : 'text-white/60 hover:text-white'
-                  }`}
-                >
-                  <span>₹</span>
-                  <span>INR (India {pricingINR.STANDARD.discount_percent}% Off)</span>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => changeCurrency('USD')}
-                  className={`flex items-center gap-1.5 rounded-lg px-3.5 py-1.5 text-xs font-semibold tracking-wide transition-all ${
-                    currency === 'USD'
-                      ? 'bg-[#FF4CE2] text-black shadow-md'
-                      : 'text-white/60 hover:text-white'
-                  }`}
-                >
-                  <span>$</span>
-                  <span>USD (Global)</span>
-                </button>
-              </>
-            ) : (
-              // International visitors ONLY see global currencies (USD, EUR, GBP) - Zero INR Leakage
-              <>
-                <button
-                  type="button"
-                  onClick={() => changeCurrency('USD')}
-                  className={`flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold tracking-wide transition-all ${
-                    currency === 'USD'
-                      ? 'bg-[#FF4CE2] text-black shadow-md'
-                      : 'text-white/60 hover:text-white'
-                  }`}
-                >
-                  <span>$</span>
-                  <span>USD {isUAE ? '(~AED)' : ''}</span>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => changeCurrency('EUR')}
-                  className={`flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold tracking-wide transition-all ${
-                    currency === 'EUR'
-                      ? 'bg-[#FF4CE2] text-black shadow-md'
-                      : 'text-white/60 hover:text-white'
-                  }`}
-                >
-                  <span>€</span>
-                  <span>EUR</span>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => changeCurrency('GBP')}
-                  className={`flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold tracking-wide transition-all ${
-                    currency === 'GBP'
-                      ? 'bg-[#FF4CE2] text-black shadow-md'
-                      : 'text-white/60 hover:text-white'
-                  }`}
-                >
-                  <span>£</span>
-                  <span>GBP</span>
-                </button>
-              </>
-            )}
+          {/* One currency per visitor, no switcher. Indian visitors are billed
+              in rupees and never offered the USD plan (no USD checkout has ever
+              completed on this account); everyone else sees their regional
+              collectable currency and can never reach the Indian rate. */}
+          <div className="inline-flex items-center gap-1.5 rounded-full border border-white/15 bg-black/40 px-4 py-1.5 text-xs font-semibold tracking-wide text-white/80">
+            <span>{config.symbol}</span>
+            <span>Prices in {currency}</span>
           </div>
         </div>
 

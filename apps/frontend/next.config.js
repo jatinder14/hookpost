@@ -101,19 +101,19 @@ const nextConfig = {
               // report-only - promoting it to enforcing without these three
               // Razorpay origins would stop every customer paying. Added now so
               // the promotion is safe whenever someone does it.
-              "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://connect.facebook.net https://static.cloudflareinsights.com https://checkout.razorpay.com",
-              "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+              "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://connect.facebook.net https://static.cloudflareinsights.com https://checkout.razorpay.com https://accounts.google.com",
+              "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://accounts.google.com",
               "font-src 'self' https://fonts.gstatic.com data:",
               "img-src 'self' data: blob: https:",
               // cloudflareinsights is Cloudflare's own Web Analytics beacon, injected by
               // the CDN itself - it is not something the app loads, and omitting it
               // made our own report-only policy the sole entry in Chrome's Issues
               // panel, costing a Best Practices point for a self-inflicted report.
-              "connect-src 'self' https://www.google-analytics.com https://www.facebook.com https://*.sentry.io https://cloudflareinsights.com https://api.razorpay.com https://lumberjack.razorpay.com",
+              "connect-src 'self' https://www.google-analytics.com https://www.facebook.com https://*.sentry.io https://cloudflareinsights.com https://api.razorpay.com https://lumberjack.razorpay.com https://accounts.google.com",
               // The Razorpay modal renders its card/UPI form in an iframe it
               // creates itself, so frame-src has to allow it explicitly -
               // default-src 'self' would otherwise blank the payment form.
-              "frame-src 'self' https://api.razorpay.com https://checkout.razorpay.com",
+              "frame-src 'self' https://api.razorpay.com https://checkout.razorpay.com https://accounts.google.com",
               "frame-ancestors 'self'",
               "base-uri 'self'",
               "form-action 'self'",

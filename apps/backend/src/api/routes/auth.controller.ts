@@ -353,6 +353,51 @@ export class AuthController {
     return response.redirect(303, url);
   }
 
+  @Post('/oauth/google/one-tap')
+  async googleOneTap(
+    @Req() req: Request,
+    @Body('credential') credential: string,
+    @Res({ passthrough: false }) response: Response,
+    @RealIP() ip: string,
+    @UserAgent() userAgent: string
+  ) {
+    // Same CSRF guard as oauthExists: a cross-site form post cannot send JSON.
+    if (
+      !req.headers['content-type']?.includes('application/json') ||
+      !credential
+    ) {
+      return response.status(400).send('Invalid request');
+    }
+
+    let result: { jwt: string; registered: boolean };
+    try {
+      result = await this._authService.googleOneTap(credential, ip, userAgent);
+    } catch (e) {
+      return response
+        .status(401)
+        .json({ login: false, message: (e as Error).message });
+    }
+
+    response.cookie('auth', result.jwt, {
+      domain: getCookieUrlFromDomain(process.env.FRONTEND_URL!),
+      ...(!process.env.NOT_SECURED
+        ? { secure: true, httpOnly: true, sameSite: 'none' }
+        : {}),
+      expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 365),
+    });
+    response.cookie('hp_logged_in', '1', {
+      domain: getCookieUrlFromDomain(process.env.FRONTEND_URL!),
+      ...(!process.env.NOT_SECURED
+        ? { secure: true, httpOnly: false, sameSite: 'lax' }
+        : {}),
+      expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 365),
+    });
+    if (process.env.NOT_SECURED) {
+      response.header('auth', result.jwt);
+    }
+    response.status(200).json({ login: true, registered: result.registered });
+  }
+
   @Post('/oauth/:provider/exists')
   async oauthExists(
     @Req() req: Request,

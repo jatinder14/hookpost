@@ -1,4 +1,5 @@
 import { google } from 'googleapis';
+import { OAuth2Client } from 'google-auth-library';
 import {
   AuthProvider,
   AuthProviderAbstract,
@@ -37,6 +38,24 @@ export class GoogleProvider extends AuthProviderAbstract {
   }
 
   async getUser(providerToken: string) {
+    // Google One Tap hands the browser a signed ID token (a JWT) instead of an
+    // OAuth access token. Verify its signature, audience and expiry against our
+    // client id; its `sub` is the same account id userinfo returns as `id`,
+    // so One Tap and the redirect flow resolve to the same user.
+    if (/^eyJ[\w-]+\.[\w-]+\.[\w-]+$/.test(providerToken)) {
+      const ticket = await new OAuth2Client(
+        process.env.YOUTUBE_CLIENT_ID
+      ).verifyIdToken({
+        idToken: providerToken,
+        audience: process.env.YOUTUBE_CLIENT_ID,
+      });
+      const payload = ticket.getPayload();
+      if (!payload?.sub || !payload.email || !payload.email_verified) {
+        return false as any;
+      }
+      return { id: payload.sub, email: payload.email, name: payload.name };
+    }
+
     const client = makeClient(defaultRedirect());
     client.setCredentials({ access_token: providerToken });
     const { data } = await google

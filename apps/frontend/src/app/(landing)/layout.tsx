@@ -39,6 +39,7 @@ import UtmSaver from '@hookpost/helpers/utils/utm.saver';
 import { ViewContentTracker } from '@hookpost/frontend/components/layout/view-content.tracker';
 import { FacebookComponent } from '@hookpost/frontend/components/layout/facebook.component';
 import { GoogleTagManagerComponent } from '@hookpost/frontend/components/layout/gtm.component';
+import { GoogleOneTap } from '@hookpost/frontend/components/auth/google-one-tap';
 import { PUBLISHABLE_CHANNEL_COUNT } from './channels/channel-count';
 
 export const metadata: Metadata = {
@@ -421,6 +422,7 @@ export default function LandingLayout({
           WebkitFontSmoothing: 'antialiased',
         }}
       >
+        <GoogleOneTap />
         {/*
           Analytics were mounted only in (app)/layout.tsx - the logged-in app -
           so every marketing page was completely untracked: the homepage, the

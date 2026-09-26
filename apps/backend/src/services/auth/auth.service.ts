@@ -327,6 +327,44 @@ export class AuthService {
     return { token };
   }
 
+  /**
+   * Google One Tap: the browser posts the ID token Google gave it. An existing
+   * Google user is logged in; a new one is registered in the same step with a
+   * default workspace name they can rename later, because One Tap has no form
+   * to collect one. Same user record as the redirect flow (providerId = sub).
+   */
+  async googleOneTap(credential: string, ip: string, userAgent: string) {
+    const providerInstance = this._providerManager.getProvider(Provider.GOOGLE);
+    const googleUser = (await providerInstance.getUser(credential)) as
+      | { id: string; email: string; name?: string }
+      | false;
+    if (!googleUser) {
+      throw new Error('Invalid Google credential');
+    }
+
+    const existing = await this._userService.getUserByProvider(
+      googleUser.id,
+      Provider.GOOGLE
+    );
+    if (existing) {
+      return { jwt: await this.jwt(existing), registered: false };
+    }
+
+    const name = (googleUser.name || googleUser.email.split('@')[0]).trim();
+    const company = `${name}'s workspace`.slice(0, 128);
+    const { jwt } = await this.routeAuth(
+      Provider.GOOGLE,
+      {
+        provider: Provider.GOOGLE,
+        providerToken: credential,
+        company: company.length >= 3 ? company : 'My workspace',
+      } as CreateOrgUserDto,
+      ip,
+      userAgent
+    );
+    return { jwt, registered: true };
+  }
+
   private async jwt(user: User) {
     if (user.password) {
       delete user.password;

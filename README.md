@@ -2,7 +2,7 @@
   <img src="apps/frontend/public/brand-logo.png" alt="Hookpost Logo" width="80" height="80" style="margin-bottom: 12px;"/>
   <h1>Hookpost</h1>
   <p><strong>The All-in-One Open-Source Social Media Scheduler & Multi-Agent AI Copilot</strong></p>
-  <p><em>Schedule to 17 networks from one calendar &mdash; or straight from Claude Code, Cursor and Windsurf.</em></p>
+  <p><em>Schedule to X, LinkedIn, YouTube, Bluesky, Discord, Telegram and more from one calendar &mdash; or straight from Claude, Cursor and Windsurf.</em></p>
 
   <p>
     <a href="https://hookpost.hookstep.in"><img src="https://img.shields.io/badge/🌐_Cloud_App-hookpost.hookstep.in-FF4CE2?style=for-the-badge" alt="Cloud App"/></a>
@@ -22,17 +22,30 @@
 
 ## ⚡ What is Hookpost?
 
-**Hookpost** is a modern, open-source social media management and scheduling platform. Write your post once and publish across **30+ social networks** simultaneously, or prompt your favorite AI agent (Claude, ChatGPT, OpenClaw, Hermes) to draft, generate visuals, and schedule posts for you via our CLI and Model Context Protocol (MCP) server.
+**Hookpost** is an open-source social media scheduler: write a post once, schedule it on one visual calendar, and it publishes to every network at the time you pick. It is also built for AI agents, with an MCP server so Claude, Cursor and other MCP clients can list your channels and schedule posts for you.
 
-### 🌟 Key Features
+A free, self-hostable alternative to **Buffer**, **Hootsuite**, **Later** and **Postiz**, with a hosted cloud version at [hookpost.hookstep.in](https://hookpost.hookstep.in).
 
-* 🤖 **Multi-Agent AI Copilot**: Drive scheduling directly through Claude, ChatGPT, Codex, or OpenClaw via our Model Context Protocol (MCP) server and CLI (`npx hookpost`).
-* 🌐 **30+ Social Networks**: Publish to X (Twitter), LinkedIn, Instagram, Facebook, Threads, YouTube, TikTok, Reddit, Pinterest, Bluesky, Mastodon, Telegram, Discord, Slack, and more.
-* 📅 **Visual Calendar & Grid Scheduler**: Drag-and-drop planning with per-platform character limits and post previews.
-* 🎨 **Built-In AI Media Suite**: Generate platform-tailored hooks, high-res AI images, and short video clips inside the composer.
-* 🔄 **Automation & API**: Native REST API, Webhooks, and plug-and-play integrations with **n8n** and **Make.com**.
-* 💳 **Transparent Pricing & Razorpay Billing**: Localized currency support (INR / USD), instant UPI, Cards, and NetBanking checkout.
-* 🛡️ **100% Open-Source & Self-Hostable**: Own your data, run with Docker Compose on any VPS.
+### 🌐 Networks that publish today
+
+X (Twitter) · LinkedIn (profiles and company pages) · YouTube (videos and Shorts) · Bluesky · Discord · Slack · Telegram · WordPress · Medium · Hashnode · Dev.to · Lemmy · Nostr · Listmonk (email)
+
+Instagram, Facebook and Threads are built and waiting on Meta app approval for the cloud version. Pinterest connects but cannot publish until Pinterest grants Standard API access.
+
+### 🌟 Features
+
+* 🤖 **MCP server for AI agents**: connect Claude Desktop, Claude Code, Cursor or Windsurf and let the assistant draft and schedule posts. [Setup guide](https://hookpost.hookstep.in/guides/claude-mcp-social-media)
+* 📅 **Visual calendar**: drag-and-drop planning, per-network previews, and character limits checked before a post is queued.
+* ✍️ **AI writing and images** inside the composer.
+* 🔌 **REST API, webhooks, CLI (`npx hookpost`) and an n8n node** ([`n8n-nodes-hookpost`](https://www.npmjs.com/package/n8n-nodes-hookpost)).
+* 💳 **Flat pricing in rupees** on the cloud version: a free plan, then one price per plan instead of a fee per channel, with UPI Autopay via Razorpay.
+* 🛡️ **Open source (AGPL-3.0) and self-hostable** with Docker Compose.
+
+### 🔎 Compare
+
+* [Free social media scheduler: free plans compared](https://hookpost.hookstep.in/free-social-media-scheduler)
+* [Hookpost vs Buffer](https://hookpost.hookstep.in/alternatives/buffer) · [vs Postiz](https://hookpost.hookstep.in/alternatives/postiz) · [vs Hootsuite](https://hookpost.hookstep.in/alternatives/hootsuite) · [vs Later](https://hookpost.hookstep.in/alternatives/later)
+* [Social media character counter](https://hookpost.hookstep.in/tools/character-counter) (free tool)
 
 ---
 
@@ -64,9 +77,9 @@ Don't want to manage Docker, Redis, PostgreSQL, and OAuth app verification yours
 
 👉 **[Try Hookpost Cloud with a 7-Day Free Trial](https://hookpost.hookstep.in/auth)**
 
-* Zero setup fees & automated backups.
-* 99.9% high-availability uptime.
-* Seamless payments with Razorpay (UPI, Credit/Debit Cards, NetBanking).
+* Free plan, no card needed.
+* Flat monthly plans in rupees, no per-channel fee.
+* Payments through Razorpay: UPI Autopay, cards, NetBanking.
 
 ---
 
@@ -76,7 +89,8 @@ Don't want to manage Docker, Redis, PostgreSQL, and OAuth app verification yours
 * **Backend**: NestJS, TypeScript, Prisma ORM
 * **Database**: PostgreSQL (Neon-ready)
 * **Cache / Queue**: Redis (Upstash / Local Redis BullMQ)
-* **AI Engine**: Model Context Protocol (MCP), OpenClaw, OpenAI / Anthropic SDKs
+* **Workflows**: Temporal
+* **AI**: Model Context Protocol (MCP) server, OpenAI SDK
 
 ---
 

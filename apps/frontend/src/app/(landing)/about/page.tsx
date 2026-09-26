@@ -147,8 +147,7 @@ export default function AboutPage() {
           <div>
             <h2 className="text-2xl font-bold text-white">The people behind Hookpost</h2>
             <p className="mt-3 text-base text-white/70 leading-relaxed">
-              Hookpost is built by JR Consulting Co., part of HookStep. The same
-              team runs both.
+              Hookpost is built and operated by <strong className="text-white">JR Consulting Co.</strong> (registered in Punjab, India: 221 Arya Samaj Gali, Sujanpur, Pathankot 145023), part of the HookStep technology group. The same core team runs both operations and engineering.
             </p>
           </div>
 

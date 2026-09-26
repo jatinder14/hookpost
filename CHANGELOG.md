@@ -20,4 +20,4 @@ First tagged release of Hookpost, an open-source social media scheduler built on
 - Self-host with Docker Compose (Next.js frontend, NestJS backend, Temporal, PostgreSQL, Redis).
 - Hosted version at https://hookpost.hookstep.in with a free plan and flat monthly plans billed in rupees through Razorpay (UPI Autopay, cards, NetBanking).
 
-[1.0.0]: https://github.com/jatinder14/hookpost/releases/tag/v1.0.0
+[1.0.0]: https://github.com/jatinder14/hookpost/releases/tag/hookpost-v1.0.0

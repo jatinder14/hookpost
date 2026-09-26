@@ -5,149 +5,92 @@ import { notFound } from 'next/navigation';
 import { SectionFaq } from '../../SectionFaq';
 import { PUBLISHABLE_CHANNEL_COUNT } from '../../channels/channel-count';
 
+// Every number below was read off the vendor's own pricing page on
+// PRICES_CHECKED (Zoho Social and Sendible via compare/competitor-facts.ts,
+// the other four fetched directly). Only facts go in `weaknesses`: a subjective
+// line like "Outdated UI" is not something a reader can check, so it is not
+// here. Re-check every vendor before bumping the date.
+const PRICES_CHECKED = '26 September 2026';
+
 interface CompetitorData {
   name: string;
   category: string;
   tagline: string;
   startingPrice: string;
+  /** Free plan as the vendor states it, or null when it offers none. */
+  freePlan: string | null;
+  /** Channels on the cheapest paid plan, as the vendor states it. */
+  entryChannels: string;
+  source: string;
   weaknesses: string[];
-  strengths: string[];
 }
 
+// Only the six competitors that live exclusively under /vs/ are defined. The
+// other ten 301 to /alternatives/<slug> (see next.config.js); their old entries
+// here carried stale prices and were removed rather than left to drift.
 const COMPETITORS: Record<string, CompetitorData> = {
-  'buffer': {
-    name: 'Buffer',
-    category: 'Social Media Management',
-    tagline: 'Simple social media tools for authentic engagement',
-    startingPrice: '$6/channel/mo',
-    weaknesses: ['Per-channel pricing adds up fast', 'No multi-account team collaboration on basic tier', 'Limited AI writing credits', 'No self-hosting or data sovereignty'],
-    strengths: ['Simple interface', 'Basic scheduling'],
-  },
-  'postiz': {
-    name: 'Postiz',
-    category: 'Open-Source Social Scheduler',
-    tagline: 'Open-source social media management platform',
-    startingPrice: '$29/mo (Cloud)',
-    weaknesses: ['No Indian payment gateways (Foreign cards only)', 'Community Discord-only support', 'Complex manual setup'],
-    strengths: ['Open source', 'Self-hostable'],
-  },
-  'hootsuite': {
-    name: 'Hootsuite',
-    category: 'Enterprise Social Media Management',
-    tagline: 'Social media marketing & management dashboard',
-    startingPrice: '$99/mo (Billed annually)',
-    weaknesses: ['Extremely expensive for creators & small businesses', 'Forced annual contracts', 'Cluttered legacy interface', 'No free tier'],
-    strengths: ['Extensive enterprise integrations', 'Large brand history'],
-  },
-  'sprout-social': {
-    name: 'Sprout Social',
-    category: 'Enterprise Social Suite',
-    tagline: 'Deep social listening and analytics',
-    startingPrice: '$199/user/mo',
-    weaknesses: ['Astronomical pricing for small teams', 'No open-source options', 'Complex onboarding'],
-    strengths: ['Deep listening tools', 'CRM integrations'],
-  },
-  'later': {
-    name: 'Later',
-    category: 'Visual Social Media Marketing',
-    tagline: 'Visual social planner for Instagram and Pinterest',
-    startingPrice: '$25/mo',
-    weaknesses: ['Heavy focus only on Instagram/Pinterest', 'Weak B2B LinkedIn & X features', 'Strict post limits'],
-    strengths: ['Visual Instagram feed preview', 'Link in bio tool'],
-  },
-  'metricool': {
-    name: 'Metricool',
-    category: 'Social Media & Ad Analytics',
-    tagline: 'All-in-one social media analytics and planning',
-    startingPrice: '$22/mo',
-    weaknesses: ['Cluttered reporting dashboard', 'Slow multi-channel publishing queues', 'Complex ad account linking'],
-    strengths: ['Detailed analytics', 'Competitor tracking'],
-  },
-  'publer': {
-    name: 'Publer',
-    category: 'Social Media Automation',
-    tagline: 'Virtual social media superhero',
-    startingPrice: '$12/mo',
-    weaknesses: ['Limited open-source flexibility', 'Per-social account upcharges', 'No self-hosted Docker option'],
-    strengths: ['Auto-scheduling', 'Recycling posts'],
-  },
-  'socialpilot': {
-    name: 'SocialPilot',
-    category: 'Agency Social Media Tool',
-    tagline: 'Cost-effective social media scheduling for teams',
-    startingPrice: '$30/mo',
-    weaknesses: ['No free starter tier', 'Interface lacks modern AI reel tools', 'No self-hosted options'],
-    strengths: ['Agency client management', 'Bulk scheduling'],
-  },
-  'planoly': {
-    name: 'Planoly',
-    category: 'Visual Planner',
-    tagline: 'Visual planning tool for creators',
-    startingPrice: '$16/mo',
-    weaknesses: ['Limited to visual platforms', 'Weak analytics', 'No multi-tenant agency management'],
-    strengths: ['Instagram grid planning', 'Mobile app'],
-  },
-  'agorapulse': {
-    name: 'Agorapulse',
-    category: 'Social Media Management Suite',
-    tagline: 'Social inbox and publishing platform',
-    startingPrice: '$49/user/mo',
-    weaknesses: ['Per-user pricing becomes very expensive for agencies', 'No open-source version', 'Complex UI'],
-    strengths: ['Unified social inbox', 'Power reports'],
-  },
   'zoho-social': {
     name: 'Zoho Social',
     category: 'All-in-One Social Tool',
     tagline: 'Social media management for businesses',
-    startingPrice: '$15/mo',
-    weaknesses: ['Locked into Zoho ecosystem', 'Outdated UI', 'Limited short-form video auto-publishing'],
-    strengths: ['Zoho CRM integration', 'Monitoring dashboard'],
+    startingPrice: '$10/mo (Standard, billed annually)',
+    freePlan: '6 channels',
+    entryChannels: '14 channels on Standard',
+    source: 'https://www.zoho.com/social/pricing.html',
+    weaknesses: ['Not open source, so it cannot be self-hosted', 'UPI is not listed on its pricing page'],
   },
   'sendible': {
     name: 'Sendible',
     category: 'Agency Social Media Platform',
     tagline: 'Social media tool built for agencies',
-    startingPrice: '$29/mo',
-    weaknesses: ['Strict client profile limits', 'No free tier', 'Slow mobile app'],
-    strengths: ['Custom white-label reports', 'Canva integration'],
+    startingPrice: '$30/mo (Core, billed annually)',
+    freePlan: null,
+    entryChannels: '6 channels on Core',
+    source: 'https://www.sendible.com/pricing',
+    weaknesses: ['No free plan, only a 14-day trial', 'Core plan includes 6 channels', 'Not open source, so it cannot be self-hosted'],
   },
   'loomly': {
     name: 'Loomly',
     category: 'Brand Success Platform',
     tagline: 'Social media calendar and brand manager',
-    startingPrice: '$42/mo',
-    weaknesses: ['High starting price point', 'No free plan', 'Limited AI generation capabilities'],
-    strengths: ['Post ideas library', 'Approval workflows'],
+    startingPrice: '$49/mo (Starter, billed annually; $65 month to month)',
+    freePlan: null,
+    entryChannels: '12 social accounts and 3 users on Starter',
+    source: 'https://www.loomly.com/pricing',
+    weaknesses: ['No free plan, only a free trial', 'Entry plan is $49/mo billed annually, $65 month to month', 'Not open source, so it cannot be self-hosted'],
   },
   'tailwind': {
     name: 'Tailwind',
-    category: 'Pinterest & Instagram Scheduler',
+    category: 'Pinterest, Instagram & Facebook Scheduler',
     tagline: 'Automated marketing for small businesses',
-    startingPrice: '$19.99/mo',
-    weaknesses: ['Only focused on Pinterest and Instagram', 'No X or LinkedIn automation', 'No open-source options'],
-    strengths: ['SmartLoop Pinterest scheduling', 'Ghostwriter AI'],
+    startingPrice: '$17.99/mo (Pro, billed annually)',
+    freePlan: '5 posts a month, 1 Pinterest, 1 Instagram and 1 Facebook account',
+    entryChannels: '1 Pinterest, 1 Instagram and 1 Facebook account on Pro',
+    source: 'https://www.tailwindapp.com/pricing',
+    weaknesses: ['Publishes to Pinterest, Instagram and Facebook only', 'Free plan is capped at 5 posts a month', 'Pro includes one account per network'],
   },
   'co-schedule': {
     name: 'CoSchedule',
     category: 'Marketing Calendar',
     tagline: 'Organize all your marketing in one place',
-    startingPrice: '$29/user/mo',
-    weaknesses: ['Expensive add-on pricing', 'Steep learning curve', 'Complex interface'],
-    strengths: ['Marketing calendar', 'Headline analyzer'],
+    startingPrice: '$29/mo (Starter, billed annually; $39 month to month)',
+    freePlan: 'Up to 15 scheduled posts per profile',
+    entryChannels: '3 social profiles on Starter (X profiles not included)',
+    source: 'https://coschedule.com/pricing',
+    weaknesses: ['Starter includes 1 user seat and 3 social profiles, not counting X', 'Extra seats on Professional cost $29/mo each'],
   },
   'meet-edgar': {
     name: 'MeetEdgar',
     category: 'Social Automation Tool',
     tagline: 'Automated evergreen social publishing',
-    startingPrice: '$29.99/mo',
-    weaknesses: ['Outdated UI', 'No short-form video support', 'Expensive for solo creators'],
-    strengths: ['Evergreen content recycling', 'Category-based scheduling'],
+    startingPrice: '$24.91/mo (Eddie, billed annually; $29.99 month to month)',
+    freePlan: null,
+    entryChannels: '5 social accounts on Eddie',
+    source: 'https://meetedgar.com/pricing',
+    weaknesses: ['No free plan, only a 30-day trial', 'Eddie plan covers 5 social accounts', 'Not open source, so it cannot be self-hosted'],
   },
 };
 
-// The ten competitors that also have an /alternatives/<slug> page now 301 to
-// it (see next.config.js), so there is no reason to build a page here that
-// nothing can reach. Only the six that live exclusively under /vs/ are built.
 const VS_ONLY = [
   'zoho-social',
   'sendible',
@@ -173,7 +116,7 @@ export async function generateMetadata({ params }: { params: Promise<{ competito
     // results. The old pair ran to 88 and 199 characters, so the tail of both
     // — including the differentiators — was being cut off.
     title: `Hookpost vs ${comp.name}: Open-Source Alternative (2026)`,
-    description: `Compare Hookpost and ${comp.name} on pricing, channel coverage, and self-hosting: 18 networks, AI drafting, and a Docker image you can run yourself.`,
+    description: `Compare Hookpost and ${comp.name} on pricing, channel coverage, and self-hosting: ${PUBLISHABLE_CHANNEL_COUNT} networks, AI drafting, and a Docker image you can run yourself.`,
     keywords: [
       `${competitor} alternative`,
       `${competitor} competitor`,
@@ -210,10 +153,10 @@ export default async function CompetitorComparisonPage({ params }: { params: Pro
     mainEntity: [
       {
         "@type": "Question",
-        name: `Why are creators switching from ${comp.name} to Hookpost?`,
+        name: `How does Hookpost compare with ${comp.name} on price?`,
         acceptedAnswer: {
           "@type": "Answer",
-          text: `Hookpost eliminates high subscription fees like ${comp.startingPrice}, offering 18 social networks, unlimited workspaces, built-in AI hooks, and self-hosted Docker deployment starting at $0.`,
+          text: `${comp.name} starts at ${comp.startingPrice}${comp.freePlan ? `, with a free plan of ${comp.freePlan}` : ' and has no free plan'} (checked ${PRICES_CHECKED}). Hookpost has a free plan of 2 channels and 30 posts a month, Standard at $15 / ₹599 a month with AI writing and 5 channels, and Pro at $39 / ₹1,999 with 20 channels. It publishes to ${PUBLISHABLE_CHANNEL_COUNT} networks and can be self-hosted with Docker.`,
         },
       },
       {
@@ -221,7 +164,7 @@ export default async function CompetitorComparisonPage({ params }: { params: Pro
         name: `Can I self-host Hookpost instead of paying for ${comp.name}?`,
         acceptedAnswer: {
           "@type": "Answer",
-          text: "Yes. Hookpost is 100% open-source under the AGPL license and can be deployed in minutes on any VPS or Docker host.",
+          text: "Yes. Hookpost is open source under AGPL-3.0 and ships a Docker Compose file, so you can run it on your own VPS or Docker host.",
         },
       },
     ],
@@ -234,12 +177,11 @@ export default async function CompetitorComparisonPage({ params }: { params: Pro
     // is removed rather than reworded: an empty comparison row is worse than a
     // missing one. Re-add it once each competitor's real channel list has been
     // checked and date-stamped.
-    { feature: 'Starting Price', hookpost: '✅ $0 Forever Free Tier (Standard: $15 / ₹599)', competitor: `❌ ${comp.startingPrice}` },
+    { feature: 'Free Plan', hookpost: '✅ 2 channels, 30 posts a month', competitor: comp.freePlan ? `✅ ${comp.freePlan}` : '❌ None' },
+    { feature: 'Cheapest Paid Plan', hookpost: 'Standard: $15 / ₹599 a month', competitor: comp.startingPrice },
+    { feature: 'Channels on Cheapest Paid Plan', hookpost: '5 on Standard (20 on Pro)', competitor: comp.entryChannels },
     { feature: 'UPI Autopay (India)', hookpost: '✅ Yes, via Razorpay', competitor: '— Not listed on pricing page' },
-    { feature: 'Open-Source & Self-Hostable', hookpost: '✅ 100% Open-Source & 1-Click Docker', competitor: comp.name === 'Postiz' ? '✅ Open-Source' : '❌ Proprietary SaaS Only' },
-    { feature: 'Built-in AI Reels & Hooks Generator', hookpost: '✅ Multi-Model Viral Hook & Caption AI', competitor: '⚠️ Basic or Expensive Add-on' },
-    { feature: 'Multi-Tenant Agency Client Workspaces', hookpost: '✅ Included with Granular Permissions', competitor: '⚠️ High Per-User Upcharge' },
-    { feature: 'Customer Support', hookpost: '✅ Email &amp; Discord Support', competitor: '⚠️ Standard Ticket Queues' },
+    { feature: 'Open-Source & Self-Hostable', hookpost: '✅ AGPL-3.0, Docker Compose', competitor: '❌ Proprietary SaaS Only' },
   ];
 
   return (
@@ -254,7 +196,7 @@ export default async function CompetitorComparisonPage({ params }: { params: Pro
       />
 
       <div className="w-full bg-[#FF4CE2] text-black text-center font-medium text-sm py-1.5 px-4 font-sans">
-        Hookpost — The #1 Rated Alternative to {comp.name} Worldwide 🚀
+        Hookpost vs {comp.name} — Pricing Checked {PRICES_CHECKED}
       </div>
 
       <header className="flex justify-between items-center w-full max-w-[1440px] mx-auto h-[70px] px-6 sm:px-12">
@@ -299,7 +241,7 @@ export default async function CompetitorComparisonPage({ params }: { params: Pro
             Looking for a Better Alternative to <span className="text-[#FF4CE2]">{comp.name}?</span>
           </h1>
           <p className="text-lg sm:text-xl text-neutral-400 leading-relaxed mb-8">
-            Why pay {comp.startingPrice} when you can publish across {PUBLISHABLE_CHANNEL_COUNT} social networks, generate viral AI copy, and invite unlimited team members with Hookpost?
+            Hookpost publishes to {PUBLISHABLE_CHANNEL_COUNT} social networks from one calendar, with AI writing from $15 / ₹599 a month and up to 15 team members on Pro.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
@@ -319,14 +261,15 @@ export default async function CompetitorComparisonPage({ params }: { params: Pro
           <p className="text-base sm:text-lg text-neutral-200 leading-relaxed">
             Hookpost is an open-source (AGPL-3.0) AI social media scheduler by JR
             Consulting Co. that publishes to {PUBLISHABLE_CHANNEL_COUNT} social networks — including
-            Instagram, YouTube, X, LinkedIn, Facebook, Threads and Pinterest — from
-            one calendar. It starts at <strong>$0</strong> with a Pro plan at{' '}
-            <strong>$15/mo (₹599)</strong> billed through Razorpay (UPI, NetBanking
-            and cards), and can be self-hosted with Docker. {comp.name} is a{' '}
-            {comp.category.toLowerCase()} starting at {comp.startingPrice}, so
-            Hookpost is the lower-cost, open-source alternative for creators,
-            agencies and small businesses that want more networks without
-            per-channel or per-seat fees.
+            X, LinkedIn, YouTube, Bluesky, Discord and Telegram — from one
+            calendar. Instagram, Facebook and Threads are waiting on Meta app
+            approval for new accounts. It has a free plan, with Standard at{' '}
+            <strong>$15/mo (₹599)</strong> and Pro at <strong>$39/mo (₹1,999)</strong>{' '}
+            billed through Razorpay (UPI, NetBanking and cards), and can be
+            self-hosted with Docker. {comp.name} is a{' '}
+            {comp.category.toLowerCase()} starting at {comp.startingPrice}{' '}
+            (<a href={comp.source} className="underline" rel="nofollow noopener" target="_blank">pricing page</a>,
+            checked {PRICES_CHECKED}).
           </p>
         </div>
 
@@ -374,7 +317,7 @@ export default async function CompetitorComparisonPage({ params }: { params: Pro
               </li>
               <li className="flex items-start gap-3 text-neutral-300 text-sm">
                 <span className="text-green-400 font-bold">✓</span>
-                <span>$0 Forever Free starter tier with full multi-channel support</span>
+                <span>Free plan with 2 channels and 30 posts a month, no credit card</span>
               </li>
               <li className="flex items-start gap-3 text-neutral-300 text-sm">
                 <span className="text-green-400 font-bold">✓</span>
@@ -382,7 +325,7 @@ export default async function CompetitorComparisonPage({ params }: { params: Pro
               </li>
               <li className="flex items-start gap-3 text-neutral-300 text-sm">
                 <span className="text-green-400 font-bold">✓</span>
-                <span>Full data sovereignty with 1-click self-hosted Docker option</span>
+                <span>Self-host it with Docker Compose under AGPL-3.0</span>
               </li>
             </ul>
           </div>

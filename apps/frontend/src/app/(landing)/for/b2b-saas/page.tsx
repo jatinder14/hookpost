@@ -57,8 +57,8 @@ export default function B2BSaaSLandingPage() {
 
   const features = [
     { title: '💼 LinkedIn & X Founder Authority Builder', desc: 'Schedule founder breakdown posts, metric milestones, and industry insights across personal profiles and company pages.' },
-    { title: '🚀 Changelog & Product Launch Distribution', desc: 'Turn GitHub release notes and product updates into viral launch threads on X, LinkedIn articles, Dev.to, Hashnode, and Medium.' },
-    { title: '👨‍💻 Developer-First Platforms & Webhooks', desc: 'Auto-publish directly to developer hubs including Dev.to, Medium, Hashnode, Discord, and Slack channels.' },
+    { title: '🚀 Changelog & Product Launch Distribution', desc: 'Turn GitHub release notes and product updates into launch threads on X, LinkedIn posts, and Dev.to and Hashnode articles.' },
+    { title: '👨‍💻 Developer-First Platforms & Webhooks', desc: 'Auto-publish directly to developer hubs including Dev.to, Hashnode, Discord, and Slack channels.' },
     { title: '🤖 AI Repurposing Engine', desc: 'Paste a technical blog post or changelog URL and watch Hookpost generate 10 high-converting bite-sized social posts.' },
     { title: '⚡ Dynamic Queue & Auto-Recycle', desc: 'Keep your top evergreen lead generation posts in a high-performing automated rotation to drive continuous demo signups.' },
     { title: '🛡️ Self-Hosted or Cloud Option', desc: 'Deploy with Docker or use our managed high-speed cloud platform with complete data privacy and zero vendor lock-in.' },

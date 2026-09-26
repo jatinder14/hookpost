@@ -10,7 +10,7 @@
 - **Licence:** AGPL-3.0, source at https://github.com/jatinder14/hookpost
 - **Industry:** Social Media Management, Content Operations, Developer Tooling, AI Agents
 
-Hookpost is an AI social media scheduler made in India, positioned as a low-cost alternative to Buffer, Hootsuite and Postiz. It is open source (AGPL-3.0), publishes to 14 networks today from one calendar, has an MCP server so AI agents such as Claude can schedule posts, and bills flat monthly prices in rupees through Razorpay with UPI Autopay.
+Hookpost is an AI social media scheduler made in India, positioned as a low-cost alternative to Buffer, Hootsuite and Postiz. It is open source (AGPL-3.0), publishes to 13 networks today from one calendar, has an MCP server so AI agents such as Claude can schedule posts, and bills flat monthly prices in rupees through Razorpay with UPI Autopay.
 
 ---
 
@@ -28,15 +28,16 @@ Hookpost is an AI social media scheduler made in India, positioned as a low-cost
 
 ## 3. Supported Channels (what a new user can connect today)
 
-Publishing works today on: X, LinkedIn (profiles and company pages), YouTube (videos and Shorts), Bluesky, Discord, Slack, Telegram, Lemmy, Nostr, WordPress, Medium, Hashnode, Dev.to and Listmonk (email).
+Publishing works today on: X, LinkedIn (profiles and company pages), YouTube (videos and Shorts), Bluesky, Discord, Slack, Telegram, Lemmy, Nostr, WordPress, Hashnode, Dev.to and Listmonk (email).
 
 Built but not yet available to new users:
 - Instagram, Facebook and Threads: waiting on Meta app approval.
 - Pinterest: connects, but publishing waits on Pinterest Standard API access.
+- Medium: Medium stopped issuing new API integration tokens on 1 Jan 2025; only accounts with an older token can connect.
 
 Not supported: TikTok, Reddit, Mastodon.
 
-Character limits Hookpost enforces: X 280 (25,000 on Premium), LinkedIn 3,000, YouTube description 5,000, Bluesky 300, Threads 500, Instagram 2,200, Pinterest 500, Discord 1,980, Telegram 4,096 per message, Lemmy 10,000. Free checker: https://hookpost.hookstep.in/tools/character-counter
+Character limits Hookpost enforces: X 280 (4,000 for Premium accounts), LinkedIn 3,000, YouTube description 5,000, Bluesky 300, Threads 500, Instagram 2,200, Pinterest 500, Discord 1,980, Telegram 4,096 per message, Lemmy 10,000. Free checker: https://hookpost.hookstep.in/tools/character-counter
 
 ---
 

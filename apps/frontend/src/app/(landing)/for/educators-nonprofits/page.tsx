@@ -104,7 +104,7 @@ export default function EducatorsNonprofitsPage() {
             { title: 'A free tier that does not expire', desc: '2 channels and 30 posts a month, no credit card, no trial clock. Enough for a department or a small charity to run its whole calendar.' },
             { title: 'Self-host at no licence cost', desc: 'AGPL-3.0. Run it on a university server or a cheap VPS and pay nothing per seat or per channel, forever.' },
             { title: 'Reach students where they already are', desc: 'Discord, Telegram, Lemmy and Bluesky alongside Instagram and YouTube — the places a campus audience actually reads.' },
-            { title: 'Publish to a blog in the same breath', desc: 'WordPress, Medium, Hashnode and DEV are channels here, so a long-form update and its social posts go out together.' },
+            { title: 'Publish to a blog in the same breath', desc: 'WordPress, Hashnode and DEV are channels here, so a long-form update and its social posts go out together.' },
             { title: 'Pay in rupees', desc: 'Billing runs through Razorpay with UPI and NetBanking, so there is no foreign-card requirement or forex markup.' },
             { title: 'Hand over without retraining', desc: 'A visual calendar that a volunteer or a student worker can pick up, and unlimited team members from the Team plan up.' },
             ].map((feat, i) => (

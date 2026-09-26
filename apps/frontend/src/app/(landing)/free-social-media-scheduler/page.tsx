@@ -26,7 +26,7 @@ const FREE_NETWORKS = [
   ['Slack', '/channels/slack'],
   ['Telegram', '/channels/telegram'],
   ['WordPress', '/channels/wordpress'],
-  ['Medium', '/channels/medium'],
+  ['Hashnode', '/channels/hashnode'],
   ['Dev.to', '/channels/devto'],
 ] as const;
 
@@ -81,7 +81,7 @@ const FAQ = [
   },
   {
     q: 'Which networks can I schedule for free?',
-    a: 'X, LinkedIn, YouTube, Bluesky, Discord, Slack, Telegram, WordPress, Medium, Dev.to, Hashnode, Lemmy, Nostr and Listmonk. Instagram, Facebook and Threads are built and waiting on Meta app approval, so new accounts cannot connect them yet.',
+    a: 'X, LinkedIn, YouTube, Bluesky, Discord, Slack, Telegram, WordPress, Dev.to, Hashnode, Lemmy, Nostr and Listmonk. Instagram, Facebook and Threads are built and waiting on Meta app approval, so new accounts cannot connect them yet.',
   },
   {
     q: 'What happens when I need more than the free plan?',

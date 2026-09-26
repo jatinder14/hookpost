@@ -51,6 +51,42 @@ const RESOURCES = [
     tag: 'India',
   },
   {
+    href: '/guides/schedule-discord-announcements',
+    title: 'How to schedule Discord messages and announcements',
+    blurb: 'Invite the bot, pick the channel, and schedule one-off or repeating messages, with what Discord posting can and cannot do.',
+    tag: 'Guide',
+  },
+  {
+    href: '/open-source-social-media-scheduler',
+    title: 'Open-source social media schedulers compared',
+    blurb: 'Hookpost, Postiz and Mixpost side by side: licence, GitHub activity, self-hosting and hosted pricing.',
+    tag: 'Comparison',
+  },
+  {
+    href: '/social-media-scheduling-api',
+    title: 'A social media scheduling API',
+    blurb: 'Endpoints, auth and real curl examples for scheduling posts from your own code.',
+    tag: 'Developers',
+  },
+  {
+    href: '/integrations/n8n',
+    title: 'Schedule social posts from n8n',
+    blurb: 'Install the Hookpost community node and build a workflow that posts to X, LinkedIn and more.',
+    tag: 'Integration',
+  },
+  {
+    href: '/tools/thread-splitter',
+    title: 'Thread splitter for X and Bluesky',
+    blurb: 'Paste long text and get numbered posts that each fit the limit.',
+    tag: 'Free tool',
+  },
+  {
+    href: '/compare/postiz-vs-buffer',
+    title: 'Postiz vs Buffer',
+    blurb: 'Pricing, free plan, API and AI-agent support from each vendor\'s own page.',
+    tag: 'Comparison',
+  },
+  {
     href: '/channels/x',
     title: 'How to schedule posts and threads on X',
     blurb: 'Post types, the per-post settings and the one constraint that trips people up when scheduling to X.',

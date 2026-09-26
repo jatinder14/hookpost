@@ -1,4 +1,5 @@
 import { MetadataRoute } from 'next';
+import { PAIRS } from './(landing)/compare/competitor-facts';
 
 const baseUrl = 'https://hookpost.hookstep.in';
 
@@ -14,6 +15,7 @@ const UPDATED = {
   docs: '2026-09-06',
   guides: '2026-08-28',
   landing: '2026-09-25',
+  landing2: '2026-09-26',
   alternatives: '2026-08-28',
   personas: '2026-08-20',
   channels: '2026-08-20',
@@ -56,6 +58,16 @@ export default function sitemap(): MetadataRoute.Sitemap {
     page('/free-social-media-scheduler', UPDATED.landing, 0.9, 'monthly'),
     page('/social-media-scheduler-india', UPDATED.landing, 0.9, 'monthly'),
     page('/tools/character-counter', UPDATED.landing, 0.8, 'monthly'),
+    // Round 2 (2026-09-26), picked from the SERP-backed keyword map.
+    page('/open-source-social-media-scheduler', UPDATED.landing2, 0.85, 'monthly'),
+    page('/social-media-scheduling-api', UPDATED.landing2, 0.85, 'monthly'),
+    page('/integrations/n8n', UPDATED.landing2, 0.8, 'monthly'),
+    page('/guides/schedule-discord-announcements', UPDATED.landing2, 0.8, 'monthly'),
+    page('/tools/x-character-counter', UPDATED.landing2, 0.75, 'monthly'),
+    page('/tools/bluesky-character-counter', UPDATED.landing2, 0.75, 'monthly'),
+    page('/tools/linkedin-character-counter', UPDATED.landing2, 0.75, 'monthly'),
+    page('/tools/thread-splitter', UPDATED.landing2, 0.75, 'monthly'),
+    ...PAIRS.map((pair) => page(`/compare/${pair}`, UPDATED.landing2, 0.7, 'monthly')),
   ];
 
   // Developer docs — these were live and indexable but missing from the

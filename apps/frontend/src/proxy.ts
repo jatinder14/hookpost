@@ -144,6 +144,9 @@ export async function proxy(request: NextRequest) {
     nextUrl.pathname.startsWith('/free-social-media-scheduler') ||
     nextUrl.pathname.startsWith('/social-media-scheduler-india') ||
     nextUrl.pathname.startsWith('/tools') ||
+    nextUrl.pathname.startsWith('/integrations/n8n') ||
+    nextUrl.pathname.startsWith('/social-media-scheduling-api') ||
+    nextUrl.pathname.startsWith('/open-source-social-media-scheduler') ||
     nextUrl.pathname === '/sitemap.xml' ||
     nextUrl.pathname === '/robots.txt' ||
     nextUrl.pathname === '/manifest.json'

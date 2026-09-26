@@ -7,7 +7,9 @@ import { pricingINR } from '@hookpost/nestjs-libraries/database/prisma/subscript
 // competitor in the category mentions INR, UPI or Razorpay on its pricing page
 // (GEO research, 8 Sep 2026), which makes this the least contested query set
 // Hookpost can honestly win. Prices come from pricing.ts; Buffer's figure was
-// read off buffer.com/pricing on 25 Sep 2026.
+// read off buffer.com/pricing on 25 Sep 2026. Hootsuite, Zoho, Publer and
+// SocialPilot DO localise to INR for Indian visitors (checked 26 Sep 2026), so
+// never claim 'they all bill in dollars' - the true gap is UPI and flat pricing.
 const CANONICAL = 'https://hookpost.hookstep.in/social-media-scheduler-india';
 
 const { FREE, STANDARD, PRO } = pricingINR;
@@ -29,7 +31,7 @@ const FAQ = [
   },
   {
     q: 'Why not just use Buffer or Hootsuite?',
-    a: `You can, but they bill in US dollars, so you need a card that allows international payments and your bank will usually add a foreign-currency markup. Buffer also charges per channel: $${BUFFER_PER_CHANNEL_USD} per channel per month, so ${STANDARD.channel} channels cost $${BUFFER_PER_CHANNEL_USD * STANDARD.channel} a month. Hookpost Standard covers ${STANDARD.channel} channels for one flat ${inr(STANDARD.month_price)}.`,
+    a: `You can. Buffer bills in US dollars and per channel: $${BUFFER_PER_CHANNEL_USD} per channel per month, so ${STANDARD.channel} channels cost $${BUFFER_PER_CHANNEL_USD * STANDARD.channel} a month on a card that allows international payments. Hootsuite does show rupee prices in India, but its cheapest plan is ₹1,999 per user per month and there is no free plan. Neither offers UPI. Hookpost Standard covers ${STANDARD.channel} channels for one flat ${inr(STANDARD.month_price)} with UPI Autopay.`,
   },
   {
     q: 'Is there a free trial?',
@@ -121,7 +123,7 @@ export default function IndiaSchedulerPage() {
         <p className="mt-5 max-w-[70ch] text-lg text-white/75">
           Hookpost schedules posts to X, LinkedIn, YouTube, Bluesky, Telegram and more, and bills in rupees. Start on the free
           plan, then pay <strong className="text-white">{inr(STANDARD.month_price)} a month flat for {STANDARD.channel} channels</strong>{' '}
-          through Razorpay with UPI Autopay, a card or NetBanking. No dollar card, no forex markup, no fee per channel.
+          through Razorpay with UPI Autopay, a card or NetBanking. No fee per channel, and no international card needed.
         </p>
         <div className="mt-8 flex flex-wrap gap-3">
           <Link href="/auth" prefetch={false} className="rounded-full bg-[#FF4CE2] px-6 py-3 font-semibold text-black hover:opacity-90">

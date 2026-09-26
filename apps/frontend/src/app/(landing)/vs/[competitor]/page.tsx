@@ -235,7 +235,7 @@ export default async function CompetitorComparisonPage({ params }: { params: Pro
     // missing one. Re-add it once each competitor's real channel list has been
     // checked and date-stamped.
     { feature: 'Starting Price', hookpost: '✅ $0 Forever Free Tier (Standard: $15 / ₹599)', competitor: `❌ ${comp.startingPrice}` },
-    { feature: 'Global & Indian Payment Gateways', hookpost: '✅ Razorpay (UPI, Netbanking, Cards)', competitor: '❌ Foreign Credit Card Only' },
+    { feature: 'UPI Autopay (India)', hookpost: '✅ Yes, via Razorpay', competitor: '— Not listed on pricing page' },
     { feature: 'Open-Source & Self-Hostable', hookpost: '✅ 100% Open-Source & 1-Click Docker', competitor: comp.name === 'Postiz' ? '✅ Open-Source' : '❌ Proprietary SaaS Only' },
     { feature: 'Built-in AI Reels & Hooks Generator', hookpost: '✅ Multi-Model Viral Hook & Caption AI', competitor: '⚠️ Basic or Expensive Add-on' },
     { feature: 'Multi-Tenant Agency Client Workspaces', hookpost: '✅ Included with Granular Permissions', competitor: '⚠️ High Per-User Upcharge' },

@@ -5,6 +5,12 @@ import { PUBLISH_PENDING } from '@hookpost/nestjs-libraries/integrations/social/
 // working, which is why this is not in PUBLISH_PENDING (that map also badges
 // the composer, and would warn users whose channel publishes fine). Delete it
 // the day the Meta app goes Live.
+// Medium stopped issuing integration tokens on 1 January 2025 (help.medium.com
+// "API/Importing"), so only an account that already holds an older token can
+// connect. Not a platform approval we are waiting on - it may never lift.
+const MEDIUM_PENDING =
+  'Medium stopped issuing new API integration tokens on 1 January 2025. Accounts that already have a token from before then can connect; new Medium accounts cannot. WordPress, Hashnode and Dev.to publish articles today.';
+
 const META_PENDING =
   'Hookpost supports this network, but connecting a new account is waiting on Meta app approval. Until that lands, new accounts cannot connect it. X, LinkedIn, YouTube, Bluesky and the other channels work today.';
 
@@ -56,7 +62,7 @@ export const CHANNEL_SPECS: Record<string, ChannelSpec> = {
   'linkedin': { limit: '3,000 characters', auth: 'Connect once with OAuth', rules: ["Carousels need 2+ images and no video", "One media item when posting video", "Comments are text only"] },
   'facebook': { pending: META_PENDING, limit: '63,206 characters', auth: 'Connect once with OAuth', rules: ["Stories require at least one media item", "Posts to a Page, not a personal profile"] },
   'threads': { pending: META_PENDING, limit: '500 characters', auth: 'Connect once with OAuth', rules: ["Text, image or video"] },
-  'x': { limit: '280 characters (25,000 on Premium)', auth: 'Connect once with OAuth', rules: ["Threads supported", "Articles accept images only"] },
+  'x': { limit: '280 characters (4,000 on a Premium account)', auth: 'Connect once with OAuth', rules: ["Threads supported", "Articles accept images only"] },
   'bluesky': { limit: '300 characters', auth: 'Connect with your own credentials', rules: ["Up to 4 images per post", "One video per post", "Connects with an App Password, not your account password"] },
   'discord': { limit: '1,980 characters', auth: 'Connect once with OAuth', rules: ["Posts to a channel in your server", "Bot must be invited to the server"] },
   'slack': { limit: 'No practical limit', auth: 'Connect once with OAuth', rules: ["Posts to a channel your app is added to"] },
@@ -65,7 +71,7 @@ export const CHANNEL_SPECS: Record<string, ChannelSpec> = {
   'nostr': { limit: 'No practical limit', auth: 'Connect with your own credentials', rules: ["Connects with a HEX private key"] },
   'listmonk': { limit: 'No practical limit', auth: 'Connect with your own credentials', rules: ["Sends to a mailing list, not a social feed"] },
   'wordpress': { limit: 'No practical limit', auth: 'Connect with your own credentials', rules: ["Publishes a full post, not a status update", "Connects with an application password"] },
-  'medium': { limit: 'No practical limit', auth: 'Connect with your own credentials', rules: ["Publishes a full article", "Connects with an integration token"] },
+  'medium': { pending: MEDIUM_PENDING, limit: 'No practical limit', auth: 'Connect with your own credentials', rules: ["Publishes a full article", "Connects with an integration token"] },
   'hashnode': { limit: '10,000 characters', auth: 'Connect with your own credentials', rules: ["Publishes a full article to your blog"] },
   'devto': { limit: 'No practical limit', auth: 'Connect with your own credentials', rules: ["Publishes a full article", "Connects with an API key"] },
 };

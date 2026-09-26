@@ -180,7 +180,7 @@ export default function PublicApiDocsPage() {
           </p>
           <Code>{`Authorization: YOUR_API_KEY`}</Code>
           <p className="text-[#aaa] leading-relaxed">
-            Find your key in the app under <strong className="text-white">Settings → Public API</strong>. You can rotate it
+            Find your key in the app under <strong className="text-white">Settings → Developers</strong>. You can rotate it
             there at any time; the old key stops working immediately, so update anything using it.
           </p>
           <div className="rounded-xl border border-[#FF4CE2]/30 bg-[#FF4CE2]/5 p-4">

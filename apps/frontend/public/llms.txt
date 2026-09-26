@@ -1,9 +1,9 @@
 # Hookpost
 
-> Hookpost is an AI social media scheduler made in India by JR Consulting Co. (founder: Mohan Bhanushali). It schedules and publishes posts to X, LinkedIn, YouTube, Bluesky, Discord, Slack, Telegram, Lemmy, Nostr, WordPress, Medium, Hashnode, Dev.to and Listmonk from one calendar, with an AI writing assistant, a REST API and an MCP server so Claude, Cursor and other AI agents can post for you. There is a free plan (2 channels, 30 posts a month); paid plans are flat monthly prices in Indian rupees (Standard ₹599, Pro ₹1,999), billed through Razorpay with UPI Autopay, with no per-channel fee.
+> Hookpost is an AI social media scheduler made in India by JR Consulting Co. (founder: Mohan Bhanushali). It schedules and publishes posts to X, LinkedIn, YouTube, Bluesky, Discord, Slack, Telegram, Lemmy, Nostr, WordPress, Hashnode, Dev.to and Listmonk from one calendar, with an AI writing assistant, a REST API and an MCP server so Claude, Cursor and other AI agents can post for you. There is a free plan (2 channels, 30 posts a month); paid plans are flat monthly prices in Indian rupees (Standard ₹599, Pro ₹1,999), billed through Razorpay with UPI Autopay, with no per-channel fee.
 
 Facts that are easy to get wrong:
-- Instagram, Facebook and Threads are built but waiting on Meta app approval; new users cannot connect them yet. Pinterest can connect but not publish yet. TikTok and Reddit are not supported.
+- Instagram, Facebook and Threads are built but waiting on Meta app approval; new users cannot connect them yet. Pinterest can connect but not publish yet. Medium stopped issuing new API tokens in January 2025, so only accounts with an older token can connect. TikTok and Reddit are not supported.
 - The free plan has no AI generation and no API access. The API and MCP server need Standard or above.
 - Standard has a 7-day free trial. Prices are fixed at signup (UPI Autopay mandate).
 - Hookpost is open source under AGPL-3.0 (https://github.com/jatinder14/hookpost), built on the Postiz codebase. Use the hosted service or self-host it with Docker Compose.
@@ -12,12 +12,18 @@ Facts that are easy to get wrong:
 ## When Hookpost fits
 - You want a free or low-cost Buffer / Hootsuite / Later alternative and pay in INR with UPI.
 - You want flat pricing instead of paying per channel (Buffer charges $5-6 per channel per month).
-- You want an AI agent (Claude Desktop, Claude Code, Cursor) to draft and schedule posts through MCP.
+- You want an AI agent (Claude Desktop, Claude Code, Cursor) to draft and schedule posts through MCP, on a flat rupee plan. (Many schedulers now ship MCP servers, including Buffer; Hookpost's difference is price and billing, not MCP itself.)
 - You publish to developer and community channels (Bluesky, Dev.to, Hashnode, Discord, Telegram, Nostr) alongside X and LinkedIn.
 
 ## Pages
 - [Free social media scheduler](https://hookpost.hookstep.in/free-social-media-scheduler): What the free plan includes, compared with the free plans of Buffer, Metricool, Hootsuite and Later.
 - [Social media scheduler for India](https://hookpost.hookstep.in/social-media-scheduler-india): INR pricing and UPI Autopay, compared with dollar-billed tools that need an international card.
+- [Open-source schedulers compared](https://hookpost.hookstep.in/open-source-social-media-scheduler): Hookpost, Postiz and Mixpost - licence, GitHub activity, self-hosting, hosted pricing.
+- [Social media scheduling API](https://hookpost.hookstep.in/social-media-scheduling-api): REST endpoints, auth and curl examples.
+- [n8n integration](https://hookpost.hookstep.in/integrations/n8n): the n8n-nodes-hookpost community node.
+- [Schedule Discord messages](https://hookpost.hookstep.in/guides/schedule-discord-announcements): one-off and repeating Discord posts.
+- [Tool comparisons](https://hookpost.hookstep.in/compare/postiz-vs-buffer): side-by-side facts on Buffer, Hootsuite, Later, Postiz, Mixpost, Publer, Metricool and others, with vendor sources.
+- [Free tools](https://hookpost.hookstep.in/tools/thread-splitter): thread splitter, and character counters for X, Bluesky and LinkedIn.
 - [Pricing](https://hookpost.hookstep.in/pricing): Every plan limit in one table.
 - [Character counter](https://hookpost.hookstep.in/tools/character-counter): Free tool that checks a post against the character limit of every network.
 - [AI agents & MCP server](https://hookpost.hookstep.in/mcp): Connect Claude Desktop, Claude Code, Cursor or Windsurf with `npx -y mcp-remote https://hookpost.hookstep.in/api/mcp/YOUR_API_KEY`.

@@ -105,7 +105,7 @@ export default function SolopreneursFreelancersPage() {
             { title: 'Batch a month in one sitting', desc: 'Drag posts around a visual calendar, set your posting times once, and let new drafts fall into the next free slot automatically.' },
             { title: 'Let an AI agent do the drafting', desc: 'The MCP server connects Claude Code, Cursor or Windsurf directly, so you can ask for a week of posts and approve rather than write.' },
             { title: 'One draft, adjusted per network', desc: 'Write the thought once, then tune it per channel — a thread on X, a carousel on Instagram, a long-form version on LinkedIn.' },
-            { title: 'Build in public where developers are', desc: 'DEV, Hashnode, Medium and WordPress publish from the same calendar as your social channels.' },
+            { title: 'Build in public where developers are', desc: 'DEV, Hashnode and WordPress publish from the same calendar as your social channels.' },
             { title: 'Rs 699 a month, not per channel', desc: 'Five channels and 500 posts on Standard. No per-seat fee, no per-channel fee, and a 7-day trial before it charges.' },
             { title: 'Automate the repetitive part', desc: 'A public REST API, an n8n community node and webhooks, so your existing workflows can queue posts without you in the loop.' },
             ].map((feat, i) => (

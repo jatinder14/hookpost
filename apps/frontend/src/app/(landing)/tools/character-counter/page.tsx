@@ -12,7 +12,7 @@ const CANONICAL = 'https://hookpost.hookstep.in/tools/character-counter';
 const FAQ = [
   {
     q: 'What is the character limit on X (Twitter)?',
-    a: '280 characters for a standard account and 25,000 on X Premium. X counts every link as 23 characters and every emoji as 2. Chinese, Japanese and Korean characters also count as 2; Hindi counts as 1 per character.',
+    a: '280 characters for a standard account and 25,000 on X Premium (Hookpost schedules Premium posts up to 4,000). X counts every link as 23 characters and every emoji as 2. Chinese, Japanese and Korean characters also count as 2; Hindi counts as 1 per character.',
   },
   {
     q: 'What is the LinkedIn post character limit?',

@@ -10,7 +10,6 @@ const { STANDARD: STD_USD, PRO: PRO_USD } = pricingUSD;
 const inr = (n: number) => n.toLocaleString('en-IN');
 // One sentence on Hookpost's sold plans, read from pricing.ts so it cannot drift.
 const HOOKPOST_PLANS = `Hookpost's free plan covers ${FREE.channel} channels and ${FREE.posts_per_month} posts a month (no AI or API). Standard is ₹${inr(STD_INR.month_price)} or $${STD_USD.month_price} a month for ${STD_INR.channel} channels and ${STD_INR.posts_per_month} posts, with AI, API and MCP. Pro is ₹${inr(PRO_INR.month_price)} or $${PRO_USD.month_price} a month for ${PRO_INR.channel} channels, ${inr(PRO_INR.posts_per_month)} posts and up to ${PRO_INR.team_member_limit} team members.`;
-const HOOKPOST_NETWORKS = `Hookpost publishes to ${PUBLISHABLE_CHANNEL_COUNT} networks for a new account today; Instagram, Facebook and Threads are awaiting Meta approval and Pinterest publishing is not available yet.`;
 
 // Planoly is not in compare/competitor-facts.ts. These figures were read off
 // https://www.planoly.com/pricing on the date below; re-check before changing.

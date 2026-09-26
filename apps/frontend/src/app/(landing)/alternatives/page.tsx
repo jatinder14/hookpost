@@ -680,7 +680,7 @@ export default function AlternativesHubPage() {
               and public API documentation, and they are dated.
             */}
             Every competitor figure on these pages is taken from that
-            competitor's own public pricing page or public API documentation,
+            competitor&apos;s own public pricing page or public API documentation,
             and is dated where it appears so you can check it against the
             source. Where a competitor prices per channel or per seat, we say
             so and state the billing basis, because monthly and annual rates

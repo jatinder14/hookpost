@@ -3,12 +3,47 @@ import Link from "next/link";
 import { Metadata } from "next";
 import { SectionFaq } from "../../SectionFaq";
 import { IndiaCostNote } from "../IndiaCostNote";
-import { CHANNEL_COUNT } from "../../channels/channel-count";
+import { PUBLISHABLE_CHANNEL_COUNT } from "../../channels/channel-count";
+import { pricingINR, pricingUSD } from "@hookpost/nestjs-libraries/database/prisma/subscriptions/pricing";
+
+const FREE = pricingINR.FREE;
+const STD_USD = pricingUSD.STANDARD;
+const STD_INR = pricingINR.STANDARD;
+const PRO_USD = pricingUSD.PRO;
+const PRO_INR = pricingINR.PRO;
+const inr = (n: number) => `₹${n.toLocaleString("en-IN")}`;
+const usd = (n: number) => `$${n.toLocaleString("en-US")}`;
+
+// Postiz hosted pricing, checked 26 Sep 2026 at postiz.com/pricing: no free
+// hosted plan (7-day trial); Standard $29/mo or $23/mo billed yearly for 5
+// channels; Team $39/mo or $31/mo billed yearly, adds unlimited team members.
+// Every plan includes its hosted MCP server, CLI and public API. The free
+// route is self-hosting the AGPL-3.0 code (github.com/gitroomhq/postiz-app,
+// ~36k stars). Hookpost is built on that code. Other Postiz tiers are not
+// quoted here because they were not verified.
+const POSTIZ_STD_MONTHLY = 29;
+const POSTIZ_STD_YEARLY = 23;
+const POSTIZ_TEAM_MONTHLY = 39;
+const POSTIZ_TEAM_YEARLY = 31;
+// Hootsuite Standard, $99/user/mo billed annually (hootsuite.com/plans, same day).
+const HOOTSUITE_STD = 99;
+const MONTHS = 36;
+const STD_SAVE_MONTHLY = POSTIZ_STD_MONTHLY - STD_USD.month_price;
+const STD_SAVE_YEARLY = POSTIZ_STD_YEARLY - STD_USD.month_price;
+const STD_SAVE_MONTHLY_PCT = Math.round((STD_SAVE_MONTHLY / POSTIZ_STD_MONTHLY) * 100);
+const STD_SAVE_YEARLY_PCT = Math.round((STD_SAVE_YEARLY / POSTIZ_STD_YEARLY) * 100);
+const TCO_HOOKPOST_STD = STD_USD.month_price * MONTHS;
+const TCO_POSTIZ_STD_MONTHLY = POSTIZ_STD_MONTHLY * MONTHS;
+const TCO_POSTIZ_STD_YEARLY = POSTIZ_STD_YEARLY * MONTHS;
+const TCO_HOOKPOST_PRO = PRO_USD.month_price * MONTHS;
+const TCO_POSTIZ_TEAM_MONTHLY = POSTIZ_TEAM_MONTHLY * MONTHS;
+const TCO_POSTIZ_TEAM_YEARLY = POSTIZ_TEAM_YEARLY * MONTHS;
+const TCO_HOOTSUITE_STD = HOOTSUITE_STD * MONTHS;
 
 export const metadata: Metadata = {
   title: "Hookpost vs Postiz (2026): Open-Source Alternative",
   description:
-    `Compare Hookpost and Postiz: ${CHANNEL_COUNT} social channels, Razorpay UPI and card billing, and a native MCP server for Claude and Cursor.`,
+    `Compare Hookpost and Postiz: Hookpost is built on Postiz and adds rupee billing (Razorpay UPI and cards) and a hosted free plan. Prices checked 26 September 2026.`,
   keywords: [
     "postiz competitor",
     "postiz competitors",
@@ -27,7 +62,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Hookpost vs Postiz (2026): Open-Source Alternative",
     description:
-      `Compare Hookpost vs Postiz. ${CHANNEL_COUNT} social channels, Razorpay UPI & Cards billing, native MCP server, 3-year TCO analysis, and direct engineering support.`,
+      `Compare Hookpost vs Postiz. Publishing to ${PUBLISHABLE_CHANNEL_COUNT} networks, Razorpay UPI & card billing, a hosted free plan, and a 3-year cost comparison.`,
     url: "https://hookpost.hookstep.in/alternatives/postiz",
     siteName: "Hookpost",
     images: [
@@ -44,28 +79,28 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Postiz Alternative (2026): Open-Source Hookpost vs Postiz",
-    description: "Compare Hookpost vs Postiz. 18 social networks, MCP server for AI agents, and UPI/Razorpay billing.",
+    description: `Compare Hookpost vs Postiz. Publishing to ${PUBLISHABLE_CHANNEL_COUNT} networks, a hosted free plan, and UPI/Razorpay billing.`,
     images: ["https://hookpost.hookstep.in/og-image.png"],
   },
 };
 
 export default function PostizAlternativePage() {
   const comparisonData = [
-    { feature: "Supported Platforms", hookpost: "18 Networks (Instagram, Pinterest, YouTube, Meta, X, Threads, Bluesky, Discord, Telegram...)", postiz: "18 Networks", winner: "Tie" },
-    { feature: "Global & Indian Payment Gateways", hookpost: "✅ Razorpay (INR, UPI, Cards, NetBanking)", postiz: "❌ US/EU Cards Only (No UPI/RuPay)", winner: "Hookpost" },
-    { feature: "Self-Hostable with 1-Click Setup", hookpost: "✅ Docker & Cloud Deployments", postiz: "✅ Docker & Cloud Deployments", winner: "Tie" },
+    { feature: "Supported Platforms", hookpost: `${PUBLISHABLE_CHANNEL_COUNT} publishing today (X, LinkedIn, YouTube, Bluesky, Discord, Telegram...); Instagram, Facebook & Threads await Meta approval`, postiz: "30 listed, incl. Instagram, Facebook, TikTok, Reddit, Pinterest", winner: "Postiz" },
+    { feature: "Global & Indian Payment Gateways", hookpost: "✅ Razorpay (INR, UPI, Cards, NetBanking)", postiz: "❌ USD pricing; no INR or UPI listed", winner: "Hookpost" },
+    { feature: "Open Source & Self-Hostable", hookpost: "✅ AGPL-3.0, built on Postiz", postiz: "✅ AGPL-3.0, ~36k GitHub stars", winner: "Tie" },
     // This row claimed Postiz was "Web AI Copilot Only". That is false and
     // trivially disproven: Postiz ships an MCP server and an agents CLI
     // (github.com/gitroomhq/postiz-agent, 450 stars, not archived, "connect it
     // to Claude / OpenClaw / etc, to schedule social media posts"), verified
-    // against the GitHub API on 2026-09-08. Publishing a checkable falsehood
+    // against the GitHub API on 2026-09-08, and postiz.com/pricing (26 Sep 2026)
+    // says every plan includes the hosted MCP server. Publishing a checkable falsehood
     // about the one competitor most likely to be fact-checked alongside us
     // discredits every other claim on the page.
-    { feature: "AI Agents & MCP Server Integration", hookpost: "✅ MCP server + CLI (npx hookpost)", postiz: "✅ MCP server + agents CLI", winner: "Tie" },
+    { feature: "AI Agents & MCP Server Integration", hookpost: "✅ MCP server + CLI (npx hookpost)", postiz: "✅ Hosted MCP server + CLI on every plan", winner: "Tie" },
     { feature: "Multi-Channel Calendar & Auto-Publishing", hookpost: "✅ Visual Drag & Drop Calendar", postiz: "✅ Visual Calendar", winner: "Tie" },
-    { feature: "Direct Enterprise & Priority Support", hookpost: "✅ Support via email & chat", postiz: "⚠️ Community Discord Only", winner: "Hookpost" },
-    { feature: "Custom Team Workspaces & Agency Roles", hookpost: "✅ Unlimited Workspaces & Granular Roles", postiz: "✅ Workspaces", winner: "Hookpost" },
-    { feature: "Free Tier Available", hookpost: "✅ $0 Forever Free Tier", postiz: "✅ Free Tier", winner: "Tie" },
+    { feature: "Team Members", hookpost: `On Pro, ${usd(PRO_USD.month_price)}/mo (${inr(PRO_INR.month_price)})`, postiz: `Unlimited on Team, ${usd(POSTIZ_TEAM_MONTHLY)}/mo or ${usd(POSTIZ_TEAM_YEARLY)}/mo billed yearly`, winner: "Postiz" },
+    { feature: "Hosted Free Plan", hookpost: `✅ ${FREE.channel} channels, ${FREE.posts_per_month} posts/month, no AI`, postiz: "❌ None on the hosted service (7-day trial); self-hosting is free", winner: "Hookpost" },
   ];
 
   const softwareSchema = {
@@ -76,7 +111,7 @@ export default function PostizAlternativePage() {
     operatingSystem: "Web, Cloud, Self-Hosted Docker",
     url: "https://hookpost.hookstep.in/alternatives/postiz",
     description:
-      "Open-source social media management platform and Postiz alternative supporting 18 channels, native Anthropic MCP server, and Razorpay billing.",
+      `Open-source social media scheduler built on Postiz, publishing to ${PUBLISHABLE_CHANNEL_COUNT} networks, with an MCP server and Razorpay billing in INR.`,
     isSimilarTo: {
       "@type": "SoftwareApplication",
       name: "Postiz",
@@ -93,24 +128,11 @@ export default function PostizAlternativePage() {
       },
     },
     offers: [
-      {
-        "@type": "Offer",
-        price: "0",
-        priceCurrency: "USD",
-        name: "Free Community Tier",
-      },
-      {
-        "@type": "Offer",
-        price: "9",
-        priceCurrency: "USD",
-        name: "Pro Tier",
-      },
-      {
-        "@type": "Offer",
-        price: "699",
-        priceCurrency: "INR",
-        name: "India Pro Tier (UPI)",
-      },
+      { "@type": "Offer", price: "0", priceCurrency: "USD", name: "Free" },
+      { "@type": "Offer", price: String(STD_USD.month_price), priceCurrency: "USD", name: "Standard" },
+      { "@type": "Offer", price: String(STD_INR.month_price), priceCurrency: "INR", name: "Standard (India, UPI)" },
+      { "@type": "Offer", price: String(PRO_USD.month_price), priceCurrency: "USD", name: "Pro" },
+      { "@type": "Offer", price: String(PRO_INR.month_price), priceCurrency: "INR", name: "Pro (India, UPI)" },
     ],
   };
 
@@ -148,15 +170,15 @@ export default function PostizAlternativePage() {
         name: "What makes Hookpost the best open-source alternative to Postiz?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "Hookpost is an open-source alternative to Postiz. It provides self-hosted and cloud social media scheduling across 18 networks, with Indian payment methods (UPI, Razorpay), an MCP server for Claude and other AI agents, and Temporal.io durable workflows that replay a publish from its last committed step instead of dropping it.",
+          text: `Hookpost is built on Postiz's open-source (AGPL-3.0) code, so scheduling works much the same way and both ship an MCP server for Claude and other AI agents. The differences are billing and the entry price: Hookpost bills in INR through Razorpay (UPI, NetBanking, Indian cards), has a hosted free plan (${FREE.channel} channels, ${FREE.posts_per_month} posts a month), and Standard is ${inr(STD_INR.month_price)} ($${STD_USD.month_price}) a month for ${STD_USD.channel} channels. Postiz's hosted service has no free plan (7-day trial), and its Standard plan is $${POSTIZ_STD_MONTHLY}/month, or $${POSTIZ_STD_YEARLY}/month billed yearly, for 5 channels. Hookpost publishes to ${PUBLISHABLE_CHANNEL_COUNT} networks today; Postiz lists more, including Instagram, Facebook and TikTok.`,
         },
       },
       {
         "@type": "Question",
-        name: "How does Hookpost pricing compare to Postiz ($29-$99/mo) and Buffer?",
+        name: "How does Hookpost pricing compare to Postiz and Buffer?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "Both Hookpost and Postiz offer generous $0 free tiers. However, on cloud plans, Postiz charges $29/mo (Starter), $39/mo (Growth), $49/mo (Pro), and $99/mo (Enterprise) in USD only. Hookpost Pro provides unlimited channels, AI copilot, and MCP tools for just $15/mo (₹599/mo with native UPI), saving users up to 80% with zero per-channel markup fees.",
+          text: `Postiz's hosted service has no free plan; Standard is $${POSTIZ_STD_MONTHLY}/month ($${POSTIZ_STD_YEARLY} billed yearly) for 5 channels and Team is $${POSTIZ_TEAM_MONTHLY}/month ($${POSTIZ_TEAM_YEARLY} billed yearly) with unlimited team members, priced in USD. Hookpost has a free plan (${FREE.channel} channels), Standard at $${STD_USD.month_price}/month (${inr(STD_INR.month_price)} with UPI) for ${STD_USD.channel} channels with AI and API access, and Pro at $${PRO_USD.month_price}/month (${inr(PRO_INR.month_price)}) for ${PRO_USD.channel} channels with team members. Buffer charges $5 per channel per month billed yearly ($6 month-to-month) and has a free plan with 3 channels. Competitor prices checked 26 September 2026.`,
         },
       },
       {
@@ -164,7 +186,7 @@ export default function PostizAlternativePage() {
         name: "Can I self-host Hookpost with Docker for free?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "Yes. Hookpost is licensed under AGPL-3.0 and self-hosts with docker compose up -d to manage all your social channels on your own server with full data ownership.",
+          text: "Yes. Hookpost is licensed under AGPL-3.0 and self-hosts with docker compose up -d to manage all your social channels on your own server with full data ownership. Postiz, which Hookpost is built on, is AGPL-3.0 too and self-hosts the same way.",
         },
       },
       {
@@ -172,7 +194,7 @@ export default function PostizAlternativePage() {
         name: "How do I migrate my scheduled posts and queues from Postiz to Hookpost?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "Migration is straightforward: (1) Export your scheduled post queue and media metadata CSV from Postiz or Buffer, (2) Re-authorize your social channels in Hookpost via official OAuth 2.0 with zero campaign downtime, and (3) Import your CSV calendar or configure your AI agent via npx hookpost mcp.",
+          text: "Migration takes three steps: (1) Re-connect your channels in Hookpost - OAuth for most networks, your own credentials for a few such as Bluesky, (2) recreate your scheduled queue in the Hookpost calendar or push it through the public API on Standard and Pro, and (3) point your AI agent at Hookpost via npx hookpost mcp.",
         },
       },
       {
@@ -180,7 +202,7 @@ export default function PostizAlternativePage() {
         name: "Does Hookpost support native Model Context Protocol (MCP) for Claude Desktop?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "Yes. Hookpost features an official, production-ready MCP server. Claude Desktop, Cursor AI, and Cline can inspect content queues, draft platform-compliant copy, and schedule posts autonomously through standardized JSON-RPC endpoints.",
+          text: "Yes. Hookpost features an official, production-ready MCP server. Claude Desktop, Cursor AI, and Cline can inspect content queues, draft platform-compliant copy, and schedule posts autonomously through standardized JSON-RPC endpoints. Postiz also includes a hosted MCP server on every plan.",
         },
       },
       {
@@ -188,7 +210,7 @@ export default function PostizAlternativePage() {
         name: "Why do international and Indian creators prefer Hookpost over Postiz for billing?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "Postiz exclusively uses USD credit card billing, which requires international cards and incurs 3.5% foreign transaction fees. Hookpost integrates Razorpay for instant domestic UPI, RuPay, and NetBanking payments at regional pricing (₹599/mo), plus Indian debit and credit cards.",
+          text: `Postiz prices its hosted plans in USD and lists no INR or UPI option, so Indian buyers pay with an internationally enabled card. Hookpost integrates Razorpay for domestic UPI, RuPay, and NetBanking payments at regional pricing (${inr(STD_INR.month_price)}/mo), plus Indian debit and credit cards.`,
         },
       },
       {
@@ -196,7 +218,7 @@ export default function PostizAlternativePage() {
         name: "How does Hookpost compare to other self-hosted alternatives like Mixpost?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "Mixpost is built on PHP/Laravel and requires paid proprietary commercial licenses ($29 to $149) for team and agency features. Hookpost is 100% open-source under AGPLv3 on a modern TypeScript, Next.js, and Node.js microservices stack with built-in MCP agent capabilities.",
+          text: "Mixpost Lite is free and MIT-licensed but supports only Facebook Pages, X and Mastodon; Mixpost Pro is a $299 one-time licence per domain (Enterprise $1,199) and ships an MCP server. Hookpost is open source under AGPL-3.0 on a TypeScript, Next.js and Node.js stack, with its own MCP server. Mixpost pricing checked 26 September 2026 at mixpost.app/pricing.",
         },
       },
       {
@@ -204,7 +226,7 @@ export default function PostizAlternativePage() {
         name: "What is the 3-year Total Cost of Ownership (TCO) difference between Hookpost and Postiz?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "Over 3 years, a creator on Postiz Pro ($49/mo) spends $1,764 plus foreign transaction fees. On Hookpost Standard ($15/mo), the 3-year cost is just $324, representing a direct saving of $1,440. For agencies on Postiz Enterprise ($99/mo vs Hookpost $29/mo), the 3-year savings exceed $2,500.",
+          text: `For 5 channels over 36 months, Postiz Standard costs ${usd(TCO_POSTIZ_STD_MONTHLY)} month-to-month or ${usd(TCO_POSTIZ_STD_YEARLY)} billed yearly. Hookpost Standard at $${STD_USD.month_price}/month costs ${usd(TCO_HOOKPOST_STD)}, a saving of ${usd(TCO_POSTIZ_STD_YEARLY - TCO_HOOKPOST_STD)} to ${usd(TCO_POSTIZ_STD_MONTHLY - TCO_HOOKPOST_STD)}. For teams, Hookpost Pro ($${PRO_USD.month_price}/month, ${usd(TCO_HOOKPOST_PRO)} over 36 months) costs the same as Postiz Team month-to-month; Postiz Team billed yearly (${usd(TCO_POSTIZ_TEAM_YEARLY)}) is cheaper. Self-hosting either one carries no licence fee.`,
         },
       },
     ],
@@ -294,7 +316,7 @@ export default function PostizAlternativePage() {
             <span>&bull;</span>
             <span>Updated September 2026</span>
             <span>&bull;</span>
-            <span className="text-[#FF4CE2] font-semibold">Tested on Postiz v1.x &amp; Hookpost v2.0</span>
+            <span className="text-[#FF4CE2] font-semibold">Prices checked 26 September 2026</span>
           </div>
         </div>
 
@@ -307,10 +329,10 @@ export default function PostizAlternativePage() {
             Where Hookpost, Postiz, Mixpost, Publer &amp; Hootsuite Fit in 2026
           </h2>
           <p className="text-sm sm:text-base text-white/80 leading-relaxed">
-            The social media scheduling landscape in 2026 has diverged into three models: legacy enterprise suites like <strong>Hootsuite</strong> ($99+/mo with mandatory annual lock-in), closed cloud schedulers like <strong>Publer</strong> ($12-$30/mo proprietary SaaS), and self-hosted open-source alternatives like <strong>Mixpost</strong> (PHP/Laravel with $29-$149 commercial license restrictions) and <strong>Postiz</strong> (Node.js/Prisma with $29-$99 cloud pricing).
+            The social media scheduling market in 2026 splits three ways: per-seat suites like <strong>Hootsuite</strong> ($99 per user per month billed annually), cloud schedulers like <strong>Publer</strong> (from $4 per channel per month billed yearly, with a free plan), and self-hostable tools like <strong>Mixpost</strong> (free MIT Lite edition; Pro is a $299 one-time licence) and <strong>Postiz</strong> (AGPL-3.0; hosted plans from $23/mo billed yearly). Prices checked 26 September 2026.
           </p>
           <p className="text-sm sm:text-base text-white/70 leading-relaxed">
-            <strong>Hookpost</strong> combines the best of both worlds: 100% open-source under the AGPLv3 license with zero paid feature gates, modern TypeScript/Next.js microservices, native Model Context Protocol (MCP) server integration for Claude &amp; Cursor, and localized payment rails (Razorpay UPI &amp; Cards) starting at $0 free forever and $15/mo pro.
+            <strong>Hookpost</strong> is built on Postiz's AGPL-3.0 code. It adds rupee billing through Razorpay (UPI &amp; cards), a hosted free plan ({FREE.channel} channels, {FREE.posts_per_month} posts a month), and paid plans from {inr(STD_INR.month_price)} / ${STD_USD.month_price} a month. Like Postiz, it ships an MCP server for Claude &amp; Cursor.
           </p>
         </section>
 
@@ -320,10 +342,10 @@ export default function PostizAlternativePage() {
             What is the Best Open-Source Alternative to Postiz?
           </h2>
           <p className="text-[#d1d1d1] text-base sm:text-lg leading-relaxed">
-            Hookpost is the leading open-source alternative to Postiz for multi-channel social media scheduling. Built on an AGPL-licensed microservices architecture, Hookpost supports {CHANNEL_COUNT} social networks, localized Razorpay UPI and card billing, dedicated priority support, and native AI agents with Model Context Protocol (MCP) server support.
+            Hookpost is built on Postiz's open-source (AGPL-3.0) code, so the two share their scheduling engine and both ship an MCP server. Hookpost adds Razorpay UPI and card billing in rupees and a hosted free plan, and publishes to {PUBLISHABLE_CHANNEL_COUNT} networks today.
           </p>
           <p className="text-sm text-white/50 pt-1">
-            Unlike tools with rigid Western payment barriers, Hookpost enables creators worldwide to schedule posts to Instagram, Facebook, YouTube, LinkedIn, X, Threads, and Pinterest with zero monthly per-channel penalties.
+            Hookpost publishes to X, LinkedIn, YouTube, Bluesky, Discord, Slack, Telegram, WordPress, Hashnode, Dev.to, Lemmy, Nostr and Listmonk. Instagram, Facebook and Threads are waiting on Meta approval, so Postiz is the better fit today if those are your main channels.
           </p>
         </section>
 
@@ -363,31 +385,31 @@ export default function PostizAlternativePage() {
         {/* Key Reasons Hookpost Wins */}
         <section className="space-y-6">
           <h2 className="text-2xl sm:text-3xl font-bold text-white">
-            Top 4 Reasons Users Switch from Postiz to Hookpost
+            Where Hookpost Differs from Postiz
           </h2>
           <div className="grid sm:grid-cols-2 gap-6">
             <div className="bg-[#141414] border border-[#262626] rounded-xl p-6 space-y-3">
               <h3 className="text-lg font-bold text-[#FF4CE2]">1. Global &amp; Indian Payment Support</h3>
               <p className="text-sm text-[#bbb] leading-relaxed">
-                Postiz is limited to rigid USD card rails, which restricts users in India and countries without USD credit cards. Hookpost integrates <strong>Razorpay (UPI, NetBanking, Domestic &amp; International Cards)</strong> for seamless subscriptions anywhere in the world.
+                Postiz prices its hosted plans in USD and lists no INR or UPI option. Hookpost bills Indian customers in rupees through <strong>Razorpay (UPI, NetBanking, Indian cards)</strong>, and international customers in USD.
               </p>
             </div>
             <div className="bg-[#141414] border border-[#262626] rounded-xl p-6 space-y-3">
-              <h3 className="text-lg font-bold text-[#FF4CE2]">2. Native AI Agents &amp; MCP Server</h3>
+              <h3 className="text-lg font-bold text-[#FF4CE2]">2. A Hosted Free Plan</h3>
               <p className="text-sm text-[#bbb] leading-relaxed">
-                Hookpost ships with an official Model Context Protocol (MCP) server and developer CLI. AI agents in Claude Desktop, Cursor, and ChatGPT can draft, schedule, and automate social media workflows directly.
+                Postiz's hosted service has no free plan, only a 7-day trial; its free route is self-hosting. Hookpost's hosted free plan keeps {FREE.channel} channels and {FREE.posts_per_month} posts a month free. Both ship an MCP server and CLI for AI agents.
               </p>
             </div>
             <div className="bg-[#141414] border border-[#262626] rounded-xl p-6 space-y-3">
-              <h3 className="text-lg font-bold text-[#FF4CE2]">3. Ultra-Fast Cloud &amp; Self-Host Setup</h3>
+              <h3 className="text-lg font-bold text-[#FF4CE2]">3. Lower Entry Price</h3>
               <p className="text-sm text-[#bbb] leading-relaxed">
-                Hookpost schedules through Temporal.io durable workflows rather than cron jobs. If a worker crashes mid-publish, Temporal replays the workflow from its last committed step, so a post is not silently dropped and not double-published.
+                Hookpost Standard is {inr(STD_INR.month_price)} (${STD_USD.month_price}) a month for {STD_USD.channel} channels. Postiz Standard is ${POSTIZ_STD_MONTHLY} a month, or ${POSTIZ_STD_YEARLY} billed yearly, for 5 channels. At team size the gap closes: Hookpost Pro and Postiz Team are both ${PRO_USD.month_price} a month.
               </p>
             </div>
             <div className="bg-[#141414] border border-[#262626] rounded-xl p-6 space-y-3">
-              <h3 className="text-lg font-bold text-[#FF4CE2]">4. Dedicated Priority Engineering Support</h3>
+              <h3 className="text-lg font-bold text-[#FF4CE2]">4. Direct Support</h3>
               <p className="text-sm text-[#bbb] leading-relaxed">
-                Get direct email and in-dashboard support from our engineering team, with guaranteed response times under 24 hours instead of waiting on public Discord channels.
+                Get direct email and in-dashboard support from the team that runs Hookpost.
               </p>
             </div>
           </div>
@@ -400,7 +422,7 @@ export default function PostizAlternativePage() {
               Official Tier-by-Tier Pricing: Postiz vs Hookpost
             </h2>
             <p className="text-sm text-neutral-400 max-w-2xl mx-auto">
-              Postiz cloud plans range from $29 to $99/mo in USD credit card only. Here is the verified tier comparison:
+              Postiz's hosted plans are priced in USD. Standard and Team below were read from postiz.com/pricing on 26 September 2026:
             </p>
           </div>
 
@@ -416,34 +438,22 @@ export default function PostizAlternativePage() {
               </thead>
               <tbody className="divide-y divide-[#262626] text-neutral-300">
                 <tr className="hover:bg-white/[0.02]">
-                  <td className="p-4 font-semibold text-white">Free / Community</td>
-                  <td className="p-4">$0 (Basic limits, Discord support)</td>
-                  <td className="p-4 text-white bg-[#FF4CE2]/5 font-bold">$0 Free Forever (Self-hostable Docker)</td>
-                  <td className="p-4 text-emerald-400 font-semibold">100% Free AGPL</td>
+                  <td className="p-4 font-semibold text-white">Free / Trial</td>
+                  <td className="p-4">No hosted free plan (7-day trial); self-hosting the AGPL code is free</td>
+                  <td className="p-4 text-white bg-[#FF4CE2]/5 font-bold">Free: {FREE.channel} channels, {FREE.posts_per_month} posts/month (also self-hostable)</td>
+                  <td className="p-4 text-emerald-400 font-semibold">Hosted free plan</td>
                 </tr>
                 <tr className="hover:bg-white/[0.02]">
-                  <td className="p-4 font-semibold text-white">Starter Tier</td>
-                  <td className="p-4 font-mono">$29 / month (5 channels)</td>
-                  <td className="p-4 text-white bg-[#FF4CE2]/5 font-bold">$15/mo (₹599 with UPI)</td>
-                  <td className="p-4 text-emerald-400 font-semibold">Save $20/mo (69%)</td>
+                  <td className="p-4 font-semibold text-white">Standard</td>
+                  <td className="p-4 font-mono">${POSTIZ_STD_MONTHLY} / month, or ${POSTIZ_STD_YEARLY} billed yearly (5 channels)</td>
+                  <td className="p-4 text-white bg-[#FF4CE2]/5 font-bold">${STD_USD.month_price}/mo ({inr(STD_INR.month_price)} with UPI), {STD_USD.channel} channels</td>
+                  <td className="p-4 text-emerald-400 font-semibold">Save ${STD_SAVE_MONTHLY}/mo ({STD_SAVE_MONTHLY_PCT}%) vs monthly, ${STD_SAVE_YEARLY}/mo ({STD_SAVE_YEARLY_PCT}%) vs yearly</td>
                 </tr>
                 <tr className="hover:bg-white/[0.02]">
-                  <td className="p-4 font-semibold text-white">Growth Tier</td>
-                  <td className="p-4 font-mono">$39 / month (10 channels)</td>
-                  <td className="p-4 text-white bg-[#FF4CE2]/5 font-bold">$15/mo (Standard, 5 channels)</td>
-                  <td className="p-4 text-emerald-400 font-semibold">Save $30/mo (77%)</td>
-                </tr>
-                <tr className="hover:bg-white/[0.02]">
-                  <td className="p-4 font-semibold text-white">Pro Tier</td>
-                  <td className="p-4 font-mono">$49 / month (15 channels)</td>
-                  <td className="p-4 text-white bg-[#FF4CE2]/5 font-bold">$15/mo (MCP Server + Copilot)</td>
-                  <td className="p-4 text-emerald-400 font-semibold">Save $40/mo (82%)</td>
-                </tr>
-                <tr className="hover:bg-white/[0.02]">
-                  <td className="p-4 font-semibold text-white">Enterprise / Agency</td>
-                  <td className="p-4 font-mono">$99 / month</td>
-                  <td className="p-4 text-white bg-[#FF4CE2]/5 font-bold">$29 / mo (Unlimited Workspaces)</td>
-                  <td className="p-4 text-emerald-400 font-semibold">Save $70/mo (71%)</td>
+                  <td className="p-4 font-semibold text-white">Team</td>
+                  <td className="p-4 font-mono">${POSTIZ_TEAM_MONTHLY} / month, or ${POSTIZ_TEAM_YEARLY} billed yearly (unlimited team members)</td>
+                  <td className="p-4 text-white bg-[#FF4CE2]/5 font-bold">${PRO_USD.month_price}/mo Pro ({inr(PRO_INR.month_price)} with UPI), {PRO_USD.channel} channels, team members</td>
+                  <td className="p-4 text-emerald-400 font-semibold">Same monthly price; Postiz is cheaper billed yearly</td>
                 </tr>
               </tbody>
             </table>
@@ -458,64 +468,64 @@ export default function PostizAlternativePage() {
               3-Year Total Cost of Ownership: Hookpost vs Postiz
             </h2>
             <p className="text-neutral-400 text-sm max-w-xl mx-auto">
-              How the math adds up over 36 months when factoring in subscription fees, currency conversion, and self-hosting infrastructure:
+              Subscription fees over 36 months, at the list prices above:
             </p>
           </div>
 
           <div className="grid md:grid-cols-2 gap-6 pt-2">
             <div className="bg-[#0e0e0e] border border-white/5 rounded-xl p-6 space-y-4">
               <h3 className="text-lg font-bold text-white flex items-center justify-between">
-                <span>Creator / Freelancer (Pro Plan)</span>
+                <span>Creator / Freelancer (5 Channels)</span>
                 <span className="text-xs text-neutral-400 font-normal">36-Month Horizon</span>
               </h3>
               <ul className="space-y-2 text-sm text-neutral-300">
                 <li className="flex justify-between py-1.5 border-b border-white/5">
-                  <span className="text-emerald-400 font-semibold">Hookpost Cloud Standard ($15/mo):</span>
-                  <span className="font-mono text-white font-bold">$324 total</span>
+                  <span className="text-emerald-400 font-semibold">Hookpost Cloud Standard (${STD_USD.month_price}/mo):</span>
+                  <span className="font-mono text-white font-bold">{usd(TCO_HOOKPOST_STD)} total</span>
                 </li>
                 <li className="flex justify-between py-1.5 border-b border-white/5">
-                  <span className="text-emerald-400 font-semibold">Hookpost Self-Hosted (VPS):</span>
+                  <span className="text-emerald-400 font-semibold">Hookpost or Postiz Self-Hosted (VPS):</span>
                   <span className="font-mono text-white font-bold">$0 software license</span>
                 </li>
                 <li className="flex justify-between py-1.5 border-b border-white/5 text-neutral-400">
-                  <span>Postiz Pro ($49/mo):</span>
-                  <span className="font-mono">$1,764</span>
+                  <span>Postiz Standard (${POSTIZ_STD_MONTHLY}/mo month-to-month):</span>
+                  <span className="font-mono">{usd(TCO_POSTIZ_STD_MONTHLY)}</span>
                 </li>
                 <li className="flex justify-between py-1.5 border-b border-white/5 text-neutral-400">
-                  <span>3.5% International Forex Surcharge on Postiz:</span>
-                  <span className="font-mono">+$61.74</span>
+                  <span>Postiz Standard (${POSTIZ_STD_YEARLY}/mo billed yearly):</span>
+                  <span className="font-mono">{usd(TCO_POSTIZ_STD_YEARLY)}</span>
                 </li>
               </ul>
               <div className="bg-[#FF4CE2]/10 border border-[#FF4CE2]/20 p-3 rounded-lg text-xs text-[#FF4CE2] font-semibold text-center">
-                Net 3-Year Creator Savings: $1,440.00+
+                3-Year Creator Savings: {usd(TCO_POSTIZ_STD_YEARLY - TCO_HOOKPOST_STD)} to {usd(TCO_POSTIZ_STD_MONTHLY - TCO_HOOKPOST_STD)}
               </div>
             </div>
 
             <div className="bg-[#0e0e0e] border border-white/5 rounded-xl p-6 space-y-4">
               <h3 className="text-lg font-bold text-white flex items-center justify-between">
-                <span>Digital Agency (Multi-Workspace)</span>
+                <span>Team (Multiple Members)</span>
                 <span className="text-xs text-neutral-400 font-normal">36-Month Horizon</span>
               </h3>
               <ul className="space-y-2 text-sm text-neutral-300">
                 <li className="flex justify-between py-1.5 border-b border-white/5">
-                  <span className="text-emerald-400 font-semibold">Hookpost Pro ($29/mo):</span>
-                  <span className="font-mono text-white font-bold">$1,044 total</span>
+                  <span className="text-emerald-400 font-semibold">Hookpost Pro (${PRO_USD.month_price}/mo, {PRO_USD.channel} channels):</span>
+                  <span className="font-mono text-white font-bold">{usd(TCO_HOOKPOST_PRO)} total</span>
                 </li>
                 <li className="flex justify-between py-1.5 border-b border-white/5 text-neutral-400">
-                  <span>Postiz Enterprise ($99/mo):</span>
-                  <span className="font-mono">$3,564</span>
+                  <span>Postiz Team (${POSTIZ_TEAM_MONTHLY}/mo month-to-month):</span>
+                  <span className="font-mono">{usd(TCO_POSTIZ_TEAM_MONTHLY)}</span>
                 </li>
                 <li className="flex justify-between py-1.5 border-b border-white/5 text-neutral-400">
-                  <span>Hootsuite Team ($249/mo):</span>
-                  <span className="font-mono">$8,964</span>
+                  <span>Postiz Team (${POSTIZ_TEAM_YEARLY}/mo billed yearly):</span>
+                  <span className="font-mono">{usd(TCO_POSTIZ_TEAM_YEARLY)}</span>
                 </li>
                 <li className="flex justify-between py-1.5 border-b border-white/5 text-neutral-400">
-                  <span>Forex / Currency Surcharges on Postiz:</span>
-                  <span className="font-mono">+$124.74</span>
+                  <span>Hootsuite Standard (${HOOTSUITE_STD}/user/mo, billed annually):</span>
+                  <span className="font-mono">{usd(TCO_HOOTSUITE_STD)} per user</span>
                 </li>
               </ul>
               <div className="bg-emerald-500/10 border border-emerald-500/20 p-3 rounded-lg text-xs text-emerald-400 font-semibold text-center">
-                Net 3-Year Agency Savings: $2,520 to $7,920
+                Hookpost Pro and Postiz Team cost about the same; both are far below Hootsuite
               </div>
             </div>
           </div>
@@ -538,14 +548,14 @@ export default function PostizAlternativePage() {
               <div className="w-8 h-8 rounded-full bg-[#FF4CE2] text-black font-black flex items-center justify-center text-sm">1</div>
               <h3 className="font-bold text-white text-base">Export Post Queue &amp; Assets</h3>
               <p className="text-xs sm:text-sm text-white/70 leading-relaxed">
-                Export your scheduled content from your existing database or download the scheduled calendar CSV containing media URLs, captions, timestamps, and target platform tags.
+                Copy your scheduled content out of Postiz - from its database if you self-host, or from the calendar - including media URLs, captions, timestamps and target channels.
               </p>
             </div>
             <div className="bg-[#161616] border border-white/5 rounded-xl p-5 space-y-3">
               <div className="w-8 h-8 rounded-full bg-[#FF4CE2] text-black font-black flex items-center justify-center text-sm">2</div>
               <h3 className="font-bold text-white text-base">Channel OAuth Re-linking</h3>
               <p className="text-xs sm:text-sm text-white/70 leading-relaxed">
-                Connect your social accounts via official Meta Graph API v20, Pinterest API v5, YouTube Data API v3, and LinkedIn API. Previous platform tokens disconnect without interrupting live accounts.
+                Connect your accounts in Hookpost - OAuth for X, LinkedIn, YouTube and most others, your own credentials for a few such as Bluesky. Instagram, Facebook and Threads are waiting on Meta approval.
               </p>
             </div>
             <div className="bg-[#161616] border border-white/5 rounded-xl p-5 space-y-3">
@@ -567,10 +577,10 @@ export default function PostizAlternativePage() {
         <section className="p-6 sm:p-8 rounded-2xl bg-white/[0.02] border border-white/10 space-y-2">
           <div className="flex items-center gap-2 text-xs text-green-400 font-semibold">
             <span className="w-2 h-2 rounded-full bg-green-400"></span>
-            <span>VERIFIED BENCHMARK &bull; SEPTEMBER 2026</span>
+            <span>FACTS CHECKED &bull; 26 SEPTEMBER 2026</span>
           </div>
           <p className="text-xs sm:text-sm text-white/60 leading-relaxed">
-            Evaluated by the JR Consulting Co. Engineering Team across 500 test posts on Meta Graph API v20, LinkedIn Marketing API, YouTube Data API v3, and X REST API endpoints. Both platforms were tested on standard Docker Compose setups and cloud deployments.
+            Postiz's prices and plans were read from postiz.com/pricing, and its licence and star count from the GitHub API, on 26 September 2026. Hookpost's figures come from its live pricing configuration.
           </p>
         </section>
 
@@ -580,7 +590,7 @@ export default function PostizAlternativePage() {
             Ready to upgrade your social media publishing?
           </h2>
           <p className="text-[#888] max-w-lg mx-auto text-base sm:text-lg">
-            Import your Postiz schedule and keep publishing. Get started in under 60 seconds with no credit card required.
+            Connect your channels and keep publishing. Get started in under 60 seconds with no credit card required.
           </p>
           <Link
             href="/auth"

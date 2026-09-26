@@ -57,20 +57,7 @@ export const COMPETITOR_FACTS: Record<string, CompetitorFacts> = {
     "mcp": true,
     "openSource": null,
     "inr": false,
-    "networks": [
-      "Bluesky",
-      "Facebook",
-      "Google Business Profile",
-      "Instagram",
-      "LinkedIn",
-      "Mastodon",
-      "Pinterest",
-      "Substack",
-      "Threads",
-      "TikTok",
-      "X",
-      "YouTube"
-    ],
+    "networks": ["Bluesky", "Facebook", "Google Business Profile", "Instagram", "LinkedIn", "Mastodon", "Pinterest", "Substack", "Threads", "TikTok", "X", "YouTube"],
     "sources": [
       "https://buffer.com/pricing",
       "https://buffer.com/mcp"
@@ -96,19 +83,7 @@ export const COMPETITOR_FACTS: Record<string, CompetitorFacts> = {
     "mcp": true,
     "openSource": null,
     "inr": true,
-    "networks": [
-      "Facebook",
-      "Instagram",
-      "LinkedIn",
-      "Threads",
-      "X",
-      "TikTok",
-      "Bluesky",
-      "YouTube",
-      "Pinterest",
-      "WhatsApp",
-      "Google Business Profile"
-    ],
+    "networks": ["Facebook", "Instagram", "LinkedIn", "Threads", "X", "TikTok", "Bluesky", "YouTube", "Pinterest", "WhatsApp", "Google Business Profile"],
     "sources": [
       "https://www.hootsuite.com/plans",
       "https://www.hootsuite.com/integrations/mcp",
@@ -136,16 +111,7 @@ export const COMPETITOR_FACTS: Record<string, CompetitorFacts> = {
     "mcp": null,
     "openSource": null,
     "inr": false,
-    "networks": [
-      "Instagram",
-      "Facebook",
-      "TikTok",
-      "Pinterest",
-      "LinkedIn",
-      "YouTube",
-      "Threads",
-      "Snapchat"
-    ],
+    "networks": ["Instagram", "Facebook", "TikTok", "Pinterest", "LinkedIn", "YouTube", "Threads", "Snapchat"],
     "sources": [
       "https://later.com/pricing/"
     ],
@@ -170,15 +136,7 @@ export const COMPETITOR_FACTS: Record<string, CompetitorFacts> = {
     "mcp": true,
     "openSource": null,
     "inr": false,
-    "networks": [
-      "Facebook",
-      "X",
-      "Instagram",
-      "LinkedIn",
-      "Threads",
-      "Pinterest",
-      "TikTok"
-    ],
+    "networks": ["Facebook", "X", "Instagram", "LinkedIn", "Threads", "Pinterest", "TikTok"],
     "sources": [
       "https://sproutsocial.com/pricing/",
       "https://support.sproutsocial.com/hc/en-us/articles/41236268336653-ChatGPT-Connection-Overview-and-Setup"
@@ -204,20 +162,7 @@ export const COMPETITOR_FACTS: Record<string, CompetitorFacts> = {
     "mcp": true,
     "openSource": null,
     "inr": false,
-    "networks": [
-      "Instagram",
-      "Facebook",
-      "Threads",
-      "TikTok",
-      "YouTube",
-      "Twitch",
-      "LinkedIn",
-      "Pinterest",
-      "Bluesky",
-      "Google Business Profile",
-      "Twitter/X (add-on)",
-      "Web/Blog"
-    ],
+    "networks": ["Instagram", "Facebook", "Threads", "TikTok", "YouTube", "Twitch", "LinkedIn", "Pinterest", "Bluesky", "Google Business Profile", "Twitter/X (add-on)", "Web/Blog"],
     "sources": [
       "https://metricool.com/pricing/"
     ],
@@ -242,21 +187,7 @@ export const COMPETITOR_FACTS: Record<string, CompetitorFacts> = {
     "mcp": true,
     "openSource": null,
     "inr": true,
-    "networks": [
-      "Facebook",
-      "Instagram",
-      "X",
-      "LinkedIn",
-      "Pinterest",
-      "TikTok",
-      "YouTube",
-      "Google Business Profile",
-      "Threads",
-      "Bluesky",
-      "Mastodon",
-      "Telegram",
-      "WordPress"
-    ],
+    "networks": ["Facebook", "Instagram", "X", "LinkedIn", "Pinterest", "TikTok", "YouTube", "Google Business Profile", "Threads", "Bluesky", "Mastodon", "Telegram", "WordPress"],
     "sources": [
       "https://publer.com/plans"
     ],
@@ -281,18 +212,7 @@ export const COMPETITOR_FACTS: Record<string, CompetitorFacts> = {
     "mcp": true,
     "openSource": null,
     "inr": true,
-    "networks": [
-      "Facebook",
-      "Instagram",
-      "LinkedIn",
-      "X",
-      "Threads",
-      "TikTok",
-      "Pinterest",
-      "YouTube",
-      "Google Business Profile",
-      "Bluesky"
-    ],
+    "networks": ["Facebook", "Instagram", "LinkedIn", "X", "Threads", "TikTok", "Pinterest", "YouTube", "Google Business Profile", "Bluesky"],
     "sources": [
       "https://www.socialpilot.co/plans",
       "https://www.socialpilot.co/socialpilot-pricing.md"
@@ -318,18 +238,7 @@ export const COMPETITOR_FACTS: Record<string, CompetitorFacts> = {
     "mcp": true,
     "openSource": null,
     "inr": false,
-    "networks": [
-      "Facebook",
-      "Instagram",
-      "LinkedIn",
-      "TikTok",
-      "X",
-      "YouTube",
-      "Threads",
-      "Pinterest",
-      "Bluesky",
-      "Google Business Profile"
-    ],
+    "networks": ["Facebook", "Instagram", "LinkedIn", "TikTok", "X", "YouTube", "Threads", "Pinterest", "Bluesky", "Google Business Profile"],
     "sources": [
       "https://www.agorapulse.com/pricing/"
     ],
@@ -354,22 +263,7 @@ export const COMPETITOR_FACTS: Record<string, CompetitorFacts> = {
     "mcp": true,
     "openSource": "AGPL-3.0",
     "inr": false,
-    "networks": [
-      "Facebook",
-      "Instagram",
-      "Threads",
-      "LinkedIn",
-      "Bluesky",
-      "X",
-      "TikTok",
-      "YouTube",
-      "Google Business Profile",
-      "Reddit",
-      "Telegram",
-      "Discord",
-      "Slack",
-      "Pinterest"
-    ],
+    "networks": ["Facebook", "Instagram", "Threads", "LinkedIn", "Bluesky", "X", "TikTok", "YouTube", "Google Business Profile", "Reddit", "Telegram", "Discord", "Slack", "Pinterest", "Dribbble", "Mastodon", "Whop", "Twitch", "Skool", "Kick", "Warpcast", "VK", "Lemmy", "MeWe", "Nostr", "Listmonk", "WordPress", "Medium", "Hashnode", "Dev.to"],
     "sources": [
       "https://postiz.com/pricing",
       "https://api.github.com/repos/gitroomhq/postiz-app"
@@ -395,20 +289,7 @@ export const COMPETITOR_FACTS: Record<string, CompetitorFacts> = {
     "mcp": true,
     "openSource": "MIT (Mixpost Lite only; Pro/Enterprise source is delivered but redistribution is prohibited)",
     "inr": false,
-    "networks": [
-      "Facebook Pages",
-      "Instagram",
-      "X",
-      "LinkedIn",
-      "YouTube",
-      "TikTok",
-      "Pinterest",
-      "Threads",
-      "Bluesky",
-      "Google Business Profile",
-      "Mastodon",
-      "Pixelfed"
-    ],
+    "networks": ["Facebook Pages", "Instagram", "X", "LinkedIn", "YouTube", "TikTok", "Pinterest", "Threads", "Bluesky", "Google Business Profile", "Mastodon", "Pixelfed"],
     "sources": [
       "https://mixpost.app/pricing",
       "https://api.github.com/repos/inovector/mixpost"
@@ -434,22 +315,7 @@ export const COMPETITOR_FACTS: Record<string, CompetitorFacts> = {
     "mcp": true,
     "openSource": null,
     "inr": true,
-    "networks": [
-      "Facebook",
-      "X",
-      "Instagram",
-      "LinkedIn",
-      "YouTube",
-      "Pinterest",
-      "TikTok",
-      "Mastodon",
-      "Threads",
-      "Bluesky",
-      "Snapchat",
-      "Arattai",
-      "WhatsApp Business",
-      "Telegram"
-    ],
+    "networks": ["Facebook", "X", "Instagram", "LinkedIn", "YouTube", "Pinterest", "TikTok", "Mastodon", "Threads", "Bluesky", "Snapchat", "Arattai", "WhatsApp Business", "Telegram", "Google Business Profile"],
     "sources": [
       "https://www.zoho.com/social/pricing.html",
       "https://www.zoho.com/social/mcp.html"
@@ -475,18 +341,7 @@ export const COMPETITOR_FACTS: Record<string, CompetitorFacts> = {
     "mcp": null,
     "openSource": null,
     "inr": false,
-    "networks": [
-      "Instagram",
-      "Facebook",
-      "TikTok",
-      "X",
-      "LinkedIn",
-      "Google Business Profile",
-      "YouTube",
-      "WordPress",
-      "Threads",
-      "Bluesky"
-    ],
+    "networks": ["Instagram", "Facebook", "TikTok", "X", "LinkedIn", "Google Business Profile", "YouTube", "WordPress", "Threads", "Bluesky"],
     "sources": [
       "https://www.sendible.com/pricing",
       "https://www.sendible.com/about"

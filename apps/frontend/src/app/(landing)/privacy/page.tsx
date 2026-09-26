@@ -218,12 +218,17 @@ export default function PrivacyPolicyPage() {
             </p>
           </section>
 
-          {/* 10. Your Rights */}
+          {/* 10. Your Rights (GDPR / CCPA / DPDP Act India) */}
           <section className="space-y-4">
             <h2 className="text-[24px] sm:text-[28px] font-bold text-white tracking-tight pt-4">
-              10. Your Rights (GDPR / CCPA / Global)
+              10. Your Rights (GDPR / CCPA / India DPDP Act 2023)
             </h2>
-            <p>You have the right to access, rectify, or erase personal data, object to or restrict processing, and export your content. To exercise these rights, email <a href="mailto:support@hookstep.in" className="text-[#FF4CE2] underline underline-offset-2 decoration-[#FF4CE2]/40 hover:decoration-[#FF4CE2] font-medium">support@hookstep.in</a>.</p>
+            <p>Depending on your jurisdiction, you have statutory rights concerning your personal data:</p>
+            <ul className="list-disc pl-6 space-y-1.5 text-[#ccc]">
+              <li><strong>GDPR (Europe) &amp; CCPA (California):</strong> Right to access, rectify, or erase personal data, object to or restrict processing, data portability, and non-discrimination.</li>
+              <li><strong>Digital Personal Data Protection Act, 2023 (India):</strong> As an Indian enterprise operated by JR Consulting Co., we recognize your rights as a Data Principal under the DPDP Act 2023, including the right to access summaries of personal data processed, the right to correction and erasure, the right of grievance redressal, and the right to nominate an individual in the event of death or incapacity.</li>
+            </ul>
+            <p>To exercise any of these rights, email our Data Privacy team at <a href="mailto:support@hookstep.in" className="text-[#FF4CE2] underline underline-offset-2 decoration-[#FF4CE2]/40 hover:decoration-[#FF4CE2] font-medium">support@hookstep.in</a>. Requests are addressed within statutory timelines (and no later than 30 days).</p>
           </section>
 
           {/* 11. Contact Us */}

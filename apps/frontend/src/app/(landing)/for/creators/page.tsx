@@ -128,6 +128,13 @@ export default function CreatorsLandingPage() {
             See Hookpost vs Buffer
           </Link>
         </div>
+
+        {/* Entity Facts Block for AI Citability & GEO */}
+        <div className="max-w-[860px] mx-auto mt-12 p-6 rounded-2xl bg-neutral-900/80 border border-white/10 text-left">
+          <p className="text-sm sm:text-base text-gray-300 leading-relaxed">
+            <strong className="text-white">Hookpost</strong> is an open-source (AGPLv3) multi-network social media scheduler built by <strong className="text-white">JR Consulting Co.</strong> (founded by Mohan Bhanushali). It serves as a flat-rate, modern alternative to Buffer and Hootsuite, letting creators and influencers auto-publish to X, LinkedIn, YouTube Shorts, Bluesky, Telegram, Discord, and Slack without per-channel fees.
+          </p>
+        </div>
       </section>
 
       <section className="w-full max-w-[1200px] mx-auto px-6 py-12">

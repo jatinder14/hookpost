@@ -1,198 +1,191 @@
-import React from "react";
-import Link from "next/link";
-import { Metadata } from "next";
-import { SectionFaq } from "../SectionFaq";
+import Link from 'next/link';
+import { Metadata } from 'next';
+import { SiteNav } from '../site-nav';
+import { pricingINR } from '@hookpost/nestjs-libraries/database/prisma/subscriptions/pricing';
+import { COMPETITOR_FACTS, CompetitorFacts, FACTS_CHECKED, PAIRS } from './competitor-facts';
+
+// The comparison hub. Every competitor figure is read from competitor-facts.ts
+// (vendor pricing pages, checked on FACTS_CHECKED); Hookpost's from pricing.ts.
+// This page used to hand-type its matrix and had drifted into claims like a
+// "$0 tier with AI" (Free has no AI) and Buffer "AI extra cost" (Buffer's free
+// plan includes its AI assistant). Nothing here is typed by hand any more.
+
+const CANONICAL = 'https://hookpost.hookstep.in/compare';
+const { FREE, STANDARD } = pricingINR;
+
+const price = (c: CompetitorFacts) => {
+  const p = c.cheapestPaid;
+  if (!p) return 'Not published';
+  const sym = p.currency === 'USD' ? '$' : p.currency === 'EUR' ? '€' : `${p.currency} `;
+  if (p.billing === 'one-time') return `${sym}${p.price} one-time`;
+  return `${sym}${p.price} / ${p.per.replace('/month', '').replace('month', 'mo')}${p.billing === 'annual' ? ' (annual)' : ''}`;
+};
+
+const free = (c: CompetitorFacts) =>
+  c.freePlan ? 'Yes' : c.freeTrialDays ? `${c.freeTrialDays}-day trial` : 'No';
+
+const ORDER = ['buffer', 'hootsuite', 'later', 'sprout-social', 'metricool', 'publer', 'socialpilot', 'agorapulse', 'postiz', 'mixpost', 'zoho-social', 'sendible'];
+
+const FAQ = [
+  {
+    q: 'Which social media scheduler has the best free plan?',
+    a: `It depends on your networks. Buffer's free plan gives 3 channels with 10 queued posts per channel and includes its AI assistant. Metricool's free plan allows 20 posts a month but leaves out X and LinkedIn. Hookpost's free plan gives ${FREE.channel} channels and ${FREE.posts_per_month} posts a month including X and LinkedIn, without AI. Hootsuite, Later, Sprout Social and SocialPilot have trials, not free plans.`,
+  },
+  {
+    q: 'Which schedulers are open source?',
+    a: 'Hookpost and Postiz are AGPL-3.0 and can be self-hosted. Mixpost Lite is MIT-licensed; Mixpost Pro is a paid self-hosted licence. Buffer, Hootsuite, Later, Sprout Social and the others are closed source.',
+  },
+  {
+    q: 'Which schedulers have an MCP server for AI agents?',
+    a: 'Most of them now do. Of the twelve tools checked, ten list an MCP server or AI-agent integration, including Buffer (on its free plan), Hootsuite, Postiz and Metricool. Hookpost has one too, on Standard and above.',
+  },
+  {
+    q: 'Can I pay for a social media scheduler in rupees with UPI?',
+    a: `Hootsuite, Zoho Social, Publer and SocialPilot show rupee prices to Indian visitors, but none of the twelve lists UPI. Hookpost bills in rupees with UPI Autopay: Standard is ₹${STANDARD.month_price} a month for ${STANDARD.channel} channels.`,
+  },
+];
 
 export const metadata: Metadata = {
-  title: "Compare Social Media Schedulers (2026) | Hookpost Matrix",
+  title: 'Compare Social Media Schedulers: 12 Tools, Real Prices',
   description:
-    "Compare top social media schedulers side-by-side: Hookpost vs Postiz, Buffer, Hootsuite & Later in pricing, features, AI, and open-source self-hosting.",
-  keywords: [
-    "compare social media schedulers",
-    "postiz vs buffer vs hootsuite",
-    "best social media management software",
-    "social media tool comparison 2026",
-    "hookpost vs postiz",
-  ],
-  alternates: {
-    canonical: "https://hookpost.hookstep.in/compare",
+    'Buffer, Hootsuite, Later, Sprout, Metricool, Publer, Postiz, Mixpost and more compared on price, free plan, API, MCP and open source, from vendor pages.',
+  alternates: { canonical: CANONICAL },
+  openGraph: {
+    title: 'Compare social media schedulers - 12 tools, real prices',
+    description: 'Cheapest plan, free plan, API, MCP and open source for 12 schedulers, read from each vendor page.',
+    url: CANONICAL,
+    siteName: 'Hookpost',
+    type: 'website',
+    images: [{ url: 'https://hookpost.hookstep.in/og-image.png', width: 1200, height: 630, alt: 'Social media scheduler comparison' }],
   },
 };
 
 export default function ComparePage() {
-  const tools = [
-    { name: "Hookpost", price: "Free / $29", channels: "30", ai: "✅ Included", openSource: "✅ Yes", payments: "Razorpay (UPI, Cards)", selfHost: "✅ Yes" },
-    { name: "Postiz", price: "Free / $29", channels: "30", ai: "✅ Included", openSource: "✅ Yes", payments: "Credit Cards Only", selfHost: "✅ Yes" },
-    { name: "Buffer", price: "$6 / channel", channels: "8", ai: "⚠️ Extra Cost", openSource: "❌ No", payments: "Credit Cards", selfHost: "❌ No" },
-    { name: "Hootsuite", price: "$99 / month", channels: "10", ai: "⚠️ Addon", openSource: "❌ No", payments: "Credit Cards", selfHost: "❌ No" },
-    { name: "Later", price: "$25 / month", channels: "5", ai: "⚠️ Limited", openSource: "❌ No", payments: "Credit Cards", selfHost: "❌ No" },
-  ];
-
-  const breadcrumbSchema = {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    itemListElement: [
-      { "@type": "ListItem", position: 1, name: "Home", item: "https://hookpost.hookstep.in" },
-      { "@type": "ListItem", position: 2, name: "Compare", item: "https://hookpost.hookstep.in/compare" },
-    ],
-  };
-
-  const faqSchema = {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    mainEntity: [
+  const tools = ORDER.map((k) => COMPETITOR_FACTS[k]).filter(Boolean);
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@graph': [
       {
-        "@type": "Question",
-        name: "How does Hookpost differ from Buffer and Hootsuite?",
-        acceptedAnswer: {
-          "@type": "Answer",
-          text: "Unlike Buffer which charges $6 per channel and Hootsuite which starts at $99/month, Hookpost provides unlimited multi-channel scheduling with AI copy generation, Docker self-hosting, and domestic UPI payments starting at $0.",
-        },
+        '@type': 'FAQPage',
+        mainEntity: FAQ.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
       },
       {
-        "@type": "Question",
-        name: "Is Hookpost completely open-source?",
-        acceptedAnswer: {
-          "@type": "Answer",
-          text: "Yes. Hookpost is licensed under the AGPL-3.0 license, allowing full self-hosting with Docker Compose and complete data ownership.",
-        },
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://hookpost.hookstep.in/' },
+          { '@type': 'ListItem', position: 2, name: 'Compare', item: CANONICAL },
+        ],
       },
     ],
   };
 
+  const cell = 'py-3 pe-4 align-top';
   return (
-    <div className="bg-black text-white min-h-screen font-sans selection:bg-[#FF4CE2] selection:text-white">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
-      />
+    <div className="min-h-screen bg-black text-white font-dm selection:bg-[#FF4CE2] selection:text-white">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <SiteNav />
 
-      <div className="w-full bg-[#FF4CE2] text-black text-center font-medium text-sm py-1.5 px-4 font-sans">
-        Hookpost — 2026 Social Media Management Software Comparison
-      </div>
+      <section className="mx-auto w-full max-w-[1200px] px-5 pt-16 sm:px-10">
+        <p className="text-sm font-semibold uppercase tracking-wider text-[#FF4CE2]">Checked {FACTS_CHECKED}</p>
+        <h1 className="mt-3 text-4xl font-extrabold tracking-tight font-jakarta sm:text-5xl text-balance">
+          Social media schedulers compared
+        </h1>
+        <p className="mt-4 max-w-[70ch] text-lg text-white/70">
+          Twelve schedulers and Hookpost on the things that decide the bill: the cheapest paid plan, how it is priced, whether
+          there is a free plan, and whether you get an API, an MCP server for AI agents, or the source code. Every figure was
+          read off the vendor&apos;s own pricing page, linked on each comparison.
+        </p>
+      </section>
 
-      <header className="flex justify-between items-center w-full max-w-[1440px] mx-auto h-[70px] px-6 sm:px-12">
-        <Link href="/" className="flex items-center gap-2">
-          <img alt="Hookpost" src="/brand-logo-96.webp" width="96" height="96" className="h-8 md:h-10 w-auto max-h-[38px] object-contain" />
-          <span className="text-2xl font-black tracking-tight text-white">
-            Hook<span className="text-[#FF4CE2]">post</span>
-          </span>
-        </Link>
-        <div className="flex items-center gap-4">
-          <Link
-            href="/auth/login"
-            className="text-sm font-medium text-white hover:text-[#FF4CE2] transition-colors px-4 py-2 border border-white/20 rounded-full hover:border-[#FF4CE2]"
-          >
-            Log In
-          </Link>
-          <Link
-            href="/auth"
-            className="text-sm font-medium bg-white text-black hover:bg-[#FF4CE2] hover:text-white transition-all px-5 py-2 rounded-full font-semibold"
-          >
-            Start Free for $0
-          </Link>
-        </div>
-      </header>
-
-      <main className="max-w-[1100px] mx-auto px-5 sm:px-8 pt-8 pb-24 space-y-12">
-        <nav aria-label="Breadcrumb" className="text-sm text-white/50">
-          <ol className="flex items-center space-x-2">
-            <li><Link href="/" className="hover:text-white transition-colors">Home</Link></li>
-            <li>/</li>
-            <li className="text-[#FF4CE2] font-semibold">Compare</li>
-          </ol>
-        </nav>
-
-        <div className="text-center space-y-4">
-          <div className="inline-block bg-[#FF4CE2]/10 border border-[#FF4CE2]/30 text-[#FF4CE2] text-xs font-semibold px-4 py-1.5 rounded-full uppercase tracking-wider">
-            Market Comparison Matrix
-          </div>
-          <h1 className="text-[36px] sm:text-[60px] font-black tracking-tight text-white leading-[1.15]">
-            Compare the Top Social Media Management Tools
-          </h1>
-          <p className="text-[#aaa] text-lg sm:text-xl max-w-[760px] mx-auto leading-relaxed">
-            See how Hookpost stacks up against Postiz, Buffer, Hootsuite, and Later in features, pricing, open-source freedom, and payment flexibility.
-          </p>
-        </div>
-
-        {/* Featured Snippet Definition Box (Position 0 Target) */}
-        <div className="bg-[#161616] border border-[#FF4CE2]/30 rounded-2xl p-6 max-w-[900px] mx-auto text-left shadow-[0_0_30px_rgba(255,76,226,0.1)]">
-          <p className="text-xs uppercase tracking-widest text-[#FF4CE2] font-bold mb-2">Social Scheduler Comparison Summary</p>
-          <p className="text-sm sm:text-base text-neutral-300 leading-relaxed">
-            <strong>Hookpost</strong> is an open-source alternative to Buffer, Postiz, and Hootsuite offering multi-channel social media scheduling across 18 networks, self-hosted Docker deployment, and native UPI/Razorpay payments. Unlike Buffer ($6/channel) or Hootsuite ($99/month), Hookpost provides a $0 forever free tier with included AI copy generation and team collaboration.
-          </p>
-        </div>
-
-        {/* Matrix Table */}
-        <div className="overflow-x-auto border border-[#262626] rounded-2xl bg-[#0e0e0e]">
-          <table className="w-full text-left text-sm sm:text-base border-collapse">
+      <section className="mx-auto w-full max-w-[1200px] px-5 py-10 sm:px-10">
+        <div className="-mx-5 overflow-x-auto px-5 sm:mx-0 sm:px-0">
+          <table className="w-full min-w-[900px] border-collapse text-left text-sm">
+            <caption className="sr-only">Social media schedulers compared</caption>
             <thead>
-              <tr className="border-b border-[#262626] bg-[#161616]">
-                <th className="p-4 sm:p-5 font-bold text-white">Platform</th>
-                <th className="p-4 sm:p-5 font-bold text-white">Starting Price</th>
-                <th className="p-4 sm:p-5 font-bold text-white">Channels</th>
-                <th className="p-4 sm:p-5 font-bold text-white">AI Tools</th>
-                <th className="p-4 sm:p-5 font-bold text-white">Open Source</th>
-                <th className="p-4 sm:p-5 font-bold text-white">Payment Options</th>
-                <th className="p-4 sm:p-5 font-bold text-white">Self-Hostable</th>
+              <tr className="border-b border-white/15 text-white/60">
+                {['Tool', 'Cheapest paid plan', 'Pricing model', 'Free plan', 'API', 'MCP / AI agents', 'Open source', 'Rupee prices'].map((h) => (
+                  <th key={h} scope="col" className="py-3 pe-4 font-semibold">{h}</th>
+                ))}
               </tr>
             </thead>
-            <tbody className="divide-y divide-[#262626]">
-              {tools.map((t, idx) => (
-                <tr key={idx} className={t.name === "Hookpost" ? "bg-[#FF4CE2]/5 font-semibold text-white" : "hover:bg-white/[0.02] text-[#888]"}>
-                  <td className="p-4 sm:p-5 font-bold text-white flex items-center gap-2">
-                    {t.name === "Hookpost" && <span className="text-[#FF4CE2]">★</span>}
-                    {t.name}
-                  </td>
-                  <td className="p-4 sm:p-5">{t.price}</td>
-                  <td className="p-4 sm:p-5">{t.channels}</td>
-                  <td className="p-4 sm:p-5">{t.ai}</td>
-                  <td className="p-4 sm:p-5">{t.openSource}</td>
-                  <td className="p-4 sm:p-5">{t.payments}</td>
-                  <td className="p-4 sm:p-5">{t.selfHost}</td>
+            <tbody className="text-white/80">
+              <tr className="border-b border-white/10 bg-[#FF4CE2]/[0.06]">
+                <th scope="row" className={`${cell} font-bold text-white`}>Hookpost</th>
+                <td className={cell}>₹{STANDARD.month_price} / mo</td>
+                <td className={cell}>flat tiers</td>
+                <td className={cell}>Yes</td>
+                <td className={cell}>Yes</td>
+                <td className={cell}>Yes</td>
+                <td className={cell}>AGPL-3.0</td>
+                <td className={cell}>Yes, UPI Autopay</td>
+              </tr>
+              {tools.map((c) => (
+                <tr key={c.slug} className="border-b border-white/10">
+                  <th scope="row" className={`${cell} font-bold text-white`}>
+                    {c.hasAlternativePage ? (
+                      <Link href={`/alternatives/${c.slug}`} className="hover:text-[#FF4CE2]">{c.name}</Link>
+                    ) : (
+                      c.name
+                    )}
+                  </th>
+                  <td className={cell}>{price(c)}</td>
+                  <td className={cell}>{c.pricingModel || '—'}</td>
+                  <td className={cell}>{free(c)}</td>
+                  <td className={cell}>{c.api == null ? 'Not stated' : c.api ? 'Yes' : 'No'}</td>
+                  <td className={cell}>{c.mcp == null ? 'Not stated' : c.mcp ? 'Yes' : 'No'}</td>
+                  <td className={cell}>{c.openSource ? c.openSource.split(' ')[0] : 'No'}</td>
+                  <td className={cell}>{c.inr == null ? 'Not stated' : c.inr ? 'Yes (localised)' : 'No, USD'}</td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
+        <p className="mt-4 text-sm text-white/55">
+          USD prices are the cheapest plan as listed; annual means billed yearly. Several vendors change prices and currency by
+          country. Confirm on the vendor&apos;s page before you buy.
+        </p>
+      </section>
 
-        <SectionFaq items={faqSchema.mainEntity} />
-
-        {/* CTA */}
-        <div className="bg-gradient-to-b from-[#181818] to-[#0a0a0a] border border-[#333] rounded-3xl p-8 sm:p-12 text-center space-y-5">
-          <h2 className="text-3xl sm:text-4xl font-bold text-white">
-            Choose the Smarter Social Media Tool
-          </h2>
-          <p className="text-[#888] max-w-lg mx-auto text-base">
-            Switch in minutes. The free tier needs no credit card and does not expire.
+      <section className="border-t border-white/10">
+        <div className="mx-auto w-full max-w-[1200px] px-5 py-14 sm:px-10">
+          <h2 className="text-2xl font-extrabold tracking-tight font-jakarta">Head-to-head comparisons</h2>
+          <ul className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {PAIRS.map((p) => {
+              const [a, b] = p.split('-vs-');
+              return (
+                <li key={p}>
+                  <Link
+                    href={`/compare/${p}`}
+                    className="block rounded-xl border border-white/10 px-4 py-3 font-semibold transition-colors hover:border-[#FF4CE2]/50 hover:text-[#FF4CE2]"
+                  >
+                    {COMPETITOR_FACTS[a].name} vs {COMPETITOR_FACTS[b].name}
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
+          <p className="mt-8 text-white/60">
+            Looking for a replacement rather than a matchup? See{' '}
+            <Link href="/alternatives" className="text-[#FF4CE2] underline">alternatives</Link>,{' '}
+            <Link href="/free-social-media-scheduler" className="text-[#FF4CE2] underline">free plans compared</Link> and{' '}
+            <Link href="/open-source-social-media-scheduler" className="text-[#FF4CE2] underline">open-source schedulers</Link>.
           </p>
-          <Link
-            href="/auth"
-            className="inline-block bg-white text-black hover:bg-[#FF4CE2] hover:text-white font-bold text-base px-10 py-4 rounded-full transition-all"
-          >
-            Get Started Free ($0) &rarr;
-          </Link>
         </div>
-      </main>
+      </section>
 
-      <footer className="w-full bg-[#141414] border-t border-[#262626] py-10 px-6 text-center text-xs text-[#666] space-y-2">
-        <p>&copy; 2026 JR Consulting Co. / Hookpost. All rights reserved.</p>
-        <div className="space-x-4">
-          <Link href="/privacy" className="hover:underline text-[#888]">Privacy Policy</Link>
-          <span>&bull;</span>
-          <Link href="/terms" className="hover:underline text-[#888]">Terms of Service</Link>
-          <span>&bull;</span>
-          <Link href="/about" className="hover:underline text-[#888]">About</Link>
-          <span>&bull;</span>
-          <Link href="/channels" className="hover:underline text-[#888]">Channels</Link>
-          <span>&bull;</span>
-          <Link href="/alternatives" className="hover:underline text-[#888]">Alternatives</Link>
+      <section className="border-t border-white/10 bg-white/[0.015]">
+        <div className="mx-auto w-full max-w-[1100px] px-5 py-14 sm:px-10">
+          <h2 className="text-2xl font-extrabold tracking-tight font-jakarta">Questions</h2>
+          <dl className="mt-6 flex flex-col gap-6">
+            {FAQ.map((f) => (
+              <div key={f.q}>
+                <dt className="text-lg font-bold font-jakarta">{f.q}</dt>
+                <dd className="mt-2 max-w-[70ch] text-white/70">{f.a}</dd>
+              </div>
+            ))}
+          </dl>
         </div>
-      </footer>
+      </section>
     </div>
   );
 }

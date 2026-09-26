@@ -24,6 +24,8 @@ export interface CompetitorFacts {
     billing: 'annual' | 'monthly' | 'one-time';
     /** Entry price in USD per month, only when directly comparable. */
     usdMonthly: number | null;
+    /** Channels the cheapest plan includes, when the vendor states a number. */
+    channelsIncluded: number | null;
   } | null;
   pricingModel: string | null;
   api: boolean | null;
@@ -47,7 +49,8 @@ export const COMPETITOR_FACTS: Record<string, CompetitorFacts> = {
       "currency": "USD",
       "per": "channel/month",
       "billing": "annual",
-      "usdMonthly": 5.0
+      "usdMonthly": 5.0,
+      "channelsIncluded": 1
     },
     "pricingModel": "per channel",
     "api": true,
@@ -85,7 +88,8 @@ export const COMPETITOR_FACTS: Record<string, CompetitorFacts> = {
       "currency": "USD",
       "per": "user/month",
       "billing": "annual",
-      "usdMonthly": 99.0
+      "usdMonthly": 99.0,
+      "channelsIncluded": 10
     },
     "pricingModel": "per user",
     "api": true,
@@ -124,7 +128,8 @@ export const COMPETITOR_FACTS: Record<string, CompetitorFacts> = {
       "currency": "USD",
       "per": "month",
       "billing": "annual",
-      "usdMonthly": 18.75
+      "usdMonthly": 18.75,
+      "channelsIncluded": 8
     },
     "pricingModel": "flat tiers",
     "api": null,
@@ -157,7 +162,8 @@ export const COMPETITOR_FACTS: Record<string, CompetitorFacts> = {
       "currency": "USD",
       "per": "user/month",
       "billing": "annual",
-      "usdMonthly": 79.0
+      "usdMonthly": 79.0,
+      "channelsIncluded": 5
     },
     "pricingModel": "per user",
     "api": true,
@@ -190,7 +196,8 @@ export const COMPETITOR_FACTS: Record<string, CompetitorFacts> = {
       "currency": "USD",
       "per": "month",
       "billing": "annual",
-      "usdMonthly": 20.0
+      "usdMonthly": 20.0,
+      "channelsIncluded": null
     },
     "pricingModel": "flat tiers",
     "api": true,
@@ -227,7 +234,8 @@ export const COMPETITOR_FACTS: Record<string, CompetitorFacts> = {
       "currency": "USD",
       "per": "channel/month",
       "billing": "annual",
-      "usdMonthly": 4.0
+      "usdMonthly": 4.0,
+      "channelsIncluded": 1
     },
     "pricingModel": "per channel",
     "api": true,
@@ -265,7 +273,8 @@ export const COMPETITOR_FACTS: Record<string, CompetitorFacts> = {
       "currency": "USD",
       "per": "month",
       "billing": "annual",
-      "usdMonthly": 25.5
+      "usdMonthly": 25.5,
+      "channelsIncluded": 7
     },
     "pricingModel": "flat tiers",
     "api": true,
@@ -301,7 +310,8 @@ export const COMPETITOR_FACTS: Record<string, CompetitorFacts> = {
       "currency": "USD",
       "per": "user/month",
       "billing": "annual",
-      "usdMonthly": 79.0
+      "usdMonthly": 79.0,
+      "channelsIncluded": 10
     },
     "pricingModel": "per user",
     "api": true,
@@ -336,7 +346,8 @@ export const COMPETITOR_FACTS: Record<string, CompetitorFacts> = {
       "currency": "USD",
       "per": "month",
       "billing": "annual",
-      "usdMonthly": 23.0
+      "usdMonthly": 23.0,
+      "channelsIncluded": 5
     },
     "pricingModel": "flat tiers",
     "api": true,
@@ -376,7 +387,8 @@ export const COMPETITOR_FACTS: Record<string, CompetitorFacts> = {
       "currency": "USD",
       "per": "licence (1 domain or subdomain)",
       "billing": "one-time",
-      "usdMonthly": null
+      "usdMonthly": null,
+      "channelsIncluded": null
     },
     "pricingModel": "self-hosted licence",
     "api": true,
@@ -414,7 +426,8 @@ export const COMPETITOR_FACTS: Record<string, CompetitorFacts> = {
       "currency": "USD",
       "per": "month",
       "billing": "annual",
-      "usdMonthly": 10.0
+      "usdMonthly": 10.0,
+      "channelsIncluded": 14
     },
     "pricingModel": "flat tiers",
     "api": null,
@@ -454,7 +467,8 @@ export const COMPETITOR_FACTS: Record<string, CompetitorFacts> = {
       "currency": "USD",
       "per": "month",
       "billing": "annual",
-      "usdMonthly": 30.0
+      "usdMonthly": 30.0,
+      "channelsIncluded": 6
     },
     "pricingModel": "flat tiers",
     "api": true,

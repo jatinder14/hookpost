@@ -56,7 +56,15 @@ export async function generateMetadata({
     title,
     description,
     alternates: { canonical: `${BASE}/${pair}` },
-    openGraph: { title, description, url: `${BASE}/${pair}`, siteName: 'Hookpost', type: 'article' },
+    openGraph: {
+      title,
+      description,
+      url: `${BASE}/${pair}`,
+      siteName: 'Hookpost',
+      type: 'article',
+      images: [{ url: 'https://hookpost.hookstep.in/og-image.png', width: 1200, height: 630, alt: title }],
+    },
+    twitter: { card: 'summary_large_image', title, description, images: ['https://hookpost.hookstep.in/og-image.png'] },
   };
 }
 
@@ -97,6 +105,24 @@ export default async function ComparePairPage({
     verdict.push(
       `${cheaper.name} is cheaper to start: ${priceText(cheaper)} against ${priceText(other)}.`
     );
+  }
+  // Per-channel against flat pricing: the entry price flatters the per-channel
+  // tool, so also price it at the flat plan's channel count.
+  for (const [perCh, flat] of [[A, B], [B, A]] as const) {
+    const pc = perCh.cheapestPaid;
+    const fl = flat.cheapestPaid;
+    if (
+      perCh.pricingModel === 'per channel' &&
+      pc?.usdMonthly != null &&
+      fl?.usdMonthly != null &&
+      fl.channelsIncluded &&
+      fl.channelsIncluded > 1
+    ) {
+      const total = Math.round(pc.usdMonthly * fl.channelsIncluded * 100) / 100;
+      verdict.push(
+        `At ${fl.channelsIncluded} channels the gap changes: ${perCh.name} comes to $${total} a month against ${flat.name}'s $${fl.usdMonthly}.`
+      );
+    }
   }
   if (A.freePlan && !B.freePlan) verdict.push(`${A.name} has a free plan; ${B.name} does not.`);
   if (B.freePlan && !A.freePlan) verdict.push(`${B.name} has a free plan; ${A.name} does not.`);

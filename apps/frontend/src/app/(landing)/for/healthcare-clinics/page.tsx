@@ -6,7 +6,7 @@ import { Metadata } from 'next';
 export const metadata: Metadata = {
   title: 'Social Media Management for Healthcare Clinics | Hookpost',
   description:
-    'Share patient education and build community authority across Instagram, LinkedIn, Facebook, and YouTube. Scheduling for clinics, dentists, therapists.',
+    'Share patient education across LinkedIn, YouTube and X, with Instagram and Facebook once Meta approves the app. Scheduling for clinics, dentists, therapists.',
   keywords: [
     'healthcare social media scheduler',
     'medical practice social media tool',
@@ -49,7 +49,7 @@ export default function HealthcareClinicsLandingPage() {
         name: "Is Hookpost really free to get started?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "Yes. Hookpost includes a generous $0 starter tier with no credit card required. Upgrade to Pro for unlimited accounts and advanced AI copilot tools.",
+          text: "Yes. The free plan covers 2 channels and 30 posts a month with no credit card. AI writing and the public API start on Standard (₹599 / $15 a month); Pro (₹1,999 / $39) raises that to 20 channels and 2,000 posts and adds team seats.",
         },
       },
     ],
@@ -57,11 +57,11 @@ export default function HealthcareClinicsLandingPage() {
 
   const features = [
     { title: '🩺 Patient Education & Wellness Tips', desc: 'Pre-schedule weekly preventative care guides, dental hygiene tips, and clinic announcements across all channels.' },
-    { title: '🔒 Enterprise Role & Approval Workflows', desc: 'Ensure every post is reviewed and approved by lead physicians or practice managers before going live.' },
-    { title: '📍 Clinic Hours & Practitioner Updates', desc: 'Share seasonal clinic hours, flu shot availability, and new practitioner introductions on your Facebook Page and Instagram profile.' },
-    { title: '🤖 AI Medical & Wellness Explainer Prompts', desc: 'Transform complex medical studies and clinic FAQs into clear, patient-friendly social posts and infographics.' },
-    { title: '🏥 Multi-Specialty & Branch Management', desc: 'Organize multiple specialty departments (e.g. Pediatrics, Dermatology, Orthopedics) into segregated workspaces.' },
-    { title: '📊 Patient Growth & Engagement Metrics', desc: 'Track which educational posts generate the highest patient inquiries, shares, and website booking clicks.' },
+    { title: '🔒 Drafts & Review Links', desc: 'Save posts as drafts and share a preview link so a lead physician or practice manager can review and comment before anything is scheduled.' },
+    { title: '📍 Clinic Hours & Practitioner Updates', desc: 'Share seasonal clinic hours, flu shot availability, and new practitioner introductions on LinkedIn and X, and on your Facebook Page and Instagram once Meta approves the app.' },
+    { title: '🤖 AI Medical & Wellness Explainer Prompts', desc: 'Turn clinic FAQs and study summaries into clear, patient-friendly social posts with the AI assistant (Standard and Pro).' },
+    { title: '🏥 Multi-Specialty & Branch Management', desc: 'Group each department or branch (e.g. Pediatrics, Dermatology, Orthopedics) as a customer and filter the calendar to one at a time.' },
+    { title: '📚 Blog and Social Together', desc: 'Publish a long-form article to WordPress and schedule the social posts that point to it from the same calendar.' },
   ];
 
   return (
@@ -90,7 +90,7 @@ export default function HealthcareClinicsLandingPage() {
             Log In
           </Link>
           <Link href="/auth" className="text-sm font-semibold text-black bg-white hover:bg-[#06b6d4] hover:text-black px-5 py-2 rounded-full">
-            Start Free Practice Trial
+            Start Free
           </Link>
         </div>
       </header>
@@ -112,18 +112,18 @@ export default function HealthcareClinicsLandingPage() {
         </div>
         <h1 className="text-4xl sm:text-6xl font-black tracking-tight text-white leading-tight mb-6">
           Educate Patients & Build Trust <br />
-          <span className="text-[#06b6d4]">Across All Social Networks.</span>
+          <span className="text-[#06b6d4]">Across Your Social Channels.</span>
         </h1>
         <p className="text-lg sm:text-xl text-neutral-300 max-w-[800px] mx-auto mb-10 leading-relaxed">
-          Provide valuable health guidance to your local community with zero marketing stress. Hookpost automates your clinic's patient outreach on Instagram, LinkedIn, Facebook, and YouTube.
+          Provide valuable health guidance to your local community with zero marketing stress. Hookpost schedules your clinic's patient outreach on LinkedIn, YouTube and X, with Instagram and Facebook to follow once Meta approves the app.
         </p>
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
           <Link href="/auth" className="w-full sm:w-auto px-8 py-4 bg-[#06b6d4] text-black font-bold rounded-full text-base hover:opacity-90">
-            Start Free Clinic Trial →
+            Start Free →
           </Link>
           <Link href="/alternatives/buffer" className="w-full sm:w-auto px-8 py-4 bg-white/5 border border-white/10 text-white font-bold rounded-full text-base hover:bg-white/10">
-            Compare Hookpost vs Sprout Social
+            Compare Hookpost vs Buffer
           </Link>
         </div>
       </section>

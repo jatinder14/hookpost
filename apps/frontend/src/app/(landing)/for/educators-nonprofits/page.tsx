@@ -2,7 +2,7 @@ import { SectionFaq } from "../../SectionFaq";
 import React from 'react';
 import Link from 'next/link';
 import { Metadata } from 'next';
-import { CHANNEL_COUNT } from '../../channels/channel-count';
+import { PUBLISHABLE_CHANNEL_COUNT } from '../../channels/channel-count';
 
 export const metadata: Metadata = {
   title: 'Social Media Management for Non-Profits | Hookpost',
@@ -41,7 +41,7 @@ export default function EducatorsNonprofitsPage() {
         name: "Is Hookpost free for educational projects and charities?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "Hookpost offers a permanent $0 free tier that allows educators, universities, and charities to schedule posts across social channels at zero cost.",
+          text: "Yes. The free plan does not expire: 2 channels and 30 posts a month at zero cost, no credit card. Charities that need more can self-host the AGPL-3.0 code at no licence cost.",
         },
       },
       {
@@ -49,7 +49,7 @@ export default function EducatorsNonprofitsPage() {
         name: "Is Hookpost really free to get started?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "Yes. Hookpost includes a generous $0 starter tier with no credit card required. Upgrade to Pro for unlimited accounts and advanced AI copilot tools.",
+          text: "Yes. The free plan covers 2 channels and 30 posts a month with no credit card. AI writing and the public API start on Standard (₹599 / $15 a month); Pro (₹1,999 / $39) raises that to 20 channels and 2,000 posts and adds team seats.",
         },
       },
     ],
@@ -83,10 +83,10 @@ export default function EducatorsNonprofitsPage() {
           For Non-Profits, NGOs & Educators
         </span>
         <h1 className="text-4xl sm:text-6xl font-black tracking-tight leading-[1.1] mb-6 max-w-4xl mx-auto">
-          Amplify Your Mission Without Draining Your Budget. <span className="text-[#FF4CE2]">$0 SaaS Fees.</span>
+          Amplify Your Mission Without Draining Your Budget. <span className="text-[#FF4CE2]">Start at $0.</span>
         </h1>
         <p className="text-lg sm:text-xl text-neutral-400 leading-relaxed mb-8 max-w-2xl mx-auto">
-          Share your cause across {CHANNEL_COUNT} social channels, coordinate community volunteers, and keep donors updated without paying extortionate enterprise software subscriptions.
+          Share your cause across {PUBLISHABLE_CHANNEL_COUNT} social channels, coordinate community volunteers, and keep donors updated without paying extortionate enterprise software subscriptions.
         </p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
           <Link href="/auth" className="bg-[#FF4CE2] text-black font-bold px-8 py-4 rounded-xl text-lg hover:bg-white transition-all shadow-[0_0_30px_rgba(255,76,226,0.4)]">
@@ -103,10 +103,10 @@ export default function EducatorsNonprofitsPage() {
             {[
             { title: 'A free tier that does not expire', desc: '2 channels and 30 posts a month, no credit card, no trial clock. Enough for a department or a small charity to run its whole calendar.' },
             { title: 'Self-host at no licence cost', desc: 'AGPL-3.0. Run it on a university server or a cheap VPS and pay nothing per seat or per channel, forever.' },
-            { title: 'Reach students where they already are', desc: 'Discord, Telegram, Lemmy and Bluesky alongside Instagram and YouTube — the places a campus audience actually reads.' },
+            { title: 'Reach students where they already are', desc: 'Discord, Telegram, Lemmy and Bluesky alongside X and YouTube — the places a campus audience actually reads.' },
             { title: 'Publish to a blog in the same breath', desc: 'WordPress, Hashnode and DEV are channels here, so a long-form update and its social posts go out together.' },
             { title: 'Pay in rupees', desc: 'Billing runs through Razorpay with UPI and NetBanking, so there is no foreign-card requirement or forex markup.' },
-            { title: 'Hand over without retraining', desc: 'A visual calendar that a volunteer or a student worker can pick up, and unlimited team members from the Team plan up.' },
+            { title: 'Hand over without retraining', desc: 'A visual calendar that a volunteer or a student worker can pick up, and up to 15 team members on Pro.' },
             ].map((feat, i) => (
               <div key={i} className="p-6 rounded-2xl bg-neutral-900/60 border border-white/10 hover:border-[#FF4CE2]/50 transition-all">
                 <h3 className="text-xl font-bold mb-3 text-white">{feat.title}</h3>

@@ -2,11 +2,12 @@ import { SectionFaq } from "../../SectionFaq";
 import React from 'react';
 import Link from 'next/link';
 import { Metadata } from 'next';
+import { PUBLISHABLE_CHANNEL_COUNT } from '../../channels/channel-count';
 
 export const metadata: Metadata = {
   title: 'Social Media Management for Musicians & DJs | Hookpost',
   description:
-    'Promote releases, tour dates, and behind-the-scenes clips across YouTube, Instagram, Threads, X, and Discord. For artists, bands, DJs, and labels.',
+    'Promote releases, tour dates, and behind-the-scenes clips across YouTube, X, Discord, Telegram and Bluesky. For artists, bands, DJs, and labels.',
   keywords: [
     'musician social media scheduler',
     'music marketing software',
@@ -40,7 +41,7 @@ export default function MusicArtistsLandingPage() {
         name: "How can musicians coordinate song and album releases?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "Hookpost lets artists schedule teaser clips, Spotify drop countdowns, and tour date flyers simultaneously across 18 networks.",
+          text: `Hookpost lets artists schedule teaser clips, Spotify drop countdowns, and tour date flyers simultaneously across ${PUBLISHABLE_CHANNEL_COUNT} networks, including YouTube, X, Discord and Telegram. Instagram and Threads follow once Meta approves the Hookpost app.`,
         },
       },
       {
@@ -48,7 +49,7 @@ export default function MusicArtistsLandingPage() {
         name: "Is Hookpost really free to get started?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "Yes. Hookpost includes a generous $0 starter tier with no credit card required. Upgrade to Pro for unlimited accounts and advanced AI copilot tools.",
+          text: "Yes. The free plan covers 2 channels and 30 posts a month with no credit card. AI writing and the public API start on Standard (₹599 / $15 a month); Pro (₹1,999 / $39) raises that to 20 channels and 2,000 posts and adds team seats.",
         },
       },
     ],
@@ -56,11 +57,11 @@ export default function MusicArtistsLandingPage() {
 
   const features = [
     { title: '🎵 Release Day Campaign Countdown', desc: 'Schedule your pre-save announcements, teaser snippets, music video drops, and listening party reminders months in advance.' },
-    { title: '🎥 Short-Form Music Video Distribution', desc: 'Push audio teasers and performance clips to Instagram Reels and YouTube Shorts simultaneously without watermarks or quality loss.' },
-    { title: '🎧 Tour & Live Show Announcements', desc: 'Broadcast ticket links, venue dates, and VIP pass releases to your entire fanbase across X, Facebook, and Discord channels.' },
-    { title: '🤖 AI Lyric & Story Prompts', desc: 'Generate catchy hooks, story snippets, and captivating behind-the-scenes captions that boost stream counts and playlist saves.' },
-    { title: '👥 Band & Manager Collaboration', desc: 'Collaborate with your manager, PR team, and bandmates in a shared workspace without sharing master passwords.' },
-    { title: '📊 Fanbase Growth & Stream Analytics', desc: 'Track which video teasers generate the highest comments, shares, and Spotify/Apple Music link-in-bio clicks.' },
+    { title: '🎥 Short-Form Music Video Distribution', desc: 'Push performance clips to YouTube Shorts, X and Bluesky together. Instagram Reels join once Meta approves the app.' },
+    { title: '🎧 Tour & Live Show Announcements', desc: 'Broadcast ticket links, venue dates, and VIP pass releases to your entire fanbase across X, Discord and Telegram channels.' },
+    { title: '🤖 AI Lyric & Story Prompts', desc: 'Generate hooks, story snippets and behind-the-scenes captions with the AI assistant (Standard and Pro).' },
+    { title: '👥 Band & Manager Collaboration', desc: 'Collaborate with your manager, PR team, and bandmates in a shared workspace without sharing master passwords (Pro, up to 15 team members).' },
+    { title: '🔁 Repeating Release Reminders', desc: 'Set a pre-save or ticket reminder to repeat on a daily or weekly interval in the run-up to release day.' },
   ];
 
   return (
@@ -110,11 +111,11 @@ export default function MusicArtistsLandingPage() {
           Singers • Bands • Electronic DJs • Music Producers
         </div>
         <h1 className="text-4xl sm:text-6xl font-black tracking-tight text-white leading-tight mb-6">
-          Drop Teasers on Reels, Shorts & YouTube <br />
+          Drop Teasers on Shorts, YouTube & X <br />
           <span className="text-[#a855f7]">While You Make Music.</span>
         </h1>
         <p className="text-lg sm:text-xl text-neutral-300 max-w-[800px] mx-auto mb-10 leading-relaxed">
-          Focus on your craft in the studio. Hookpost takes care of scheduling release teasers, playlist promos, and fan engagement across all 18 social platforms.
+          Focus on your craft in the studio. Hookpost takes care of scheduling release teasers, playlist promos, and fan engagement across {PUBLISHABLE_CHANNEL_COUNT} networks.
         </p>
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">

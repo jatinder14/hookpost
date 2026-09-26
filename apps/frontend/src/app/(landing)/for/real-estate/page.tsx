@@ -6,7 +6,7 @@ import { Metadata } from 'next';
 export const metadata: Metadata = {
   title: 'Social Media Automation for Real Estate Agents | Hookpost',
   description:
-    'Automatically schedule Just Listed reels, open-house tours, and multi-image property carousels. Social media scheduling for realtors and brokers.',
+    'Schedule Just Listed posts, open-house tour videos and multi-image property carousels to LinkedIn, X and YouTube. Social media scheduling for realtors and brokers.',
   keywords: [
     'social media for real estate agents',
     'realtor instagram scheduler',
@@ -41,7 +41,7 @@ export default function RealEstateLandingPage() {
         name: "Can realtors auto-post property video tours and open house flyers?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "Yes. Realtors can batch-upload video walkthroughs, carousel listing photos, and open house dates to Facebook, Instagram, and YouTube Shorts.",
+          text: "Yes. Realtors can schedule video walkthroughs to YouTube, listing photo carousels to LinkedIn, and open house dates to X. New accounts cannot connect Facebook or Instagram until Meta approves the Hookpost app.",
         },
       },
       {
@@ -49,19 +49,19 @@ export default function RealEstateLandingPage() {
         name: "Is Hookpost really free to get started?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "Yes. Hookpost includes a generous $0 starter tier with no credit card required. Upgrade to Pro for unlimited accounts and advanced AI copilot tools.",
+          text: "Yes. The free plan covers 2 channels and 30 posts a month with no credit card. AI writing and the public API start on Standard (₹599 / $15 a month); Pro (₹1,999 / $39) raises that to 20 channels and 2,000 posts and adds team seats.",
         },
       },
     ],
   };
 
   const features = [
-    { title: '🏡 "Just Listed" & "Open House" Multi-Publishing', desc: 'Promote new listings across Instagram, Facebook, LinkedIn, and X simultaneously with HD property photos and walkthrough videos.' },
-    { title: '📸 Multi-Photo Carousel Previews', desc: 'Showcase floorplans, exterior architecture, and luxury interior shots in high-engagement Instagram & LinkedIn carousels.' },
-    { title: '🎥 Vertical Video Tours for Reels & Shorts', desc: 'Auto-publish walkthrough video tours directly to Instagram Reels, Facebook Reels, and YouTube Shorts.' },
-    { title: '🤖 AI Real Estate Property Description Writer', desc: 'Turn basic MLS property bullet points into compelling, luxury buyer-focused social copy in seconds.' },
+    { title: '🏡 "Just Listed" & "Open House" Multi-Publishing', desc: 'Promote new listings across LinkedIn, X and Bluesky simultaneously with property photos and walkthrough videos. Instagram and Facebook join once Meta approves the app.' },
+    { title: '📸 Multi-Photo Carousel Previews', desc: 'Showcase floorplans, exterior architecture, and interior shots in LinkedIn image carousels.' },
+    { title: '🎥 Vertical Video Tours for Reels & Shorts', desc: 'Auto-publish walkthrough video tours to YouTube Shorts. Instagram and Facebook Reels join once Meta approves the app.' },
+    { title: '🤖 AI Real Estate Property Description Writer', desc: 'Turn basic MLS property bullet points into buyer-focused social copy with the AI assistant (Standard and Pro).' },
     { title: '📅 Weekend Open House Blast Schedules', desc: 'Set up recurring reminders on Thursday, Friday, and Saturday mornings to maximize weekend open house turnout.' },
-    { title: '👔 Professional LinkedIn Thought Leadership', desc: 'Position yourself as the premier local market expert with automated market statistic updates and neighborhood guides.' },
+    { title: '👔 Professional LinkedIn Thought Leadership', desc: 'Schedule market updates and neighborhood guides to LinkedIn to position yourself as the local market expert.' },
   ];
 
   return (
@@ -90,7 +90,7 @@ export default function RealEstateLandingPage() {
             Log In
           </Link>
           <Link href="/auth" className="text-sm font-semibold text-black bg-white hover:bg-[#FF4CE2] hover:text-black px-5 py-2 rounded-full">
-            Start Free Realtor Trial
+            Start Free
           </Link>
         </div>
       </header>
@@ -111,13 +111,13 @@ export default function RealEstateLandingPage() {
           Designed for Realtors, Brokerages & Property Managers
         </div>
         <h1 className="text-4xl sm:text-6xl font-black tracking-tight text-white leading-tight mb-6">
-          Promote Every Listing Everywhere.<br />
+          Promote Every Listing From One Calendar.<br />
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FF4CE2] to-cyan-400">
             More Buyer Inquiries, Less Screen Time.
           </span>
         </h1>
         <p className="text-lg sm:text-xl text-neutral-400 max-w-[800px] mx-auto mb-10 leading-relaxed">
-          Spend your time closing deals with clients, not fighting with 4 different social media apps. Hookpost automates your property launches from listing to sold.
+          Spend your time closing deals with clients, not fighting with 4 different social media apps. Hookpost schedules your property posts from listing to sold.
         </p>
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
           <Link href="/auth" className="w-full sm:w-auto px-8 py-4 rounded-full bg-[#FF4CE2] text-black font-bold text-lg hover:scale-105 transition-all">
@@ -148,7 +148,7 @@ export default function RealEstateLandingPage() {
       <section className="w-full max-w-[900px] mx-auto px-6 py-16 text-center">
         <div className="p-10 rounded-3xl bg-gradient-to-b from-neutral-900 to-black border border-[#FF4CE2]/30">
           <h2 className="text-3xl sm:text-4xl font-black mb-4">Turn Listings into Signed Contracts</h2>
-          <p className="text-neutral-400 mb-8 text-lg">Join top-performing real estate professionals using Hookpost.</p>
+          <p className="text-neutral-400 mb-8 text-lg">Connect a channel and schedule your first listing post in minutes.</p>
           <Link href="/auth" className="inline-block px-8 py-4 rounded-full bg-[#FF4CE2] text-black font-bold text-lg hover:scale-105 transition-all">
             Get Started Free
           </Link>

@@ -49,7 +49,7 @@ export default function EnterpriseTeamsPage() {
         name: "Is Hookpost really free to get started?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "Yes. Hookpost includes a generous $0 starter tier with no credit card required. Upgrade to Pro for 30 channels, 5,000 posts a month and the AI copilot.",
+          text: "Yes. Hookpost includes a generous $0 starter tier with no credit card required. Pro (₹1,999 / $39 a month) adds 20 channels, 2,000 posts a month, AI writing and up to 15 team members.",
         },
       },
     ],
@@ -67,7 +67,7 @@ export default function EnterpriseTeamsPage() {
       />
 
       <div className="w-full bg-[#FF4CE2] text-black text-center font-medium text-sm py-1.5 px-4">
-        Enterprise-Grade Security & Self-Hosted Deployments 🏢🔒
+        Self-Hosted Deployments for Enterprise Teams 🏢🔒
       </div>
       <header className="flex justify-between items-center w-full max-w-[1440px] mx-auto h-[70px] px-6 sm:px-12">
         <Link href="/" className="flex items-center gap-2">
@@ -83,14 +83,14 @@ export default function EnterpriseTeamsPage() {
           For Enterprise Organizations & Marketing Teams
         </span>
         <h1 className="text-4xl sm:text-6xl font-black tracking-tight leading-[1.1] mb-6 max-w-4xl mx-auto">
-          Full Data Sovereignty & Multi-Tenant Workspaces. <span className="text-[#FF4CE2]">Deploy Anywhere.</span>
+          Full Data Sovereignty & Role-Based Teams. <span className="text-[#FF4CE2]">Deploy Anywhere.</span>
         </h1>
         <p className="text-lg sm:text-xl text-neutral-400 leading-relaxed mb-8 max-w-2xl mx-auto">
-          Deploy on your own private cloud or use our secure global infrastructure. Granular permissions, approval workflows, and audit trails for compliant corporate social marketing.
+          Deploy on your own private cloud or use the hosted version. Admin and User roles, draft previews for review, and publishing that runs on servers you control.
         </p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
           <Link href="/auth" className="bg-[#FF4CE2] text-black font-bold px-8 py-4 rounded-xl text-lg hover:bg-white transition-all shadow-[0_0_30px_rgba(255,76,226,0.4)]">
-            Explore Enterprise Cloud
+            Start Free
           </Link>
         </div>
         {/* Persona-specific detail. This page previously stopped after the hero
@@ -102,11 +102,11 @@ export default function EnterpriseTeamsPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {[
             { title: 'Self-host behind your firewall', desc: 'AGPL-3.0 and a Docker Compose stack you run on your own infrastructure. Posts, tokens and media never leave hardware you control.' },
-            { title: 'Approval before anything publishes', desc: 'Draft, review and approve inside the calendar, so nothing reaches a corporate account without a second pair of eyes.' },
-            { title: 'Unlimited team members on Team and above', desc: 'Seats are not metered. Add the whole marketing function without the bill moving.' },
+            { title: 'Review before anything publishes', desc: 'Save posts as drafts and share a preview link for comments, so a second pair of eyes can see them before they are scheduled.' },
+            { title: 'Up to 15 team members on Pro', desc: 'One flat price, owner included, with Admin and User roles. No per-seat fee.' },
             { title: 'Publishing that survives a restart', desc: 'Scheduling runs on Temporal workflows. If a worker dies mid-publish it resumes from its last committed step rather than dropping the post or sending it twice.' },
             { title: 'Webhooks into your own systems', desc: '30 webhooks on Pro, so publishing events can reach your data warehouse, Slack or an internal audit log.' },
-            { title: `${pricing.PRO.channel} channels on Pro, ${pricing.ULTIMATE.channel} on Ultimate`, desc: 'Each connected profile or page counts as one channel, so a brand with several regional pages fits in a single workspace.' },
+            { title: `${pricing.PRO.channel} channels on Pro`, desc: 'Each connected profile or page counts as one channel, so a brand with several regional pages fits in a single workspace.' },
             ].map((feat, i) => (
               <div key={i} className="p-6 rounded-2xl bg-neutral-900/60 border border-white/10 hover:border-[#FF4CE2]/50 transition-all">
                 <h3 className="text-xl font-bold mb-3 text-white">{feat.title}</h3>

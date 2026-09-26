@@ -42,7 +42,7 @@ export default function CryptoWeb3LandingPage() {
         name: "Can Hookpost schedule announcements across X and Telegram?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "Yes. Hookpost allows Web3 teams to simultaneously publish announcements across X, Telegram, Discord, Threads, and LinkedIn from a single dashboard.",
+          text: "Yes. Hookpost allows Web3 teams to simultaneously publish announcements across X, Telegram, Discord, Bluesky, Nostr and LinkedIn from a single dashboard.",
         },
       },
       {
@@ -50,7 +50,7 @@ export default function CryptoWeb3LandingPage() {
         name: "Is Hookpost really free to get started?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "Yes. Hookpost includes a generous $0 starter tier with no credit card required. Upgrade to Pro for unlimited accounts and advanced AI copilot tools.",
+          text: "Yes. The free plan covers 2 channels and 30 posts a month with no credit card. AI writing and the public API start on Standard (₹599 / $15 a month); Pro (₹1,999 / $39) raises that to 20 channels and 2,000 posts and adds team seats.",
         },
       },
     ],
@@ -60,9 +60,9 @@ export default function CryptoWeb3LandingPage() {
     { title: '🪐 Native Web3 & Decentralized Socials', desc: 'Publish simultaneously to Nostr, Bluesky, Lemmy, and X (Twitter) without copying and pasting across tabs.' },
     { title: '📢 Discord & Telegram Announcement Bot', desc: 'Broadcast alpha, roadmap updates, and community news straight into Telegram channels and Discord announcement feeds on a timed schedule.' },
     { title: '⚡ 24/7 Global Timezone Scheduling', desc: 'Your crypto audience never sleeps. Queue 24-hour round-the-clock dispatches targeting Asia, Europe, and US market sessions.' },
-    { title: '🛡️ Multi-Sig & Multi-Admin Security', desc: 'Empower community managers and moderators without sharing master private keys or raw social account logins.' },
-    { title: '🤖 AI Token & Community Copilot', desc: 'Turn technical whitepapers and GitHub release notes into viral Twitter threads, Discord highlights, and Nostr notes.' },
-    { title: '📊 On-Chain & Cross-Channel Engagement', desc: 'Measure which social posts drive the highest referral traffic, engagement spikes, and community member joins.' },
+    { title: '🛡️ Multi-Admin Access', desc: 'Invite community managers and moderators as team members (Pro, up to 15 seats) without handing out raw social account logins.' },
+    { title: '🤖 AI Token & Community Copilot', desc: 'Paste a whitepaper section or release notes into the AI assistant and have it draft an X thread, a Discord update and a Nostr note (Standard and Pro).' },
+    { title: '🔌 API, Webhooks & n8n', desc: 'Queue announcements from your own bots or an n8n workflow through the public REST API, and get webhooks when posts publish (Standard and Pro).' },
   ];
 
   return (
@@ -121,7 +121,7 @@ export default function CryptoWeb3LandingPage() {
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
           <Link href="/auth" className="w-full sm:w-auto px-8 py-4 bg-[#6366f1] text-white font-bold rounded-full text-base hover:opacity-90">
-            Start Free Web3 Trial (No CC Required) →
+            Start Free (No CC Required) →
           </Link>
           <Link href="/alternatives/buffer" className="w-full sm:w-auto px-8 py-4 bg-white/5 border border-white/10 text-white font-bold rounded-full text-base hover:bg-white/10">
             Compare vs Buffer & Postiz

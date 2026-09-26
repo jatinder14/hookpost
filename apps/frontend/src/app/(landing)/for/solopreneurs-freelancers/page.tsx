@@ -42,7 +42,7 @@ export default function SolopreneursFreelancersPage() {
         name: "How much time does Hookpost save freelancers?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "By centralizing content scheduling across X, LinkedIn, Threads, and Instagram into one calendar with AI hook generation, solopreneurs save 5-10 hours every week.",
+          text: "Hookpost puts X, LinkedIn, Bluesky and your blog channels into one calendar, with AI drafting on Standard and Pro, so a week of posts can be scheduled in one sitting. Threads and Instagram follow once Meta approves the Hookpost app.",
         },
       },
       {
@@ -50,7 +50,7 @@ export default function SolopreneursFreelancersPage() {
         name: "Is Hookpost really free to get started?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "Yes. Hookpost includes a generous $0 starter tier with no credit card required. Upgrade to Pro for unlimited accounts and advanced AI copilot tools.",
+          text: "Yes. The free plan covers 2 channels and 30 posts a month with no credit card. AI writing and the public API start on Standard (₹599 / $15 a month); Pro (₹1,999 / $39) raises that to 20 channels and 2,000 posts and adds team seats.",
         },
       },
     ],
@@ -87,7 +87,7 @@ export default function SolopreneursFreelancersPage() {
           Turn Your Expertise Into Inbound Leads. <span className="text-[#FF4CE2]">Without Working 24/7.</span>
         </h1>
         <p className="text-lg sm:text-xl text-neutral-400 leading-relaxed mb-8 max-w-2xl mx-auto">
-          Batch schedule an entire month of LinkedIn insights, X threads, and Instagram carousels in one afternoon. Let Hookpost publish around the clock while you focus on client work.
+          Batch schedule an entire month of LinkedIn insights, X threads and Bluesky posts in one afternoon. Let Hookpost publish around the clock while you focus on client work.
         </p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
           <Link href="/auth" className="bg-[#FF4CE2] text-black font-bold px-8 py-4 rounded-xl text-lg hover:bg-white transition-all shadow-[0_0_30px_rgba(255,76,226,0.4)]">
@@ -104,9 +104,9 @@ export default function SolopreneursFreelancersPage() {
             {[
             { title: 'Batch a month in one sitting', desc: 'Drag posts around a visual calendar, set your posting times once, and let new drafts fall into the next free slot automatically.' },
             { title: 'Let an AI agent do the drafting', desc: 'The MCP server connects Claude Code, Cursor or Windsurf directly, so you can ask for a week of posts and approve rather than write.' },
-            { title: 'One draft, adjusted per network', desc: 'Write the thought once, then tune it per channel — a thread on X, a carousel on Instagram, a long-form version on LinkedIn.' },
+            { title: 'One draft, adjusted per network', desc: 'Write the thought once, then tune it per channel — a thread on X, a carousel on LinkedIn, a long-form article on Hashnode.' },
             { title: 'Build in public where developers are', desc: 'DEV, Hashnode and WordPress publish from the same calendar as your social channels.' },
-            { title: 'Rs 699 a month, not per channel', desc: 'Five channels and 500 posts on Standard. No per-seat fee, no per-channel fee, and a 7-day trial before it charges.' },
+            { title: 'Rs 599 ($15) a month, not per channel', desc: 'Five channels and 500 posts on Standard. No per-seat fee, no per-channel fee, and a 7-day trial before it charges.' },
             { title: 'Automate the repetitive part', desc: 'A public REST API, an n8n community node and webhooks, so your existing workflows can queue posts without you in the loop.' },
             ].map((feat, i) => (
               <div key={i} className="p-6 rounded-2xl bg-neutral-900/60 border border-white/10 hover:border-[#FF4CE2]/50 transition-all">

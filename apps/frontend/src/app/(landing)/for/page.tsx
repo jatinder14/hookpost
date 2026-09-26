@@ -1,6 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import { Metadata } from "next";
+import { PUBLISHABLE_CHANNEL_COUNT } from "../channels/channel-count";
 
 export const metadata: Metadata = {
   title: "Social Media Solutions by Role | Hookpost",
@@ -19,21 +20,21 @@ export const metadata: Metadata = {
 };
 
 const PERSONAS = [
-  { slug: "creators", title: "Content Creators & Influencers", desc: "Batch schedule Reels, YouTube Shorts, and Threads with AI hook generation.", badge: "Creators" },
-  { slug: "agencies", title: "Digital Marketing Agencies", desc: "Manage 50+ client workspaces, white-label visual calendars, and team approval workflows.", badge: "Agencies" },
-  { slug: "b2b-saas", title: "B2B SaaS & Tech Startups", desc: "Automate founder LinkedIn thought leadership, X product updates, and GitHub release posts.", badge: "B2B SaaS" },
-  { slug: "ecommerce", title: "E-Commerce Brands & Shopify Stores", desc: "Drive repeat sales with visual product carousels, Pinterest pins, and seasonal discount drops.", badge: "E-Commerce" },
-  { slug: "small-business", title: "Small & Local Businesses", desc: "Consistent local presence on Facebook, Instagram, and Threads with zero complicated setups.", badge: "Small Business" },
-  { slug: "solopreneurs-freelancers", title: "Solopreneurs & Freelancers", desc: "Save 10+ hours every week. One unified calendar to schedule across all your professional channels.", badge: "Solopreneurs" },
-  { slug: "real-estate", title: "Real Estate Agents & Brokers", desc: "Showcase property video tours, open-house updates, and listing flyers across Facebook and Instagram.", badge: "Real Estate" },
-  { slug: "restaurants-cafes", title: "Restaurants, Cafes & Bars", desc: "Schedule daily menu specials, happy hour stories, and weekend event teasers seamlessly.", badge: "Food & Beverage" },
+  { slug: "creators", title: "Content Creators & Influencers", desc: "Batch schedule YouTube Shorts, X threads and LinkedIn carousels, with AI captions on paid plans.", badge: "Creators" },
+  { slug: "agencies", title: "Digital Marketing Agencies", desc: "Group channels by client, share preview links for feedback, and add up to 15 team members on Pro.", badge: "Agencies" },
+  { slug: "b2b-saas", title: "B2B SaaS & Tech Startups", desc: "Automate founder LinkedIn thought leadership, X product updates, and Dev.to and Hashnode launch articles.", badge: "B2B SaaS" },
+  { slug: "ecommerce", title: "E-Commerce Brands & Shopify Stores", desc: "Schedule product launches, YouTube demos, and seasonal discount drops to social channels and email.", badge: "E-Commerce" },
+  { slug: "small-business", title: "Small & Local Businesses", desc: "Consistent local presence on X, LinkedIn and YouTube with zero complicated setups.", badge: "Small Business" },
+  { slug: "solopreneurs-freelancers", title: "Solopreneurs & Freelancers", desc: "One unified calendar to schedule across all your professional channels.", badge: "Solopreneurs" },
+  { slug: "real-estate", title: "Real Estate Agents & Brokers", desc: "Showcase property video tours, open-house updates, and listing photos across LinkedIn, X and YouTube.", badge: "Real Estate" },
+  { slug: "restaurants-cafes", title: "Restaurants, Cafes & Bars", desc: "Schedule daily menu specials, happy hour reminders, and weekend event teasers seamlessly.", badge: "Food & Beverage" },
   { slug: "fitness-coaches", title: "Fitness Coaches & Gyms", desc: "Post daily workout tips, client transformations, and nutritional guides to build an engaged community.", badge: "Fitness" },
   { slug: "healthcare-clinics", title: "Healthcare & Wellness Clinics", desc: "Build patient trust with educational health content, clinic updates, and doctor spotlights.", badge: "Healthcare" },
   { slug: "crypto-web3", title: "Web3, DeFi & Crypto Projects", desc: "Coordinate X announcements, Telegram community drops, and Discord updates in real time.", badge: "Web3" },
-  { slug: "music-artists", title: "Musicians & Recording Artists", desc: "Drop album teasers, Spotify release count-downs, and tour announcements across 18 networks.", badge: "Music" },
-  { slug: "educators-nonprofits", title: "Educators & Nonprofits", desc: "Amplify awareness campaigns, student outreach, and donation drives on an affordable $0 starter budget.", badge: "Nonprofit" },
-  { slug: "enterprise-teams", title: "Enterprise Marketing Teams", desc: "Granular role-based permissions, multi-brand audit logs, and self-hosted on-premise Docker deployment.", badge: "Enterprise" },
-  { slug: "students-young-creators", title: "Students & Young Founders", desc: "100% free starter tier to build personal brands, showcase portfolios, and launch side projects.", badge: "Students" },
+  { slug: "music-artists", title: "Musicians & Recording Artists", desc: `Drop album teasers, Spotify release count-downs, and tour announcements across ${PUBLISHABLE_CHANNEL_COUNT} networks.`, badge: "Music" },
+  { slug: "educators-nonprofits", title: "Educators & Nonprofits", desc: "Amplify awareness campaigns, student outreach, and donation drives, starting on the free plan.", badge: "Nonprofit" },
+  { slug: "enterprise-teams", title: "Enterprise Marketing Teams", desc: "Admin and User roles, shareable draft previews for review, and self-hosted Docker deployment.", badge: "Enterprise" },
+  { slug: "students-young-creators", title: "Students & Young Founders", desc: "A free plan to build personal brands, showcase portfolios, and launch side projects.", badge: "Students" },
 ];
 
 export default function ForHubPage() {
@@ -127,7 +128,7 @@ export default function ForHubPage() {
             <span className="text-[#FF4CE2]">Engineered for Your Industry</span>
           </h1>
           <p className="text-[#aaa] text-lg sm:text-xl leading-relaxed">
-            Whether you are a solo creator, a fast-scaling B2B startup, or an agency managing dozens of client workspaces, Hookpost adapts to your publishing rhythm.
+            Whether you are a solo creator, a fast-scaling B2B startup, or an agency juggling several clients, Hookpost adapts to your publishing rhythm.
           </p>
         </div>
 
@@ -135,7 +136,7 @@ export default function ForHubPage() {
         <div className="bg-[#161616] border border-[#FF4CE2]/30 rounded-2xl p-6 max-w-[900px] mx-auto text-left shadow-[0_0_30px_rgba(255,76,226,0.1)]">
           <p className="text-xs uppercase tracking-widest text-[#FF4CE2] font-bold mb-2">Social Media Solutions Summary</p>
           <p className="text-sm sm:text-base text-neutral-300 leading-relaxed">
-            <strong>Hookpost Solutions</strong> provide specialized social media scheduling workflows tailored for 15+ personas, including content creators, marketing agencies, B2B SaaS startups, e-commerce stores, and small businesses. Key capabilities include multi-tenant client workspaces, AI-assisted viral hook generation, multi-network auto-posting, and self-hosted Docker deployment options.
+            <strong>Hookpost Solutions</strong> provide specialized social media scheduling workflows tailored for 15 personas, including content creators, marketing agencies, B2B SaaS startups, e-commerce stores, and small businesses. Key capabilities include per-client channel grouping, AI-assisted caption writing on paid plans, auto-posting to {PUBLISHABLE_CHANNEL_COUNT} networks, and self-hosted Docker deployment options.
           </p>
         </div>
 
@@ -175,7 +176,7 @@ export default function ForHubPage() {
             Ready to Automate Your Industry Socials?
           </h2>
           <p className="text-[#888] max-w-lg mx-auto text-base sm:text-lg">
-            Connect all your channels in under 60 seconds with no credit card required.
+            Connect your channels with no credit card required.
           </p>
           <Link
             href="/auth"

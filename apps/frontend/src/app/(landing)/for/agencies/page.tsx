@@ -2,17 +2,18 @@ import { SectionFaq } from "../../SectionFaq";
 import React from 'react';
 import Link from 'next/link';
 import { Metadata } from 'next';
+import { PUBLISHABLE_CHANNEL_COUNT } from '../../channels/channel-count';
 
 export const metadata: Metadata = {
   title: 'Social Media Management Software for Agencies | Hookpost',
   description:
-    'Manage 50+ client brands with unlimited seats, white-label approval portals, and multi-tenant workspaces. A Sprout Social and Hootsuite alternative.',
+    'Group channels by client, share post previews for feedback, and add up to 15 team members on Pro with no per-seat fee. A Sprout Social and Hootsuite alternative.',
   keywords: [
     'social media software for agencies',
     'sprout social alternative for agencies',
-    'unlimited accounts social media scheduler',
-    'white label social media management',
-    'client approval workflow tool',
+    'multi-brand social media scheduler',
+    'agency social media scheduler',
+    'client post preview tool',
     'multi-client social media dashboard',
     'agency social media pricing',
   ],
@@ -39,10 +40,10 @@ export default function AgenciesLandingPage() {
     mainEntity: [
       {
         "@type": "Question",
-        name: "How many client workspaces can an agency manage on Hookpost?",
+        name: "How do agencies manage several clients in Hookpost?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "Hookpost Pro allows agencies to create unlimited client workspaces with granular role-based permissions, client approval calendars, and unified multi-brand publishing.",
+          text: "Each connected channel can be assigned to a customer, and the calendar can be filtered to one customer at a time. Pro includes 20 channels and up to 15 team members (owner included) with Admin and User roles, on one flat price with no per-seat fee.",
         },
       },
       {
@@ -50,19 +51,19 @@ export default function AgenciesLandingPage() {
         name: "Is Hookpost really free to get started?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "Yes. Hookpost includes a generous $0 starter tier with no credit card required. Upgrade to Pro for unlimited accounts and advanced AI copilot tools.",
+          text: "Yes. The free plan covers 2 channels and 30 posts a month with no credit card. AI writing and the public API start on Standard (₹599 / $15 a month); Pro (₹1,999 / $39) raises that to 20 channels and 2,000 posts and adds team seats.",
         },
       },
     ],
   };
 
   const features = [
-    { title: '🏢 Multi-Tenant Client Workspaces', desc: 'Isolate client accounts, credentials, and assets into dedicated branded workspaces with zero cross-client leakage.' },
-    { title: '✅ White-Label Client Approval Portals', desc: 'Send interactive review links to clients. Clients can approve, reject, or request edits without creating an account or seeing competitor brands.' },
-    { title: '👥 Unlimited Team Members & Granular Roles', desc: 'Stop paying $199/user/month. Add your entire creative, copywriting, and strategy team without per-seat price penalties.' },
-    { title: '📦 500+ Post Bulk CSV Upload', desc: 'Schedule hundreds of client posts across 18 social networks in seconds using structured spreadsheet imports.' },
-    { title: '📈 Unified Cross-Channel Reporting', desc: 'Generate high-impact PDF analytics and engagement reports highlighting client follower growth, engagement rates, and top posts.' },
-    { title: '🛡️ Enterprise Role Permissions', desc: 'Assign fine-grained admin, editor, and viewer permissions to protect client API keys and social publishing access.' },
+    { title: '🏢 Channels Grouped by Client', desc: 'Assign each connected channel to a customer and switch the calendar to one client at a time, so posts for different brands stay apart.' },
+    { title: '✅ Preview Links for Client Feedback', desc: 'Save a post as a draft and share a preview link. Clients can open it without an account, and sign in to leave comments before you schedule it.' },
+    { title: '👥 Team Seats Without Per-Seat Fees', desc: 'Pro includes up to 15 team members, owner included, on one flat price. Hootsuite Standard is $99 per user a month and Sprout Social Essentials $79 per user (both billed annually).' },
+    { title: '🔌 Bulk Scheduling via API & n8n', desc: `Queue client posts in bulk from your own scripts or an n8n workflow through the public REST API, across ${PUBLISHABLE_CHANNEL_COUNT} networks (Standard and Pro).` },
+    { title: '🔁 Repeating Posts & Signatures', desc: 'Set a post to repeat on an interval from daily to monthly, and save signatures you can drop into any client post.' },
+    { title: '🛡️ Admin and User Roles', desc: 'Invite teammates as Admin or User. Channels connect through each network sign-in, so nobody needs a client password.' },
   ];
 
   return (
@@ -91,7 +92,7 @@ export default function AgenciesLandingPage() {
             Log In
           </Link>
           <Link href="/auth" className="text-sm font-semibold text-black bg-white hover:bg-[#FF4CE2] hover:text-black px-5 py-2 rounded-full">
-            Start Free Agency Trial
+            Start Free
           </Link>
         </div>
       </header>
@@ -112,13 +113,13 @@ export default function AgenciesLandingPage() {
           The Modern Sprout Social & Hootsuite Escape Hatch
         </div>
         <h1 className="text-4xl sm:text-6xl font-black tracking-tight text-white leading-tight mb-6">
-          Manage 50+ Client Brands.<br />
+          Manage Every Client From One Calendar.<br />
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FF4CE2] to-cyan-400">
-            No Per-User Fees. 100% Margins.
+            No Per-User Fees.
           </span>
         </h1>
         <p className="text-lg sm:text-xl text-neutral-400 max-w-[800px] mx-auto mb-10 leading-relaxed">
-          Tired of Sprout Social charging $199 per team member and Hootsuite capping your client profiles? Hookpost gives marketing agencies complete control with unlimited scale.
+          Sprout Social Essentials is $79 per user a month and Hootsuite Standard is $99 per user (both billed annually). Hookpost Pro is ₹1,999 / $39 a month flat for 20 channels and up to 15 team members.
         </p>
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
           <Link href="/auth" className="w-full sm:w-auto px-8 py-4 rounded-full bg-[#FF4CE2] text-black font-bold text-lg hover:scale-105 transition-all">
@@ -151,7 +152,7 @@ export default function AgenciesLandingPage() {
           <h2 className="text-3xl sm:text-4xl font-black mb-4">Protect Your Agency Profit Margins</h2>
           <p className="text-neutral-400 mb-8 text-lg">Switch your agency clients to Hookpost in under 15 minutes.</p>
           <Link href="/auth" className="inline-block px-8 py-4 rounded-full bg-[#FF4CE2] text-black font-bold text-lg hover:scale-105 transition-all">
-            Get Started with Unlimited Workspaces
+            Get Started Free
           </Link>
         </div>
       </section>

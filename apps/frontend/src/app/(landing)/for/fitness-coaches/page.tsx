@@ -6,7 +6,7 @@ import { Metadata } from 'next';
 export const metadata: Metadata = {
   title: 'Social Media Scheduler for Fitness Coaches | Hookpost',
   description:
-    'Auto-schedule Instagram Reels, Facebook Reels, YouTube Shorts, and Pinterest workout guides. For personal trainers, gym owners, and wellness creators.',
+    'Auto-schedule YouTube Shorts, X and LinkedIn posts, with Instagram and Facebook Reels once Meta approves the app. For personal trainers, gym owners, and wellness creators.',
   keywords: [
     'fitness social media scheduler',
     'instagram reels scheduler for personal trainers',
@@ -40,7 +40,7 @@ export default function FitnessCoachesLandingPage() {
         name: "Can fitness trainers schedule recurring workout tips and transformation videos?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "Yes. Hookpost enables coaches to batch-schedule 30-60 days of video workouts, nutrition tips, and client reels in one sitting.",
+          text: "Yes. Coaches can schedule weeks of workout videos and nutrition tips in one sitting and set a post to repeat on an interval from daily to monthly. YouTube publishes today; Instagram and Facebook Reels follow once Meta approves the Hookpost app.",
         },
       },
       {
@@ -48,19 +48,19 @@ export default function FitnessCoachesLandingPage() {
         name: "Is Hookpost really free to get started?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "Yes. Hookpost includes a generous $0 starter tier with no credit card required. Upgrade to Pro for unlimited accounts and advanced AI copilot tools.",
+          text: "Yes. The free plan covers 2 channels and 30 posts a month with no credit card. AI writing and the public API start on Standard (₹599 / $15 a month); Pro (₹1,999 / $39) raises that to 20 channels and 2,000 posts and adds team seats.",
         },
       },
     ],
   };
 
   const features = [
-    { title: '🎬 Multi-Platform Video Auto-Publish', desc: 'Shoot one workout demo or transformation video and schedule it across Instagram Reels, YouTube Shorts, and Facebook Reels in 1-click.' },
+    { title: '🎬 Multi-Platform Video Auto-Publish', desc: 'Shoot one workout demo or transformation video and schedule it to YouTube Shorts, X and LinkedIn in 1 click. Instagram and Facebook Reels join once Meta approves the app.' },
     { title: '📅 Visual Content & Challenge Calendar', desc: 'Map out 30-day fitness challenges, client shoutouts, and nutrition tips weeks in advance so you can focus on training clients.' },
-    { title: '🤖 AI Workout & Caption Writer', desc: 'Instantly generate engaging captions, workout breakdowns, rep-set guides, and high-converting calls-to-action to book coaching calls.' },
-    { title: '📌 Pinterest Workout & Recipe Boards', desc: 'Auto-publish high-resolution workout routines and meal plans directly to Pinterest to generate passive organic leads.' },
-    { title: '⚡ Peak Engagement Scheduling', desc: 'Hookpost automatically identifies when your audience is waking up, working out, or browsing so your videos hit the algorithm at prime hours.' },
-    { title: '💵 100% Free Trial, Affordable Scaling', desc: 'No bloated $99/mo subscriptions. Scale your fitness business with full multi-channel automation at founder-friendly prices.' },
+    { title: '🤖 AI Workout & Caption Writer', desc: 'Generate captions, workout breakdowns, rep-set guides and calls-to-action to book coaching calls with the AI assistant (Standard and Pro).' },
+    { title: '📨 Telegram & Discord Community Posts', desc: 'Send daily workout tips to your Telegram channel or Discord server on the same schedule as your social posts.' },
+    { title: '⏰ Your Own Posting Slots', desc: 'Set the times you want to post on each channel once, and new posts can drop into the next free slot.' },
+    { title: '💵 Free Plan, Flat Pricing', desc: 'Start free with 2 channels and 30 posts a month. Standard is ₹599 / $15 a month for 5 channels and AI captions.' },
   ];
 
   return (
@@ -89,7 +89,7 @@ export default function FitnessCoachesLandingPage() {
             Log In
           </Link>
           <Link href="/auth" className="text-sm font-semibold text-black bg-white hover:bg-[#10b981] hover:text-black px-5 py-2 rounded-full">
-            Start Free Fitness Trial
+            Start Free
           </Link>
         </div>
       </header>
@@ -110,11 +110,11 @@ export default function FitnessCoachesLandingPage() {
           Personal Trainers • Online Coaches • Gym Studios
         </div>
         <h1 className="text-4xl sm:text-6xl font-black tracking-tight text-white leading-tight mb-6">
-          Publish Workouts to Reels, Shorts & Threads <br />
+          Publish Workouts to Shorts, X & LinkedIn <br />
           <span className="text-[#10b981]">On Complete Autopilot.</span>
         </h1>
         <p className="text-lg sm:text-xl text-neutral-300 max-w-[800px] mx-auto mb-10 leading-relaxed">
-          Stop spending 3 hours a day reposting videos across apps. Hookpost publishes your Instagram Reels, YouTube Shorts, and Facebook Reels simultaneously with custom captions and prime-time scheduling.
+          Stop spending 3 hours a day reposting videos across apps. Hookpost publishes your YouTube Shorts, X and LinkedIn posts together with captions tuned per network. Instagram and Facebook Reels follow once Meta approves the app.
         </p>
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">

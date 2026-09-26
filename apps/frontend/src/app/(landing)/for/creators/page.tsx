@@ -2,11 +2,12 @@ import { SectionFaq } from "../../SectionFaq";
 import React from 'react';
 import Link from 'next/link';
 import { Metadata } from 'next';
+import { PUBLISHABLE_CHANNEL_COUNT } from '../../channels/channel-count';
 
 export const metadata: Metadata = {
   title: 'Social Media Scheduler for Creators & Influencers | Hookpost',
   description:
-    'Schedule Reels, Shorts, carousels, and X threads from one calendar. Free social media automation built for creators and influencers.',
+    'Schedule YouTube Shorts, X threads and LinkedIn carousels from one calendar, with Instagram Reels once Meta approves the app. Free plan for creators and influencers.',
   keywords: [
     'social media scheduler for creators',
     'free reel scheduler',
@@ -39,10 +40,10 @@ export default function CreatorsLandingPage() {
     mainEntity: [
       {
         "@type": "Question",
-        name: "Does Hookpost auto-post Reels and Shorts without mobile notifications?",
+        name: "Does Hookpost auto-post Shorts and Reels without mobile notifications?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "Yes. Hookpost publishes through the official Meta Instagram Graph API and YouTube Data API, so Reels and Shorts go live automatically with no manual push notification to tap.",
+          text: "For YouTube Shorts, yes: Hookpost uploads through the YouTube Data API, so the video goes live at the scheduled time with nothing to tap. Instagram Reels work the same way through the Instagram Graph API, but new accounts cannot connect Instagram until Meta approves the Hookpost app.",
         },
       },
       {
@@ -50,19 +51,19 @@ export default function CreatorsLandingPage() {
         name: "Is Hookpost really free to get started?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "Yes. Hookpost includes a generous $0 starter tier with no credit card required. Upgrade to Pro for unlimited accounts and advanced AI copilot tools.",
+          text: "Yes. The free plan covers 2 channels and 30 posts a month with no credit card. AI writing and the public API start on Standard (₹599 / $15 a month); Pro (₹1,999 / $39) raises that to 20 channels and 2,000 posts and adds team seats.",
         },
       },
     ],
   };
 
   const features = [
-    { title: '🎬 Multi-Platform Video Auto-Publish', desc: 'Upload once, schedule to Instagram Reels and YouTube Shorts simultaneously without manual confirmation notifications.' },
-    { title: '✍️ Built-in AI Hook & Caption Generator', desc: 'Generate viral caption variations, hook lines, and high-performing hashtags tailored to your niche in seconds.' },
-    { title: '📅 Visual Drag & Drop Calendar', desc: 'Plan an entire month of content in one sitting with intuitive visual preview grids for Instagram and Threads.' },
-    { title: '💸 $0 Free Tier for Students & Emerging Creators', desc: 'Never pay $30-$100/mo just to schedule a few posts. Full scheduling power with no credit card required.' },
-    { title: '🧵 X / Twitter & LinkedIn Threads', desc: 'Draft, format, and schedule long-form threads, image grids, and PDF carousels effortlessly.' },
-    { title: '📊 Audience Peak Analytics', desc: 'Automatically schedule your content when your followers across the globe are most active and engaged.' },
+    { title: '🎬 Multi-Platform Video Auto-Publish', desc: 'Upload once and schedule to YouTube Shorts, X, LinkedIn and Bluesky together, with no confirmation notification to tap. Instagram Reels join once Meta approves the app.' },
+    { title: '✍️ Built-in AI Hook & Caption Generator', desc: 'Generate caption variations, hook lines and hashtags with the AI assistant, on Standard and Pro.' },
+    { title: '📅 Visual Drag & Drop Calendar', desc: 'Plan an entire month of content in one sitting, with a preview of how each post will look on its network.' },
+    { title: '💸 Free Plan for Students & Emerging Creators', desc: '2 channels and 30 posts a month for free, no credit card. AI writing starts on Standard at ₹599 / $15 a month.' },
+    { title: '🧵 X / Twitter & LinkedIn Threads', desc: 'Draft and schedule X threads and LinkedIn image carousels from the same editor.' },
+    { title: '⏰ Your Own Posting Slots', desc: 'Set the times you want to post on each channel once, and new posts can drop into the next free slot.' },
   ];
 
   return (
@@ -77,7 +78,7 @@ export default function CreatorsLandingPage() {
       />
 
       <div className="w-full bg-[#FF4CE2] text-black text-center font-medium text-sm py-1.5 px-4">
-        ⚡ Hookpost for Creators — Post Everywhere, Grow Faster, Spend $0
+        ⚡ Hookpost for Creators — Post to {PUBLISHABLE_CHANNEL_COUNT} Networks, Start at $0
       </div>
 
       <header className="flex justify-between items-center w-full max-w-[1440px] mx-auto h-[70px] px-6 sm:px-12">
@@ -114,7 +115,7 @@ export default function CreatorsLandingPage() {
         <h1 className="text-4xl sm:text-6xl font-black tracking-tight text-white leading-tight mb-6">
           Schedule Once. Go Viral Everywhere.<br />
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FF4CE2] to-cyan-400">
-            Reels, Shorts, Threads & X in 1-Click.
+            Shorts, X, LinkedIn & Bluesky in 1 Click.
           </span>
         </h1>
         <p className="text-lg sm:text-xl text-neutral-400 max-w-[800px] mx-auto mb-10 leading-relaxed">

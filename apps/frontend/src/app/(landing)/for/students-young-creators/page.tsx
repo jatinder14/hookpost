@@ -6,7 +6,7 @@ import { Metadata } from 'next';
 export const metadata: Metadata = {
   title: 'Free Social Media Scheduler for Students | Hookpost',
   description:
-    'Schedule Instagram Reels, YouTube Shorts, Threads, and Discord posts on autopilot. Free for students, teen creators, and streamers - no card needed.',
+    'Schedule YouTube Shorts, X, Discord and Telegram posts on autopilot, with Instagram once Meta approves. Free plan for students, teen creators, and streamers - no card needed.',
   keywords: [
     'social media scheduler for students',
     'free instagram reels scheduler',
@@ -44,7 +44,7 @@ export default function StudentsYoungCreatorsPage() {
         name: "Can students build a personal brand for free with Hookpost?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "Yes. Hookpost provides a full-featured $0 free tier with no credit card required, perfect for students building portfolios on LinkedIn and X.",
+          text: "Yes. The free plan covers 2 channels and 30 posts a month with no credit card, enough to keep LinkedIn and X active while you build a portfolio. AI writing is on the paid plans.",
         },
       },
       {
@@ -52,7 +52,7 @@ export default function StudentsYoungCreatorsPage() {
         name: "Is Hookpost really free to get started?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "Yes. Hookpost includes a generous $0 starter tier with no credit card required. Upgrade to Pro for unlimited accounts and advanced AI copilot tools.",
+          text: "Yes. The free plan covers 2 channels and 30 posts a month with no credit card. AI writing and the public API start on Standard (₹599 / $15 a month); Pro (₹1,999 / $39) raises that to 20 channels and 2,000 posts and adds team seats.",
         },
       },
     ],
@@ -70,7 +70,7 @@ export default function StudentsYoungCreatorsPage() {
       />
 
       <div className="w-full bg-[#FF4CE2] text-black text-center font-medium text-sm py-1.5 px-4">
-        100% Free Forever for Students & Emerging Creators Worldwide 🎓🚀
+        A Free Plan for Students & Emerging Creators Worldwide 🎓🚀
       </div>
 
       <header className="flex justify-between items-center w-full max-w-[1440px] mx-auto h-[70px] px-6 sm:px-12">
@@ -101,10 +101,10 @@ export default function StudentsYoungCreatorsPage() {
             For Students, Gamers & Young Creators
           </span>
           <h1 className="text-4xl sm:text-6xl font-black tracking-tight leading-[1.1] mb-6">
-            Build Your Audience While You Sleep or Study. <span className="text-[#FF4CE2]">100% Free.</span>
+            Build Your Audience While You Sleep or Study. <span className="text-[#FF4CE2]">Free to Start.</span>
           </h1>
           <p className="text-lg sm:text-xl text-neutral-400 leading-relaxed mb-8">
-            Never stress about posting times between classes. Auto-post your short-form videos and clips to Instagram Reels, YouTube Shorts, Threads, X, Discord, and Telegram from a single dashboard.
+            Never stress about posting times between classes. Auto-post your short-form videos and clips to YouTube Shorts, X, Discord, Telegram and Bluesky from a single dashboard. Instagram Reels and Threads follow once Meta approves the Hookpost app.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
@@ -127,21 +127,21 @@ export default function StudentsYoungCreatorsPage() {
             <div className="text-3xl mb-4">⚡</div>
             <h2 className="text-xl font-bold mb-2">Cross-Post Short Form Video</h2>
             <p className="text-neutral-400 text-sm leading-relaxed">
-              Upload your video once. Hookpost automatically formats and schedules it across Instagram Reels, YouTube Shorts, and Facebook Reels simultaneously.
+              Upload your video once and schedule it to YouTube Shorts, X and Bluesky together. Instagram and Facebook Reels join once Meta approves the app.
             </p>
           </div>
           <div className="bg-neutral-950 border border-neutral-800 p-8 rounded-2xl">
             <div className="text-3xl mb-4">🤖</div>
             <h2 className="text-xl font-bold mb-2">Viral AI Caption & Hook Ideas</h2>
             <p className="text-neutral-400 text-sm leading-relaxed">
-              Stuck on titles? Built-in AI generates trending viral hooks, captions, and hashtag clusters tailored for young audiences.
+              Stuck on titles? The AI assistant drafts hooks, captions and hashtags. It is on Standard and Pro, not the free plan.
             </p>
           </div>
           <div className="bg-neutral-950 border border-neutral-800 p-8 rounded-2xl">
             <div className="text-3xl mb-4">💰</div>
-            <h2 className="text-xl font-bold mb-2">$0 Forever Free Tier</h2>
+            <h2 className="text-xl font-bold mb-2">A Free Plan That Does Not Expire</h2>
             <p className="text-neutral-400 text-sm leading-relaxed">
-              Unlike Buffer or Hootsuite that charge $15-$99/month, Hookpost gives students and young creators genuine free access with zero hidden paywalls.
+              Buffer&apos;s free plan covers 3 channels and 10 scheduled posts per channel; Hootsuite has no free plan and starts at $99 per user a month. Hookpost&apos;s free plan gives you 2 channels and 30 posts a month, no card required. AI writing and the API are on paid plans.
             </p>
           </div>
         </div>

@@ -2,6 +2,7 @@ import { SectionFaq } from "../../SectionFaq";
 import React from 'react';
 import Link from 'next/link';
 import { Metadata } from 'next';
+import { PUBLISHABLE_CHANNEL_COUNT } from '../../channels/channel-count';
 
 export const metadata: Metadata = {
   title: 'Social Media Management for B2B SaaS Founders | Hookpost',
@@ -41,7 +42,7 @@ export default function B2BSaaSLandingPage() {
         name: "Can B2B SaaS teams automate founder LinkedIn and X posts?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "Yes. Hookpost supports multi-author personal brand scheduling for founders and executives alongside company page updates and automated GitHub release distribution.",
+          text: "Yes. Connect founders' LinkedIn and X accounts and schedule them from one calendar. Several people can share the workspace on Pro (up to 15 team members, owner included).",
         },
       },
       {
@@ -49,19 +50,19 @@ export default function B2BSaaSLandingPage() {
         name: "Is Hookpost really free to get started?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "Yes. Hookpost includes a generous $0 starter tier with no credit card required. Upgrade to Pro for unlimited accounts and advanced AI copilot tools.",
+          text: "Yes. The free plan covers 2 channels and 30 posts a month with no credit card. AI writing and the public API start on Standard (₹599 / $15 a month); Pro (₹1,999 / $39) raises that to 20 channels and 2,000 posts and adds team seats.",
         },
       },
     ],
   };
 
   const features = [
-    { title: '💼 LinkedIn & X Founder Authority Builder', desc: 'Schedule founder breakdown posts, metric milestones, and industry insights across personal profiles and company pages.' },
-    { title: '🚀 Changelog & Product Launch Distribution', desc: 'Turn GitHub release notes and product updates into launch threads on X, LinkedIn posts, and Dev.to and Hashnode articles.' },
+    { title: '💼 LinkedIn & X Founder Authority Builder', desc: 'Schedule founder breakdown posts, metric milestones, and industry insights across LinkedIn and X.' },
+    { title: '🚀 Changelog & Product Launch Distribution', desc: 'Schedule a launch as an X thread, a LinkedIn post and full Dev.to and Hashnode articles from the same calendar.' },
     { title: '👨‍💻 Developer-First Platforms & Webhooks', desc: 'Auto-publish directly to developer hubs including Dev.to, Hashnode, Discord, and Slack channels.' },
-    { title: '🤖 AI Repurposing Engine', desc: 'Paste a technical blog post or changelog URL and watch Hookpost generate 10 high-converting bite-sized social posts.' },
-    { title: '⚡ Dynamic Queue & Auto-Recycle', desc: 'Keep your top evergreen lead generation posts in a high-performing automated rotation to drive continuous demo signups.' },
-    { title: '🛡️ Self-Hosted or Cloud Option', desc: 'Deploy with Docker or use our managed high-speed cloud platform with complete data privacy and zero vendor lock-in.' },
+    { title: '🤖 AI Drafting', desc: 'Paste your changelog or release notes into the AI assistant and have it draft posts for each network. AI writing is on Standard and Pro.' },
+    { title: '🔁 Repeating Evergreen Posts', desc: 'Set an evergreen post to repeat on a fixed interval, from daily to monthly, so it keeps going out without rescheduling it by hand.' },
+    { title: '🛡️ Self-Hosted or Cloud Option', desc: 'Deploy it yourself with Docker Compose under AGPL-3.0, or use the hosted version at hookpost.hookstep.in.' },
   ];
 
   return (
@@ -90,7 +91,7 @@ export default function B2BSaaSLandingPage() {
             Log In
           </Link>
           <Link href="/auth" className="text-sm font-semibold text-black bg-white hover:bg-[#3b82f6] hover:text-white px-5 py-2 rounded-full">
-            Start Free SaaS Trial
+            Start Free
           </Link>
         </div>
       </header>
@@ -115,7 +116,7 @@ export default function B2BSaaSLandingPage() {
           <span className="text-[#3b82f6]">Across LinkedIn, X & Dev Hubs.</span>
         </h1>
         <p className="text-lg sm:text-xl text-neutral-300 max-w-[800px] mx-auto mb-10 leading-relaxed">
-          Transform your startup's changelogs, feature drops, and founder insights into continuous organic inbound pipeline across 18 networks.
+          Transform your startup's changelogs, feature drops, and founder insights into continuous organic inbound pipeline across {PUBLISHABLE_CHANNEL_COUNT} networks.
         </p>
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">

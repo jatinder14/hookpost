@@ -6,7 +6,7 @@ import { Metadata } from 'next';
 export const metadata: Metadata = {
   title: 'Social Media Management for Small Businesses | Hookpost',
   description:
-    'Auto-post to Facebook, Instagram, and Threads in minutes. Simple social media marketing for local shops, clinics, and restaurants.',
+    'Auto-post to X, LinkedIn, YouTube and more in minutes, with Facebook, Instagram and Threads once Meta approves. Simple social media for local shops, clinics, and restaurants.',
   keywords: [
     'social media for small business',
     'easy social media scheduler',
@@ -41,7 +41,7 @@ export default function SmallBusinessLandingPage() {
         name: "Why is Hookpost better than Buffer or Hootsuite for local shops?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "Hookpost eliminates costly per-channel fees and $99/mo minimums, giving small businesses multi-channel scheduling starting at $0.",
+          text: "Buffer charges $5 per channel a month and Hootsuite starts at $99 per user a month (both billed annually). Hookpost has a free plan for 2 channels, and Standard covers 5 channels for ₹599 / $15 a month with no per-channel fee.",
         },
       },
       {
@@ -49,18 +49,18 @@ export default function SmallBusinessLandingPage() {
         name: "Is Hookpost really free to get started?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "Yes. Hookpost includes a generous $0 starter tier with no credit card required. Upgrade to Pro for unlimited accounts and advanced AI copilot tools.",
+          text: "Yes. The free plan covers 2 channels and 30 posts a month with no credit card. AI writing and the public API start on Standard (₹599 / $15 a month); Pro (₹1,999 / $39) raises that to 20 channels and 2,000 posts and adds team seats.",
         },
       },
     ],
   };
 
   const features = [
-    { title: '📍 Local Offers on Facebook & Instagram', desc: 'Publish special offers, opening-hours changes, and photos to your Facebook Page and Instagram Business account on a schedule.' },
-    { title: '⚡ 1-Click Multi-Posting to Meta', desc: 'Publish to your Facebook Page and Instagram Business account simultaneously without opening Meta Business Suite.' },
-    { title: '🤖 AI Copywriter for Busy Owners', desc: 'No marketing degree needed. Simply type what you sell, and our AI writes professional captions, offers, and hashtags for you.' },
+    { title: '📍 Local Offers on Every Channel', desc: 'Publish special offers, opening-hours changes and photos to X, LinkedIn and Bluesky on a schedule. Your Facebook Page and Instagram can be added once Meta approves the Hookpost app.' },
+    { title: '⚡ 1-Click Multi-Posting', desc: 'Publish one post to several channels at once, with per-network tweaks where you need them.' },
+    { title: '🤖 AI Copywriter for Busy Owners', desc: 'No marketing degree needed. Type what you sell, and the AI assistant writes captions, offers and hashtags for you (Standard and Pro).' },
     { title: '⏰ Set-and-Forget Weekly Scheduling', desc: 'Dedicate 20 minutes on Monday morning to schedule all your weekly promos, then focus 100% on running your business.' },
-    { title: '💳 Affordable Plans with Zero Surprise Fees', desc: 'Start for free or upgrade to Pro for less than the cost of a single lunch. Fair pricing designed for main street businesses.' },
+    { title: '💳 Affordable Plans with Zero Surprise Fees', desc: 'Start free, or move to Standard at ₹599 / $15 a month for 5 channels and AI captions. No per-channel fee.' },
     { title: '📱 Clean, Non-Technical Dashboard', desc: 'No confusing tech jargon, APIs, or complex graphs. Clean, visual calendar anyone on your staff can use.' },
   ];
 
@@ -117,14 +117,14 @@ export default function SmallBusinessLandingPage() {
           </span>
         </h1>
         <p className="text-lg sm:text-xl text-neutral-400 max-w-[800px] mx-auto mb-10 leading-relaxed">
-          You have a business to run. Let Hookpost automatically publish your promotions, menus, and updates to Facebook, Instagram, and Threads every week.
+          You have a business to run. Let Hookpost automatically publish your promotions, menus, and updates to X, LinkedIn, YouTube and more every week.
         </p>
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
           <Link href="/auth" className="w-full sm:w-auto px-8 py-4 rounded-full bg-[#FF4CE2] text-black font-bold text-lg hover:scale-105 transition-all">
             Start Free for Your Business
           </Link>
           <Link href="/alternatives/hootsuite" className="w-full sm:w-auto px-8 py-4 rounded-full border border-white/20 hover:border-white text-white font-medium text-lg">
-            See Why We Beat Hootsuite
+            Compare with Hootsuite
           </Link>
         </div>
       </section>

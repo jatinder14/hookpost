@@ -6,7 +6,7 @@ import { Metadata } from 'next';
 export const metadata: Metadata = {
   title: 'Social Media Scheduler for Restaurants & Cafes | Hookpost',
   description:
-    'Schedule daily specials, menu reels, and Facebook Page updates from one calendar. Social media scheduling for restaurants, cafes, and bars.',
+    'Schedule daily specials, menu videos and event posts from one calendar, with Facebook and Instagram once Meta approves the app. For restaurants, cafes, and bars.',
   keywords: [
     'restaurant social media scheduler',
     'cafe instagram marketing tool',
@@ -49,19 +49,19 @@ export default function RestaurantsCafesLandingPage() {
         name: "Is Hookpost really free to get started?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "Yes. Hookpost includes a generous $0 starter tier with no credit card required. Upgrade to Pro for unlimited accounts and advanced AI copilot tools.",
+          text: "Yes. The free plan covers 2 channels and 30 posts a month with no credit card. AI writing and the public API start on Standard (₹599 / $15 a month); Pro (₹1,999 / $39) raises that to 20 channels and 2,000 posts and adds team seats.",
         },
       },
     ],
   };
 
   const features = [
-    { title: '📍 Daily Specials on Facebook & Instagram', desc: 'Keep your Page and profile active with daily menu specials, happy hour times, and holiday hours.' },
-    { title: '🍔 Visual Food & Drink Reels Scheduler', desc: 'Publish mouthwatering kitchen prep videos and cocktail creation reels across Instagram, Facebook, and YouTube Shorts simultaneously.' },
+    { title: '📍 Daily Specials, Every Day', desc: 'Queue daily menu specials, happy hour times and holiday hours for X and Telegram today, and your Facebook Page and Instagram once Meta approves the app.' },
+    { title: '🍔 Visual Food & Drink Reels Scheduler', desc: 'Publish kitchen prep videos and cocktail creation clips to YouTube Shorts. Instagram and Facebook Reels join once Meta approves the app.' },
     { title: '⏰ Day-Part & Weekend Specials Automation', desc: 'Schedule lunch specials at 11:00 AM and weekend brunch promotions on Thursday evening on recurring automated slots.' },
-    { title: '🤖 AI Menu & Event Description Assistant', desc: 'Generate appetizing captions for new seasonal dishes, wine tastings, and live music nights in seconds.' },
-    { title: '👥 Multi-Location Restaurant Workspaces', desc: 'Manage 5, 10, or 50 restaurant branches from one central dashboard with separate location branding and team permissions.' },
-    { title: '💬 Review & Engagement Tracking', desc: 'Monitor customer interactions, comments, and mentions across all platforms from a single unified inbox.' },
+    { title: '🤖 AI Menu & Event Description Assistant', desc: 'Generate appetizing captions for new seasonal dishes, wine tastings, and live music nights with the AI assistant (Standard and Pro).' },
+    { title: '👥 Multi-Location Channel Groups', desc: 'Group each branch as a customer and filter the calendar by location. Pro covers 20 channels and up to 15 team members.' },
+    { title: '📧 Menu Emails via Listmonk', desc: 'Send the weekly menu to your Listmonk mailing list from the same calendar as your social posts.' },
   ];
 
   return (
@@ -90,7 +90,7 @@ export default function RestaurantsCafesLandingPage() {
             Log In
           </Link>
           <Link href="/auth" className="text-sm font-semibold text-black bg-white hover:bg-[#f59e0b] hover:text-black px-5 py-2 rounded-full">
-            Start Free Restaurant Trial
+            Start Free
           </Link>
         </div>
       </header>
@@ -112,15 +112,15 @@ export default function RestaurantsCafesLandingPage() {
         </div>
         <h1 className="text-4xl sm:text-6xl font-black tracking-tight text-white leading-tight mb-6">
           Schedule Mouth-Watering Specials <br />
-          <span className="text-[#f59e0b]">Across Instagram, Facebook & Google.</span>
+          <span className="text-[#f59e0b]">Across YouTube, X & Telegram.</span>
         </h1>
         <p className="text-lg sm:text-xl text-neutral-300 max-w-[800px] mx-auto mb-10 leading-relaxed">
-          While you run a bustling kitchen and provide exceptional guest hospitality, Hookpost keeps your social feeds and Google profile full of daily specials and event promotions.
+          While you run a bustling kitchen and provide exceptional guest hospitality, Hookpost keeps your social feeds full of daily specials and event promotions.
         </p>
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
           <Link href="/auth" className="w-full sm:w-auto px-8 py-4 bg-[#f59e0b] text-black font-bold rounded-full text-base hover:opacity-90">
-            Start Free Trial (Zero Setup Fees) →
+            Start Free (Zero Setup Fees) →
           </Link>
           <Link href="/alternatives/buffer" className="w-full sm:w-auto px-8 py-4 bg-white/5 border border-white/10 text-white font-bold rounded-full text-base hover:bg-white/10">
             Compare Hookpost vs Competitors

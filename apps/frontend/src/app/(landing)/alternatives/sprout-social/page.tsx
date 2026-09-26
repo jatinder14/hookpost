@@ -2,10 +2,24 @@ import React from "react";
 import Link from "next/link";
 import { Metadata } from "next";
 import { SectionFaq } from "../../SectionFaq";
+import { IndiaCostNote } from "../IndiaCostNote";
+import { PUBLISHABLE_CHANNEL_COUNT } from "../../channels/channel-count";
+import { pricingINR, pricingUSD } from '@hookpost/nestjs-libraries/database/prisma/subscriptions/pricing';
+import { COMPETITOR_FACTS, FACTS_CHECKED } from '../../compare/competitor-facts';
+
+const { FREE, STANDARD: STD_INR, PRO: PRO_INR } = pricingINR;
+const { STANDARD: STD_USD, PRO: PRO_USD } = pricingUSD;
+const inr = (n: number) => n.toLocaleString('en-IN');
+// One sentence on Hookpost's sold plans, read from pricing.ts so it cannot drift.
+const HOOKPOST_PLANS = `Hookpost's free plan covers ${FREE.channel} channels and ${FREE.posts_per_month} posts a month (no AI or API). Standard is ₹${inr(STD_INR.month_price)} or $${STD_USD.month_price} a month for ${STD_INR.channel} channels and ${STD_INR.posts_per_month} posts, with AI, API and MCP. Pro is ₹${inr(PRO_INR.month_price)} or $${PRO_USD.month_price} a month for ${PRO_INR.channel} channels, ${inr(PRO_INR.posts_per_month)} posts and up to ${PRO_INR.team_member_limit} team members.`;
+const HOOKPOST_NETWORKS = `Hookpost publishes to ${PUBLISHABLE_CHANNEL_COUNT} networks for a new account today; Instagram, Facebook and Threads are awaiting Meta approval and Pinterest publishing is not available yet.`;
+const SPROUT = COMPETITOR_FACTS['sprout-social'];
+
+const BEST_ALTERNATIVE_ANSWER = `Hookpost is an open-source alternative to Sprout Social with flat plans instead of per-seat pricing. Sprout Social has no free plan (30-day trial); its Essentials plan is $79 per seat per month billed annually ($99 billed monthly) with 5 channels, and Standard is $199 per seat billed annually. Sprout's API is on its Advanced plan, and its MCP server works with ChatGPT for TikTok data only. ${HOOKPOST_PLANS} ${HOOKPOST_NETWORKS} Sprout Social prices checked ${FACTS_CHECKED}.`;
 
 export const metadata: Metadata = {
-  title: "Hookpost vs Sprout Social (2026): #1 Open-Source Alternative",
-  description: "Escape Sprout Social's $199/user/mo price tag. Compare Hookpost vs Sprout Social. Multi-channel scheduling, AI copilot, client workspaces starting at $0.",
+  title: "Hookpost vs Sprout Social (2026): Open-Source Alternative",
+  description: `Compare Hookpost vs Sprout Social: Sprout Essentials is $79 per seat/mo billed annually; Hookpost Pro is $${PRO_USD.month_price}/mo flat for up to ${PRO_INR.team_member_limit} team members, and there is a free plan.`,
   keywords: ["sprout social alternative","cheaper sprout social alternative","sprout social competitors","sprout social vs hookpost","open source sprout social"],
   alternates: {
     canonical: "https://hookpost.hookstep.in/alternatives/sprout-social",
@@ -47,7 +61,7 @@ export default function SproutSocialAlternativePage() {
         name: "What is the Best Alternative to Sprout Social in 2026?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "Hookpost is the #1 affordable and open-source alternative to Sprout Social. Where Sprout Social charges an astronomical $199 per user every month, Hookpost delivers multi-channel scheduling across 18 networks, multi-tenant agency workspaces, AI agent automation, and open-source Docker deployment starting at $0 forever.",
+          text: BEST_ALTERNATIVE_ANSWER,
         },
       },
       {
@@ -148,7 +162,7 @@ export default function SproutSocialAlternativePage() {
             What is the Best Alternative to Sprout Social in 2026?
           </h2>
           <p className="text-[#d1d1d1] text-base sm:text-lg leading-relaxed">
-            Hookpost is the #1 affordable and open-source alternative to Sprout Social. Where Sprout Social charges an astronomical $199 per user every month, Hookpost delivers multi-channel scheduling across 18 networks, multi-tenant agency workspaces, AI agent automation, and open-source Docker deployment starting at $0 forever.
+            {BEST_ALTERNATIVE_ANSWER}
           </p>
         </section>
 
@@ -170,8 +184,8 @@ export default function SproutSocialAlternativePage() {
               <tbody className="divide-y divide-[#262626]">
                   <tr className="hover:bg-white/[0.02] transition-colors">
                     <td className="p-4 sm:p-5 font-medium text-white">Pricing Per User</td>
-                    <td className="p-4 sm:p-5 text-white bg-[#FF4CE2]/5 font-semibold">✅ $0 Free / $29 Flat (Unlimited Users)</td>
-                    <td className="p-4 sm:p-5 text-[#888]">❌ $199 - $399 / user / month</td>
+                    <td className="p-4 sm:p-5 text-white bg-[#FF4CE2]/5 font-semibold">✅ $0 Free / Pro ${PRO_USD.month_price}/mo (₹{inr(PRO_INR.month_price)}) flat for up to {PRO_INR.team_member_limit} team members</td>
+                    <td className="p-4 sm:p-5 text-[#888]">❌ Essentials $79 per seat/mo billed annually ($99 monthly); Standard $199</td>
                     <td className="p-4 sm:p-5">
                       <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-green-500/10 text-green-400 border border-green-500/20">
                         Hookpost
@@ -179,19 +193,19 @@ export default function SproutSocialAlternativePage() {
                     </td>
                   </tr>
                   <tr className="hover:bg-white/[0.02] transition-colors">
-                    <td className="p-4 sm:p-5 font-medium text-white">Contract Lock-In</td>
-                    <td className="p-4 sm:p-5 text-white bg-[#FF4CE2]/5 font-semibold">✅ Zero contracts, cancel anytime or self-host free</td>
-                    <td className="p-4 sm:p-5 text-[#888]">❌ Forced annual corporate contracts</td>
+                    <td className="p-4 sm:p-5 font-medium text-white">Billing Period</td>
+                    <td className="p-4 sm:p-5 text-white bg-[#FF4CE2]/5 font-semibold">✅ Monthly billing, or self-host</td>
+                    <td className="p-4 sm:p-5 text-[#888]">Monthly billing available; headline prices are annual rates</td>
                     <td className="p-4 sm:p-5">
-                      <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-green-500/10 text-green-400 border border-green-500/20">
-                        Hookpost
+                      <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-white/10 text-white">
+                        Tie
                       </span>
                     </td>
                   </tr>
                   <tr className="hover:bg-white/[0.02] transition-colors">
                     <td className="p-4 sm:p-5 font-medium text-white">Open-Source Architecture</td>
                     <td className="p-4 sm:p-5 text-white bg-[#FF4CE2]/5 font-semibold">✅ 100% AGPL Codebase on GitHub</td>
-                    <td className="p-4 sm:p-5 text-[#888]">❌ Closed enterprise black box</td>
+                    <td className="p-4 sm:p-5 text-[#888]">❌ Proprietary SaaS</td>
                     <td className="p-4 sm:p-5">
                       <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-green-500/10 text-green-400 border border-green-500/20">
                         Hookpost
@@ -199,9 +213,9 @@ export default function SproutSocialAlternativePage() {
                     </td>
                   </tr>
                   <tr className="hover:bg-white/[0.02] transition-colors">
-                    <td className="p-4 sm:p-5 font-medium text-white">AI Agent & CLI Integration</td>
-                    <td className="p-4 sm:p-5 text-white bg-[#FF4CE2]/5 font-semibold">✅ Official MCP server for Claude & Cursor</td>
-                    <td className="p-4 sm:p-5 text-[#888]">❌ No open developer protocol</td>
+                    <td className="p-4 sm:p-5 font-medium text-white">AI Agent &amp; API Access</td>
+                    <td className="p-4 sm:p-5 text-white bg-[#FF4CE2]/5 font-semibold">✅ MCP server and API on Standard and Pro</td>
+                    <td className="p-4 sm:p-5 text-[#888]">⚠️ MCP server for ChatGPT, TikTok data only; API on the Advanced plan</td>
                     <td className="p-4 sm:p-5">
                       <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-green-500/10 text-green-400 border border-green-500/20">
                         Hookpost
@@ -210,11 +224,11 @@ export default function SproutSocialAlternativePage() {
                   </tr>
                   <tr className="hover:bg-white/[0.02] transition-colors">
                     <td className="p-4 sm:p-5 font-medium text-white">Supported Networks</td>
-                    <td className="p-4 sm:p-5 text-white bg-[#FF4CE2]/5 font-semibold">18 Platforms</td>
-                    <td className="p-4 sm:p-5 text-[#888]">8-10 Platforms</td>
+                    <td className="p-4 sm:p-5 text-white bg-[#FF4CE2]/5 font-semibold">{PUBLISHABLE_CHANNEL_COUNT} networks publishable for new accounts (Instagram, Facebook, Threads and Pinterest not yet)</td>
+                    <td className="p-4 sm:p-5 text-[#888]">7 networks on its pricing page, including Instagram, Facebook and TikTok</td>
                     <td className="p-4 sm:p-5">
-                      <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-green-500/10 text-green-400 border border-green-500/20">
-                        Hookpost
+                      <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-white/10 text-white">
+                        Tie
                       </span>
                     </td>
                   </tr>
@@ -223,16 +237,20 @@ export default function SproutSocialAlternativePage() {
           </div>
         </section>
 
+        <IndiaCostNote slug="sprout-social" />
+
+
         <SectionFaq items={faqSchema.mainEntity} />
 
-        {/* E-E-A-T Benchmark Section */}
+        {/* Sources. Replaced a "verified benchmark" claim that had no published
+            methodology or data behind it. */}
         <section className="p-6 sm:p-8 rounded-2xl bg-white/[0.02] border border-white/10 space-y-2">
           <div className="flex items-center gap-2 text-xs text-green-400 font-semibold">
             <span className="w-2 h-2 rounded-full bg-green-400"></span>
-            <span>VERIFIED BENCHMARK &bull; SEPTEMBER 2026</span>
+            <span>SOURCES &bull; CHECKED {FACTS_CHECKED.toUpperCase()}</span>
           </div>
           <p className="text-xs sm:text-sm text-white/60 leading-relaxed">
-            Evaluated by the JR Consulting Co. Engineering Team across Meta Graph API v20, LinkedIn Marketing API, YouTube Data API v3, and X REST API endpoints. Both platforms were tested for multi-network scheduling latency and API reliability.
+            {SPROUT.name} figures were read off its own pricing page ({SPROUT.sources.join(', ')}) on {FACTS_CHECKED}; prices can differ by country and billing period. Hookpost figures are its published plans. We do not publish performance benchmarks.
           </p>
         </section>
 
@@ -242,7 +260,7 @@ export default function SproutSocialAlternativePage() {
             Ready to Upgrade from Sprout Social?
           </h2>
           <p className="text-[#888] max-w-lg mx-auto text-base">
-            No credit card required. Connect your social channels in 30 seconds.
+            No credit card required. Free plan: {FREE.channel} channels and {FREE.posts_per_month} posts a month.
           </p>
           <Link
             href="/auth"

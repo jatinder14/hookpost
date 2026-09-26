@@ -2,11 +2,25 @@ import React from "react";
 import Link from "next/link";
 import { Metadata } from "next";
 import { SectionFaq } from "../../SectionFaq";
+import { IndiaCostNote } from "../IndiaCostNote";
 import { PUBLISHABLE_CHANNEL_COUNT } from '../../channels/channel-count';
+import { pricingINR, pricingUSD } from '@hookpost/nestjs-libraries/database/prisma/subscriptions/pricing';
+
+const FREE = pricingINR.FREE;
+const STD_USD = pricingUSD.STANDARD;
+const STD_INR = pricingINR.STANDARD;
+const PRO_USD = pricingUSD.PRO;
+const inr = (n: number) => `₹${n.toLocaleString('en-IN')}`;
+
+// Later figures checked 26 Sep 2026 at later.com/pricing: Starter $18.75/mo
+// billed yearly ($25 monthly), 1 user, 8 profiles (Instagram, Facebook, TikTok,
+// Pinterest, LinkedIn, YouTube, Threads, Snapchat), 30 posts per profile per
+// month, no free plan, 14-day trial, billed in USD. No X/Twitter or Bluesky.
+const BEST_LATER_ANSWER = `Hookpost is a strong alternative to Later if you post to X, LinkedIn, YouTube, Bluesky or developer and community channels. Later has no free plan (14-day trial), its Starter plan is $18.75/month billed yearly ($25 month-to-month) for one user, and it does not support X/Twitter. Hookpost publishes to ${PUBLISHABLE_CHANNEL_COUNT} networks today, including X, with a free plan (${FREE.channel} channels, ${FREE.posts_per_month} posts a month) and Standard at ${inr(STD_INR.month_price)} ($${STD_USD.month_price}) a month. If Instagram, Facebook, Threads or TikTok are your main channels, note that Hookpost cannot publish to them yet - Instagram, Facebook and Threads await Meta approval. Later pricing checked 26 September 2026.`;
 
 export const metadata: Metadata = {
   title: "Hookpost vs Later (2026): Best Visual Scheduler Alternative",
-  description: "Looking for a Later alternative? Hookpost offers unlimited Reels, Shorts, Pinterest pins, AI hooks, open-source Docker power & $0 free tier.",
+  description: `Looking for a Later alternative? Hookpost publishes to ${PUBLISHABLE_CHANNEL_COUNT} networks including X, is open source and self-hostable, and has a free plan.`,
   keywords: ["later alternative","best later alternative","instagram scheduler like later","later competitors","later vs hookpost"],
   alternates: {
     canonical: "https://hookpost.hookstep.in/alternatives/later",
@@ -48,7 +62,7 @@ export default function LaterAlternativePage() {
         name: "What is the Best Alternative to Later in 2026?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: `Hookpost is the best modern alternative to Later for visual content creators and social media teams. Unlike Later's restrictive post limits and heavy Instagram-only focus, Hookpost provides unified video auto-publishing across ${PUBLISHABLE_CHANNEL_COUNT} networks including Instagram Reels, YouTube Shorts, Threads, and Pinterest, complete with AI caption copilot and a permanent $0 tier.`,
+          text: BEST_LATER_ANSWER,
         },
       },
       {
@@ -149,7 +163,7 @@ export default function LaterAlternativePage() {
             What is the Best Alternative to Later in 2026?
           </h2>
           <p className="text-[#d1d1d1] text-base sm:text-lg leading-relaxed">
-            Hookpost is the best modern alternative to Later for visual content creators and social media teams. Unlike Later's restrictive post limits and heavy Instagram-only focus, Hookpost provides unified video auto-publishing across {PUBLISHABLE_CHANNEL_COUNT} networks including Instagram Reels, YouTube Shorts, Threads, and Pinterest, complete with AI caption copilot and a permanent $0 tier.
+            {BEST_LATER_ANSWER}
           </p>
         </section>
 
@@ -170,29 +184,19 @@ export default function LaterAlternativePage() {
               </thead>
               <tbody className="divide-y divide-[#262626]">
                   <tr className="hover:bg-white/[0.02] transition-colors">
-                    <td className="p-4 sm:p-5 font-medium text-white">Multi-Platform Video Publishing</td>
-                    <td className="p-4 sm:p-5 text-white bg-[#FF4CE2]/5 font-semibold">✅ Auto-posts to Instagram, Shorts, Facebook, Pinterest & Threads</td>
-                    <td className="p-4 sm:p-5 text-[#888]">⚠️ Push notifications required for certain networks</td>
+                    <td className="p-4 sm:p-5 font-medium text-white">Supported Networks</td>
+                    <td className="p-4 sm:p-5 text-white bg-[#FF4CE2]/5 font-semibold">{PUBLISHABLE_CHANNEL_COUNT} publishing today, incl. X, LinkedIn, YouTube, Bluesky; Instagram, Facebook &amp; Threads await Meta approval</td>
+                    <td className="p-4 sm:p-5 text-[#888]">8: Instagram, Facebook, TikTok, Pinterest, LinkedIn, YouTube, Threads, Snapchat. No X/Twitter</td>
                     <td className="p-4 sm:p-5">
-                      <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-green-500/10 text-green-400 border border-green-500/20">
-                        Hookpost
+                      <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-white/10 text-white">
+                        Depends
                       </span>
                     </td>
                   </tr>
                   <tr className="hover:bg-white/[0.02] transition-colors">
                     <td className="p-4 sm:p-5 font-medium text-white">Monthly Post Limits</td>
-                    <td className="p-4 sm:p-5 text-white bg-[#FF4CE2]/5 font-semibold">✅ Unlimited Video & Image Scheduling</td>
-                    <td className="p-4 sm:p-5 text-[#888]">❌ Strict limits (30 posts/channel on starter tier)</td>
-                    <td className="p-4 sm:p-5">
-                      <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-green-500/10 text-green-400 border border-green-500/20">
-                        Hookpost
-                      </span>
-                    </td>
-                  </tr>
-                  <tr className="hover:bg-white/[0.02] transition-colors">
-                    <td className="p-4 sm:p-5 font-medium text-white">AI Hook & Caption Generator</td>
-                    <td className="p-4 sm:p-5 text-white bg-[#FF4CE2]/5 font-semibold">✅ Unlimited viral hooks & platform captions</td>
-                    <td className="p-4 sm:p-5 text-[#888]">⚠️ Limited monthly AI credits</td>
+                    <td className="p-4 sm:p-5 text-white bg-[#FF4CE2]/5 font-semibold">{STD_USD.posts_per_month.toLocaleString('en-US')} posts/month on Standard, {PRO_USD.posts_per_month.toLocaleString('en-US')} on Pro, {FREE.posts_per_month} on Free</td>
+                    <td className="p-4 sm:p-5 text-[#888]">30 posts per profile per month on Starter</td>
                     <td className="p-4 sm:p-5">
                       <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-green-500/10 text-green-400 border border-green-500/20">
                         Hookpost
@@ -212,7 +216,7 @@ export default function LaterAlternativePage() {
                   <tr className="hover:bg-white/[0.02] transition-colors">
                     <td className="p-4 sm:p-5 font-medium text-white">Global & Regional Payments</td>
                     <td className="p-4 sm:p-5 text-white bg-[#FF4CE2]/5 font-semibold">✅ Razorpay (UPI, NetBanking, Cards)</td>
-                    <td className="p-4 sm:p-5 text-[#888]">❌ USD credit cards only</td>
+                    <td className="p-4 sm:p-5 text-[#888]">❌ Billed in USD only</td>
                     <td className="p-4 sm:p-5">
                       <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-green-500/10 text-green-400 border border-green-500/20">
                         Hookpost
@@ -221,8 +225,8 @@ export default function LaterAlternativePage() {
                   </tr>
                   <tr className="hover:bg-white/[0.02] transition-colors">
                     <td className="p-4 sm:p-5 font-medium text-white">Pricing</td>
-                    <td className="p-4 sm:p-5 text-white bg-[#FF4CE2]/5 font-semibold">✅ $0 Starter / $29 Unlimited</td>
-                    <td className="p-4 sm:p-5 text-[#888]">❌ $25/month with per-seat caps</td>
+                    <td className="p-4 sm:p-5 text-white bg-[#FF4CE2]/5 font-semibold">✅ Free plan / {inr(STD_INR.month_price)} (${STD_USD.month_price}/mo) Standard, {STD_USD.channel} channels</td>
+                    <td className="p-4 sm:p-5 text-[#888]">$18.75/mo Starter billed yearly ($25 monthly), 1 user; no free plan, 14-day trial</td>
                     <td className="p-4 sm:p-5">
                       <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-green-500/10 text-green-400 border border-green-500/20">
                         Hookpost
@@ -234,16 +238,19 @@ export default function LaterAlternativePage() {
           </div>
         </section>
 
+        <IndiaCostNote slug="later" />
+
+
         <SectionFaq items={faqSchema.mainEntity} />
 
         {/* E-E-A-T Benchmark Section */}
         <section className="p-6 sm:p-8 rounded-2xl bg-white/[0.02] border border-white/10 space-y-2">
           <div className="flex items-center gap-2 text-xs text-green-400 font-semibold">
             <span className="w-2 h-2 rounded-full bg-green-400"></span>
-            <span>VERIFIED BENCHMARK &bull; SEPTEMBER 2026</span>
+            <span>FACTS CHECKED &bull; 26 SEPTEMBER 2026</span>
           </div>
           <p className="text-xs sm:text-sm text-white/60 leading-relaxed">
-            Evaluated by the JR Consulting Co. Engineering Team across Meta Graph API v20, LinkedIn Marketing API, YouTube Data API v3, and X REST API endpoints. Both platforms were tested for multi-network scheduling latency and API reliability.
+            Later's prices, plans and networks were read from later.com/pricing on 26 September 2026. Hookpost's figures come from its live pricing configuration.
           </p>
         </section>
 

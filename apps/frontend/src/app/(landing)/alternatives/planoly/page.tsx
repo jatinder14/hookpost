@@ -3,10 +3,27 @@ import Link from "next/link";
 import { Metadata } from "next";
 import { SectionFaq } from "../../SectionFaq";
 import { PUBLISHABLE_CHANNEL_COUNT } from '../../channels/channel-count';
+import { pricingINR, pricingUSD } from '@hookpost/nestjs-libraries/database/prisma/subscriptions/pricing';
+
+const { FREE, STANDARD: STD_INR, PRO: PRO_INR } = pricingINR;
+const { STANDARD: STD_USD, PRO: PRO_USD } = pricingUSD;
+const inr = (n: number) => n.toLocaleString('en-IN');
+// One sentence on Hookpost's sold plans, read from pricing.ts so it cannot drift.
+const HOOKPOST_PLANS = `Hookpost's free plan covers ${FREE.channel} channels and ${FREE.posts_per_month} posts a month (no AI or API). Standard is ₹${inr(STD_INR.month_price)} or $${STD_USD.month_price} a month for ${STD_INR.channel} channels and ${STD_INR.posts_per_month} posts, with AI, API and MCP. Pro is ₹${inr(PRO_INR.month_price)} or $${PRO_USD.month_price} a month for ${PRO_INR.channel} channels, ${inr(PRO_INR.posts_per_month)} posts and up to ${PRO_INR.team_member_limit} team members.`;
+const HOOKPOST_NETWORKS = `Hookpost publishes to ${PUBLISHABLE_CHANNEL_COUNT} networks for a new account today; Instagram, Facebook and Threads are awaiting Meta approval and Pinterest publishing is not available yet.`;
+
+// Planoly is not in compare/competitor-facts.ts. These figures were read off
+// https://www.planoly.com/pricing on the date below; re-check before changing.
+// The page toggles monthly/annual and says annual saves up to 15%, headline
+// "Plans starting at $14 a month": Starter $14 / $16, Growth $24 / $28, Pro $47 / $55.
+const PLANOLY_CHECKED = '26 September 2026';
+const PLANOLY_SOURCE = 'https://www.planoly.com/pricing';
+
+const BEST_ALTERNATIVE_ANSWER = `Planoly is built around Instagram and Pinterest planning, and Hookpost cannot publish to either for a new account yet: Instagram (with Facebook and Threads) is awaiting Meta approval, and Pinterest publishing is not available. If those are your main channels, Hookpost is not a replacement today. Hookpost fits if you publish mainly to YouTube, X, LinkedIn, Bluesky and similar networks; it publishes to ${PUBLISHABLE_CHANNEL_COUNT} networks for a new account. Planoly's plans start at $14 a month (Starter: 1 social set, 1 user), with a 14-day trial and a free plan on its mobile app limited to 10 uploads a month. ${HOOKPOST_PLANS} Planoly prices checked ${PLANOLY_CHECKED}.`;
 
 export const metadata: Metadata = {
   title: "Hookpost vs Planoly (2026): Visual Planner Alternative",
-  description: "Looking for the best Planoly alternative? Hookpost provides visual calendar planning, multi-network auto-posting for Reels and Shorts, AI hooks & $0 tier.",
+  description: "Compare Hookpost vs Planoly on price, free plans and networks. Planoly centres on Instagram and Pinterest; Hookpost cannot publish to Instagram or Pinterest for new accounts yet.",
   keywords: ["planoly alternative","planoly competitors","planoly vs hookpost","instagram grid planner alternative","planoly pricing"],
   alternates: {
     canonical: "https://hookpost.hookstep.in/alternatives/planoly",
@@ -48,7 +65,7 @@ export default function PlanolyAlternativePage() {
         name: "What is the Best Alternative to Planoly in 2026?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: `Hookpost is the best alternative to Planoly for creators, influencers, and brands seeking modern visual planning. While Planoly focuses primarily on Instagram grids with rigid channel caps, Hookpost auto-publishes visual reels, carousels, and videos across ${PUBLISHABLE_CHANNEL_COUNT} channels including Instagram Reels, YouTube Shorts, X, and Pinterest without manual push notifications.`,
+          text: BEST_ALTERNATIVE_ANSWER,
         },
       },
       {
@@ -149,7 +166,7 @@ export default function PlanolyAlternativePage() {
             What is the Best Alternative to Planoly in 2026?
           </h2>
           <p className="text-[#d1d1d1] text-base sm:text-lg leading-relaxed">
-            Hookpost is the best alternative to Planoly for creators, influencers, and brands seeking modern visual planning. While Planoly focuses primarily on Instagram grids with rigid channel caps, Hookpost auto-publishes visual reels, carousels, and videos across {PUBLISHABLE_CHANNEL_COUNT} channels including Instagram Reels, YouTube Shorts, X, and Pinterest without manual push notifications.
+            {BEST_ALTERNATIVE_ANSWER}
           </p>
         </section>
 
@@ -170,39 +187,59 @@ export default function PlanolyAlternativePage() {
               </thead>
               <tbody className="divide-y divide-[#262626]">
                   <tr className="hover:bg-white/[0.02] transition-colors">
-                    <td className="p-4 sm:p-5 font-medium text-white">True Auto-Publishing</td>
-                    <td className="p-4 sm:p-5 text-white bg-[#FF4CE2]/5 font-semibold">✅ 100% Automated direct posting across all networks</td>
-                    <td className="p-4 sm:p-5 text-[#888]">⚠️ Requires mobile app push notifications for some posts</td>
+                    <td className="p-4 sm:p-5 font-medium text-white">Instagram &amp; Pinterest Publishing</td>
+                    <td className="p-4 sm:p-5 text-white bg-[#FF4CE2]/5 font-semibold">❌ Not available to new accounts yet (Instagram awaiting Meta approval; Pinterest publishing unavailable)</td>
+                    <td className="p-4 sm:p-5 text-[#888]">✅ Part of every social set, with Instagram grid preview</td>
                     <td className="p-4 sm:p-5">
-                      <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-green-500/10 text-green-400 border border-green-500/20">
-                        Hookpost
+                      <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-white/10 text-white/70">
+                        Planoly
                       </span>
                     </td>
                   </tr>
                   <tr className="hover:bg-white/[0.02] transition-colors">
-                    <td className="p-4 sm:p-5 font-medium text-white">Cross-Platform Video Sync</td>
-                    <td className="p-4 sm:p-5 text-white bg-[#FF4CE2]/5 font-semibold">✅ Schedule once, auto-distribute to 18 networks</td>
-                    <td className="p-4 sm:p-5 text-[#888]">❌ Narrow focus on Instagram & Pinterest</td>
+                    <td className="p-4 sm:p-5 font-medium text-white">Other Networks</td>
+                    <td className="p-4 sm:p-5 text-white bg-[#FF4CE2]/5 font-semibold">✅ {PUBLISHABLE_CHANNEL_COUNT} networks for new accounts, including YouTube, X, LinkedIn, Bluesky, Discord, Telegram and WordPress</td>
+                    <td className="p-4 sm:p-5 text-[#888]">One social set = 1 each of Instagram, Facebook, X, Pinterest, LinkedIn, YouTube, Threads and TikTok</td>
                     <td className="p-4 sm:p-5">
-                      <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-green-500/10 text-green-400 border border-green-500/20">
-                        Hookpost
+                      <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-white/10 text-white">
+                        Tie
                       </span>
                     </td>
                   </tr>
                   <tr className="hover:bg-white/[0.02] transition-colors">
-                    <td className="p-4 sm:p-5 font-medium text-white">AI Copywriter & Hook Engine</td>
-                    <td className="p-4 sm:p-5 text-white bg-[#FF4CE2]/5 font-semibold">✅ Included platform-specific hook generation</td>
-                    <td className="p-4 sm:p-5 text-[#888]">⚠️ Basic caption helper</td>
+                    <td className="p-4 sm:p-5 font-medium text-white">Auto-Publishing</td>
+                    <td className="p-4 sm:p-5 text-white bg-[#FF4CE2]/5 font-semibold">✅ Direct posting on every network it supports</td>
+                    <td className="p-4 sm:p-5 text-[#888]">⚠️ Auto-posts where platforms allow; push notifications to post natively otherwise</td>
                     <td className="p-4 sm:p-5">
-                      <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-green-500/10 text-green-400 border border-green-500/20">
-                        Hookpost
+                      <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-white/10 text-white">
+                        Tie
+                      </span>
+                    </td>
+                  </tr>
+                  <tr className="hover:bg-white/[0.02] transition-colors">
+                    <td className="p-4 sm:p-5 font-medium text-white">Entry Price</td>
+                    <td className="p-4 sm:p-5 text-white bg-[#FF4CE2]/5 font-semibold">₹{inr(STD_INR.month_price)} or ${STD_USD.month_price}/mo Standard ({STD_INR.channel} channels, 1 user)</td>
+                    <td className="p-4 sm:p-5 text-[#888]">Starter $14–$16/mo depending on billing period (1 social set, 1 user)</td>
+                    <td className="p-4 sm:p-5">
+                      <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-white/10 text-white">
+                        Tie
+                      </span>
+                    </td>
+                  </tr>
+                  <tr className="hover:bg-white/[0.02] transition-colors">
+                    <td className="p-4 sm:p-5 font-medium text-white">AI Writing</td>
+                    <td className="p-4 sm:p-5 text-white bg-[#FF4CE2]/5 font-semibold">✅ On Standard and Pro (not on Free)</td>
+                    <td className="p-4 sm:p-5 text-[#888]">✅ AI post ideas and caption suggestions on every plan</td>
+                    <td className="p-4 sm:p-5">
+                      <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-white/10 text-white">
+                        Tie
                       </span>
                     </td>
                   </tr>
                   <tr className="hover:bg-white/[0.02] transition-colors">
                     <td className="p-4 sm:p-5 font-medium text-white">Payment Flexibility</td>
                     <td className="p-4 sm:p-5 text-white bg-[#FF4CE2]/5 font-semibold">✅ Razorpay (UPI, NetBanking &amp; Cards)</td>
-                    <td className="p-4 sm:p-5 text-[#888]">❌ USD cards only</td>
+                    <td className="p-4 sm:p-5 text-[#888]">Prices in USD; payment methods not listed on its pricing page</td>
                     <td className="p-4 sm:p-5">
                       <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-green-500/10 text-green-400 border border-green-500/20">
                         Hookpost
@@ -211,8 +248,8 @@ export default function PlanolyAlternativePage() {
                   </tr>
                   <tr className="hover:bg-white/[0.02] transition-colors">
                     <td className="p-4 sm:p-5 font-medium text-white">Free Tier</td>
-                    <td className="p-4 sm:p-5 text-white bg-[#FF4CE2]/5 font-semibold">✅ Generous $0 Starter Plan</td>
-                    <td className="p-4 sm:p-5 text-[#888]">❌ Limited 7-day trial then paid</td>
+                    <td className="p-4 sm:p-5 text-white bg-[#FF4CE2]/5 font-semibold">✅ {FREE.channel} channels, {FREE.posts_per_month} posts/month</td>
+                    <td className="p-4 sm:p-5 text-[#888]">⚠️ Free plan on the mobile app only, 10 uploads/month; 14-day trial on paid plans</td>
                     <td className="p-4 sm:p-5">
                       <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-green-500/10 text-green-400 border border-green-500/20">
                         Hookpost
@@ -226,14 +263,15 @@ export default function PlanolyAlternativePage() {
 
         <SectionFaq items={faqSchema.mainEntity} />
 
-        {/* E-E-A-T Benchmark Section */}
+        {/* Sources. Replaced a "verified benchmark" claim that had no published
+            methodology or data behind it. */}
         <section className="p-6 sm:p-8 rounded-2xl bg-white/[0.02] border border-white/10 space-y-2">
           <div className="flex items-center gap-2 text-xs text-green-400 font-semibold">
             <span className="w-2 h-2 rounded-full bg-green-400"></span>
-            <span>VERIFIED BENCHMARK &bull; SEPTEMBER 2026</span>
+            <span>SOURCES &bull; CHECKED {PLANOLY_CHECKED.toUpperCase()}</span>
           </div>
           <p className="text-xs sm:text-sm text-white/60 leading-relaxed">
-            Evaluated by the JR Consulting Co. Engineering Team across Meta Graph API v20, LinkedIn Marketing API, YouTube Data API v3, and X REST API endpoints. Both platforms were tested for multi-network scheduling latency and API reliability.
+            {"Planoly"} figures were read off its own pricing page ({PLANOLY_SOURCE}) on {PLANOLY_CHECKED}; prices can differ by country and billing period. Hookpost figures are its published plans. We do not publish performance benchmarks.
           </p>
         </section>
 
@@ -243,7 +281,7 @@ export default function PlanolyAlternativePage() {
             Ready to Upgrade from Planoly?
           </h2>
           <p className="text-[#888] max-w-lg mx-auto text-base">
-            No credit card required. Connect your social channels in 30 seconds.
+            No credit card required. Free plan: {FREE.channel} channels and {FREE.posts_per_month} posts a month.
           </p>
           <Link
             href="/auth"

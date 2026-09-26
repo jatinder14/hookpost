@@ -2,10 +2,24 @@ import React from "react";
 import Link from "next/link";
 import { Metadata } from "next";
 import { SectionFaq } from "../../SectionFaq";
+import { IndiaCostNote } from "../IndiaCostNote";
+import { PUBLISHABLE_CHANNEL_COUNT } from "../../channels/channel-count";
+import { pricingINR, pricingUSD } from '@hookpost/nestjs-libraries/database/prisma/subscriptions/pricing';
+import { COMPETITOR_FACTS, FACTS_CHECKED } from '../../compare/competitor-facts';
+
+const { FREE, STANDARD: STD_INR, PRO: PRO_INR } = pricingINR;
+const { STANDARD: STD_USD, PRO: PRO_USD } = pricingUSD;
+const inr = (n: number) => n.toLocaleString('en-IN');
+// One sentence on Hookpost's sold plans, read from pricing.ts so it cannot drift.
+const HOOKPOST_PLANS = `Hookpost's free plan covers ${FREE.channel} channels and ${FREE.posts_per_month} posts a month (no AI or API). Standard is ₹${inr(STD_INR.month_price)} or $${STD_USD.month_price} a month for ${STD_INR.channel} channels and ${STD_INR.posts_per_month} posts, with AI, API and MCP. Pro is ₹${inr(PRO_INR.month_price)} or $${PRO_USD.month_price} a month for ${PRO_INR.channel} channels, ${inr(PRO_INR.posts_per_month)} posts and up to ${PRO_INR.team_member_limit} team members.`;
+const HOOKPOST_NETWORKS = `Hookpost publishes to ${PUBLISHABLE_CHANNEL_COUNT} networks for a new account today; Instagram, Facebook and Threads are awaiting Meta approval and Pinterest publishing is not available yet.`;
+const SP = COMPETITOR_FACTS.socialpilot;
+
+const BEST_ALTERNATIVE_ANSWER = `Hookpost is an open-source alternative to SocialPilot with a free plan. SocialPilot has no free plan (14-day trial); its Essentials plan is $25.50 a month billed annually ($30 billed monthly) for 7 channels and 1 user, and Indian visitors are shown INR prices. SocialPilot includes an MCP server on all paid plans, but its API is Enterprise-only. ${HOOKPOST_PLANS} ${HOOKPOST_NETWORKS} SocialPilot prices checked ${FACTS_CHECKED}.`;
 
 export const metadata: Metadata = {
   title: "Hookpost vs SocialPilot (2026): Agency Alternative",
-  description: "Compare Hookpost vs SocialPilot. Hookpost provides open-source self-hosting, Claude MCP integration, 18 social networks, and flat pricing starting at $0.",
+  description: `Compare Hookpost vs SocialPilot: open-source self-hosting, a free plan, and flat pricing (Standard ₹${inr(STD_INR.month_price)} or $${STD_USD.month_price}/mo) vs SocialPilot's $25.50/mo Essentials billed annually.`,
   keywords: ["socialpilot alternative","socialpilot competitors","socialpilot vs hookpost","social media tool for teams","socialpilot pricing"],
   alternates: {
     canonical: "https://hookpost.hookstep.in/alternatives/socialpilot",
@@ -47,7 +61,7 @@ export default function SocialpilotAlternativePage() {
         name: "What is the Best Alternative to SocialPilot in 2026?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "Hookpost is the top modern alternative to SocialPilot for digital marketing agencies and collaborative teams. Where SocialPilot requires expensive tier upgrades to unlock multi-account team workflows, Hookpost provides unlimited workspaces, open-source Docker deployment, native AI agent hooks, and flexible monthly billing starting at $0.",
+          text: BEST_ALTERNATIVE_ANSWER,
         },
       },
       {
@@ -148,7 +162,7 @@ export default function SocialpilotAlternativePage() {
             What is the Best Alternative to SocialPilot in 2026?
           </h2>
           <p className="text-[#d1d1d1] text-base sm:text-lg leading-relaxed">
-            Hookpost is the top modern alternative to SocialPilot for digital marketing agencies and collaborative teams. Where SocialPilot requires expensive tier upgrades to unlock multi-account team workflows, Hookpost provides unlimited workspaces, open-source Docker deployment, native AI agent hooks, and flexible monthly billing starting at $0.
+            {BEST_ALTERNATIVE_ANSWER}
           </p>
         </section>
 
@@ -170,8 +184,8 @@ export default function SocialpilotAlternativePage() {
               <tbody className="divide-y divide-[#262626]">
                   <tr className="hover:bg-white/[0.02] transition-colors">
                     <td className="p-4 sm:p-5 font-medium text-white">Pricing Flexibility</td>
-                    <td className="p-4 sm:p-5 text-white bg-[#FF4CE2]/5 font-semibold">✅ $0 Free Tier / ₹599 ($15/mo)</td>
-                    <td className="p-4 sm:p-5 text-[#888]">❌ $30/month minimum (No free tier)</td>
+                    <td className="p-4 sm:p-5 text-white bg-[#FF4CE2]/5 font-semibold">✅ $0 Free / ₹{inr(STD_INR.month_price)} or ${STD_USD.month_price}/mo Standard ({STD_INR.channel} channels)</td>
+                    <td className="p-4 sm:p-5 text-[#888]">⚠️ No free plan (14-day trial); Essentials $25.50/mo billed annually ($30 monthly), 7 channels</td>
                     <td className="p-4 sm:p-5">
                       <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-green-500/10 text-green-400 border border-green-500/20">
                         Hookpost
@@ -189,19 +203,19 @@ export default function SocialpilotAlternativePage() {
                     </td>
                   </tr>
                   <tr className="hover:bg-white/[0.02] transition-colors">
-                    <td className="p-4 sm:p-5 font-medium text-white">AI Agent & CLI Integration</td>
-                    <td className="p-4 sm:p-5 text-white bg-[#FF4CE2]/5 font-semibold">✅ Official MCP server + CLI (npx hookpost)</td>
-                    <td className="p-4 sm:p-5 text-[#888]">❌ Standard dashboard only</td>
+                    <td className="p-4 sm:p-5 font-medium text-white">AI Agent &amp; API Access</td>
+                    <td className="p-4 sm:p-5 text-white bg-[#FF4CE2]/5 font-semibold">✅ MCP server + CLI (npx hookpost); API and MCP on Standard and Pro</td>
+                    <td className="p-4 sm:p-5 text-[#888]">✅ MCP server on all paid plans; API on Enterprise only</td>
                     <td className="p-4 sm:p-5">
-                      <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-green-500/10 text-green-400 border border-green-500/20">
-                        Hookpost
+                      <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-white/10 text-white">
+                        Tie
                       </span>
                     </td>
                   </tr>
                   <tr className="hover:bg-white/[0.02] transition-colors">
                     <td className="p-4 sm:p-5 font-medium text-white">Payment Methods</td>
                     <td className="p-4 sm:p-5 text-white bg-[#FF4CE2]/5 font-semibold">✅ Razorpay (UPI, NetBanking &amp; Cards)</td>
-                    <td className="p-4 sm:p-5 text-[#888]">❌ International credit cards only</td>
+                    <td className="p-4 sm:p-5 text-[#888]">Shows INR prices to Indian visitors; UPI not listed on its pricing page</td>
                     <td className="p-4 sm:p-5">
                       <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-green-500/10 text-green-400 border border-green-500/20">
                         Hookpost
@@ -210,11 +224,11 @@ export default function SocialpilotAlternativePage() {
                   </tr>
                   <tr className="hover:bg-white/[0.02] transition-colors">
                     <td className="p-4 sm:p-5 font-medium text-white">Supported Networks</td>
-                    <td className="p-4 sm:p-5 text-white bg-[#FF4CE2]/5 font-semibold">18 Platforms</td>
-                    <td className="p-4 sm:p-5 text-[#888]">8-10 Platforms</td>
+                    <td className="p-4 sm:p-5 text-white bg-[#FF4CE2]/5 font-semibold">{PUBLISHABLE_CHANNEL_COUNT} networks publishable for new accounts (Instagram, Facebook, Threads and Pinterest not yet)</td>
+                    <td className="p-4 sm:p-5 text-[#888]">10 networks listed, including Instagram, Facebook, TikTok and Google Business Profile</td>
                     <td className="p-4 sm:p-5">
-                      <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-green-500/10 text-green-400 border border-green-500/20">
-                        Hookpost
+                      <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-white/10 text-white">
+                        Tie
                       </span>
                     </td>
                   </tr>
@@ -223,16 +237,20 @@ export default function SocialpilotAlternativePage() {
           </div>
         </section>
 
+        <IndiaCostNote slug="socialpilot" />
+
+
         <SectionFaq items={faqSchema.mainEntity} />
 
-        {/* E-E-A-T Benchmark Section */}
+        {/* Sources. Replaced a "verified benchmark" claim that had no published
+            methodology or data behind it. */}
         <section className="p-6 sm:p-8 rounded-2xl bg-white/[0.02] border border-white/10 space-y-2">
           <div className="flex items-center gap-2 text-xs text-green-400 font-semibold">
             <span className="w-2 h-2 rounded-full bg-green-400"></span>
-            <span>VERIFIED BENCHMARK &bull; SEPTEMBER 2026</span>
+            <span>SOURCES &bull; CHECKED {FACTS_CHECKED.toUpperCase()}</span>
           </div>
           <p className="text-xs sm:text-sm text-white/60 leading-relaxed">
-            Evaluated by the JR Consulting Co. Engineering Team across Meta Graph API v20, LinkedIn Marketing API, YouTube Data API v3, and X REST API endpoints. Both platforms were tested for multi-network scheduling latency and API reliability.
+            {SP.name} figures were read off its own pricing page ({SP.sources.join(', ')}) on {FACTS_CHECKED}; prices can differ by country and billing period. Hookpost figures are its published plans. We do not publish performance benchmarks.
           </p>
         </section>
 
@@ -242,7 +260,7 @@ export default function SocialpilotAlternativePage() {
             Ready to Upgrade from SocialPilot?
           </h2>
           <p className="text-[#888] max-w-lg mx-auto text-base">
-            No credit card required. Connect your social channels in 30 seconds.
+            No credit card required. Free plan: {FREE.channel} channels and {FREE.posts_per_month} posts a month.
           </p>
           <Link
             href="/auth"

@@ -7,7 +7,7 @@ import { PUBLISHABLE_CHANNEL_COUNT } from '../channels/channel-count';
 export const metadata: Metadata = {
   title: "Social Media MCP Server for Claude & Cursor | Hookpost",
   description:
-    "Open-source Model Context Protocol server. Connect Claude, Cursor, and other AI agents to 18 social networks to draft, schedule, and analyse content.",
+    "Open-source Model Context Protocol server. Connect Claude, Cursor, and other AI agents to Hookpost to draft and schedule posts on X, LinkedIn, YouTube, Bluesky, Discord, Telegram and more.",
   keywords: [
     "social media mcp server",
     "mcp server social media",
@@ -25,7 +25,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Social Media MCP Server for Claude & Cursor | Hookpost",
     description:
-      "Connect Claude Desktop, Cursor, and AI agents directly to 18 social networks. Official open-source Model Context Protocol server for automated multi-channel publishing.",
+      "Connect Claude Desktop, Cursor, and AI agents to Hookpost. Open-source Model Context Protocol server for scheduling posts across X, LinkedIn, YouTube, Bluesky and more.",
     url: "https://hookpost.hookstep.in/mcp",
     siteName: "Hookpost",
     images: [
@@ -308,7 +308,7 @@ export default function McpPage() {
             What is a Social Media MCP Server?
           </h2>
           <p className="text-[#d1d1d1] text-base sm:text-lg leading-relaxed">
-            A <strong>Social Media MCP Server</strong> is a specialized implementation of Anthropic's open Model Context Protocol that allows AI models (such as Claude 3.7 Sonnet, ChatGPT, and Cursor AI) to securely interact with social media publishing APIs. Through standardized JSON-RPC tool endpoints, AI agents can inspect scheduled calendars, draft platform-compliant captions, validate character limits, and publish directly to {PUBLISHABLE_CHANNEL_COUNT} social networks without human context switching.
+            A <strong>Social Media MCP Server</strong> is a specialized implementation of Anthropic's open Model Context Protocol that allows AI models (such as Claude, ChatGPT and Cursor) to securely interact with social media publishing APIs. Through standardized JSON-RPC tool endpoints, AI agents can inspect scheduled calendars, draft platform-compliant captions, validate character limits, and publish directly to {PUBLISHABLE_CHANNEL_COUNT} social networks without human context switching.
           </p>
         </section>
 
@@ -530,7 +530,7 @@ export default function McpPage() {
                 </tr>
                 <tr className="hover:bg-white/[0.02]">
                   <td className="p-4 text-neutral-400">Cryptographic Security</td>
-                  <td className="p-4 text-white font-semibold">AES-256 GCM encrypted OAuth tokens; zero transmission of social credentials to LLMs</td>
+                  <td className="p-4 text-white font-semibold">Social account tokens stay on the Hookpost server; MCP tools return channel names and IDs, never credentials. Access is scoped to one workspace&apos;s API key.</td>
                 </tr>
                 <tr className="hover:bg-white/[0.02]">
                   <td className="p-4 text-neutral-400">AI Client Compatibility</td>
@@ -538,11 +538,11 @@ export default function McpPage() {
                 </tr>
                 <tr className="hover:bg-white/[0.02]">
                   <td className="p-4 text-neutral-400">Supported Social Platforms</td>
-                  <td className="p-4 text-white font-semibold">18 Networks (Instagram, YouTube, X, LinkedIn, Facebook, Threads, Bluesky, Pinterest, Discord, Telegram...)</td>
+                  <td className="p-4 text-white font-semibold">{PUBLISHABLE_CHANNEL_COUNT} networks today (X, LinkedIn, YouTube, Bluesky, Discord, Slack, Telegram, WordPress, Dev.to...). Instagram, Facebook and Threads await Meta approval.</td>
                 </tr>
                 <tr className="hover:bg-white/[0.02]">
                   <td className="p-4 text-neutral-400">Open-Source License</td>
-                  <td className="p-4 text-white font-semibold">AGPL-3.0 (full self-hosting &amp; commercial SaaS freedom)</td>
+                  <td className="p-4 text-white font-semibold">AGPL-3.0 (self-host freely; if you offer a modified version as a service, share its source)</td>
                 </tr>
               </tbody>
             </table>

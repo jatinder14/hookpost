@@ -243,7 +243,7 @@ export default async function HomePage() {
       {/* ---------------------------------------------------------- channels */}
       <section className="mx-auto w-full max-w-[1280px] px-5 py-20 sm:px-10">
         <h2 className="text-3xl font-extrabold tracking-tight font-jakarta sm:text-4xl text-balance">
-          18 networks, including the ones nobody else covers
+          {PUBLISHABLE_CHANNEL_COUNT} networks today, including the ones others skip
         </h2>
         <p className="mt-3 max-w-[62ch] text-white/60">
           Alongside the usual social networks, Hookpost publishes to developer

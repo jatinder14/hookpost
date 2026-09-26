@@ -2,11 +2,24 @@ import React from "react";
 import Link from "next/link";
 import { Metadata } from "next";
 import { SectionFaq } from "../../SectionFaq";
-import { CHANNEL_COUNT } from "../../channels/channel-count";
+import { IndiaCostNote } from "../IndiaCostNote";
+import { PUBLISHABLE_CHANNEL_COUNT } from "../../channels/channel-count";
+import { pricingINR, pricingUSD } from '@hookpost/nestjs-libraries/database/prisma/subscriptions/pricing';
+import { COMPETITOR_FACTS, FACTS_CHECKED } from '../../compare/competitor-facts';
+
+const { FREE, STANDARD: STD_INR, PRO: PRO_INR } = pricingINR;
+const { STANDARD: STD_USD, PRO: PRO_USD } = pricingUSD;
+const inr = (n: number) => n.toLocaleString('en-IN');
+// One sentence on Hookpost's sold plans, read from pricing.ts so it cannot drift.
+const HOOKPOST_PLANS = `Hookpost's free plan covers ${FREE.channel} channels and ${FREE.posts_per_month} posts a month (no AI or API). Standard is ₹${inr(STD_INR.month_price)} or $${STD_USD.month_price} a month for ${STD_INR.channel} channels and ${STD_INR.posts_per_month} posts, with AI, API and MCP. Pro is ₹${inr(PRO_INR.month_price)} or $${PRO_USD.month_price} a month for ${PRO_INR.channel} channels, ${inr(PRO_INR.posts_per_month)} posts and up to ${PRO_INR.team_member_limit} team members.`;
+const HOOKPOST_NETWORKS = `Hookpost publishes to ${PUBLISHABLE_CHANNEL_COUNT} networks for a new account today; Instagram, Facebook and Threads are awaiting Meta approval and Pinterest publishing is not available yet.`;
+const PUB = COMPETITOR_FACTS.publer;
+
+const BEST_ALTERNATIVE_ANSWER = `Hookpost is an open-source alternative to Publer with flat plans instead of per-account pricing. Publer's Professional plan is $4 per social account per month billed annually, and its API and MCP access are on the Business plan ($8 per account per month billed annually). Publer's free plan covers 3 accounts with 10 scheduled posts each and no X. ${HOOKPOST_PLANS} ${HOOKPOST_NETWORKS} Publer prices checked ${FACTS_CHECKED}.`;
 
 export const metadata: Metadata = {
   title: "Hookpost vs Publer (2026): Open-Source Alternative",
-  description: `Compare Hookpost vs Publer. Hookpost delivers ${CHANNEL_COUNT} social channels, native Claude MCP server, Docker self-hosting, and localized Razorpay UPI payments.`,
+  description: `Compare Hookpost vs Publer: flat plans from $0 (Standard ₹${inr(STD_INR.month_price)} or $${STD_USD.month_price}/mo for ${STD_INR.channel} channels) vs Publer's $4 per account, Docker self-hosting, and Razorpay UPI billing.`,
   keywords: ["publer alternative","publer competitors","publer vs hookpost","free publer alternative","publer pricing 2026"],
   alternates: {
     canonical: "https://hookpost.hookstep.in/alternatives/publer",
@@ -48,7 +61,7 @@ export default function PublerAlternativePage() {
         name: "What is the Best Alternative to Publer in 2026?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "Hookpost is the premier open-source alternative to Publer for content creators, agencies, and automation power users. While Publer charges incremental per-account add-on fees, Hookpost delivers bundled scheduling across 18 social networks, official Claude Model Context Protocol (MCP) support, Docker self-hosting, and regional UPI billing starting at $0.",
+          text: BEST_ALTERNATIVE_ANSWER,
         },
       },
       {
@@ -149,7 +162,7 @@ export default function PublerAlternativePage() {
             What is the Best Alternative to Publer in 2026?
           </h2>
           <p className="text-[#d1d1d1] text-base sm:text-lg leading-relaxed">
-            Hookpost is the premier open-source alternative to Publer for content creators, agencies, and automation power users. While Publer charges incremental per-account add-on fees, Hookpost delivers bundled scheduling across 18 social networks, official Claude Model Context Protocol (MCP) support, Docker self-hosting, and regional UPI billing starting at $0.
+            {BEST_ALTERNATIVE_ANSWER}
           </p>
         </section>
 
@@ -170,12 +183,12 @@ export default function PublerAlternativePage() {
               </thead>
               <tbody className="divide-y divide-[#262626]">
                   <tr className="hover:bg-white/[0.02] transition-colors">
-                    <td className="p-4 sm:p-5 font-medium text-white">Developer & AI MCP Server</td>
-                    <td className="p-4 sm:p-5 text-white bg-[#FF4CE2]/5 font-semibold">✅ Official JSON-RPC MCP server for Claude & Cursor</td>
-                    <td className="p-4 sm:p-5 text-[#888]">❌ Web dashboard and browser extension only</td>
+                    <td className="p-4 sm:p-5 font-medium text-white">API &amp; AI MCP Server</td>
+                    <td className="p-4 sm:p-5 text-white bg-[#FF4CE2]/5 font-semibold">✅ API and MCP server on Standard and Pro (not on Free)</td>
+                    <td className="p-4 sm:p-5 text-[#888]">✅ API and MCP on the Business plan ($8 per account/mo, billed annually)</td>
                     <td className="p-4 sm:p-5">
-                      <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-green-500/10 text-green-400 border border-green-500/20">
-                        Hookpost
+                      <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-white/10 text-white">
+                        Tie
                       </span>
                     </td>
                   </tr>
@@ -192,7 +205,7 @@ export default function PublerAlternativePage() {
                   <tr className="hover:bg-white/[0.02] transition-colors">
                     <td className="p-4 sm:p-5 font-medium text-white">Billing &amp; Payment Methods</td>
                     <td className="p-4 sm:p-5 text-white bg-[#FF4CE2]/5 font-semibold">Billed in INR — UPI, NetBanking, Indian cards</td>
-                    <td className="p-4 sm:p-5 text-[#888]">Billed in USD — international cards</td>
+                    <td className="p-4 sm:p-5 text-[#888]">Shows INR prices to Indian visitors; UPI not listed on its plans page</td>
                     <td className="p-4 sm:p-5">
                       <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-green-500/10 text-green-400 border border-green-500/20">
                         Hookpost
@@ -201,8 +214,8 @@ export default function PublerAlternativePage() {
                   </tr>
                   <tr className="hover:bg-white/[0.02] transition-colors">
                     <td className="p-4 sm:p-5 font-medium text-white">Channel Scaling Costs</td>
-                    <td className="p-4 sm:p-5 text-white bg-[#FF4CE2]/5 font-semibold">✅ Flat transparent plans with bundled accounts</td>
-                    <td className="p-4 sm:p-5 text-[#888]">⚠️ Per-account monthly cost scaling</td>
+                    <td className="p-4 sm:p-5 text-white bg-[#FF4CE2]/5 font-semibold">✅ Flat price: {STD_INR.channel} channels on Standard, {PRO_INR.channel} on Pro</td>
+                    <td className="p-4 sm:p-5 text-[#888]">⚠️ Professional: $4 per account/mo, billed annually</td>
                     <td className="p-4 sm:p-5">
                       <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-green-500/10 text-green-400 border border-green-500/20">
                         Hookpost
@@ -211,8 +224,8 @@ export default function PublerAlternativePage() {
                   </tr>
                   <tr className="hover:bg-white/[0.02] transition-colors">
                     <td className="p-4 sm:p-5 font-medium text-white">Free Tier</td>
-                    <td className="p-4 sm:p-5 text-white bg-[#FF4CE2]/5 font-semibold">✅ Permanent $0 Free Tier</td>
-                    <td className="p-4 sm:p-5 text-[#888]">✅ Basic Free Plan (Limited)</td>
+                    <td className="p-4 sm:p-5 text-white bg-[#FF4CE2]/5 font-semibold">✅ {FREE.channel} channels, {FREE.posts_per_month} posts/month (no AI or API)</td>
+                    <td className="p-4 sm:p-5 text-[#888]">✅ 3 accounts, 10 scheduled posts each, no X</td>
                     <td className="p-4 sm:p-5">
                       <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-white/10 text-white">
                         Tie
@@ -224,16 +237,20 @@ export default function PublerAlternativePage() {
           </div>
         </section>
 
+        <IndiaCostNote slug="publer" />
+
+
         <SectionFaq items={faqSchema.mainEntity} />
 
-        {/* E-E-A-T Benchmark Section */}
+        {/* Sources. Replaced a "verified benchmark" claim that had no published
+            methodology or data behind it. */}
         <section className="p-6 sm:p-8 rounded-2xl bg-white/[0.02] border border-white/10 space-y-2">
           <div className="flex items-center gap-2 text-xs text-green-400 font-semibold">
             <span className="w-2 h-2 rounded-full bg-green-400"></span>
-            <span>VERIFIED BENCHMARK &bull; SEPTEMBER 2026</span>
+            <span>SOURCES &bull; CHECKED {FACTS_CHECKED.toUpperCase()}</span>
           </div>
           <p className="text-xs sm:text-sm text-white/60 leading-relaxed">
-            Evaluated by the JR Consulting Co. Engineering Team across Meta Graph API v20, LinkedIn Marketing API, YouTube Data API v3, and X REST API endpoints. Both platforms were tested for multi-network scheduling latency and API reliability.
+            {PUB.name} figures were read off its own pricing page ({PUB.sources.join(', ')}) on {FACTS_CHECKED}; prices can differ by country and billing period. Hookpost figures are its published plans. We do not publish performance benchmarks.
           </p>
         </section>
 
@@ -243,7 +260,7 @@ export default function PublerAlternativePage() {
             Ready to Upgrade from Publer?
           </h2>
           <p className="text-[#888] max-w-lg mx-auto text-base">
-            No credit card required. Connect your social channels in 30 seconds.
+            No credit card required. Free plan: {FREE.channel} channels and {FREE.posts_per_month} posts a month.
           </p>
           <Link
             href="/auth"

@@ -2,6 +2,7 @@ import React from "react";
 import Link from "next/link";
 import { Metadata } from "next";
 import { SectionFaq } from "../../SectionFaq";
+import { IndiaCostNote } from "../IndiaCostNote";
 import { CHANNEL_COUNT } from "../../channels/channel-count";
 
 export const metadata: Metadata = {
@@ -558,6 +559,8 @@ export default function PostizAlternativePage() {
         </section>
 
         {/* Visible FAQ Section */}
+        <IndiaCostNote slug="postiz" />
+
         <SectionFaq items={faqSchema.mainEntity} />
 
         {/* E-E-A-T Benchmark Section */}

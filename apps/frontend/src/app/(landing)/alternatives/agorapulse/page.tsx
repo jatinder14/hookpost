@@ -2,11 +2,24 @@ import React from "react";
 import Link from "next/link";
 import { Metadata } from "next";
 import { SectionFaq } from "../../SectionFaq";
-import { CHANNEL_COUNT, PUBLISHABLE_CHANNEL_COUNT } from '../../channels/channel-count';
+import { IndiaCostNote } from "../IndiaCostNote";
+import { PUBLISHABLE_CHANNEL_COUNT } from '../../channels/channel-count';
+import { pricingINR, pricingUSD } from '@hookpost/nestjs-libraries/database/prisma/subscriptions/pricing';
+import { COMPETITOR_FACTS, FACTS_CHECKED } from '../../compare/competitor-facts';
+
+const { FREE, STANDARD: STD_INR, PRO: PRO_INR } = pricingINR;
+const { STANDARD: STD_USD, PRO: PRO_USD } = pricingUSD;
+const inr = (n: number) => n.toLocaleString('en-IN');
+// One sentence on Hookpost's sold plans, read from pricing.ts so it cannot drift.
+const HOOKPOST_PLANS = `Hookpost's free plan covers ${FREE.channel} channels and ${FREE.posts_per_month} posts a month (no AI or API). Standard is ₹${inr(STD_INR.month_price)} or $${STD_USD.month_price} a month for ${STD_INR.channel} channels and ${STD_INR.posts_per_month} posts, with AI, API and MCP. Pro is ₹${inr(PRO_INR.month_price)} or $${PRO_USD.month_price} a month for ${PRO_INR.channel} channels, ${inr(PRO_INR.posts_per_month)} posts and up to ${PRO_INR.team_member_limit} team members.`;
+const HOOKPOST_NETWORKS = `Hookpost publishes to ${PUBLISHABLE_CHANNEL_COUNT} networks for a new account today; Instagram, Facebook and Threads are awaiting Meta approval and Pinterest publishing is not available yet.`;
+const AGORA = COMPETITOR_FACTS.agorapulse;
+
+const BEST_ALTERNATIVE_ANSWER = `Hookpost is an open-source alternative to Agorapulse with flat plans instead of per-user pricing. Agorapulse's Standard plan is $79 per user per month billed annually ($99 billed monthly) with 10 social profiles per user and a 30-day trial; no free plan is listed on its pricing page. Agorapulse also includes a self-hosted MCP connector for ChatGPT or Claude from Standard. ${HOOKPOST_PLANS} ${HOOKPOST_NETWORKS} Agorapulse prices checked ${FACTS_CHECKED}.`;
 
 export const metadata: Metadata = {
   title: "Hookpost vs Agorapulse (2026): Modern Agency Alternative",
-  description: "Tired of Agorapulse's steep prices? Compare Hookpost vs Agorapulse. Hookpost offers unified multi-channel calendar, AI agents, agency roles & $0 free tier.",
+  description: `Compare Hookpost vs Agorapulse: Agorapulse Standard is $79 per user/mo billed annually; Hookpost has a free plan and Pro at $${PRO_USD.month_price}/mo flat for up to ${PRO_INR.team_member_limit} team members.`,
   keywords: ["agorapulse alternative","agorapulse competitors","agorapulse vs hookpost","social media inbox alternative","agorapulse pricing"],
   alternates: {
     canonical: "https://hookpost.hookstep.in/alternatives/agorapulse",
@@ -48,7 +61,7 @@ export default function AgorapulseAlternativePage() {
         name: "What is the Best Alternative to Agorapulse in 2026?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: `Hookpost is the best modern alternative to Agorapulse for marketing agencies, social media managers, and digital brands. Unlike Agorapulse's $79/user/month entry price (billed annually; $99 billed monthly), Hookpost bundles multi-channel scheduling across ${CHANNEL_COUNT} networks, publishing to ${PUBLISHABLE_CHANNEL_COUNT} of them, client collaboration workspaces, and an AI copilot starting at $0.`,
+          text: BEST_ALTERNATIVE_ANSWER,
         },
       },
       {
@@ -149,7 +162,7 @@ export default function AgorapulseAlternativePage() {
             What is the Best Alternative to Agorapulse in 2026?
           </h2>
           <p className="text-[#d1d1d1] text-base sm:text-lg leading-relaxed">
-            Hookpost is the best modern alternative to Agorapulse for marketing agencies, social media managers, and digital brands. Unlike Agorapulse's $79/user/month entry price (billed annually; $99 billed monthly), Hookpost bundles multi-channel scheduling across {CHANNEL_COUNT} networks, publishing to {PUBLISHABLE_CHANNEL_COUNT} of them, client collaboration workspaces, and an AI copilot starting at $0.
+            {BEST_ALTERNATIVE_ANSWER}
           </p>
         </section>
 
@@ -171,11 +184,8 @@ export default function AgorapulseAlternativePage() {
               <tbody className="divide-y divide-[#262626]">
                   <tr className="hover:bg-white/[0.02] transition-colors">
                     <td className="p-4 sm:p-5 font-medium text-white">Starting Cost</td>
-                    <td className="p-4 sm:p-5 text-white bg-[#FF4CE2]/5 font-semibold">✅ $0 Free Plan / $29 Flat Tier</td>
-                    {/* Was "$49 / user / month". Agorapulse's cheapest plan is Standard at
-                        $79 per user/month billed annually, $99 billed monthly; Professional is
-                        $119/$149. Verified against agorapulse.com/pricing on 2026-09-08. */}
-                    <td className="p-4 sm:p-5 text-[#888]">$79 / user / month billed annually ($99 monthly)</td>
+                    <td className="p-4 sm:p-5 text-white bg-[#FF4CE2]/5 font-semibold">✅ $0 Free / ₹{inr(STD_INR.month_price)} or ${STD_USD.month_price}/mo Standard</td>
+                    <td className="p-4 sm:p-5 text-[#888]">$79 / user / month billed annually ($99 monthly); no free plan listed on the pricing page</td>
                     <td className="p-4 sm:p-5">
                       <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-green-500/10 text-green-400 border border-green-500/20">
                         Hookpost
@@ -183,9 +193,9 @@ export default function AgorapulseAlternativePage() {
                     </td>
                   </tr>
                   <tr className="hover:bg-white/[0.02] transition-colors">
-                    <td className="p-4 sm:p-5 font-medium text-white">Multi-Client Workspaces</td>
-                    <td className="p-4 sm:p-5 text-white bg-[#FF4CE2]/5 font-semibold">✅ Unlimited client workspaces with granular roles</td>
-                    <td className="p-4 sm:p-5 text-[#888]">⚠️ Heavy per-seat and per-profile add-on fees</td>
+                    <td className="p-4 sm:p-5 font-medium text-white">Team Seats</td>
+                    <td className="p-4 sm:p-5 text-white bg-[#FF4CE2]/5 font-semibold">✅ Up to {PRO_INR.team_member_limit} team members on Pro at one flat price</td>
+                    <td className="p-4 sm:p-5 text-[#888]">⚠️ Priced per user; extra profiles $10 each/mo (billed annually)</td>
                     <td className="p-4 sm:p-5">
                       <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-green-500/10 text-green-400 border border-green-500/20">
                         Hookpost
@@ -193,7 +203,7 @@ export default function AgorapulseAlternativePage() {
                     </td>
                   </tr>
                   <tr className="hover:bg-white/[0.02] transition-colors">
-                    <td className="p-4 sm:p-5 font-medium text-white">Self-Hosting & Privacy</td>
+                    <td className="p-4 sm:p-5 font-medium text-white">Self-Hosting &amp; Privacy</td>
                     <td className="p-4 sm:p-5 text-white bg-[#FF4CE2]/5 font-semibold">✅ 100% Docker self-hostable with complete data ownership</td>
                     <td className="p-4 sm:p-5 text-[#888]">❌ Proprietary SaaS only</td>
                     <td className="p-4 sm:p-5">
@@ -203,19 +213,19 @@ export default function AgorapulseAlternativePage() {
                     </td>
                   </tr>
                   <tr className="hover:bg-white/[0.02] transition-colors">
-                    <td className="p-4 sm:p-5 font-medium text-white">AI Copilot & Hooks</td>
-                    <td className="p-4 sm:p-5 text-white bg-[#FF4CE2]/5 font-semibold">✅ Built-in AI hook engine and Claude MCP server</td>
-                    <td className="p-4 sm:p-5 text-[#888]">⚠️ Limited proprietary AI assistant</td>
+                    <td className="p-4 sm:p-5 font-medium text-white">AI &amp; MCP</td>
+                    <td className="p-4 sm:p-5 text-white bg-[#FF4CE2]/5 font-semibold">✅ AI writing, API and MCP server on Standard and Pro</td>
+                    <td className="p-4 sm:p-5 text-[#888]">✅ Self-hosted MCP connector for ChatGPT or Claude, from Standard</td>
                     <td className="p-4 sm:p-5">
-                      <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-green-500/10 text-green-400 border border-green-500/20">
-                        Hookpost
+                      <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-white/10 text-white">
+                        Tie
                       </span>
                     </td>
                   </tr>
                   <tr className="hover:bg-white/[0.02] transition-colors">
                     <td className="p-4 sm:p-5 font-medium text-white">Global Billing Options</td>
                     <td className="p-4 sm:p-5 text-white bg-[#FF4CE2]/5 font-semibold">✅ Razorpay (UPI, NetBanking &amp; Cards)</td>
-                    <td className="p-4 sm:p-5 text-[#888]">❌ Western credit cards only</td>
+                    <td className="p-4 sm:p-5 text-[#888]">USD prices; no INR or UPI listed on its pricing page</td>
                     <td className="p-4 sm:p-5">
                       <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-green-500/10 text-green-400 border border-green-500/20">
                         Hookpost
@@ -227,16 +237,20 @@ export default function AgorapulseAlternativePage() {
           </div>
         </section>
 
+        <IndiaCostNote slug="agorapulse" />
+
+
         <SectionFaq items={faqSchema.mainEntity} />
 
-        {/* E-E-A-T Benchmark Section */}
+        {/* Sources. Replaced a "verified benchmark" claim that had no published
+            methodology or data behind it. */}
         <section className="p-6 sm:p-8 rounded-2xl bg-white/[0.02] border border-white/10 space-y-2">
           <div className="flex items-center gap-2 text-xs text-green-400 font-semibold">
             <span className="w-2 h-2 rounded-full bg-green-400"></span>
-            <span>VERIFIED BENCHMARK &bull; SEPTEMBER 2026</span>
+            <span>SOURCES &bull; CHECKED {FACTS_CHECKED.toUpperCase()}</span>
           </div>
           <p className="text-xs sm:text-sm text-white/60 leading-relaxed">
-            Evaluated by the JR Consulting Co. Engineering Team across Meta Graph API v20, LinkedIn Marketing API, YouTube Data API v3, and X REST API endpoints. Both platforms were tested for multi-network scheduling latency and API reliability.
+            {AGORA.name} figures were read off its own pricing page ({AGORA.sources.join(', ')}) on {FACTS_CHECKED}; prices can differ by country and billing period. Hookpost figures are its published plans. We do not publish performance benchmarks.
           </p>
         </section>
 
@@ -246,7 +260,7 @@ export default function AgorapulseAlternativePage() {
             Ready to Upgrade from Agorapulse?
           </h2>
           <p className="text-[#888] max-w-lg mx-auto text-base">
-            No credit card required. Connect your social channels in 30 seconds.
+            No credit card required. Free plan: {FREE.channel} channels and {FREE.posts_per_month} posts a month.
           </p>
           <Link
             href="/auth"

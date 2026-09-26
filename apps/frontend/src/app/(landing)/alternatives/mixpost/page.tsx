@@ -2,12 +2,25 @@ import React from "react";
 import Link from "next/link";
 import { Metadata } from "next";
 import { SectionFaq } from "../../SectionFaq";
-import { CHANNEL_COUNT } from "../../channels/channel-count";
+import { IndiaCostNote } from "../IndiaCostNote";
+import { PUBLISHABLE_CHANNEL_COUNT } from "../../channels/channel-count";
+import { pricingINR, pricingUSD } from '@hookpost/nestjs-libraries/database/prisma/subscriptions/pricing';
+import { COMPETITOR_FACTS, FACTS_CHECKED } from '../../compare/competitor-facts';
+
+const { FREE, STANDARD: STD_INR, PRO: PRO_INR } = pricingINR;
+const { STANDARD: STD_USD, PRO: PRO_USD } = pricingUSD;
+const inr = (n: number) => n.toLocaleString('en-IN');
+// One sentence on Hookpost's sold plans, read from pricing.ts so it cannot drift.
+const HOOKPOST_PLANS = `Hookpost's free plan covers ${FREE.channel} channels and ${FREE.posts_per_month} posts a month (no AI or API). Standard is ₹${inr(STD_INR.month_price)} or $${STD_USD.month_price} a month for ${STD_INR.channel} channels and ${STD_INR.posts_per_month} posts, with AI, API and MCP. Pro is ₹${inr(PRO_INR.month_price)} or $${PRO_USD.month_price} a month for ${PRO_INR.channel} channels, ${inr(PRO_INR.posts_per_month)} posts and up to ${PRO_INR.team_member_limit} team members.`;
+const HOOKPOST_NETWORKS = `Hookpost publishes to ${PUBLISHABLE_CHANNEL_COUNT} networks for a new account today; Instagram, Facebook and Threads are awaiting Meta approval and Pinterest publishing is not available yet.`;
+const MIXPOST = COMPETITOR_FACTS.mixpost;
+const FACTS = Object.values(COMPETITOR_FACTS);
+const MCP_COUNT = FACTS.filter((c) => c.mcp === true).length;
 
 export const metadata: Metadata = {
   title: "Hookpost vs Mixpost (2026): Open-Source Self-Hosted Alternative",
   description:
-    `Compare Hookpost and Mixpost: ${CHANNEL_COUNT} social networks, modern Node.js/Temporal stack vs PHP/Laravel, native Claude MCP server, and Razorpay UPI billing.`,
+    `Compare Hookpost and Mixpost: hosted cloud plus self-hosting vs self-hosted only, Node.js/Temporal vs PHP/Laravel, free and monthly plans vs a $299 one-time licence, and Razorpay UPI billing.`,
   keywords: [
     "mixpost alternative",
     "mixpost competitors",
@@ -24,7 +37,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Hookpost vs Mixpost (2026): Open-Source Alternative",
     description:
-      `Compare Hookpost vs Mixpost: ${CHANNEL_COUNT} social platforms, Node.js + Temporal event-driven architecture, native MCP server for Claude and Cursor, and cloud + Docker self-hosting.`,
+      `Compare Hookpost vs Mixpost: publishes to ${PUBLISHABLE_CHANNEL_COUNT} networks, Node.js + Temporal architecture, MCP server on paid plans, and cloud + Docker self-hosting.`,
     url: "https://hookpost.hookstep.in/alternatives/mixpost",
     siteName: "Hookpost",
     images: [
@@ -41,7 +54,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Mixpost Alternative (2026): Hookpost vs Mixpost",
-    description: `Compare Hookpost vs Mixpost. ${CHANNEL_COUNT} social networks, MCP server for AI agents, and event-driven temporal scheduling.`,
+    description: `Compare Hookpost vs Mixpost. Publishes to ${PUBLISHABLE_CHANNEL_COUNT} networks, hosted cloud plus self-hosting, and event-driven Temporal scheduling.`,
     images: ["https://hookpost.hookstep.in/og-image.png"],
   },
 };
@@ -50,9 +63,9 @@ export default function MixpostAlternativePage() {
   const comparisonData = [
     {
       feature: "Supported Social Networks",
-      hookpost: "18+ Networks (Instagram, YouTube, TikTok, X, LinkedIn, Threads, Bluesky, Pinterest, Discord, Telegram...)",
-      mixpost: "8 Networks (Facebook, Instagram, X, LinkedIn, YouTube, Pinterest, Mastodon, Threads)",
-      winner: "Hookpost",
+      hookpost: `${PUBLISHABLE_CHANNEL_COUNT} networks for new accounts (X, LinkedIn, YouTube, Bluesky, Discord, Slack, Telegram, WordPress...); Instagram, Facebook, Threads and Pinterest not yet`,
+      mixpost: "12 networks on Pro, including Instagram, TikTok, Pinterest, Threads, Mastodon and Pixelfed; Lite covers Facebook Pages, X and Mastodon only",
+      winner: "Tie",
     },
     {
       feature: "Architecture & Stack",
@@ -62,38 +75,38 @@ export default function MixpostAlternativePage() {
     },
     {
       feature: "AI Agent & MCP Integration",
-      hookpost: "✅ Official Model Context Protocol (MCP) server for Claude Desktop, Claude Code, Cursor & Windsurf",
-      mixpost: "❌ No MCP Server (Web dashboard only)",
-      winner: "Hookpost",
+      hookpost: "✅ MCP server on Standard and Pro, for Claude Desktop, Claude Code, Cursor and other MCP clients",
+      mixpost: "✅ MCP server included with Mixpost Pro",
+      winner: "Tie",
     },
     {
       feature: "Deployment Options",
-      hookpost: "✅ Managed Cloud SaaS + 1-Click Docker Self-Hosting",
-      mixpost: "⚠️ Self-Hosted Server Only (Requires managing PHP, Composer, MySQL, Nginx)",
+      hookpost: "✅ Managed Cloud SaaS + Docker Self-Hosting",
+      mixpost: "⚠️ Self-hosted only; no hosted plan",
       winner: "Hookpost",
     },
     {
       feature: "Video & Reels Auto-Publishing",
-      hookpost: "✅ Direct API auto-publishing for Reels, Shorts, and TikTok with thumbnail selection",
-      mixpost: "✅ Video publishing on supported networks",
-      winner: "Tie",
+      hookpost: "Video publishing to YouTube (including Shorts), X, LinkedIn and others; no Instagram Reels or TikTok yet",
+      mixpost: "✅ Video publishing on its supported networks, which include Instagram and TikTok",
+      winner: "Mixpost",
     },
     {
       feature: "Payment Methods & Regional Access",
-      hookpost: "✅ Global Cards + Native Indian UPI (Google Pay, PhonePe, Paytm, NetBanking) via Razorpay",
-      mixpost: "❌ No built-in billing in core (Requires purchasing commercial Mixpost Pro license)",
+      hookpost: "✅ Monthly plans billed in INR via Razorpay (UPI, NetBanking, cards), or USD by card",
+      mixpost: "One-time USD licence ($299 Pro), paid by card or PayPal",
       winner: "Hookpost",
     },
     {
-      feature: "Team & Workspace Isolation",
-      hookpost: "✅ Unlimited Isolated Workspaces, Client Roles & Granular Permissions",
-      mixpost: "⚠️ Workspaces require paid Mixpost Pro license",
-      winner: "Hookpost",
+      feature: "Team & Account Limits",
+      hookpost: `Pro: ${PRO_INR.channel} channels and up to ${PRO_INR.team_member_limit} team members`,
+      mixpost: "Pro: unlimited accounts on 1 domain or subdomain",
+      winner: "Mixpost",
     },
     {
       feature: "Free Starter Tier",
-      hookpost: "✅ Free Forever Cloud Tier (2 channels, 30 posts/month, no credit card required)",
-      mixpost: "⚠️ Free Lite version is self-hosted only with limited channels",
+      hookpost: `✅ Free cloud plan (${FREE.channel} channels, ${FREE.posts_per_month} posts/month, no AI or API, no credit card required)`,
+      mixpost: "⚠️ Mixpost Lite: free and open source (MIT), self-hosted only; Facebook Pages, X and Mastodon only",
       winner: "Hookpost",
     },
   ];
@@ -117,7 +130,7 @@ export default function MixpostAlternativePage() {
     {
       name: "What is the main difference between Hookpost and Mixpost?",
       acceptedAnswer: {
-        text: "While both Hookpost and Mixpost offer open-source social media management, Hookpost is built on modern TypeScript (Next.js 16, NestJS, and Temporal.io for bulletproof job scheduling) and features a native Model Context Protocol (MCP) server that lets you schedule posts directly from Claude Code, Cursor, and AI agents. Hookpost also offers both a zero-maintenance cloud SaaS and Docker self-hosting, whereas Mixpost is a self-hosted PHP/Laravel application.",
+        text: "While both Hookpost and Mixpost offer open-source social media management, Hookpost is built on modern TypeScript (Next.js 16, NestJS, and Temporal.io for bulletproof job scheduling) Both ship a Model Context Protocol (MCP) server (Hookpost on Standard and Pro, Mixpost with its Pro licence). Hookpost offers both a hosted cloud plan and Docker self-hosting, whereas Mixpost is a self-hosted PHP/Laravel application with no hosted plan.",
       },
     },
     {
@@ -129,19 +142,19 @@ export default function MixpostAlternativePage() {
     {
       name: "Does Hookpost support more networks than Mixpost?",
       acceptedAnswer: {
-        text: "Yes. Hookpost supports 18+ platforms including Instagram (Feed, Reels, Stories), YouTube (Videos & Shorts), TikTok, LinkedIn (Profiles & Pages), X (Twitter), Facebook, Threads, Pinterest, Bluesky, Mastodon, Reddit, Telegram, Discord, and decentralized channels like Nostr and Lemmy.",
+        text: `Not across the board. Hookpost publishes to ${PUBLISHABLE_CHANNEL_COUNT} networks for a new account, including X, LinkedIn, YouTube, Bluesky, Discord, Telegram, WordPress, Nostr and Lemmy. Instagram, Facebook and Threads are awaiting Meta approval and Pinterest publishing is not available yet. Mixpost Pro lists 12 networks, including Instagram, TikTok, Pinterest, Threads, Mastodon and Pixelfed, which Hookpost does not publish to today.`,
       },
     },
     {
       name: "How does pricing compare between Hookpost and Mixpost?",
       acceptedAnswer: {
-        text: "Hookpost offers a free cloud tier (2 channels, 30 posts/mo) and transparent flat plans starting at ₹599/month with Razorpay (UPI, NetBanking, Cards) and zero per-channel fees. Mixpost operates on a split model: an open-source Lite version with limited features, and a commercial Pro license ($149-$299/year) that requires your own server hosting costs.",
+        text: `${HOOKPOST_PLANS} Hookpost bills monthly via Razorpay (UPI, NetBanking, cards). Mixpost has no hosted plan: Mixpost Lite is free and open source (MIT) but self-hosted, and Mixpost Pro is a $299 one-time licence for one domain (1 year of updates included), plus your own server costs. Mixpost prices checked ${FACTS_CHECKED}.`,
       },
     },
     {
       name: "Does Hookpost have an AI scheduler or MCP server?",
       acceptedAnswer: {
-        text: "Yes. Hookpost is the world's first social media management platform with a native Model Context Protocol (MCP) server. You can install it with 'npx hookpost' or integrate it directly into Claude Desktop, Claude Code, Cursor, and Windsurf to draft, review, and schedule social media campaigns through natural language.",
+        text: `Yes, on Standard and Pro (not on Free). You can install the CLI with 'npx hookpost' or connect the MCP server to Claude Desktop, Claude Code, Cursor or another MCP client to draft and schedule posts. It is not unique: Mixpost Pro also ships an MCP server, and ${MCP_COUNT} of the ${FACTS.length} social media tools we checked on ${FACTS_CHECKED} offer one.`,
       },
     },
   ];
@@ -227,6 +240,9 @@ export default function MixpostAlternativePage() {
             </tbody>
           </table>
         </div>
+        <p className="text-center text-xs text-white/50 mt-4">
+          {MIXPOST.name} figures read off {MIXPOST.sources[0]} on {FACTS_CHECKED}. Hookpost figures are its published plans.
+        </p>
       </section>
 
       {/* Deep Dive Pillars */}
@@ -236,7 +252,7 @@ export default function MixpostAlternativePage() {
             <div className="text-3xl mb-4">🚀</div>
             <h3 className="text-xl font-bold mb-3 text-white">Event-Driven Temporal Engine</h3>
             <p className="text-white/70 text-sm leading-relaxed">
-              Mixpost uses traditional PHP/Laravel cron queue workers that can drop posts if a worker crashes. Hookpost runs on Temporal.io, guaranteeing distributed state execution, auto-retries, and resilient publishing workflows.
+              Mixpost runs publishing on PHP/Laravel queue workers. Hookpost runs it as Temporal.io workflows, which keep their state across restarts and retry failed steps.
             </p>
           </div>
 
@@ -244,7 +260,7 @@ export default function MixpostAlternativePage() {
             <div className="text-3xl mb-4">🤖</div>
             <h3 className="text-xl font-bold mb-3 text-white">Native Model Context Protocol (MCP)</h3>
             <p className="text-white/70 text-sm leading-relaxed">
-              Connect Hookpost directly to Claude Desktop, Cursor, or your autonomous AI marketing agents. Schedule, edit, and orchestrate campaigns directly from your terminal or AI IDE via standard MCP tools.
+              On Standard and Pro, connect Hookpost to Claude Desktop, Cursor or another MCP client and schedule posts from your terminal or AI IDE. Mixpost Pro ships an MCP server too.
             </p>
           </div>
 
@@ -252,7 +268,7 @@ export default function MixpostAlternativePage() {
             <div className="text-3xl mb-4">💳</div>
             <h3 className="text-xl font-bold mb-3 text-white">Transparent Flat Pricing & UPI</h3>
             <p className="text-white/70 text-sm leading-relaxed">
-              No commercial license lock-in. Hookpost offers a free forever cloud plan, plus flat plans with Razorpay UPI (Google Pay, PhonePe, Paytm) and international credit cards. No per-channel penalties.
+              Hookpost has a free cloud plan ({FREE.channel} channels, {FREE.posts_per_month} posts a month) and flat monthly plans from ₹{inr(STD_INR.month_price)} or ${STD_USD.month_price}, paid with Razorpay UPI (Google Pay, PhonePe, Paytm) or cards. Mixpost Pro is a $299 one-time licence you host yourself (prices checked {FACTS_CHECKED}).
             </p>
           </div>
         </div>
@@ -260,6 +276,8 @@ export default function MixpostAlternativePage() {
 
       {/* FAQ Section */}
       <section className="px-6 sm:px-12 max-w-4xl mx-auto py-16">
+        <IndiaCostNote slug="mixpost" />
+
         <SectionFaq items={faqItems} title="Frequently Asked Questions: Hookpost vs Mixpost" />
       </section>
 
@@ -267,10 +285,10 @@ export default function MixpostAlternativePage() {
       <section className="px-6 sm:px-12 max-w-5xl mx-auto py-20 text-center">
         <div className="p-12 rounded-3xl border border-white/15 bg-gradient-to-b from-white/[0.06] to-transparent">
           <h2 className="text-3xl sm:text-4xl font-extrabold mb-4">
-            Switch to the Smartest Open-Source Social Scheduler
+            Try Hookpost, the Open-Source Social Scheduler
           </h2>
           <p className="text-white/70 max-w-2xl mx-auto mb-8 text-base sm:text-lg">
-            Start scheduling across 18+ networks with visual calendar queues, AI-assisted hooks, and full developer API access.
+            Publish to {PUBLISHABLE_CHANNEL_COUNT} networks from one calendar, with AI writing and API access on Standard and Pro.
           </p>
           <Link
             href="/auth"

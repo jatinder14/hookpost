@@ -2,7 +2,26 @@ import React from "react";
 import Link from "next/link";
 import { Metadata } from "next";
 import { SectionFaq } from "../../SectionFaq";
-import { CHANNEL_COUNT } from "../../channels/channel-count";
+import { IndiaCostNote } from "../IndiaCostNote";
+import { PUBLISHABLE_CHANNEL_COUNT } from "../../channels/channel-count";
+import { pricingINR, pricingUSD } from "@hookpost/nestjs-libraries/database/prisma/subscriptions/pricing";
+
+const FREE = pricingINR.FREE;
+const STD_USD = pricingUSD.STANDARD;
+const STD_INR = pricingINR.STANDARD;
+const PRO_USD = pricingUSD.PRO;
+const PRO_INR = pricingINR.PRO;
+const inr = (n: number) => `₹${n.toLocaleString("en-IN")}`;
+
+// Buffer Essentials for ten channels, checked 26 Sep 2026 at buffer.com/pricing:
+// $5/channel/mo billed yearly ($600/yr), $6 month-to-month ($720/yr).
+const BUFFER_10CH_YEARLY = 600;
+const BUFFER_10CH_MONTHLY = 720;
+const HOOKPOST_PRO_YEAR = PRO_USD.month_price * 12;
+const SAVE_LOW = BUFFER_10CH_YEARLY - HOOKPOST_PRO_YEAR;
+const SAVE_HIGH = BUFFER_10CH_MONTHLY - HOOKPOST_PRO_YEAR;
+const SAVE_LOW_PCT = Math.round((SAVE_LOW / BUFFER_10CH_YEARLY) * 100);
+const SAVE_HIGH_PCT = Math.round((SAVE_HIGH / BUFFER_10CH_MONTHLY) * 100);
 
 export const metadata: Metadata = {
   title: "Hookpost vs Buffer (2026): Open-Source Alternative",
@@ -26,7 +45,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Hookpost vs Buffer (2026): Open-Source Alternative",
     description:
-      "Compare Hookpost vs Buffer. Zero per-channel penalties, bundled multi-channel scheduling across 18 networks, and native AI copilot.",
+      `Compare Hookpost vs Buffer. No per-channel billing: ${STD_USD.channel} channels on Standard, ${PRO_USD.channel} on Pro, publishing to ${PUBLISHABLE_CHANNEL_COUNT} networks today.`,
     url: "https://hookpost.hookstep.in/alternatives/buffer",
     siteName: "Hookpost",
     images: [
@@ -53,21 +72,21 @@ export default function BufferAlternativePage() {
     // Basis stated explicitly. Buffer's headline price is $5/channel/mo
     // billed yearly ($60/yr); $6 is the month-to-month rate. Quoting $6
     // unlabelled reads as wrong to anyone who opens buffer.com/pricing.
-    // Verified 8 Sep 2026 against buffer.com/pricing.
+    // Checked 26 Sep 2026 against buffer.com/pricing.
     { feature: "Channel Pricing Model", hookpost: "✅ Channels bundled into the plan", buffer: "Per channel: $5/mo billed yearly, $6 month-to-month", winner: "Hookpost" },
-    // Was "₹599 ($15/mo)" against Buffer's ten channels. Standard caps at 5
-    // Team was retired (PURCHASABLE_TIERS), so ten channels is now the Pro
-    // plan - 20 channels for Rs1,999/$39 against Buffer's $50 for exactly ten.
-    { feature: "Cost for 10 social accounts", hookpost: "₹1,999 ($39/mo) — Pro, 20 channels", buffer: "$50/mo billed yearly, $60 month-to-month", winner: "Hookpost" },
-    { feature: "Open-Source & Self-Hostable", hookpost: "✅ 100% AGPLv3 Open-Source", buffer: "❌ Closed Proprietary SaaS", winner: "Hookpost" },
-    { feature: "AI Content & Hook Copilot", hookpost: "✅ Native AI Copilot & MCP Server", buffer: "⚠️ Paid AI Add-on Credits", winner: "Hookpost" },
-    { feature: "Supported Networks", hookpost: `${CHANNEL_COUNT} (Instagram, Facebook, Threads, YouTube, X, Pinterest, Bluesky...)`, buffer: "8-10 Channels", winner: "Hookpost" },
+    // Standard caps at 5 channels and Team is retired (PURCHASABLE_TIERS), so
+    // ten channels is the Pro plan against Buffer's $50 for exactly ten.
+    { feature: "Cost for 10 social accounts", hookpost: `${inr(PRO_INR.month_price)} ($${PRO_USD.month_price}/mo) — Pro, ${PRO_USD.channel} channels`, buffer: "$50/mo billed yearly, $60 month-to-month", winner: "Hookpost" },
+    { feature: "Open-Source & Self-Hostable", hookpost: "✅ AGPL-3.0 open source (built on Postiz)", buffer: "❌ Closed Proprietary SaaS", winner: "Hookpost" },
+    // Buffer's AI assistant is on every plan including Free, and its MCP
+    // server is too (buffer.com/pricing, buffer.com/mcp, 26 Sep 2026).
+    { feature: "AI Assistant & MCP Server", hookpost: "AI on Standard and Pro (not on Free); MCP server", buffer: "✅ AI assistant and MCP server on every plan, including Free", winner: "Buffer" },
+    { feature: "Supported Networks", hookpost: `${PUBLISHABLE_CHANNEL_COUNT} publishing today (X, LinkedIn, YouTube, Bluesky, Discord, Telegram...); Instagram, Facebook & Threads await Meta approval`, buffer: "12, incl. Instagram, Facebook, TikTok, Pinterest, Threads, X", winner: "Depends" },
     // Scoring "Buffer: Foreign Credit Card Only" as a Hookpost win read exactly
     // backwards to the buyer this page is for - an ordinary credit card is what
     // they want. Stated as fact, with no winner claimed.
-    { feature: "Billing & Payment Methods", hookpost: "Billed in INR — UPI, NetBanking & Indian cards", buffer: "Billed in USD — international cards", winner: "Tie" },
-    { feature: "Multi-Client Agency Workspaces", hookpost: "✅ Workspaces & Granular Roles", buffer: "⚠️ Requires Agency Tier ($120+/mo)", winner: "Hookpost" },
-    { feature: "Forever Free Tier", hookpost: "✅ $0 Starter Plan", buffer: "✅ Basic Free Tier (3 Channels Max)", winner: "Hookpost" },
+    { feature: "Billing & Payment Methods", hookpost: "Billed in INR — UPI, NetBanking & Indian cards", buffer: "Billed in USD — no INR pricing", winner: "Tie" },
+    { feature: "Free Plan", hookpost: `${FREE.channel} channels, ${FREE.posts_per_month} posts/month, no AI`, buffer: "3 channels, 10 scheduled posts per channel, AI assistant included", winner: "Buffer" },
   ];
 
   const softwareSchema = {
@@ -78,7 +97,7 @@ export default function BufferAlternativePage() {
     operatingSystem: "Web, Cloud, Self-Hosted Docker",
     url: "https://hookpost.hookstep.in/alternatives/buffer",
     description:
-      "Modern open-source social media management platform and Buffer competitor supporting 18 channels with zero per-channel penalty fees.",
+      `Open-source social media scheduler and Buffer alternative, publishing to ${PUBLISHABLE_CHANNEL_COUNT} networks, with channels bundled into flat plans instead of per-channel fees.`,
     isSimilarTo: {
       "@type": "SoftwareApplication",
       name: "Buffer",
@@ -95,24 +114,11 @@ export default function BufferAlternativePage() {
       },
     },
     offers: [
-      {
-        "@type": "Offer",
-        price: "0",
-        priceCurrency: "USD",
-        name: "Free Community Tier",
-      },
-      {
-        "@type": "Offer",
-        price: "9",
-        priceCurrency: "USD",
-        name: "Pro Tier",
-      },
-      {
-        "@type": "Offer",
-        price: "699",
-        priceCurrency: "INR",
-        name: "India Pro Tier (UPI)",
-      },
+      { "@type": "Offer", price: "0", priceCurrency: "USD", name: "Free" },
+      { "@type": "Offer", price: String(STD_USD.month_price), priceCurrency: "USD", name: "Standard" },
+      { "@type": "Offer", price: String(STD_INR.month_price), priceCurrency: "INR", name: "Standard (India, UPI)" },
+      { "@type": "Offer", price: String(PRO_USD.month_price), priceCurrency: "USD", name: "Pro" },
+      { "@type": "Offer", price: String(PRO_INR.month_price), priceCurrency: "INR", name: "Pro (India, UPI)" },
     ],
   };
 
@@ -150,7 +156,7 @@ export default function BufferAlternativePage() {
         name: "Why is Hookpost the top competitor to Buffer in 2026?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "Buffer prices per channel: $5 per channel per month billed yearly, or $6 month-to-month, so ten channels costs $50-$60 a month. Hookpost bundles channels into flat plans - 5 channels on Standard at ₹599 ($9) a month and 10 channels on Team at ₹1,499 ($19) a month - across 18 networks, with a free tier at ₹0 and AGPL self-hosting. Buffer pricing verified 8 September 2026 at buffer.com/pricing.",
+          text: `Buffer prices per channel: $5 per channel per month billed yearly, or $6 month-to-month, so ten channels costs $50-$60 a month. Hookpost bundles channels into flat plans - ${STD_USD.channel} channels on Standard at ${inr(STD_INR.month_price)} ($${STD_USD.month_price}) a month and ${PRO_USD.channel} channels on Pro at ${inr(PRO_INR.month_price)} ($${PRO_USD.month_price}) a month - publishing to ${PUBLISHABLE_CHANNEL_COUNT} networks today, with a free plan (${FREE.channel} channels, ${FREE.posts_per_month} posts a month) and AGPL self-hosting. Buffer's free plan has one more channel (3) and includes its AI assistant, which Hookpost's free plan does not. Buffer pricing checked 26 September 2026 at buffer.com/pricing.`,
         },
       },
       {
@@ -158,7 +164,7 @@ export default function BufferAlternativePage() {
         name: "How much can I save switching from Buffer to Hookpost?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "Ten profiles on Buffer Essentials is $600 a year billed yearly, or $720 month-to-month. The like-for-like Hookpost plan for ten channels is Team at ₹1,499 ($19) a month, which is $228 a year - a saving of $372 to $492 a year, or 62% to 68%. Comparing against Hookpost Standard would not be like-for-like, because Standard includes 5 channels, not 10.",
+          text: `Ten profiles on Buffer Essentials is $${BUFFER_10CH_YEARLY} a year billed yearly, or $${BUFFER_10CH_MONTHLY} month-to-month. The Hookpost plan that covers ten channels is Pro at ${inr(PRO_INR.month_price)} ($${PRO_USD.month_price}) a month for up to ${PRO_USD.channel} channels, which is $${HOOKPOST_PRO_YEAR} a year - a saving of $${SAVE_LOW} to $${SAVE_HIGH} a year, or ${SAVE_LOW_PCT}% to ${SAVE_HIGH_PCT}%. Comparing against Hookpost Standard would not be like-for-like, because Standard includes ${STD_USD.channel} channels, not 10.`,
         },
       },
       {
@@ -174,7 +180,7 @@ export default function BufferAlternativePage() {
         name: "Does Hookpost support AI agents and Claude Desktop via MCP?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "Yes. Hookpost features an official Model Context Protocol (MCP) server. Claude Desktop, Cursor, and Cline can inspect your scheduled calendar, draft platform-compliant posts, and queue updates autonomously.",
+          text: "Yes. Hookpost features an official Model Context Protocol (MCP) server. Claude Desktop, Cursor, and Cline can inspect your scheduled calendar, draft platform-compliant posts, and queue updates autonomously. Buffer also has an official MCP server, included on every plan including Free.",
         },
       },
       {
@@ -182,7 +188,7 @@ export default function BufferAlternativePage() {
         name: "How do I migrate from Buffer to Hookpost with zero downtime?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "Migration takes 3 steps: (1) Export your scheduled post queue CSV from Buffer, (2) Connect your social media channels in Hookpost via official OAuth 2.0, and (3) Import your CSV calendar into Hookpost or drive scheduling via npx hookpost mcp.",
+          text: "Migration takes 3 steps: (1) Connect your channels in Hookpost - OAuth for most networks, your own credentials for a few such as Bluesky, (2) recreate your scheduled queue in the Hookpost calendar, or push it through the public API on Standard and Pro, and (3) optionally drive scheduling from an AI agent via npx hookpost mcp.",
         },
       },
       {
@@ -190,7 +196,7 @@ export default function BufferAlternativePage() {
         name: "Does Hookpost support Indian payment methods like UPI and RuPay?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "Yes. Hookpost bills through Razorpay and supports UPI, RuPay, NetBanking and Indian cards at rupee pricing (₹599/mo). Buffer bills in USD by international card. If you are paying from outside India, Buffer's USD billing is the simpler option today.",
+          text: `Yes. Hookpost bills through Razorpay and supports UPI, RuPay, NetBanking and Indian cards at rupee pricing (${inr(STD_INR.month_price)}/mo). Buffer shows USD prices only, with no INR option. If you are paying from outside India, Buffer's USD billing is the simpler option today.`,
         },
       },
     ],
@@ -262,7 +268,7 @@ export default function BufferAlternativePage() {
             Switch to <span className="text-[#FF4CE2]">Hookpost</span>
           </h1>
           <p className="text-[#aaa] text-lg sm:text-xl max-w-[760px] mx-auto leading-relaxed">
-            Buffer charges you for every single connected account. Hookpost gives you unlimited channels, AI generation, and multi-platform automation starting at $0.
+            Buffer charges you for every connected account. Hookpost bundles channels into flat plans - {STD_USD.channel} on Standard, {PRO_USD.channel} on Pro - with a free plan for {FREE.channel}.
           </p>
           <div className="pt-4 flex justify-center gap-4">
             <Link
@@ -280,7 +286,7 @@ export default function BufferAlternativePage() {
             What is the Best Alternative to Buffer in 2026?
           </h2>
           <p className="text-[#d1d1d1] text-base sm:text-lg leading-relaxed">
-            Hookpost is the best modern alternative to Buffer for creators, agencies, and businesses. Where Buffer bills per channel, Hookpost provides bundled multi-channel scheduling across 18 social networks, built-in AI copywriting, self-hosted Docker freedom, and regional Razorpay UPI &amp; card payments starting at $0.
+            Hookpost is the best modern alternative to Buffer for creators, agencies, and businesses. Where Buffer bills per channel, Hookpost bundles channels into flat plans, publishes to {PUBLISHABLE_CHANNEL_COUNT} networks today, and offers AI copywriting on paid plans, self-hosted Docker, and Razorpay UPI &amp; card payments, with a free plan.
           </p>
         </section>
 
@@ -322,24 +328,26 @@ export default function BufferAlternativePage() {
           <div className="bg-[#141414] border border-[#262626] rounded-2xl p-6 space-y-3">
             <h3 className="text-xl font-bold text-white">💰 No Per-Channel Penalties</h3>
             <p className="text-sm text-[#888]">
-              Buffer bills per channel: $5 a month each billed yearly, $6 month-to-month, so 10 channels is $50-$60 a month. Hookpost bundles channels - 10 of them on Team at $19 a month, and 2 on the free plan.
+              Buffer bills per channel: $5 a month each billed yearly, $6 month-to-month, so 10 channels is $50-$60 a month. Hookpost bundles channels - {PRO_USD.channel} on Pro at ${PRO_USD.month_price} a month, {STD_USD.channel} on Standard at ${STD_USD.month_price}, and {FREE.channel} on the free plan.
             </p>
           </div>
           <div className="bg-[#141414] border border-[#262626] rounded-2xl p-6 space-y-3">
-            <h3 className="text-xl font-bold text-white">⚡ {CHANNEL_COUNT} Supported Networks</h3>
+            <h3 className="text-xl font-bold text-white">⚡ {PUBLISHABLE_CHANNEL_COUNT} Networks Today</h3>
             <p className="text-sm text-[#888]">
-              Post to Instagram, Facebook, YouTube Shorts, Threads, X, LinkedIn, Pinterest, Discord, Slack, Bluesky, WordPress, and Telegram.
+              Post to X, LinkedIn, YouTube, Bluesky, Discord, Slack, Telegram, WordPress, Hashnode, Dev.to, Lemmy, Nostr and Listmonk. Instagram, Facebook and Threads are waiting on Meta approval.
             </p>
           </div>
           <div className="bg-[#141414] border border-[#262626] rounded-2xl p-6 space-y-3">
             <h3 className="text-xl font-bold text-white">🤖 AI Copilot &amp; MCP Server</h3>
             <p className="text-sm text-[#888]">
-              Generate platform-specific viral hooks, hashtags, and schedule directly via Claude, Cursor, and automated agents.
+              Generate platform-specific hooks and hashtags on paid plans, and schedule directly from Claude, Cursor and other agents through the MCP server.
             </p>
           </div>
         </div>
 
         {/* Visible FAQ Section */}
+        <IndiaCostNote slug="buffer" />
+
         <SectionFaq
           items={faqSchema.mainEntity}
           title="Frequently Asked Questions: Buffer Competitors &amp; Migration"

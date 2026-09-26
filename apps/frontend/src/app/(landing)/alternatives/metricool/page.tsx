@@ -2,11 +2,25 @@ import React from "react";
 import Link from "next/link";
 import { Metadata } from "next";
 import { SectionFaq } from "../../SectionFaq";
-import { CHANNEL_COUNT } from "../../channels/channel-count";
+import { IndiaCostNote } from "../IndiaCostNote";
+import { PUBLISHABLE_CHANNEL_COUNT } from "../../channels/channel-count";
+import { pricingINR, pricingUSD } from "@hookpost/nestjs-libraries/database/prisma/subscriptions/pricing";
+
+const FREE = pricingINR.FREE;
+const STD_USD = pricingUSD.STANDARD;
+const STD_INR = pricingINR.STANDARD;
+const PRO_USD = pricingUSD.PRO;
+const inr = (n: number) => `₹${n.toLocaleString("en-IN")}`;
+
+// Metricool figures checked 26 Sep 2026 at metricool.com/pricing: free plan
+// 1 brand (all networks except LinkedIn and X), 20 posts/month, AI assistant
+// and Metricool MCP; Starter $20/mo billed annually ($25 monthly) for up to 5
+// brands; X is a paid add-on; API from Advanced; EUR and USD prices only.
+const BEST_METRICOOL_ANSWER = `Hookpost is an open-source (AGPL-3.0) alternative to Metricool for multi-platform publishing. Metricool prices by brand: its free plan covers 1 brand and 20 posts a month but excludes LinkedIn and X, and Starter is $20/month billed annually ($25 month-to-month) for up to 5 brands, with X as a paid add-on. Hookpost's free plan has ${FREE.channel} channels and ${FREE.posts_per_month} posts a month, LinkedIn and X included, and Standard is ${inr(STD_INR.month_price)} ($${STD_USD.month_price}) a month for ${STD_USD.channel} channels. Both ship an MCP server for Claude and other AI agents. Metricool pricing checked 26 September 2026.`;
 
 export const metadata: Metadata = {
   title: "Hookpost vs Metricool (2026): #1 Open-Source Alternative",
-  description: `Compare Hookpost vs Metricool. Hookpost delivers open-source self-hosting, ${CHANNEL_COUNT} social networks, Claude MCP server support, and affordable $0 free tier.`,
+  description: `Compare Hookpost vs Metricool. Hookpost offers open-source self-hosting, publishing to ${PUBLISHABLE_CHANNEL_COUNT} networks, an MCP server, and a free plan that includes LinkedIn and X.`,
   keywords: ["metricool alternative","metricool competitors","metricool vs hookpost","open source metricool","metricool pricing"],
   alternates: {
     canonical: "https://hookpost.hookstep.in/alternatives/metricool",
@@ -48,7 +62,7 @@ export default function MetricoolAlternativePage() {
         name: "What is the Best Alternative to Metricool in 2026?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "Hookpost is the top open-source alternative to Metricool for multi-platform social media publishing. While Metricool focuses on basic analytics with complex tier upgrades, Hookpost delivers complete data sovereignty via Docker self-hosting, an official Model Context Protocol (MCP) server for Claude & AI agents, and flat, affordable pricing starting at $0.",
+          text: BEST_METRICOOL_ANSWER,
         },
       },
       {
@@ -149,7 +163,7 @@ export default function MetricoolAlternativePage() {
             What is the Best Alternative to Metricool in 2026?
           </h2>
           <p className="text-[#d1d1d1] text-base sm:text-lg leading-relaxed">
-            Hookpost is the top open-source alternative to Metricool for multi-platform social media publishing. While Metricool focuses on basic analytics with complex tier upgrades, Hookpost delivers complete data sovereignty via Docker self-hosting, an official Model Context Protocol (MCP) server for Claude & AI agents, and flat, affordable pricing starting at $0.
+            {BEST_METRICOOL_ANSWER}
           </p>
         </section>
 
@@ -172,7 +186,7 @@ export default function MetricoolAlternativePage() {
                   <tr className="hover:bg-white/[0.02] transition-colors">
                     <td className="p-4 sm:p-5 font-medium text-white">Data Sovereignty & Self-Hosting</td>
                     <td className="p-4 sm:p-5 text-white bg-[#FF4CE2]/5 font-semibold">✅ 100% Open-Source Docker deployment</td>
-                    <td className="p-4 sm:p-5 text-[#888]">❌ Cloud SaaS only; data hosted on proprietary servers</td>
+                    <td className="p-4 sm:p-5 text-[#888]">❌ Cloud SaaS only; not self-hostable</td>
                     <td className="p-4 sm:p-5">
                       <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-green-500/10 text-green-400 border border-green-500/20">
                         Hookpost
@@ -181,28 +195,28 @@ export default function MetricoolAlternativePage() {
                   </tr>
                   <tr className="hover:bg-white/[0.02] transition-colors">
                     <td className="p-4 sm:p-5 font-medium text-white">AI Agent & MCP Integration</td>
-                    <td className="p-4 sm:p-5 text-white bg-[#FF4CE2]/5 font-semibold">✅ Official MCP server + CLI (npx hookpost)</td>
-                    <td className="p-4 sm:p-5 text-[#888]">❌ No programmatic agent interface</td>
+                    <td className="p-4 sm:p-5 text-white bg-[#FF4CE2]/5 font-semibold">✅ Official MCP server + CLI (npx hookpost); API on Standard and Pro</td>
+                    <td className="p-4 sm:p-5 text-[#888]">✅ Metricool MCP listed from the free plan; API from Advanced</td>
                     <td className="p-4 sm:p-5">
-                      <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-green-500/10 text-green-400 border border-green-500/20">
-                        Hookpost
+                      <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-white/10 text-white">
+                        Tie
                       </span>
                     </td>
                   </tr>
                   <tr className="hover:bg-white/[0.02] transition-colors">
                     <td className="p-4 sm:p-5 font-medium text-white">Supported Networks</td>
-                    <td className="p-4 sm:p-5 text-white bg-[#FF4CE2]/5 font-semibold">{CHANNEL_COUNT} (Instagram, Facebook, YouTube, Threads, X, Pinterest, Bluesky...)</td>
-                    <td className="p-4 sm:p-5 text-[#888]">10+ Networks</td>
+                    <td className="p-4 sm:p-5 text-white bg-[#FF4CE2]/5 font-semibold">{PUBLISHABLE_CHANNEL_COUNT} publishing today (X, LinkedIn, YouTube, Bluesky, Discord, Telegram...); Instagram, Facebook &amp; Threads await Meta approval</td>
+                    <td className="p-4 sm:p-5 text-[#888]">12, incl. Instagram, Facebook, TikTok, LinkedIn, Pinterest; X is a paid add-on</td>
                     <td className="p-4 sm:p-5">
-                      <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-green-500/10 text-green-400 border border-green-500/20">
-                        Hookpost
+                      <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-white/10 text-white">
+                        Depends
                       </span>
                     </td>
                   </tr>
                   <tr className="hover:bg-white/[0.02] transition-colors">
                     <td className="p-4 sm:p-5 font-medium text-white">Regional Currency Pricing</td>
                     <td className="p-4 sm:p-5 text-white bg-[#FF4CE2]/5 font-semibold">✅ Razorpay (UPI, NetBanking, Cards)</td>
-                    <td className="p-4 sm:p-5 text-[#888]">❌ Euro/USD credit card billing only</td>
+                    <td className="p-4 sm:p-5 text-[#888]">❌ EUR and USD prices only; no INR</td>
                     <td className="p-4 sm:p-5">
                       <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-green-500/10 text-green-400 border border-green-500/20">
                         Hookpost
@@ -210,22 +224,22 @@ export default function MetricoolAlternativePage() {
                     </td>
                   </tr>
                   <tr className="hover:bg-white/[0.02] transition-colors">
-                    <td className="p-4 sm:p-5 font-medium text-white">Multi-Brand Workspaces</td>
-                    <td className="p-4 sm:p-5 text-white bg-[#FF4CE2]/5 font-semibold">✅ Unlimited client workspaces included</td>
-                    <td className="p-4 sm:p-5 text-[#888]">⚠️ Requires higher enterprise tiers</td>
+                    <td className="p-4 sm:p-5 font-medium text-white">Free Plan</td>
+                    <td className="p-4 sm:p-5 text-white bg-[#FF4CE2]/5 font-semibold">{FREE.channel} channels, {FREE.posts_per_month} posts/month, LinkedIn &amp; X included; no AI</td>
+                    <td className="p-4 sm:p-5 text-[#888]">1 brand, 20 posts/month, no LinkedIn or X; AI assistant included</td>
                     <td className="p-4 sm:p-5">
-                      <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-green-500/10 text-green-400 border border-green-500/20">
-                        Hookpost
+                      <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-white/10 text-white">
+                        Depends
                       </span>
                     </td>
                   </tr>
                   <tr className="hover:bg-white/[0.02] transition-colors">
                     <td className="p-4 sm:p-5 font-medium text-white">Pricing</td>
-                    <td className="p-4 sm:p-5 text-white bg-[#FF4CE2]/5 font-semibold">✅ $0 Free Tier / ₹599 ($15/mo)</td>
-                    <td className="p-4 sm:p-5 text-[#888]">❌ $22/month starter tier</td>
+                    <td className="p-4 sm:p-5 text-white bg-[#FF4CE2]/5 font-semibold">✅ Free / {inr(STD_INR.month_price)} (${STD_USD.month_price}/mo) Standard, {STD_USD.channel} channels; ${PRO_USD.month_price}/mo Pro, {PRO_USD.channel} channels</td>
+                    <td className="p-4 sm:p-5 text-[#888]">$20/mo Starter billed annually ($25 monthly), up to 5 brands</td>
                     <td className="p-4 sm:p-5">
-                      <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-green-500/10 text-green-400 border border-green-500/20">
-                        Hookpost
+                      <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-white/10 text-white">
+                        Depends
                       </span>
                     </td>
                   </tr>
@@ -234,16 +248,19 @@ export default function MetricoolAlternativePage() {
           </div>
         </section>
 
+        <IndiaCostNote slug="metricool" />
+
+
         <SectionFaq items={faqSchema.mainEntity} />
 
         {/* E-E-A-T Benchmark Section */}
         <section className="p-6 sm:p-8 rounded-2xl bg-white/[0.02] border border-white/10 space-y-2">
           <div className="flex items-center gap-2 text-xs text-green-400 font-semibold">
             <span className="w-2 h-2 rounded-full bg-green-400"></span>
-            <span>VERIFIED BENCHMARK &bull; SEPTEMBER 2026</span>
+            <span>FACTS CHECKED &bull; 26 SEPTEMBER 2026</span>
           </div>
           <p className="text-xs sm:text-sm text-white/60 leading-relaxed">
-            Evaluated by the JR Consulting Co. Engineering Team across Meta Graph API v20, LinkedIn Marketing API, YouTube Data API v3, and X REST API endpoints. Both platforms were tested for multi-network scheduling latency and API reliability.
+            Metricool's prices, plans and networks were read from metricool.com/pricing on 26 September 2026. Hookpost's figures come from its live pricing configuration.
           </p>
         </section>
 

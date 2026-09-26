@@ -2,6 +2,39 @@ import React from "react";
 import Link from "next/link";
 import { Metadata } from "next";
 import { SectionFaq } from "../SectionFaq";
+import { pricingINR, pricingUSD } from '@hookpost/nestjs-libraries/database/prisma/subscriptions/pricing';
+import { COMPETITOR_FACTS, FACTS_CHECKED } from '../compare/competitor-facts';
+import { PUBLISHABLE_CHANNEL_COUNT } from '../channels/channel-count';
+
+// Hookpost figures come from pricing.ts (only FREE, STANDARD and PRO are sold);
+// competitor figures from compare/competitor-facts.ts, checked FACTS_CHECKED.
+const { FREE, STANDARD: STD_INR, PRO: PRO_INR } = pricingINR;
+const { STANDARD: STD_USD, PRO: PRO_USD } = pricingUSD;
+const inr = (n: number) => n.toLocaleString('en-IN');
+const usd = (n: number) => `$${n.toLocaleString('en-US')}`;
+
+const FACTS = Object.values(COMPETITOR_FACTS);
+const MCP_COUNT = FACTS.filter((c) => c.mcp === true).length;
+const BUFFER_PER_CHANNEL = COMPETITOR_FACTS.buffer.cheapestPaid!.price; // annual billing
+const HOOTSUITE_PER_USER = COMPETITOR_FACTS.hootsuite.cheapestPaid!.price; // annual billing
+const AGORAPULSE_PER_USER = COMPETITOR_FACTS.agorapulse.cheapestPaid!.price; // annual billing, 10 profiles per user
+const SPROUT_PER_SEAT = COMPETITOR_FACTS['sprout-social'].cheapestPaid!.price; // annual billing, 5 channels
+
+// 3-year cost scenarios, all at the vendors' annual-billing rates.
+const MONTHS = 36;
+const A_CHANNELS = STD_INR.channel;
+const TCO_A = {
+  hookpost: STD_USD.month_price * MONTHS,
+  buffer: BUFFER_PER_CHANNEL * A_CHANNELS * MONTHS,
+  hootsuite: HOOTSUITE_PER_USER * MONTHS,
+};
+const B_CHANNELS = 15;
+const B_SEATS = 3;
+const TCO_B = {
+  hookpost: PRO_USD.month_price * MONTHS,
+  buffer: BUFFER_PER_CHANNEL * B_CHANNELS * MONTHS,
+  agorapulse: AGORAPULSE_PER_USER * B_SEATS * MONTHS,
+};
 
 export const metadata: Metadata = {
   title: "Top Social Media Management Alternatives (2026) — Hookpost",
@@ -50,89 +83,89 @@ const ALTERNATIVES = [
   {
     slug: "postiz",
     name: "Postiz",
-    tagline: "Leading open-source social media management app",
-    hookpostAdvantage: "Direct Razorpay UPI + Indian card billing, priority support, and built-in AI agents.",
-    priceDiff: "Same $0 starter tier; Hookpost includes localized regional currency billing.",
+    tagline: "Open-source social media management app",
+    hookpostAdvantage: "A free hosted plan and rupee billing via Razorpay (UPI, NetBanking, cards). Postiz lists USD prices only and no UPI.",
+    priceDiff: `Postiz has no hosted free plan (7-day trial); Standard is $23/mo billed annually for 5 channels. Hookpost Standard: ₹${inr(STD_INR.month_price)} or $${STD_USD.month_price}/mo for ${STD_INR.channel} channels.`,
     badge: "Open-Source Alternative",
   },
   {
     slug: "buffer",
     name: "Buffer",
     tagline: "Simple social media tools with per-channel pricing",
-    hookpostAdvantage: "No per-channel price gouging ($6/channel adds up fast). Hookpost bundles unlimited channels.",
-    priceDiff: "Save up to 80% with bundled multi-channel scheduling and AI generation.",
+    hookpostAdvantage: `Buffer charges per channel ($5/channel/mo billed annually, $6 monthly). Hookpost Standard is one flat price for ${STD_INR.channel} channels.`,
+    priceDiff: `${A_CHANNELS} channels: Buffer $${BUFFER_PER_CHANNEL * A_CHANNELS}/mo (billed annually) vs Hookpost $${STD_USD.month_price}/mo.`,
     badge: "Price Value Alternative",
   },
   {
     slug: "hootsuite",
     name: "Hootsuite",
-    tagline: "Legacy enterprise social suite with $99/mo minimum",
-    hookpostAdvantage: "Escape the $99/mo minimum fee. Hookpost gives you multi-network scheduling starting at $0.",
-    priceDiff: "$0 vs $99/month minimum contract.",
+    tagline: "Social media suite priced per user",
+    hookpostAdvantage: "Hootsuite has no free plan (14-day trial). Hookpost has a free plan and flat monthly plans.",
+    priceDiff: `$0 or $${STD_USD.month_price}/mo vs $99 per user/mo billed annually (₹1,999 for Indian visitors).`,
     badge: "Cost-Saving Alternative",
   },
   {
     slug: "later",
     name: "Later",
-    tagline: "Visual social planner focused on Instagram & Pinterest",
-    hookpostAdvantage: "Full support for 18 networks including Instagram Reels, YouTube Shorts, Threads, X, and LinkedIn.",
-    priceDiff: "Higher post limits, multi-account workspaces, and AI hook generator included.",
+    tagline: "Visual social planner",
+    hookpostAdvantage: "Hookpost publishes to X and Bluesky, which Later's plans don't include. Hookpost's Instagram, Facebook, Threads and Pinterest publishing are not available to new accounts yet.",
+    priceDiff: `Later has no free plan; Starter is $18.75/mo billed annually ($25 monthly). Hookpost: free plan, Standard $${STD_USD.month_price}/mo.`,
     badge: "Multi-Channel Alternative",
   },
   {
     slug: "metricool",
     name: "Metricool",
     tagline: "Social media planning & analytics dashboard",
-    hookpostAdvantage: "100% open-source self-hostable with Docker, plus official Model Context Protocol (MCP) server.",
-    priceDiff: "Free self-hosting forever with complete data privacy.",
+    hookpostAdvantage: "Open source (AGPL) and self-hostable with Docker; Metricool is not. Both offer an MCP server.",
+    priceDiff: `Metricool Free: 1 brand, 20 posts/mo, no LinkedIn or X; Starter $20/mo billed annually. Hookpost Free: ${FREE.channel} channels, ${FREE.posts_per_month} posts/mo.`,
     badge: "Open-Source Alternative",
   },
   {
     slug: "sprout-social",
     name: "Sprout Social",
-    tagline: "High-end enterprise social media management",
-    hookpostAdvantage: "No $199/user/month per-seat fees. Perfect for agile startups, creators, and lean digital agencies.",
-    priceDiff: "$0 / $29 vs $199/user/month.",
+    tagline: "Enterprise social media management priced per seat",
+    hookpostAdvantage: `Flat pricing instead of per seat: Hookpost Pro covers up to ${PRO_INR.team_member_limit} team members for one price.`,
+    priceDiff: `$0 / $${STD_USD.month_price} / $${PRO_USD.month_price} per month vs $79 per seat/mo billed annually (Essentials).`,
     badge: "Agency Alternative",
   },
   {
     slug: "agorapulse",
     name: "Agorapulse",
     tagline: "Social media inbox and publishing tool",
-    hookpostAdvantage: "Lightweight modern interface with AI agent copilot, n8n custom node, and Make.com integrations.",
-    priceDiff: "Affordable flat-rate plans with zero mandatory annual lock-in.",
+    hookpostAdvantage: `Flat pricing instead of per user: Hookpost Pro is $${PRO_USD.month_price}/mo for up to ${PRO_INR.team_member_limit} team members.`,
+    priceDiff: "Agorapulse Standard is $79 per user/mo billed annually ($99 monthly); no free plan listed on its pricing page.",
     badge: "Modern Workflow Alternative",
   },
   {
     slug: "publer",
     name: "Publer",
-    tagline: "Virtual social media assistant and scheduler",
-    hookpostAdvantage: "Native MCP server and developer CLI for AI coding assistants like Claude, Cursor, and ChatGPT.",
-    priceDiff: "Free tier with robust AI generation and multi-platform automation.",
+    tagline: "Social media scheduler priced per account",
+    hookpostAdvantage: `API and MCP from Standard ($${STD_USD.month_price}/mo for ${STD_INR.channel} channels). On Publer they need the Business plan ($8 per account/mo billed annually).`,
+    priceDiff: `Publer Free: 3 accounts, 10 scheduled posts each, no X; Professional $4 per account/mo billed annually. Hookpost Free: ${FREE.channel} channels, ${FREE.posts_per_month} posts/mo, no AI.`,
     badge: "Developer & AI Alternative",
   },
   {
     slug: "socialpilot",
     name: "SocialPilot",
-    tagline: "Cost-effective social media scheduling for teams",
-    hookpostAdvantage: "True self-hosted open-source architecture with full API access and localized INR pricing.",
-    priceDiff: "Flexible monthly billing with Razorpay UPI and cards.",
+    tagline: "Social media scheduling for teams",
+    hookpostAdvantage: "Open source and self-hostable, with API access from Standard. SocialPilot's API is Enterprise-only.",
+    priceDiff: `SocialPilot has no free plan (14-day trial); Essentials is $25.50/mo billed annually for 7 channels, with INR prices shown in India. Hookpost Standard: ₹${inr(STD_INR.month_price)}/mo.`,
     badge: "Team Alternative",
   },
   {
     slug: "mixpost",
     name: "Mixpost",
     tagline: "Self-hosted social media software for Laravel & PHP",
-    hookpostAdvantage: "Modern TypeScript/Next.js/Node microservices stack with built-in MCP server, 18 networks, and native Razorpay UPI.",
-    priceDiff: "$0 AGPL open-source vs $29-$149 closed self-hosted license.",
+    hookpostAdvantage: "A hosted cloud plan as well as Docker self-hosting, and Razorpay UPI billing. Both ship an MCP server.",
+    priceDiff: "Mixpost Lite is free (MIT, self-hosted); Pro is a $299 one-time licence. Mixpost has no hosted plan.",
     badge: "Open-Source Alternative",
   },
   {
     slug: "planoly",
     name: "Planoly",
-    tagline: "Visual social planner for visual creators",
-    hookpostAdvantage: "Cross-posts visual reels and videos simultaneously across Meta, Threads, YouTube, and Pinterest.",
-    priceDiff: "Flat pricing, unified analytics, and free tier.",
+    tagline: "Visual planner built around Instagram and Pinterest",
+    hookpostAdvantage: "Hookpost publishes to YouTube, X, LinkedIn, Bluesky and more. Its Instagram and Pinterest publishing are not available to new accounts yet.",
+    priceDiff: "Planoly plans start at $14/mo (planoly.com/pricing); its free plan is mobile-only with 10 uploads/mo.",
     badge: "Visual Alternative",
   },
 ];
@@ -179,7 +212,7 @@ export default function AlternativesHubPage() {
         name: "What is the best alternative to Buffer and Hootsuite in 2026?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "Hookpost is the highest-rated alternative to Buffer and Hootsuite for creators and teams. Unlike Buffer ($6/channel) and Hootsuite ($99/mo), Hookpost provides an open-source AGPL engine, bundles 18 social platforms with zero per-channel penalties, includes native Model Context Protocol (MCP) server support, and offers domestic UPI/card payments via Razorpay.",
+          text: `Hookpost is an open-source (AGPL) alternative to Buffer and Hootsuite with flat plans. Buffer charges per channel ($5 per channel per month billed annually, $6 monthly) and Hootsuite per user ($99 per user per month billed annually). Hookpost has a free plan (${FREE.channel} channels, ${FREE.posts_per_month} posts a month); Standard is ₹${inr(STD_INR.month_price)} or $${STD_USD.month_price} a month for ${STD_INR.channel} channels, and Pro is ₹${inr(PRO_INR.month_price)} or $${PRO_USD.month_price} for ${PRO_INR.channel} channels and up to ${PRO_INR.team_member_limit} team members, paid via Razorpay (UPI, NetBanking, cards). Buffer and Hootsuite also offer MCP servers, so that is not a difference. Prices checked ${FACTS_CHECKED}.`,
         },
       },
       {
@@ -187,7 +220,7 @@ export default function AlternativesHubPage() {
         name: "How much can I save by switching from proprietary social schedulers to Hookpost?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "A solo creator managing 5 social channels saves over $1,000 across 3 years switching from Buffer, and over $3,500 compared to Hootsuite. A 5-member digital agency saves $6,000 to $8,000 over 3 years compared to Sprout Social and Hootsuite Team tiers.",
+          text: `At annual-billing rates over 3 years: a creator with ${A_CHANNELS} channels pays ${usd(TCO_A.hookpost)} on Hookpost Standard, ${usd(TCO_A.buffer)} on Buffer and ${usd(TCO_A.hootsuite)} on Hootsuite Standard (1 user). A team with ${B_CHANNELS} channels and ${B_SEATS} seats pays ${usd(TCO_B.hookpost)} on Hookpost Pro, ${usd(TCO_B.buffer)} on Buffer and ${usd(TCO_B.agorapulse)} on Agorapulse Standard. Competitor prices checked ${FACTS_CHECKED}.`,
         },
       },
       {
@@ -195,7 +228,7 @@ export default function AlternativesHubPage() {
         name: "Can I self-host Hookpost for free on my own server?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "Yes. Hookpost is 100% open-source under the AGPL license. You can deploy it in 2 minutes using Docker Compose on any VPS or local machine with full data sovereignty and zero vendor lock-in.",
+          text: "Yes. Hookpost is 100% open-source under the AGPL license. You can deploy it using Docker Compose on any VPS or local machine with full data sovereignty and zero vendor lock-in.",
         },
       },
       {
@@ -203,7 +236,7 @@ export default function AlternativesHubPage() {
         name: "How does Hookpost differ from Postiz?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "Hookpost builds upon open-source foundations with essential production features: localized payment options (Razorpay UPI Autopay, NetBanking, and Indian cards), native Anthropic Model Context Protocol (MCP) server for Claude Desktop, and dedicated direct engineering support.",
+          text: "Hookpost builds on open-source foundations. The practical differences are pricing and billing: Hookpost has a free hosted plan and bills Indian customers in rupees via Razorpay (UPI Autopay, NetBanking, cards), while Postiz has no hosted free plan (7-day trial) and lists USD prices from $23/mo billed annually. Both include an MCP server.",
         },
       },
       {
@@ -211,7 +244,7 @@ export default function AlternativesHubPage() {
         name: "What are the hidden costs of legacy tools like Buffer, Later, and Hootsuite?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "The primary hidden costs include: (1) per-channel pricing penalties ($6/channel quickly scaling to $60-$120/mo), (2) per-seat user fees ($199-$399/seat on Sprout Social), (3) add-on AI generation fees (e.g. Hootsuite OwlyWriter), (4) mandatory annual contract lock-ins, and (5) 3.5-5% foreign exchange fees on USD-only billing for international users.",
+          text: `The costs that are easy to miss: (1) per-channel pricing ($5 per channel on Buffer, $4 per account on Publer, both billed annually), (2) per-seat pricing ($79 per seat on Sprout Social Essentials, $99 per user on Hootsuite, $79 per user on Agorapulse, all billed annually), (3) headline prices that are annual rates, with higher monthly rates, and (4) USD-only billing, where your bank may add a foreign-transaction fee. Prices checked ${FACTS_CHECKED}.`,
         },
       },
       {
@@ -219,7 +252,7 @@ export default function AlternativesHubPage() {
         name: "Why do agencies prefer Hookpost over Sprout Social for team collaboration?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "Sprout Social charges $199 to $399 per user per month, costing a 5-person agency up to $2,000/month. Hookpost provides unlimited client workspaces, granular role-based permissions, and unified visual approval calendars for a flat $29/month, saving agencies over $20,000 per year.",
+          text: `Sprout Social prices per seat: Essentials is $${SPROUT_PER_SEAT} per seat per month billed annually ($99 monthly) and includes 5 channels, so 5 seats cost $${SPROUT_PER_SEAT * 5} a month. Hookpost Pro is $${PRO_USD.month_price} (₹${inr(PRO_INR.month_price)}) a month flat for ${PRO_INR.channel} channels and up to ${PRO_INR.team_member_limit} team members. Prices checked ${FACTS_CHECKED}.`,
         },
       },
       {
@@ -227,7 +260,7 @@ export default function AlternativesHubPage() {
         name: "Does Hookpost support AI agent automation through MCP (Model Context Protocol)?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "Yes. Hookpost is the world's first open-source scheduler with native MCP server support. AI agents in Claude Desktop, Cursor, and Cline can inspect calendars, draft multi-network posts, and schedule autonomously via standardized JSON-RPC tools.",
+          text: `Yes, on Standard and Pro (not on Free). MCP clients such as Claude Desktop and Cursor can draft and schedule posts through it. It is not unique to Hookpost: ${MCP_COUNT} of the ${FACTS.length} social media tools we checked on ${FACTS_CHECKED} offer an MCP server, including Buffer, Hootsuite, Publer and Postiz.`,
         },
       },
       {
@@ -235,7 +268,7 @@ export default function AlternativesHubPage() {
         name: "Can international and Indian creators pay in local currencies like INR?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "Yes. Hookpost supports native Razorpay integration for instant UPI (Google Pay, PhonePe, Paytm), RuPay, NetBanking, and Indian cards at regional pricing (₹599/mo).",
+          text: "Yes. Hookpost supports native Razorpay integration for instant UPI (Google Pay, PhonePe, Paytm), RuPay, NetBanking, and Indian cards at regional pricing: Standard ₹" + inr(STD_INR.month_price) + "/mo, Pro ₹" + inr(PRO_INR.month_price) + "/mo.",
         },
       },
     ],
@@ -311,7 +344,7 @@ export default function AlternativesHubPage() {
         <div className="bg-[#161616] border border-[#FF4CE2]/30 rounded-2xl p-6 max-w-[900px] mx-auto text-left shadow-[0_0_30px_rgba(255,76,226,0.1)]">
           <p className="text-xs uppercase tracking-widest text-[#FF4CE2] font-bold mb-2">Social Management Alternatives Summary</p>
           <p className="text-sm sm:text-base text-neutral-300 leading-relaxed">
-            The top alternatives to proprietary social media tools like Buffer ($6/channel) and Hootsuite ($99/mo) include <strong>Hookpost</strong> and <strong>Postiz</strong>. Hookpost differentiates by combining an open-source AGPL engine, 1-click Docker self-hosting, bundled AI copy generation, and domestic regional payment support (Razorpay UPI &amp; Cards) with a $0 starter tier.
+            Alternatives to proprietary social media tools like Buffer ($5 per channel/mo) and Hootsuite ($99 per user/mo, both billed annually) include <strong>Hookpost</strong> and <strong>Postiz</strong>. Hookpost combines an open-source AGPL engine, Docker self-hosting, AI writing on paid plans, and rupee billing via Razorpay (UPI &amp; cards) with a free plan of {FREE.channel} channels and {FREE.posts_per_month} posts a month. Competitor prices checked {FACTS_CHECKED}.
           </p>
         </div>
 

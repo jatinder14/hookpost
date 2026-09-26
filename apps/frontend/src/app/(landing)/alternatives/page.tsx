@@ -406,7 +406,7 @@ export default function AlternativesHubPage() {
               Direct Pricing Comparison Matrix (2026 Dollar Figures)
             </h2>
             <p className="text-neutral-400 text-sm sm:text-base max-w-2xl mx-auto">
-              Transparent, unvarnished pricing data showing exactly how Hookpost compares with legacy SaaS schedulers.
+              Each vendor&apos;s cheapest paid plan, read off its own pricing page on {FACTS_CHECKED}. Competitor prices are annual-billing rates; monthly billing costs more.
             </p>
           </div>
 
@@ -425,31 +425,31 @@ export default function AlternativesHubPage() {
               </thead>
               <tbody className="divide-y divide-[#262626] text-neutral-300">
                 <tr className="hover:bg-white/[0.02]">
-                  <td className="p-4 font-semibold text-white">Starter Price</td>
-                  <td className="p-4 text-white bg-[#FF4CE2]/5 font-bold">$0 / free forever</td>
-                  <td className="p-4">$0 (max 3 channels)</td>
-                  <td className="p-4 text-red-400">No free tier</td>
-                  <td className="p-4 text-red-400">No free tier</td>
-                  <td className="p-4">$0 (max 3 accounts)</td>
-                  <td className="p-4">$0 / free tier</td>
+                  <td className="p-4 font-semibold text-white">Free Plan</td>
+                  <td className="p-4 text-white bg-[#FF4CE2]/5 font-bold">$0: {FREE.channel} channels, {FREE.posts_per_month} posts/mo</td>
+                  <td className="p-4">$0: 3 channels, 10 scheduled posts each</td>
+                  <td className="p-4 text-red-400">No free plan (14-day trial)</td>
+                  <td className="p-4 text-red-400">No free plan (30-day trial)</td>
+                  <td className="p-4">$0: 3 accounts, 10 scheduled posts each, no X</td>
+                  <td className="p-4 text-red-400">No hosted free plan (7-day trial)</td>
                 </tr>
                 <tr className="hover:bg-white/[0.02]">
-                  <td className="p-4 font-semibold text-white">Pro / Team Tier</td>
-                  <td className="p-4 text-white bg-[#FF4CE2]/5 font-bold">$15 / mo (₹599)</td>
-                  <td className="p-4">$6 / channel / mo</td>
-                  <td className="p-4 text-red-400">$99 / mo minimum</td>
-                  <td className="p-4 text-red-400">$199 / user / mo</td>
-                  <td className="p-4">$12 / mo</td>
-                  <td className="p-4">$15 / mo</td>
+                  <td className="p-4 font-semibold text-white">Entry Paid Plan</td>
+                  <td className="p-4 text-white bg-[#FF4CE2]/5 font-bold">${STD_USD.month_price} / mo (₹{inr(STD_INR.month_price)}), {STD_INR.channel} channels</td>
+                  <td className="p-4">$5 / channel / mo</td>
+                  <td className="p-4">$99 / user / mo</td>
+                  <td className="p-4">$79 / seat / mo</td>
+                  <td className="p-4">$4 / account / mo</td>
+                  <td className="p-4">$23 / mo, 5 channels</td>
                 </tr>
                 <tr className="hover:bg-white/[0.02]">
-                  <td className="p-4 font-semibold text-white">Per-Channel Penalty</td>
-                  <td className="p-4 text-emerald-400 bg-[#FF4CE2]/5 font-bold">$0 (Bundled)</td>
-                  <td className="p-4 text-red-400">+$6 / channel / mo</td>
-                  <td className="p-4 text-red-400">Add-on packs ($$)</td>
-                  <td className="p-4 text-red-400">Add-on packs ($$)</td>
-                  <td className="p-4">+$4 / account / mo</td>
-                  <td className="p-4 text-emerald-400">$0 (Bundled)</td>
+                  <td className="p-4 font-semibold text-white">Pricing Basis</td>
+                  <td className="p-4 text-emerald-400 bg-[#FF4CE2]/5 font-bold">Flat per plan ({STD_INR.channel} channels Standard, {PRO_INR.channel} Pro)</td>
+                  <td className="p-4 text-red-400">Per channel</td>
+                  <td className="p-4 text-red-400">Per user (10 channels)</td>
+                  <td className="p-4 text-red-400">Per seat (5 channels on Essentials)</td>
+                  <td className="p-4">Per account</td>
+                  <td className="p-4 text-emerald-400">Flat per plan</td>
                 </tr>
                 <tr className="hover:bg-white/[0.02]">
                   <td className="p-4 font-semibold text-white">Self-Hostable (Docker)</td>
@@ -458,25 +458,25 @@ export default function AlternativesHubPage() {
                   <td className="p-4 text-red-400">❌ Proprietary Cloud</td>
                   <td className="p-4 text-red-400">❌ Proprietary Cloud</td>
                   <td className="p-4 text-red-400">❌ Proprietary Cloud</td>
-                  <td className="p-4 text-emerald-400">✅ 100% Free (AGPL)</td>
+                  <td className="p-4 text-emerald-400">✅ Free (AGPL-3.0)</td>
                 </tr>
                 <tr className="hover:bg-white/[0.02]">
-                  <td className="p-4 font-semibold text-white">MCP &amp; AI Agent Server</td>
-                  <td className="p-4 text-emerald-400 bg-[#FF4CE2]/5 font-bold">✅ Native MCP Server</td>
-                  <td className="p-4 text-neutral-500">❌ Web Copilot Only</td>
-                  <td className="p-4 text-neutral-500">❌ Web Copilot Only</td>
-                  <td className="p-4 text-neutral-500">❌ Web Copilot Only</td>
-                  <td className="p-4 text-neutral-500">❌ Web Copilot Only</td>
-                  <td className="p-4 text-neutral-500">⚠️ Limited Web AI</td>
+                  <td className="p-4 font-semibold text-white">MCP Server</td>
+                  <td className="p-4 text-emerald-400 bg-[#FF4CE2]/5 font-bold">✅ Standard and Pro (not Free)</td>
+                  <td className="p-4">✅ Every plan, incl. Free</td>
+                  <td className="p-4">✅ Official MCP servers</td>
+                  <td className="p-4">⚠️ ChatGPT only, TikTok data only</td>
+                  <td className="p-4">✅ Business plan</td>
+                  <td className="p-4">✅ Every plan</td>
                 </tr>
                 <tr className="hover:bg-white/[0.02]">
-                  <td className="p-4 font-semibold text-white">Payment Methods</td>
-                  <td className="p-4 text-white bg-[#FF4CE2]/5 font-bold">Razorpay (UPI, NetBanking, Cards)</td>
-                  <td className="p-4">Credit Cards Only</td>
-                  <td className="p-4">Enterprise Invoice</td>
-                  <td className="p-4">Enterprise Invoice</td>
-                  <td className="p-4">Credit Cards Only</td>
-                  <td className="p-4">Credit Cards Only</td>
+                  <td className="p-4 font-semibold text-white">Rupee Pricing / UPI</td>
+                  <td className="p-4 text-white bg-[#FF4CE2]/5 font-bold">INR billing: UPI, NetBanking, Cards</td>
+                  <td className="p-4">USD only; no UPI listed</td>
+                  <td className="p-4">Shows INR (₹1,999 / user / mo); no UPI listed</td>
+                  <td className="p-4">USD only; no UPI listed</td>
+                  <td className="p-4">Shows INR; no UPI listed</td>
+                  <td className="p-4">USD only; no UPI listed</td>
                 </tr>
               </tbody>
             </table>
@@ -491,64 +491,60 @@ export default function AlternativesHubPage() {
               3-Year Total Cost of Ownership (TCO) Breakdown
             </h2>
             <p className="text-neutral-400 text-sm sm:text-base max-w-xl mx-auto">
-              Per-channel billing quietly drains creator budgets. Here is how much you spend over 36 months:
+              What each plan costs over 36 months at the vendors&apos; annual-billing rates (checked {FACTS_CHECKED}):
             </p>
           </div>
 
           <div className="grid md:grid-cols-2 gap-6">
             <div className="bg-[#0b0b0b] border border-white/5 rounded-xl p-6 space-y-4">
               <h3 className="text-lg font-bold text-white flex items-center justify-between">
-                <span>Scenario A: Solo Creator (5 Channels)</span>
+                <span>Scenario A: Solo Creator ({A_CHANNELS} Channels)</span>
                 <span className="text-xs text-neutral-400 font-normal">3-Year Horizon</span>
               </h3>
               <ul className="space-y-2 text-sm text-neutral-300">
                 <li className="flex justify-between py-1 border-b border-white/5">
-                  <span className="text-emerald-400 font-semibold">Hookpost Cloud Pro:</span>
-                  <span className="font-mono text-white font-bold">$540 ($15/mo)</span>
+                  <span className="text-emerald-400 font-semibold">Hookpost Standard:</span>
+                  <span className="font-mono text-white font-bold">{usd(TCO_A.hookpost)} (${STD_USD.month_price}/mo)</span>
                 </li>
                 <li className="flex justify-between py-1 border-b border-white/5">
                   <span className="text-emerald-400 font-semibold">Hookpost Self-Hosted:</span>
                   <span className="font-mono text-white font-bold">$0 (Free Forever)</span>
                 </li>
                 <li className="flex justify-between py-1 border-b border-white/5 text-neutral-400">
-                  <span>Buffer ($30/mo for 5 channels):</span>
-                  <span className="font-mono">$1,080</span>
+                  <span>Buffer (${BUFFER_PER_CHANNEL * A_CHANNELS}/mo for {A_CHANNELS} channels):</span>
+                  <span className="font-mono">{usd(TCO_A.buffer)}</span>
                 </li>
                 <li className="flex justify-between py-1 border-b border-white/5 text-neutral-400">
-                  <span>Hootsuite ($99/mo standard):</span>
-                  <span className="font-mono">$3,564</span>
+                  <span>Hootsuite Standard (${HOOTSUITE_PER_USER}/user/mo, 1 user):</span>
+                  <span className="font-mono">{usd(TCO_A.hootsuite)}</span>
                 </li>
               </ul>
               <div className="bg-[#FF4CE2]/10 border border-[#FF4CE2]/20 p-3 rounded-lg text-xs text-[#FF4CE2] font-semibold text-center">
-                Net 3-Year Creator Savings: $540 to $3,564
+                3-year difference vs Hookpost Standard: {usd(TCO_A.buffer - TCO_A.hookpost)} to {usd(TCO_A.hootsuite - TCO_A.hookpost)}
               </div>
             </div>
 
             <div className="bg-[#0b0b0b] border border-white/5 rounded-xl p-6 space-y-4">
               <h3 className="text-lg font-bold text-white flex items-center justify-between">
-                <span>Scenario B: Small Agency (15 Channels, 3 Seats)</span>
+                <span>Scenario B: Small Agency ({B_CHANNELS} Channels, {B_SEATS} Seats)</span>
                 <span className="text-xs text-neutral-400 font-normal">3-Year Horizon</span>
               </h3>
               <ul className="space-y-2 text-sm text-neutral-300">
                 <li className="flex justify-between py-1 border-b border-white/5">
                   <span className="text-emerald-400 font-semibold">Hookpost Pro:</span>
-                  <span className="font-mono text-white font-bold">$1,044 ($29/mo)</span>
+                  <span className="font-mono text-white font-bold">{usd(TCO_B.hookpost)} (${PRO_USD.month_price}/mo)</span>
                 </li>
                 <li className="flex justify-between py-1 border-b border-white/5 text-neutral-400">
-                  <span>Buffer ($90/mo for 15 channels):</span>
-                  <span className="font-mono">$3,240</span>
+                  <span>Buffer (${BUFFER_PER_CHANNEL * B_CHANNELS}/mo for {B_CHANNELS} channels):</span>
+                  <span className="font-mono">{usd(TCO_B.buffer)}</span>
                 </li>
                 <li className="flex justify-between py-1 border-b border-white/5 text-neutral-400">
-                  <span>Sprout Social ($199/user x 3 = $597/mo):</span>
-                  <span className="font-mono">$21,492</span>
-                </li>
-                <li className="flex justify-between py-1 border-b border-white/5 text-neutral-400">
-                  <span>Hootsuite Team ($249/mo):</span>
-                  <span className="font-mono">$8,964</span>
+                  <span>Agorapulse Standard (${AGORAPULSE_PER_USER}/user x {B_SEATS} = ${AGORAPULSE_PER_USER * B_SEATS}/mo):</span>
+                  <span className="font-mono">{usd(TCO_B.agorapulse)}</span>
                 </li>
               </ul>
               <div className="bg-emerald-500/10 border border-emerald-500/20 p-3 rounded-lg text-xs text-emerald-400 font-semibold text-center">
-                Net 3-Year Agency Savings: $7,920 to $20,448
+                3-year difference vs Hookpost Pro: {usd(TCO_B.buffer - TCO_B.hookpost)} to {usd(TCO_B.agorapulse - TCO_B.hookpost)}
               </div>
             </div>
           </div>
@@ -556,42 +552,42 @@ export default function AlternativesHubPage() {
           {/* Blueprint: The 5 Hidden Costs of Legacy Schedulers */}
           <div className="space-y-4 pt-4 border-t border-white/10">
             <h3 className="text-xl font-bold text-white text-center">
-              The 5 Hidden Gotchas of Legacy Social Media Schedulers
+              Five Pricing Details to Check Before You Pay
             </h3>
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 pt-2">
               <div className="bg-[#161616] border border-white/10 rounded-xl p-4 space-y-2">
-                <span className="text-xs font-bold text-red-400 uppercase">1. Per-Channel Gouging</span>
-                <h4 className="text-sm font-bold text-white">The "Only $6/mo" Trap</h4>
+                <span className="text-xs font-bold text-red-400 uppercase">1. Per-Channel Pricing</span>
+                <h4 className="text-sm font-bold text-white">The &quot;Only $5/mo&quot; Trap</h4>
                 <p className="text-xs text-neutral-400 leading-relaxed">
-                  Buffer charges per channel. A brand active on Instagram, Bluesky, Pinterest, YouTube, X, Threads, Facebook, and LinkedIn pays $48-$60/mo just for basic connections. Hookpost includes 18 networks flat.
+                  Buffer charges per channel: 8 channels cost ${BUFFER_PER_CHANNEL * 8}/mo billed annually, or $48 billed monthly. Hookpost Standard covers {STD_INR.channel} channels for ${STD_USD.month_price}/mo and Pro covers {PRO_INR.channel} for ${PRO_USD.month_price}/mo.
                 </p>
               </div>
               <div className="bg-[#161616] border border-white/10 rounded-xl p-4 space-y-2">
                 <span className="text-xs font-bold text-red-400 uppercase">2. Per-Seat Multipliers</span>
-                <h4 className="text-sm font-bold text-white">Extortionate Agency Tax</h4>
+                <h4 className="text-sm font-bold text-white">Paying Again for Every Teammate</h4>
                 <p className="text-xs text-neutral-400 leading-relaxed">
-                  Sprout Social charges $199-$399 per seat per month. Adding your copywriter, designer, and client costs thousands extra. Hookpost includes unlimited team seats and client workspaces.
+                  Sprout Social Essentials is ${SPROUT_PER_SEAT} per seat per month billed annually; Standard is $199. Hookpost Pro includes up to {PRO_INR.team_member_limit} team members for ${PRO_USD.month_price}/mo.
                 </p>
               </div>
               <div className="bg-[#161616] border border-white/10 rounded-xl p-4 space-y-2">
-                <span className="text-xs font-bold text-red-400 uppercase">3. AI Token Add-ons</span>
-                <h4 className="text-sm font-bold text-white">Metered Copywriting</h4>
+                <span className="text-xs font-bold text-red-400 uppercase">3. Gated API Access</span>
+                <h4 className="text-sm font-bold text-white">API on the Top Tier Only</h4>
                 <p className="text-xs text-neutral-400 leading-relaxed">
-                  Hootsuite charges extra for OwlyWriter AI credits; others restrict generations. Hookpost includes full AI generation and free local MCP server access for Claude and Cursor.
+                  Publer puts its API and MCP on Business, SocialPilot&apos;s API is Enterprise-only, and Sprout&apos;s API is on Advanced. Hookpost includes AI, API and MCP from Standard; Free has none of them.
                 </p>
               </div>
               <div className="bg-[#161616] border border-white/10 rounded-xl p-4 space-y-2">
-                <span className="text-xs font-bold text-red-400 uppercase">4. Annual Contract Lock-in</span>
-                <h4 className="text-sm font-bold text-white">Automatic Renewal Price Hikes</h4>
+                <span className="text-xs font-bold text-red-400 uppercase">4. Annual-Rate Headlines</span>
+                <h4 className="text-sm font-bold text-white">Monthly Billing Costs More</h4>
                 <p className="text-xs text-neutral-400 leading-relaxed">
-                  Enterprise suites enforce $1,188+ upfront annual commitments with automatic 15-20% price jumps upon renewal. Hookpost offers true month-to-month billing and $0 self-hosting.
+                  Headline prices are often annual rates: Sprout Essentials $79 vs $99 monthly, Agorapulse $79 vs $99, SocialPilot $25.50 vs $30. Hookpost Standard is ₹{inr(STD_INR.month_price)} or ${STD_USD.month_price} billed monthly.
                 </p>
               </div>
               <div className="bg-[#161616] border border-white/10 rounded-xl p-4 space-y-2">
-                <span className="text-xs font-bold text-red-400 uppercase">5. Forex &amp; Gateway Fees</span>
-                <h4 className="text-sm font-bold text-white">3.5% International Surcharges</h4>
+                <span className="text-xs font-bold text-red-400 uppercase">5. Currency</span>
+                <h4 className="text-sm font-bold text-white">USD-Only Billing</h4>
                 <p className="text-xs text-neutral-400 leading-relaxed">
-                  Non-US creators pay hidden 3.5% foreign transaction fees on USD credit card payments. Hookpost provides native Razorpay UPI and card support in domestic currencies.
+                  Buffer, Sprout Social, Agorapulse, Later and Postiz list USD prices only, and your bank may add a foreign-transaction fee. Hookpost bills Indian customers in INR via Razorpay, including UPI Autopay.
                 </p>
               </div>
               <div className="bg-gradient-to-br from-[#FF4CE2]/10 to-transparent border border-[#FF4CE2]/30 rounded-xl p-4 space-y-2 flex flex-col justify-between">
@@ -618,7 +614,7 @@ export default function AlternativesHubPage() {
               Migrate to Hookpost in 3 Easy Steps
             </h2>
             <p className="text-neutral-400 text-sm sm:text-base max-w-xl mx-auto">
-              Switching from Buffer, Hootsuite, or Later takes under 3 minutes with zero downtime for your active campaigns.
+              Switching from Buffer, Hootsuite, or Later without pausing your active campaigns.
             </p>
           </div>
 
@@ -638,7 +634,7 @@ export default function AlternativesHubPage() {
               </div>
               <h3 className="text-base font-bold text-white">1-Click Channel OAuth</h3>
               <p className="text-xs sm:text-sm text-neutral-400 leading-relaxed">
-                Log into Hookpost and authorize your social accounts (X, Instagram, Facebook, LinkedIn, YouTube, Pinterest, etc.) in 60 seconds.
+                Log into Hookpost and authorize your social accounts (X, LinkedIn, YouTube, Bluesky, Telegram and more). Instagram, Facebook, Threads and Pinterest are not available to new accounts yet.
               </p>
             </div>
             <div className="bg-[#111] border border-white/10 rounded-2xl p-6 space-y-3">
@@ -647,7 +643,7 @@ export default function AlternativesHubPage() {
               </div>
               <h3 className="text-base font-bold text-white">Automate with AI &amp; MCP</h3>
               <p className="text-xs sm:text-sm text-neutral-400 leading-relaxed">
-                Drag-and-drop posts in the visual calendar or instruct Claude Desktop via the Hookpost MCP Server to schedule your upcoming month.
+                Drag-and-drop posts in the visual calendar or, on Standard and Pro, instruct Claude Desktop via the Hookpost MCP server to schedule your upcoming month.
               </p>
             </div>
           </div>
@@ -693,16 +689,16 @@ export default function AlternativesHubPage() {
             a win.
           </p>
           <div className="pt-2 text-xs text-white/50">
-            Last updated: September 2026 &bull; Verified against production releases
+            Competitor figures checked {FACTS_CHECKED}
           </div>
         </section>
 
         <div className="bg-gradient-to-b from-[#181818] to-[#0a0a0a] border border-[#333] rounded-3xl p-8 sm:p-12 text-center space-y-5">
           <h2 className="text-3xl sm:text-4xl font-bold text-white">
-            Ready to Experience the #1 Open-Source Scheduler?
+            Ready to Try an Open-Source Scheduler?
           </h2>
           <p className="text-[#888] max-w-lg mx-auto text-base sm:text-lg">
-            Schedule to 18 networks from one calendar. Free to start, no credit card, under 60 seconds to set up.
+            Publish to {PUBLISHABLE_CHANNEL_COUNT} networks from one calendar. Free to start, no credit card.
           </p>
           <Link
             href="/auth"

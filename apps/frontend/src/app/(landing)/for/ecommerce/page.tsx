@@ -10,7 +10,7 @@ export const metadata: Metadata = {
   keywords: [
     'social media scheduler for ecommerce',
     'shopify social media automation',
-    'pinterest pin scheduler bulk',
+    'youtube product demo scheduler',
     'product launch social campaign scheduler',
     'dtc brand content calendar',
   ],

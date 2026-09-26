@@ -132,7 +132,7 @@ export default function StudentsYoungCreatorsPage() {
           </div>
           <div className="bg-neutral-950 border border-neutral-800 p-8 rounded-2xl">
             <div className="text-3xl mb-4">🤖</div>
-            <h2 className="text-xl font-bold mb-2">Viral AI Caption & Hook Ideas</h2>
+            <h2 className="text-xl font-bold mb-2">AI Caption & Hook Ideas</h2>
             <p className="text-neutral-400 text-sm leading-relaxed">
               Stuck on titles? The AI assistant drafts hooks, captions and hashtags. It is on Standard and Pro, not the free plan.
             </p>

@@ -11,7 +11,7 @@ export const metadata: Metadata = {
   keywords: [
     'social media scheduler for creators',
     'free reel scheduler',
-    'youtube shorts bulk scheduler',
+    'youtube shorts scheduler',
     'instagram carousel scheduler free',
     'best content calendar for influencers',
     'buffer alternative for creators',
@@ -62,7 +62,7 @@ export default function CreatorsLandingPage() {
     { title: '✍️ Built-in AI Hook & Caption Generator', desc: 'Generate caption variations, hook lines and hashtags with the AI assistant, on Standard and Pro.' },
     { title: '📅 Visual Drag & Drop Calendar', desc: 'Plan an entire month of content in one sitting, with a preview of how each post will look on its network.' },
     { title: '💸 Free Plan for Students & Emerging Creators', desc: '2 channels and 30 posts a month for free, no credit card. AI writing starts on Standard at ₹599 / $15 a month.' },
-    { title: '🧵 X / Twitter & LinkedIn Threads', desc: 'Draft and schedule X threads and LinkedIn image carousels from the same editor.' },
+    { title: '🧵 X Threads & LinkedIn Carousels', desc: 'Draft and schedule X threads and LinkedIn image carousels from the same editor.' },
     { title: '⏰ Your Own Posting Slots', desc: 'Set the times you want to post on each channel once, and new posts can drop into the next free slot.' },
   ];
 
@@ -113,7 +113,7 @@ export default function CreatorsLandingPage() {
           Built For Solo Creators, Reelmakers & YouTubers
         </div>
         <h1 className="text-4xl sm:text-6xl font-black tracking-tight text-white leading-tight mb-6">
-          Schedule Once. Go Viral Everywhere.<br />
+          Schedule Once. Publish Across Your Channels.<br />
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FF4CE2] to-cyan-400">
             Shorts, X, LinkedIn & Bluesky in 1 Click.
           </span>

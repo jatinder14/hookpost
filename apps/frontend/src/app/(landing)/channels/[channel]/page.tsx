@@ -61,13 +61,13 @@ const CHANNELS_DATA: Record<string, ChannelConfig> = {
   linkedin: {
     name: 'LinkedIn',
     slug: 'linkedin',
-    tagline: 'Schedule LinkedIn Personal Posts & Company Page Updates',
+    tagline: 'Schedule LinkedIn Posts to Your Profile',
     description:
-      'Grow your professional personal brand and company page presence with scheduled LinkedIn posts, PDF documents, carousels, and multi-image posts.',
+      'Schedule LinkedIn posts to your personal profile: text up to 3,000 characters, images, video and image carousels. Company Pages are not available yet.',
     features: [
-      'Personal profile and Company Page scheduling',
+      'Personal profile scheduling (Company Pages not available yet)',
       'PDF carousel and document posting',
-      'AI hook generator for viral LinkedIn copy',
+      'AI writing assistant in the composer',
       'Post-level impression and engagement analytics',
     ],
     keywords: ['linkedin post scheduler', 'schedule linkedin company posts', 'linkedin automation'],

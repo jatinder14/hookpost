@@ -7,7 +7,7 @@ All notable changes to Hookpost are recorded here. The format follows [Keep a Ch
 First tagged release of Hookpost, an open-source social media scheduler built on the AGPL-3.0 Postiz codebase (see `NOTICE`).
 
 ### Publishing
-- Schedule and publish to X (posts and threads), LinkedIn (profiles and company pages), YouTube (videos and Shorts), Bluesky, Discord, Slack, Telegram, WordPress, Hashnode, Dev.to, Lemmy, Nostr and Listmonk.
+- Schedule and publish to X (posts and threads), LinkedIn (personal profiles), YouTube (videos and Shorts), Bluesky, Discord, Slack, Telegram, WordPress, Hashnode, Dev.to, Lemmy, Nostr and Listmonk.
 - Instagram, Facebook and Threads providers are included; on the hosted version they wait on Meta app approval. Pinterest connects but cannot publish until Pinterest grants Standard API access. Medium works only for accounts that already hold an integration token (Medium stopped issuing new ones in January 2025).
 - Per-network validation (character limits, media rules) before a post is queued; repeat posting on supported channels.
 

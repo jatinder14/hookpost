@@ -57,7 +57,7 @@ export default function SeoSchemas() {
           // Facebook, Threads and Pinterest return once their platform
           // approvals land - see channel-specs.ts.
           'X post and thread scheduling',
-          'LinkedIn profile and company page publishing',
+          'LinkedIn profile publishing',
           'YouTube video and Shorts auto-publishing',
           'Bluesky, Telegram, Discord and Slack publishing',
           'AI caption and hashtag generation',

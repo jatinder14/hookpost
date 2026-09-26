@@ -28,7 +28,7 @@ Hookpost is an AI social media scheduler made in India, positioned as a low-cost
 
 ## 3. Supported Channels (what a new user can connect today)
 
-Publishing works today on: X, LinkedIn (profiles and company pages), YouTube (videos and Shorts), Bluesky, Discord, Slack, Telegram, Lemmy, Nostr, WordPress, Hashnode, Dev.to and Listmonk (email).
+Publishing works today on: X, LinkedIn (personal profiles), YouTube (videos and Shorts), Bluesky, Discord, Slack, Telegram, Lemmy, Nostr, WordPress, Hashnode, Dev.to and Listmonk (email).
 
 Built but not yet available to new users:
 - Instagram, Facebook and Threads: waiting on Meta app approval.

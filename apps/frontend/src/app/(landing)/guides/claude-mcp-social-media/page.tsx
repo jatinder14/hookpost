@@ -181,7 +181,7 @@ export default function ClaudeMcpGuidePage() {
           </p>
           <ul className="list-disc list-inside space-y-1 text-sm text-[#ddd] pl-2">
             <li><strong>X (Twitter)</strong>: Posts, threads, and polls.</li>
-            <li><strong>LinkedIn</strong>: Personal profiles and company organization pages.</li>
+            <li><strong>LinkedIn</strong>: personal profiles (Company Pages are not available yet).</li>
             <li><strong>Instagram &amp; Threads</strong>: Single images, carousels, and Reels.</li>
             <li><strong>YouTube &amp; Shorts</strong>: Video uploads and captions.</li>
           </ul>

@@ -262,7 +262,7 @@ export default function N8nIntegrationPage() {
               <strong className="text-white">RSS Feed Trigger</strong> (built into n8n), pointed at your blog&apos;s feed.
             </li>
             <li>
-              <strong className="text-white">Hookpost → Create Post.</strong> Channel: your LinkedIn page. When: Schedule. Date:
+              <strong className="text-white">Hookpost → Create Post.</strong> Channel: your LinkedIn profile. When: Schedule. Date:
               empty, so it takes the next free slot. Content:
               <Code>{LINKEDIN_CONTENT}</Code>
             </li>

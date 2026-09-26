@@ -208,7 +208,7 @@ export default function IndiaSchedulerPage() {
           <h2 className="text-3xl font-extrabold tracking-tight font-jakarta text-balance">Built for how Indian teams post</h2>
           <ul className="mt-6 grid gap-3 sm:grid-cols-2 text-white/80">
             <li className="rounded-2xl border border-white/10 p-5"><strong className="text-white">Schedule in IST.</strong> The calendar follows your browser&apos;s time zone by default (you can change it in Settings), so a 9 AM post goes out at 9 AM India time.</li>
-            <li className="rounded-2xl border border-white/10 p-5"><strong className="text-white">LinkedIn pages and profiles.</strong> Post to a personal profile and a company page from the same calendar.</li>
+            <li className="rounded-2xl border border-white/10 p-5"><strong className="text-white">LinkedIn profiles.</strong> Schedule posts, carousels and video to your personal LinkedIn profile.</li>
             <li className="rounded-2xl border border-white/10 p-5"><strong className="text-white">YouTube uploads and Shorts.</strong> Title, description and visibility set per post.</li>
             <li className="rounded-2xl border border-white/10 p-5"><strong className="text-white">Telegram channels and groups.</strong> Broadcast to a Telegram channel on the same schedule as everything else.</li>
           </ul>

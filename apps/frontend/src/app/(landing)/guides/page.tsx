@@ -94,7 +94,7 @@ const RESOURCES = [
   },
   {
     href: '/channels/linkedin',
-    title: 'How to schedule LinkedIn posts to a profile or company page',
+    title: 'How to schedule LinkedIn posts',
     blurb: 'Carousels, video and the rules LinkedIn enforces on each post type.',
     tag: 'Channel guide',
   },

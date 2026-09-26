@@ -181,7 +181,7 @@ export default function FreeSchedulerPage() {
       <section className="mx-auto w-full max-w-[1100px] px-5 py-16 sm:px-10">
         <h2 className="text-3xl font-extrabold tracking-tight font-jakarta text-balance">What the free plan includes</h2>
         <ul className="mt-6 grid gap-3 sm:grid-cols-2 text-white/80">
-          <li className="rounded-2xl border border-white/10 p-5"><strong className="text-white">{FREE.channel} connected channels.</strong> Any two of the networks below, for example one X account and one LinkedIn page.</li>
+          <li className="rounded-2xl border border-white/10 p-5"><strong className="text-white">{FREE.channel} connected channels.</strong> Any two of the networks below, for example one X account and one LinkedIn profile.</li>
           <li className="rounded-2xl border border-white/10 p-5"><strong className="text-white">{FREE.posts_per_month} scheduled posts a month.</strong> Counted across all channels and reset every billing month. The limit is enforced in code, so it is exactly what you get.</li>
           <li className="rounded-2xl border border-white/10 p-5"><strong className="text-white">Visual calendar.</strong> Drag posts between days, preview them per network, and see what goes out when.</li>
           <li className="rounded-2xl border border-white/10 p-5"><strong className="text-white">Per-network checks before publishing.</strong> Character limits and media rules are validated before a post is queued, not after it fails.</li>
@@ -264,7 +264,7 @@ export default function FreeSchedulerPage() {
           <h2 className="text-3xl font-extrabold tracking-tight font-jakarta text-balance">Schedule your first post in three steps</h2>
           <ol className="mt-6 flex flex-col gap-4 text-white/80 list-decimal ps-6">
             <li><strong className="text-white">Sign up</strong> with Google or email. Choose &quot;Continue with Free Plan&quot; on the plan screen.</li>
-            <li><strong className="text-white">Connect a channel</strong>, for example your X account or LinkedIn page. Most networks connect with one OAuth click.</li>
+            <li><strong className="text-white">Connect a channel</strong>, for example your X account or LinkedIn profile. Most networks connect with one OAuth click.</li>
             <li><strong className="text-white">Write the post, pick a date and time</strong>, and add it to the calendar. Hookpost publishes it then, even if your laptop is closed.</li>
           </ol>
           <p className="mt-6 text-white/60">

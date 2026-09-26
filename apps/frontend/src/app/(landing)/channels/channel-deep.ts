@@ -50,7 +50,7 @@ export const CHANNEL_DEEP: Record<string, DeepSection> = {
 
   linkedin: {
     intro:
-      'LinkedIn takes 3,000 characters and treats documents differently from images, which is where most scheduling tools quietly give up. Hookpost posts to a personal profile or, separately, to a Company Page.',
+      'LinkedIn takes 3,000 characters and treats documents differently from images, which is where most scheduling tools quietly give up. Hookpost posts to your personal profile; Company Pages are not available yet.',
     publish: [
       {
         title: 'Text and single media',
@@ -60,15 +60,10 @@ export const CHANNEL_DEEP: Record<string, DeepSection> = {
         title: 'Image carousels',
         body: 'Two or more images published as a swipeable carousel with its own title. Videos cannot be mixed into a carousel; the post is rejected before it is sent rather than after.',
       },
-      {
-        title: 'Company Pages',
-        body: 'A separate channel type from your personal profile, so a page and a person can be scheduled independently in the same calendar.',
-      },
     ],
     perPost: [
       'Post as an image carousel, with a carousel name',
       'Visibility — public feed',
-      'Personal profile or Company Page',
     ],
     gotcha: {
       title: 'Comments are text only',

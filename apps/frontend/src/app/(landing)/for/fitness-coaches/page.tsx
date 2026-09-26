@@ -6,7 +6,7 @@ import { Metadata } from 'next';
 export const metadata: Metadata = {
   title: 'Social Media Scheduler for Fitness Coaches | Hookpost',
   description:
-    'Auto-schedule YouTube Shorts, X and LinkedIn posts, with Instagram and Facebook Reels once Meta approves the app. For personal trainers, gym owners, and wellness creators.',
+    'Schedule YouTube Shorts, X and LinkedIn posts, with Instagram and Facebook once Meta approves. For personal trainers, gym owners and wellness creators.',
   keywords: [
     'fitness social media scheduler',
     'instagram reels scheduler for personal trainers',

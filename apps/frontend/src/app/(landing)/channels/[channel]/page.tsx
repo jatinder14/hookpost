@@ -254,6 +254,18 @@ const CONTENT_NOUN: Record<string, string> = {
   listmonk: 'Newsletters',
 };
 
+// Guides and tools that go deeper on one network. Linked from that network's
+// page so the channel page, its how-to and its tool read as one cluster.
+const RELATED: Record<string, [string, string][]> = {
+  x: [['How to schedule X threads', '/guides/schedule-x-threads'], ['X character counter', '/tools/x-character-counter'], ['Thread splitter', '/tools/thread-splitter'], ['Cross-post to X and Bluesky', '/guides/cross-post-x-bluesky']],
+  bluesky: [['Cross-post to X and Bluesky', '/guides/cross-post-x-bluesky'], ['Bluesky character counter', '/tools/bluesky-character-counter'], ['Thread splitter', '/tools/thread-splitter']],
+  linkedin: [['LinkedIn character counter', '/tools/linkedin-character-counter']],
+  discord: [['How to schedule Discord messages', '/guides/schedule-discord-announcements']],
+  devto: [['Cross-post articles to Dev.to, Hashnode and WordPress', '/guides/cross-post-dev-articles']],
+  hashnode: [['Cross-post articles to Dev.to, Hashnode and WordPress', '/guides/cross-post-dev-articles']],
+  wordpress: [['Cross-post articles to Dev.to, Hashnode and WordPress', '/guides/cross-post-dev-articles']],
+};
+
 export async function generateMetadata({ params }: { params: Promise<{ channel: string }> | { channel: string } }): Promise<Metadata> {
   const resolved = await Promise.resolve(params);
   const data = getChannelData(resolved.channel || '');
@@ -554,6 +566,20 @@ export default async function ChannelLandingPage({ params }: { params: Promise<{
           </div>
         )}
 
+        {RELATED[data.slug] && (
+          <div className="mx-auto mb-12 max-w-3xl text-left">
+            <h2 className="mb-4 text-2xl font-bold text-white">Guides and free tools for {data.name}</h2>
+            <ul className="flex flex-wrap gap-2">
+              {RELATED[data.slug].map(([label, href]) => (
+                <li key={href}>
+                  <Link href={href} className="inline-block rounded-full border border-white/15 px-4 py-2 text-sm text-white/80 hover:border-[#FF4CE2] hover:text-white">
+                    {label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
         <SectionFaq items={faqSchema.mainEntity} />
 
         {/* Bottom Banner */}

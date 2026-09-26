@@ -57,6 +57,30 @@ const RESOURCES = [
     tag: 'Guide',
   },
   {
+    href: '/guides/schedule-x-threads',
+    title: 'How to schedule a thread on X',
+    blurb: 'Write the thread once, set per-post delays and publish it as a reply chain at the time you pick.',
+    tag: 'Guide',
+  },
+  {
+    href: '/guides/cross-post-x-bluesky',
+    title: 'Cross-post to X and Bluesky at the same time',
+    blurb: 'One post, two networks, with a shorter version for each limit and threads on both.',
+    tag: 'Guide',
+  },
+  {
+    href: '/guides/cross-post-dev-articles',
+    title: 'Cross-post articles to Dev.to, Hashnode and WordPress',
+    blurb: 'Publish the original once, point the copies back with a canonical URL, and schedule all three.',
+    tag: 'Guide',
+  },
+  {
+    href: '/alternatives/typefully',
+    title: 'Hookpost vs Typefully',
+    blurb: 'Plans, free tier and networks side by side, including where Typefully is the better pick.',
+    tag: 'Comparison',
+  },
+  {
     href: '/open-source-social-media-scheduler',
     title: 'Open-source social media schedulers compared',
     blurb: 'Hookpost, Postiz and Mixpost side by side: licence, GitHub activity, self-hosting and hosted pricing.',

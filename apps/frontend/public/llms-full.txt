@@ -33,7 +33,7 @@ Publishing works today on: X, LinkedIn (personal profiles), YouTube (videos and 
 Built but not yet available to new users:
 - Instagram, Facebook and Threads: waiting on Meta app approval.
 - Pinterest: connects, but publishing waits on Pinterest Standard API access.
-- Medium: Medium stopped issuing new API integration tokens on 1 Jan 2025; only accounts with an older token can connect.
+- Medium: Medium no longer issues new API integration tokens; only accounts with an existing token can connect.
 
 Not supported: TikTok, Reddit, Mastodon.
 

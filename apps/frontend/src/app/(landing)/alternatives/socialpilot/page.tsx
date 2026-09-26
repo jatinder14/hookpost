@@ -19,7 +19,7 @@ const BEST_ALTERNATIVE_ANSWER = `Hookpost is an open-source alternative to Socia
 
 export const metadata: Metadata = {
   title: "Hookpost vs SocialPilot (2026): Agency Alternative",
-  description: `Compare Hookpost vs SocialPilot: open-source self-hosting, a free plan, and flat pricing (Standard ₹${inr(STD_INR.month_price)} or $${STD_USD.month_price}/mo) vs SocialPilot's $25.50/mo Essentials billed annually.`,
+  description: `Hookpost vs SocialPilot: a free plan, open source, and Standard at ₹${inr(STD_INR.month_price)} or $${STD_USD.month_price}/mo vs SocialPilot Essentials at $25.50/mo (annual).`,
   keywords: ["socialpilot alternative","socialpilot competitors","socialpilot vs hookpost","social media tool for teams","socialpilot pricing"],
   alternates: {
     canonical: "https://hookpost.hookstep.in/alternatives/socialpilot",

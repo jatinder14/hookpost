@@ -30,11 +30,12 @@ A free, self-hostable alternative to **Buffer**, **Hootsuite**, **Later** and **
 
 X (Twitter) · LinkedIn (personal profiles) · YouTube (videos and Shorts) · Bluesky · Discord · Slack · Telegram · WordPress · Hashnode · Dev.to · Lemmy · Nostr · Listmonk (email)
 
-Instagram, Facebook and Threads are built and waiting on Meta app approval for the cloud version. Pinterest connects but cannot publish until Pinterest grants Standard API access. Medium stopped issuing new API tokens in January 2025, so only accounts with an older token can connect.
+Instagram, Facebook and Threads are built and waiting on Meta app approval for the cloud version. Pinterest connects but cannot publish until Pinterest grants Standard API access. Medium no longer issues new API tokens, so only accounts with an existing token can connect.
 
 ### 🌟 Features
 
 * 🤖 **MCP server for AI agents**: connect Claude Desktop, Claude Code, Cursor or Windsurf and let the assistant draft and schedule posts. [Setup guide](https://hookpost.hookstep.in/guides/claude-mcp-social-media)
+  A standalone stdio server that wraps the public API lives in [`mcp-server/`](./mcp-server) (list channels, upload media, create, list and delete posts).
 * 📅 **Visual calendar**: drag-and-drop planning, per-network previews, and character limits checked before a post is queued.
 * ✍️ **AI writing and images** inside the composer.
 * 🔌 **REST API, webhooks, CLI (`npx hookpost`) and an n8n node** ([`n8n-nodes-hookpost`](https://www.npmjs.com/package/n8n-nodes-hookpost)).

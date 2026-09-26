@@ -19,7 +19,7 @@ const BEST_ALTERNATIVE_ANSWER = `Hookpost is an open-source alternative to Sprou
 
 export const metadata: Metadata = {
   title: "Hookpost vs Sprout Social (2026): Open-Source Alternative",
-  description: `Compare Hookpost vs Sprout Social: Sprout Essentials is $79 per seat/mo billed annually; Hookpost Pro is $${PRO_USD.month_price}/mo flat for up to ${PRO_INR.team_member_limit} team members, and there is a free plan.`,
+  description: `Sprout Social Essentials is $79 per seat/mo (annual). Hookpost Pro is $${PRO_USD.month_price}/mo flat for up to ${PRO_INR.team_member_limit} team members, plus a free plan.`,
   keywords: ["sprout social alternative","cheaper sprout social alternative","sprout social competitors","sprout social vs hookpost","open source sprout social"],
   alternates: {
     canonical: "https://hookpost.hookstep.in/alternatives/sprout-social",

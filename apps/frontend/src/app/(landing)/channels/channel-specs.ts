@@ -5,11 +5,11 @@ import { PUBLISH_PENDING } from '@hookpost/nestjs-libraries/integrations/social/
 // working, which is why this is not in PUBLISH_PENDING (that map also badges
 // the composer, and would warn users whose channel publishes fine). Delete it
 // the day the Meta app goes Live.
-// Medium stopped issuing integration tokens on 1 January 2025 (help.medium.com
+// Medium no longer issues integration tokens (help.medium.com
 // "API/Importing"), so only an account that already holds an older token can
 // connect. Not a platform approval we are waiting on - it may never lift.
 const MEDIUM_PENDING =
-  'Medium stopped issuing new API integration tokens on 1 January 2025. Accounts that already have a token from before then can connect; new Medium accounts cannot. WordPress, Hashnode and Dev.to publish articles today.';
+  'Medium no longer issues new API integration tokens. Accounts that already have a token from before then can connect; new Medium accounts cannot. WordPress, Hashnode and Dev.to publish articles today.';
 
 const META_PENDING =
   'Hookpost supports this network, but connecting a new account is waiting on Meta app approval. Until that lands, new accounts cannot connect it. X, LinkedIn, YouTube, Bluesky and the other channels work today.';

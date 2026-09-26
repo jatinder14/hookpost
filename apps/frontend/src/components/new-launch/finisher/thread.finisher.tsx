@@ -8,6 +8,12 @@ import { useIntegration } from '@hookpost/frontend/components/launches/helpers/u
 import { useSettings } from '@hookpost/frontend/components/launches/helpers/use.values';
 import { useLaunchStore } from '@hookpost/frontend/components/new-launch/store';
 
+// No provider publishes the finisher: x.provider and threads.provider only
+// declare the fields in their settings types, and bluesky.provider does not
+// mention them. The switch let users turn on a closing post that never went
+// out. Hidden until a provider actually posts it; flip this when one does.
+const THREAD_FINISHER_PUBLISHED = false;
+
 export const ThreadFinisher = () => {
   const integration = useIntegration();
   const { register, watch, setValue } = useSettings();
@@ -27,6 +33,10 @@ export const ThreadFinisher = () => {
 
   const slider = watch('active_thread_finisher');
   const value = watch('thread_finisher');
+
+  if (!THREAD_FINISHER_PUBLISHED) {
+    return null;
+  }
 
   return (
     <div className="flex flex-col gap-[10px] border-tableBorder border p-[15px] rounded-lg mb-5">

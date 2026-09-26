@@ -19,7 +19,7 @@ const MCP_COUNT = FACTS.filter((c) => c.mcp === true).length;
 export const metadata: Metadata = {
   title: "Hookpost vs Mixpost (2026): Open-Source Self-Hosted Alternative",
   description:
-    `Compare Hookpost and Mixpost: hosted cloud plus self-hosting vs self-hosted only, Node.js/Temporal vs PHP/Laravel, free and monthly plans vs a $299 one-time licence, and Razorpay UPI billing.`,
+    `Hookpost vs Mixpost: hosted plus self-hosting vs self-hosted only, Node.js vs Laravel, and a free plan with monthly pricing vs a $299 one-time licence.`,
   keywords: [
     "mixpost alternative",
     "mixpost competitors",

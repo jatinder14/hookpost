@@ -6,7 +6,7 @@ import { Metadata } from 'next';
 export const metadata: Metadata = {
   title: 'Free Social Media Scheduler for Students | Hookpost',
   description:
-    'Schedule YouTube Shorts, X, Discord and Telegram posts on autopilot, with Instagram once Meta approves. Free plan for students, teen creators, and streamers - no card needed.',
+    'Schedule YouTube Shorts, X, Discord and Telegram posts, with Instagram once Meta approves. Free plan for students and young creators, no card needed.',
   keywords: [
     'social media scheduler for students',
     'free instagram reels scheduler',

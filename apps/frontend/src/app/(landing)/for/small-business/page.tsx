@@ -6,7 +6,7 @@ import { Metadata } from 'next';
 export const metadata: Metadata = {
   title: 'Social Media Management for Small Businesses | Hookpost',
   description:
-    'Auto-post to X, LinkedIn, YouTube and more in minutes, with Facebook, Instagram and Threads once Meta approves. Simple social media for local shops, clinics, and restaurants.',
+    'Schedule posts to X, LinkedIn, YouTube and more in minutes; Facebook and Instagram once Meta approves. Simple social media for shops, clinics and cafes.',
   keywords: [
     'social media for small business',
     'easy social media scheduler',

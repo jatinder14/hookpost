@@ -7,7 +7,7 @@ import { PUBLISHABLE_CHANNEL_COUNT } from '../channels/channel-count';
 export const metadata: Metadata = {
   title: "Social Media MCP Server for Claude & Cursor | Hookpost",
   description:
-    "Open-source Model Context Protocol server. Connect Claude, Cursor, and other AI agents to Hookpost to draft and schedule posts on X, LinkedIn, YouTube, Bluesky, Discord, Telegram and more.",
+    "Open-source MCP server: let Claude, Cursor and other AI agents draft and schedule posts on X, LinkedIn, YouTube, Bluesky, Discord and more.",
   keywords: [
     "social media mcp server",
     "mcp server social media",

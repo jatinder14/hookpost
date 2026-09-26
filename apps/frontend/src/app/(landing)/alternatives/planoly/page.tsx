@@ -22,7 +22,7 @@ const BEST_ALTERNATIVE_ANSWER = `Planoly is built around Instagram and Pinterest
 
 export const metadata: Metadata = {
   title: "Hookpost vs Planoly (2026): Visual Planner Alternative",
-  description: "Compare Hookpost vs Planoly on price, free plans and networks. Planoly centres on Instagram and Pinterest; Hookpost cannot publish to Instagram or Pinterest for new accounts yet.",
+  description: "Hookpost vs Planoly on price, free plans and networks. Planoly centres on Instagram and Pinterest, which Hookpost can't publish to for new accounts yet.",
   keywords: ["planoly alternative","planoly competitors","planoly vs hookpost","instagram grid planner alternative","planoly pricing"],
   alternates: {
     canonical: "https://hookpost.hookstep.in/alternatives/planoly",

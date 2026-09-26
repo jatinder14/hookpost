@@ -373,9 +373,10 @@ export class AuthController {
     try {
       result = await this._authService.googleOneTap(credential, ip, userAgent);
     } catch (e) {
+      // Don't echo library internals (e.g. google-auth-library's PEM errors).
       return response
         .status(401)
-        .json({ login: false, message: (e as Error).message });
+        .json({ login: false, message: 'Google sign-in could not be verified' });
     }
 
     response.cookie('auth', result.jwt, {
